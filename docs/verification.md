@@ -1,0 +1,56 @@
+# Verificar alterações no Radiant
+
+A [Constitution](../constitution/CONSTITUTION.md) define o significado de
+conclusão. A [skill](../skills/radiant-cycle/SKILL.md), modo verificar e aprender,
+define o procedimento. Aqui ficam os checks concretos deste repositório.
+
+Execute na raiz com Python 3.9+ e Git, sem dependências de runtime adicionais:
+
+```sh
+python3 validators/check_repository.py
+python3 -m unittest discover -s tests -v
+git diff --check
+git diff --cached --check
+```
+
+O primeiro comando verifica links Markdown locais e anchors, inventário de
+custódia, integridade dos corpos preservados e ausência de paths pessoais nas
+camadas operacionais. Os testes exercitam o gerador de bootstrap e o gate de
+pin através dos seus comandos reais em diretórios temporários, incluindo
+divergência, sujeira no checkout e paths inválidos.
+
+## Revisão estrutural separada do Build
+
+Confronte os arquivos finais com estes critérios, depois dos checks:
+
+| Critério | Evidência a inspecionar |
+| --- | --- |
+| Canonicality | Constitution única; índices e adapters apontam para owners |
+| Core/adapter | Nenhuma regra geral exclusiva do harness |
+| Global | Bloco pequeno, regenerável, sem corpos ou estado local de produto |
+| Portabilidade | Repetir bootstrap em outro path, inclusive com espaços |
+| Independência do projeto | Frame/Spec/Plan/Contracts no consumidor; pin conferido |
+| Independência AIKM | Checks operacionais não dependem de executar o produto |
+| Discoverability | Percursos abaixo alcançam fontes reais a partir da raiz |
+| Versionabilidade | Diff e referência Git permitem saber o estado aplicado |
+| Minimalismo | Cada arquivo tem função; nenhuma pasta vazia antecipatória |
+| Extensibilidade | Novas capabilities cabem na estrutura sem introduzi-las agora |
+
+Simule A: entrar pelo AGENTS do Radiant, encontrar Constitution, tese, capability
+e verificação. Simule B: consumidor vazio, pin, bootstrap, Frame e estado local,
+contrato e leitura compartilhada. Simule C: AIKM independente com seus documentos,
+Learn Back e nenhum ownership sobre o Core.
+
+Use verificadores determinísticos como evidência independente da redação e
+inspecione os percursos do consumidor. Declare se houve outro revisor ou apenas
+readback próprio. Testes estruturais não demonstram que um modelo obedecerá ao
+adapter em uma nova sessão; simulação conceitual não é E2E real do harness.
+
+`migration/aikm/` é custódia histórica: links externos ao snapshot têm resolução
+explícita no [mapa](../migration/README.md) e inventário exato de exceções.
+Não confundir esses links com entradas operacionais válidas nem ignorar links
+novos quebrados. O validador não reescreve qualquer documento.
+
+Registre resultados e limites no relatório autorizado. Se houver falha material,
+corrija dentro do escopo e repita a verificação afetada. Não declarar DONE por
+passagem de testes apenas.

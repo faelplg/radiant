@@ -1,0 +1,50 @@
+[
+  {
+    "source": "migration/aikm/WORKFLOW.md",
+    "target": "../radiant/skills/radiant-cycle/SKILL.md"
+  },
+  {
+    "source": "migration/aikm/WORKFLOW.md",
+    "target": "../../AGENTS.md"
+  },
+  {
+    "source": "migration/aikm/WORKFLOW.md",
+    "target": "../../README.md#development"
+  },
+  {
+    "source": "migration/aikm/adrs/ADR-0001-technical-bootstrap.md",
+    "target": "../../../README.md#development"
+  },
+  {
+    "source": "migration/aikm/contracts/TC-0001-iteration-00-bootstrap.md",
+    "target": "../../radiant/CONSTITUTION.md"
+  },
+  {
+    "source": "migration/aikm/contracts/TC-0001-iteration-00-bootstrap.md",
+    "target": "../../../AGENTS.md"
+  },
+  {
+    "source": "migration/aikm/contracts/TC-0002-capture-search.md",
+    "target": "../../radiant/CONSTITUTION.md"
+  },
+  {
+    "source": "migration/aikm/contracts/TC-0002-capture-search.md",
+    "target": "../../radiant/skills/radiant-cycle/SKILL.md"
+  },
+  {
+    "source": "migration/aikm/learning/LR-0001-workflow-activation.md",
+    "target": "../../radiant/skills/radiant-cycle/SKILL.md"
+  },
+  {
+    "source": "migration/aikm/learning/LR-0001-workflow-activation.md",
+    "target": "../../../AGENTS.md"
+  },
+  {
+    "source": "migration/aikm/verification/VR-0001-workflow-setup.md",
+    "target": "../../radiant/skills/radiant-cycle/SKILL.md"
+  },
+  {
+    "source": "migration/aikm/verification/VR-0002-bootstrap-acceptance.md",
+    "target": "../../radiant/skills/radiant-cycle/SKILL.md"
+  }
+]

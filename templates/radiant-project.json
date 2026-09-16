@@ -1,0 +1,12 @@
+{
+  "radiant_revision": "RADIANT_COMMIT",
+  "frame": null,
+  "spec": null,
+  "plan": null,
+  "workflow": null,
+  "contracts": null,
+  "active_contract": null,
+  "adrs": null,
+  "verification": null,
+  "learning": null
+}

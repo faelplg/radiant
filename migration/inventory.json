@@ -1,0 +1,99 @@
+[
+  {
+    "original": "AGENTS.md",
+    "destination": "AGENTS.md",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "preserved": false
+  },
+  {
+    "original": "aikm-context/FRAME.md",
+    "destination": "migration/aikm/FRAME.md",
+    "sha256": "f2461003cf637e2be98e62f61438c5a71d82a850862af8d66dcc94c3d7139414",
+    "preserved": true
+  },
+  {
+    "original": "aikm-context/PLAN.md",
+    "destination": "migration/aikm/PLAN.md",
+    "sha256": "a9f7875580b4821f7250b7b1abb77842f9e8075840401fdbf543c2b176741a6e",
+    "preserved": true
+  },
+  {
+    "original": "aikm-context/SPEC.md",
+    "destination": "migration/aikm/SPEC.md",
+    "sha256": "fff49c896aca9f00bdfb9f45cce1a2ced2a85972a588feb1182a140d6e152984",
+    "preserved": true
+  },
+  {
+    "original": "aikm-context/WORKFLOW.md",
+    "destination": "migration/aikm/WORKFLOW.md",
+    "sha256": "490b79750f17adb020ac6e79a199358a0d3bc92c83b323d834f3f166124f7968",
+    "preserved": true
+  },
+  {
+    "original": "aikm-context/adrs/ADR-0001-technical-bootstrap.md",
+    "destination": "migration/aikm/adrs/ADR-0001-technical-bootstrap.md",
+    "sha256": "19a83011efe82fe3605f975c92287c2c9d8f898965ec739676b0d4ead943d0a3",
+    "preserved": true
+  },
+  {
+    "original": "aikm-context/contracts/ACTIVE.md",
+    "destination": "migration/aikm/contracts/ACTIVE.md",
+    "sha256": "7476df8da97487c38a73154fef738e6887d83539ab4e0d126af93f9d8b54e2b7",
+    "preserved": true
+  },
+  {
+    "original": "aikm-context/contracts/README.md",
+    "destination": "migration/aikm/contracts/README.md",
+    "sha256": "4e5a46288abe6631fd0dc5a9ef4fe1c541bd74c51c10ef8cc2b5b48556d040e6",
+    "preserved": true
+  },
+  {
+    "original": "aikm-context/contracts/TC-0001-iteration-00-bootstrap.md",
+    "destination": "migration/aikm/contracts/TC-0001-iteration-00-bootstrap.md",
+    "sha256": "661d9f6f5565b47ca83723abb3f302cfc6da11b77cdb50295c242f3b011fcc15",
+    "preserved": true
+  },
+  {
+    "original": "aikm-context/contracts/TC-0002-capture-search.md",
+    "destination": "migration/aikm/contracts/TC-0002-capture-search.md",
+    "sha256": "d24677f99a51b8cac63438646f6e25e47070cf3a5f53a76cbfc5e6534881d726",
+    "preserved": true
+  },
+  {
+    "original": "aikm-context/learning/LR-0001-workflow-activation.md",
+    "destination": "migration/aikm/learning/LR-0001-workflow-activation.md",
+    "sha256": "cd2a45dbc183a5a601ffd3302de43dcd8afdc40feb82f563811f5444afbf4d5c",
+    "preserved": true
+  },
+  {
+    "original": "aikm-context/verification/VR-0001-workflow-setup.md",
+    "destination": "migration/aikm/verification/VR-0001-workflow-setup.md",
+    "sha256": "572adac2de87559e7079f175c268c40c71031f9b0cbd4f41ff0b3d1d1c3e79ec",
+    "preserved": true
+  },
+  {
+    "original": "aikm-context/verification/VR-0002-bootstrap-acceptance.md",
+    "destination": "migration/aikm/verification/VR-0002-bootstrap-acceptance.md",
+    "sha256": "e7c120e0d9975ed52c9b6d90b682dc61936cd77146d7e8d85d5b352ea9cd1ba6",
+    "preserved": true
+  },
+  {
+    "original": "constitution.md",
+    "destination": "constitution/CONSTITUTION.md",
+    "sha256": "9e163384c3f70074b4b720c5f3ad0702be186653cce22f5993217c58636c2a50",
+    "preserved": true
+  },
+  {
+    "original": "project-generation-system.md",
+    "destination": "docs/project-generation-system.md",
+    "sha256": "761b8a4929e470cab38e378048c9bb55be1a86cfd19905fb9ffbeb6e04cb2de0",
+    "preserved": false
+  },
+  {
+    "original": "aikm-context/.DS_Store",
+    "destination": "migration/aikm/.DS_Store",
+    "sha256": "4e4525f016cdb42f2e414b1f819e5b5ab8a66bd18ae2afc5f97deb905b042132",
+    "preserved": true,
+    "local_only": true
+  }
+]

@@ -422,75 +422,10 @@ E explícito o suficiente para permitir que outra pessoa ou agente compreenda:
 
 ## 9. Radiant Constitution
 
-Radiant deve possuir uma camada estável de princípios chamada:
-
-# Radiant Constitution
-
-Esses princípios não podem ser ignorados por um agente apenas porque ele encontrou um caminho mais rápido.
-
-### Intenção antes de implementação
-
-Não construir o que ainda não sabemos por que existe.
-
-### Evidência antes de expansão
-
-Não ampliar escopo antes de validar o mecanismo central.
-
-### Verificação antes de conclusão
-
-“Implementado” não significa “verificado”.
-
-### Learn Back obrigatório
-
-Erro relevante deve corrigir a camada responsável.
-
-### Especificação proporcional à irreversibilidade
-
-Quanto maior o custo de reversão, maior o rigor antes da execução.
-
-### Autonomia proporcional à reversibilidade
-
-Quanto mais destrutiva ou externa uma ação, menor deve ser a autonomia sem aprovação.
-
-### Criação e crítica separadas
-
-Sempre que possível, quem produz não deve ser o único responsável por avaliar.
-
-### Memória como saída
-
-Um projeto não termina apenas com software.
-
-Ele deve deixar conhecimento utilizável.
-
-### Uma fonte canônica, ponteiros nos demais lugares
-
-Conhecimento compartilhado não deve ser duplicado entre agentes e ferramentas.
-
-### Proveniência
-
-Decisões e conhecimento importantes devem manter relação com origem, contexto e evidência.
-
-### Model-agnostic
-
-Nenhum modelo de IA deve se tornar identidade do processo.
-
-### Core–adapter separation
-
-O processo é estável.
-
-Integrações com ferramentas são adaptadores.
-
-### Humanos mantêm agência
-
-IA pode propor, executar e avaliar.
-
-Direção, trade-offs relevantes e decisões irreversíveis continuam sob responsabilidade humana.
-
-### Simplicidade como resultado
-
-Rigor não deve se transformar em burocracia.
-
----
+A [Radiant Constitution](../constitution/CONSTITUTION.md) é a fonte normativa
+canônica dos princípios operacionais. Esta tese explica o sistema; não mantém
+uma segunda lista de regras. Consulte a Constitution para precedência, artigos,
+estados operacionais e alterações constitucionais.
 
 ## 10. Core e adapters
 
