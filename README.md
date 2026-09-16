@@ -14,20 +14,21 @@ registra o momento em que foi escrita, não o status desta reorganização.
 
 ## Encontrar o que precisa
 
-| Local | Responsabilidade |
-| --- | --- |
-| [AGENTS.md](AGENTS.md) | Mapa para trabalhar no próprio Radiant |
-| [constitution/CONSTITUTION.md](constitution/CONSTITUTION.md) | Invariantes e precedência |
-| [docs/capabilities.md](docs/capabilities.md) | Índice das capacidades disponíveis |
-| [skills/radiant-cycle/SKILL.md](skills/radiant-cycle/SKILL.md) | Procedimento reutilizável do ciclo |
-| [templates/](templates/README.md) | Formulários de Frame, Contract e mapa do projeto |
-| [contracts/README.md](contracts/README.md) | Convenção compartilhada de contratos |
-| [adapters/codex/](adapters/codex/README.md) | Bootstrap específico do harness atual |
-| [validators/](validators/README.md) | Checks locais de integridade e revisão |
-| [docs/contributing.md](docs/contributing.md) | Evolução e versionamento |
-| [docs/verification.md](docs/verification.md) | Verificar mudanças neste sistema |
-| [docs/learn-back.md](docs/learn-back.md) | Encaminhar aprendizado ao owner correto |
-| [migration/](migration/README.md) | Custódia temporária dos documentos AIKM |
+| Local                                                          | Responsabilidade                                         |
+| -------------------------------------------------------------- | -------------------------------------------------------- |
+| [AGENTS.md](AGENTS.md)                                         | Mapa para trabalhar no próprio Radiant                   |
+| [constitution/CONSTITUTION.md](constitution/CONSTITUTION.md)   | Invariantes e precedência                                |
+| [docs/capabilities.md](docs/capabilities.md)                   | Índice das capacidades disponíveis                       |
+| [docs/design-layer.md](docs/design-layer.md)                   | Camada canônica de design do Radiant                     |
+| [skills/radiant-cycle/SKILL.md](skills/radiant-cycle/SKILL.md) | Procedimento reutilizável do ciclo                       |
+| [templates/](templates/README.md)                              | Formulários de Frame, Contract, Design e mapa do projeto |
+| [contracts/README.md](contracts/README.md)                     | Convenção compartilhada de contratos                     |
+| [adapters/codex/](adapters/codex/README.md)                    | Bootstrap específico do harness atual                    |
+| [validators/](validators/README.md)                            | Checks locais de integridade e revisão                   |
+| [docs/contributing.md](docs/contributing.md)                   | Evolução e versionamento                                 |
+| [docs/verification.md](docs/verification.md)                   | Verificar mudanças neste sistema                         |
+| [docs/learn-back.md](docs/learn-back.md)                       | Encaminhar aprendizado ao owner correto                  |
+| [migration/](migration/README.md)                              | Custódia temporária dos documentos AIKM                  |
 
 ## Usar em outro projeto
 
@@ -49,8 +50,8 @@ motivação e evidência em Git. Um finding de projeto pode melhorar um template
 skill, validator ou adapter pelo [Learn Back](docs/learn-back.md). Só invariantes
 transversais justificam propostas constitucionais.
 
-Há uma skill de ciclo real, dois formulários de artefatos e um mapa de integração.
-Não há engines, package manager, adapters futuros ou Design Layer implementados.
+Há uma skill de ciclo real, formulários de artefatos, uma camada de design e um mapa de integração.
+Não há engines, package manager, adapters futuros ou dependência de ferramenta específica.
 O procedimento de workflow vive na skill; nenhum diretório vazio o duplica.
 
 Veja o [relatório da reorganização](docs/repository-report.md) para inventário,

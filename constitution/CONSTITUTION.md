@@ -70,6 +70,24 @@ Nenhuma implementação relevante deve começar sem compreensão suficiente da t
 
 Um agente não deve compensar intenção ausente inventando produto, requisito ou escopo por conta própria.
 
+## Artigo IA — Intenção antes da interface
+
+Nenhum projeto deve começar por telas, componentes ou linguagem visual antes de compreender a intenção da experiência e a hipótese do produto.
+
+> **A interface é expressão, não substituto da intenção.**
+
+## Artigo IB — Estrutura antes de estilo
+
+A estrutura do sistema, a arquitetura de informação, os estados relevantes e os fluxos críticos devem preceder decisões puramente estéticas ou de ornamentação.
+
+> **A clareza funcional precede a expressão visual.**
+
+## Artigo IC — Acessibilidade como restrição de projeto
+
+Acessibilidade, legibilidade, clareza de interação e uso em contexto real são restrições de projeto e não checklist posterior.
+
+> **Se a experiência não é utilizável, a implementação não atende ao objetivo.**
+
 ---
 
 ## Artigo II — Evidência antes de expansão

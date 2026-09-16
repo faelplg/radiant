@@ -2,17 +2,21 @@
 
 Este índice não implementa comportamento. Leia somente o corpo aplicável.
 
-| Necessidade | Corpo canônico | Resultado local do consumidor |
-| --- | --- | --- |
-| Planejar, executar, verificar e aprender | [radiant-cycle](../skills/radiant-cycle/SKILL.md) | Incremento delimitado e evidência |
-| Enquadrar intenção | [Project Frame](../templates/project-frame.md) | Frame preenchido |
-| Contratar um incremento | [Convenção](../contracts/README.md), [formulário](../templates/task-contract.md) | Contract e ponteiro local |
-| Mapear estado do consumidor | [Integração](integration.md), [formulário](../templates/radiant-project.json) | Paths e revisão do Radiant |
-| Verificar o Radiant | [Verification](verification.md), [validators](../validators/README.md) | Evidência sobre a alteração |
-| Encaminhar aprendizado | [Learn Back](learn-back.md) | Correção no owner responsável |
+| Necessidade                              | Corpo canônico                                                                   | Resultado local do consumidor       |
+| ---------------------------------------- | -------------------------------------------------------------------------------- | ----------------------------------- |
+| Planejar, executar, verificar e aprender | [radiant-cycle](../skills/radiant-cycle/SKILL.md)                                | Incremento delimitado e evidência   |
+| Enquadrar intenção                       | [Project Frame](../templates/project-frame.md)                                   | Frame preenchido                    |
+| Enquadrar a experiência                  | [Design Frame](../templates/design-frame.md)                                     | Design Frame preenchido             |
+| Definir a experiência detalhadamente     | [Design Spec](../templates/design-spec.md)                                       | Design Spec implementável           |
+| Contratar um incremento                  | [Convenção](../contracts/README.md), [formulário](../templates/task-contract.md) | Contract e ponteiro local           |
+| Mapear estado do consumidor              | [Integração](integration.md), [formulário](../templates/radiant-project.json)    | Paths e revisão do Radiant          |
+| Verificar o Radiant                      | [Verification](verification.md), [validators](../validators/README.md)           | Evidência sobre a alteração         |
+| Encaminhar aprendizado                   | [Learn Back](learn-back.md)                                                      | Correção no owner responsável       |
+| Operar a camada de design                | [Design Layer](design-layer.md)                                                  | Sistema de design dentro do Radiant |
 
 Spec e Plan são orientados pela skill e pelas seções 6.3 e 6.5 da
-[tese](project-generation-system.md). Ainda não existem skills especializadas
-ou templates próprios para cada etapa. A menção a Design na tese permanece
-conceitual. Capabilities futuras podem entrar como skills, templates, validators
-ou workflows próprios quando houver corpo distinto e necessidade comprovada.
+[tese](project-generation-system.md). A camada de design agora possui corpo
+canônico próprio e templates específicos, mantendo a separação entre System
+Design e Experience Design. Capabilities futuras podem entrar como skills,
+templates, validators ou workflows próprios quando houver corpo distinto e
+necessidade comprovada.

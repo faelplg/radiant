@@ -241,21 +241,41 @@ A especificação funciona como contrato intermediário entre intenção e códi
 
 ### 6.4. Design
 
-Define como o sistema será estruturado.
+Define como o sistema será estruturado e como a experiência será percebida, compreendida e usada.
 
-Pode incluir:
+Radiant reconhece duas trilhas conceitualmente distintas, que podem coexistir no mesmo projeto:
+
+#### 6.4.1. System Design
+
+Relaciona-se à estrutura interna do sistema:
 
 - arquitetura;
 - modelo de domínio;
 - componentes;
 - contratos;
 - persistência;
-- UX flows;
+- integrações;
 - decisões técnicas;
 - trade-offs;
 - ADRs.
 
-Radiant deve favorecer decisões reversíveis enquanto a incerteza for alta.
+#### 6.4.2. Experience Design
+
+Relaciona-se à forma como pessoas percebem, entendem e usam o sistema:
+
+- intenção da experiência;
+- arquitetura de informação;
+- jornadas e fluxos;
+- estados e interações;
+- responsividade;
+- acessibilidade;
+- expressão visual;
+- comportamento e feedback;
+- coerência entre intenção e implementação.
+
+A Design Layer do Radiant formaliza essa separação sem criar um processo paralelo. A etapa Design deve preservar a diferença entre estrutura do sistema e experiência do usuário. O corpo canônico especializado está em [Radiant Design Layer](design-layer.md).
+
+Radiant deve favorecer decisões reversíveis enquanto a incerteza for alta e manter a formalidade proporcional ao risco.
 
 ---
 

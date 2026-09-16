@@ -5,6 +5,10 @@ projeto, com identidade, decisões e histórico próprios. Não manter no consum
 uma cópia do template para distribuição a outros projetos.
 
 - [project-frame.md](project-frame.md): intenção e menor experimento.
+- [design-frame.md](design-frame.md): enquadramento da experiência antes da
+  implementação.
+- [design-spec.md](design-spec.md): estrutura da experiência, estados, fluxos,
+  acessibilidade e critérios de verificação.
 - [task-contract.md](task-contract.md): delegação delimitada; usar a
   [convenção](../contracts/README.md).
 - [radiant-project.json](radiant-project.json): mapa local e pin, conforme
