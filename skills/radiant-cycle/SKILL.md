@@ -6,7 +6,7 @@ description:
   iniciar ou retomar uma entrega Radiant; uma consulta pontual não exige
   executar o ciclo inteiro.
 metadata:
-  version: "0.1.1"
+  version: "0.1.2"
 ---
 
 # Ciclo operacional Radiant
@@ -73,6 +73,10 @@ projeto consumidor.
 - Releia critérios e outputs a partir do contrato e da Spec. Inspecione o diff e
   o resultado como consumidor; confronte a afirmação de conclusão com esses
   inputs, não apenas com o relato de quem implementou.
+- Quando uma revisão posterior encontrar lacuna em um aceite anterior, preserve
+  o contrato e a evidência histórica. Registre o que a nova evidência limita,
+  qual correção cabe ao ciclo atual e qual critério ainda precisa de prova;
+  não transforme o `DONE` da revisão em novo aceite da entrega examinada.
 - Execute o percurso real aplicável e os gates do projeto. Para documentação,
   confira referências, coerência das instruções e consequências de segui-las em
   cenários reais. Registre comandos e resultados efetivos, incluindo bloqueios;
