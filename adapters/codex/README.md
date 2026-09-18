@@ -11,6 +11,7 @@ pertencem à [integração](../../docs/integration.md).
    Siga o resultado antes de carregar instruções compartilhadas.
 3. Com o gate satisfeito, leia a
    [Constitution](../../constitution/CONSTITUTION.md) dessa revisão, o
+   [Engineering Baseline](../../engineering/engineering-baseline.md), o
    [índice de capabilities](../../docs/capabilities.md) e a skill aplicável.
 4. Leia os paths do mapa do consumidor conforme a tarefa; comandos são locais
    ao consumidor. O [Learn Back](../../docs/learn-back.md) aponta para os owners.
@@ -66,6 +67,7 @@ do Core precisa mudar.
 
 Use [project.AGENTS.template.md](project.AGENTS.template.md) como mapa local e
 [radiant-project.json](../../templates/radiant-project.json) como `.radiant.json`.
-Preencha o commit e os paths conforme a [convenção](../../docs/integration.md).
+Preencha o commit e os paths conforme a [convenção](../../docs/integration.md),
+incluindo `engineering_profile` quando o projeto possuir um Profile.
 Um `AGENTS.md` já existente recebe só os ponteiros necessários, não substituição
 integral. Constituição, templates compartilhados e skills permanecem no Radiant.

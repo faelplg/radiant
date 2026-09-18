@@ -447,6 +447,17 @@ canônica dos princípios operacionais. Esta tese explica o sistema; não manté
 uma segunda lista de regras. Consulte a Constitution para precedência, artigos,
 estados operacionais e alterações constitucionais.
 
+### Engenharia como restrição explícita
+
+Radiant não substitui práticas de engenharia pelo uso de agentes. Projetos
+podem adotar um [Radiant Engineering Baseline](../engineering/engineering-baseline.md)
+com expectativas mínimas e um Engineering Profile com adaptações específicas.
+O Baseline não impõe arquitetura ou stack universal; sua aplicação é
+proporcional ao risco, impacto e reversibilidade.
+
+Task Contracts referenciam essas regras, Verify produz evidência de conformidade
+e Learn Back corrige a camada responsável quando a regra se mostra insuficiente.
+
 ## 10. Core e adapters
 
 Radiant deve separar:
@@ -710,6 +721,11 @@ Task Contracts não devem se transformar em um novo PRD.
 
 Devem permanecer bounded.
 
+Além dos limites funcionais, um contrato pode declarar Baseline e Profile,
+Engineering Check, política de dependências, comandos de verificação e
+condições de HOLD específicas de engenharia. O contrato referencia esses
+documentos; não copia seus corpos.
+
 ---
 
 ## 19. Memória operacional
@@ -900,6 +916,14 @@ Registra o que foi efetivamente verificado.
 ### Learning Record
 
 Registra resultado, evidência, diagnóstico e Learn Back.
+
+### Engineering Baseline
+
+Define o padrão mínimo de engenharia reutilizável entre projetos.
+
+### Engineering Profile
+
+Contextualiza o Baseline para um projeto sem duplicá-lo.
 
 Nem todo projeto precisa de todos os artefatos.
 
@@ -1114,6 +1138,11 @@ Pode exigir:
 
 Radiant aumenta rigor conforme aumenta o custo do erro.
 
+Para pequenos experimentos, o Baseline pode ser aplicado diretamente e o
+Profile pode ser omitido. Para produtos com múltiplas iterações, integrações,
+dados sensíveis ou risco operacional, o Profile e a evidência de engenharia
+passam a ser recomendados.
+
 ---
 
 ## 32. Primeira implementação do Radiant
@@ -1147,6 +1176,7 @@ Componentes iniciais recomendados:
 8. skill de Learn Back;
 9. adapters iniciais para harnesses usados;
 10. integração gradual com AIKM.
+11. Radiant Engineering Baseline e template de Profile.
 
 A infraestrutura deve crescer a partir do uso real.
 

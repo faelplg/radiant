@@ -8,7 +8,7 @@ import subprocess
 from pathlib import Path
 
 
-FILES = ("frame", "spec", "plan", "workflow", "active_contract")
+FILES = ("frame", "spec", "plan", "workflow", "active_contract", "engineering_profile")
 DIRECTORIES = ("contracts", "adrs", "verification", "learning")
 FIELDS = {"radiant_revision", *FILES, *DIRECTORIES}
 

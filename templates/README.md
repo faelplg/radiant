@@ -11,6 +11,8 @@ uma cópia do template para distribuição a outros projetos.
   acessibilidade e critérios de verificação.
 - [task-contract.md](task-contract.md): delegação delimitada; usar a
   [convenção](../contracts/README.md).
+- O Engineering Profile é um artefato do consumidor; o Baseline permanece em
+  [engineering/engineering-baseline.md](../engineering/engineering-baseline.md).
 - [radiant-project.json](radiant-project.json): mapa local e pin, conforme
   [integração](../docs/integration.md). Substituir `RADIANT_COMMIT` por commit
   completo real; `null` significa que o artefato ainda não existe.
