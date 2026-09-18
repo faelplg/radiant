@@ -2,11 +2,11 @@
 
 ## Três níveis
 
-| Nível | Owner e conteúdo | Não contém |
-| --- | --- | --- |
-| Radiant Core | Este repositório: Constitution, definição, capabilities e convenções | Estado de produtos |
-| Usuário | Localização do checkout e entrada do adapter do harness | Corpos do Core ou conhecimento de projetos |
-| Projeto | Opt-in, revisão, paths, restrições e comandos próprios | Constitution ou skills compartilhadas copiadas |
+| Nível        | Owner e conteúdo                                                     | Não contém                                     |
+| ------------ | -------------------------------------------------------------------- | ---------------------------------------------- |
+| Radiant Core | Este repositório: Constitution, definição, capabilities e convenções | Estado de produtos                             |
+| Usuário      | Localização do checkout e entrada do adapter do harness              | Corpos do Core ou conhecimento de projetos     |
+| Projeto      | Opt-in, revisão, paths, restrições e comandos próprios               | Constitution ou skills compartilhadas copiadas |
 
 O repository é a autoridade. O Core é lógico, distribuído pelos diretórios
 listados no [README](../README.md); não exige uma pasta `core/` adicional.
@@ -38,6 +38,8 @@ Na raiz do consumidor, `.radiant.json` declara o uso do sistema. Comece pelo
 - `radiant_revision`: commit Git completo, 40 ou 64 dígitos hexadecimais.
 - `frame`, `spec`, `plan`, `workflow`, `active_contract`: arquivo relativo à
   raiz do consumidor ou `null` enquanto não existir.
+- `engineering_profile`: arquivo relativo ao consumidor ou `null` quando o
+  Baseline for suficiente e não houver decisões específicas do projeto.
 - `contracts`, `adrs`, `verification`, `learning`: diretório relativo ou `null`.
 
 Todos os campos estão presentes; não inserir paths absolutos, `..` ou symlinks
@@ -46,6 +48,8 @@ que escapem do projeto. Quando um artefato for criado, atualize seu ponteiro.
 e orienta seu enquadramento. O validador estrutural não concede autorização.
 
 O `AGENTS.md` do consumidor aponta para esse mapa e para a entrada do harness.
+O Baseline de engenharia vive no Radiant; o Profile, quando existir, vive no
+consumidor e não deve copiar o corpo do Baseline.
 Restrições, comandos e referências a ADRs locais podem ficar nele ou em
 `workflow`, conforme o volume. A lista de contratos ativos existe somente no
 `ACTIVE.md` apontado, nunca no mapa e no adapter simultaneamente.
