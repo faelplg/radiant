@@ -26,19 +26,22 @@ necessária instalação em catálogo nativo.
 Requisitos: Python 3.9+, Git e checkout acessível ao harness. Na raiz do Radiant:
 
 ```sh
-python3 adapters/render_bootstrap.py --adapter claude-code
+python3 adapters/render_bootstrap.py
 ```
 
-O comando imprime o [template global](global.CLAUDE.template.md) com o path
-absoluto deste checkout. Para criar um arquivo local inspecionável, ignorado no Git:
+O comando imprime o [bloco global](../global.template.md) com o path absoluto
+deste checkout. Para criar um arquivo local inspecionável, ignorado no Git:
 
 ```sh
-python3 adapters/render_bootstrap.py --adapter claude-code --output .local/claude-global.md
+python3 adapters/render_bootstrap.py --output .local/global.md
 ```
 
-Inclua apenas o bloco gerado no `~/.claude/CLAUDE.md`, preservando as
-instruções existentes. O gerador recusa sobrescrever arquivos e symlinks e não
-altera configuração global sozinho.
+Inclua o bloco uma única vez no `~/.claude/CLAUDE.md`, preservando as
+instruções existentes. O bloco é o mesmo para todos os harnesses: se
+`~/.claude/CLAUDE.md` e as instruções globais de outro harness apontam para o
+mesmo arquivo (por exemplo via dotfiles), um único bloco atende aos dois. Se o
+arquivo for gerado por Nix ou dotfiles, altere sua fonte. O gerador recusa
+sobrescrever arquivos e symlinks e não altera configuração global sozinho.
 
 ## Capacidades
 

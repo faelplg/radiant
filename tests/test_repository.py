@@ -46,6 +46,14 @@ class RepositoryCheckTests(unittest.TestCase):
         self.assertEqual(result.returncode, 1)
         self.assertIn("adapters/claude-code", result.stderr)
 
+    def test_adapter_missing_from_global_block_fails(self):
+        adapter = self.root / "adapters/new-harness"
+        adapter.mkdir()
+        shutil.copy2(self.root / "adapters/codex/capabilities.json", adapter / "capabilities.json")
+        result = self.check()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("adapters/global.template.md", result.stderr)
+
     def test_agent_with_unknown_role_or_capability_fails(self):
         path = self.root / "skills/radiant-delegation/agents.json"
         original = path.read_text(encoding="utf-8")

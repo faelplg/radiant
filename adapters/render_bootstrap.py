@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render a harness bootstrap block or Radiant subagents; never modify global configuration."""
+"""Render the Radiant bootstrap block or a harness's subagents; never modify global configuration."""
 
 import argparse
 import json
@@ -7,9 +7,9 @@ from pathlib import Path
 
 
 ADAPTERS = {
-    "codex": {"global": "global.AGENTS.template.md", "agent": "agent.template.toml", "ext": ".toml",
+    "codex": {"agent": "agent.template.toml", "ext": ".toml",
               "read": 'sandbox_mode = "read-only"\n'},
-    "claude-code": {"global": "global.CLAUDE.template.md", "agent": "agent.template.md", "ext": ".md",
+    "claude-code": {"agent": "agent.template.md", "ext": ".md",
                     "read": "tools: Read, Grep, Glob, WebFetch, WebSearch\n"},
 }
 
@@ -18,8 +18,9 @@ def as_json(value):
     return json.dumps(value, ensure_ascii=False)
 
 
-def render_global(root: Path, adapter: str) -> str:
-    template = root / "adapters" / adapter / ADAPTERS[adapter]["global"]
+def render_global(root: Path) -> str:
+    """One harness-neutral block, valid whether harnesses share an instructions file or not."""
+    template = root / "adapters/global.template.md"
     return template.read_text(encoding="utf-8").replace("{{RADIANT_ROOT_JSON}}", as_json(str(root)))
 
 
@@ -69,11 +70,13 @@ def write_exclusive(files: dict) -> None:
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--adapter", required=True, choices=sorted(ADAPTERS))
+    parser.add_argument("--adapter", choices=sorted(ADAPTERS), help="harness for --agents-dir")
     target = parser.add_mutually_exclusive_group()
     target.add_argument("--output", type=Path, help="create the global block in a new local file")
     target.add_argument("--agents-dir", type=Path, help="create the Radiant subagents in this directory")
     args = parser.parse_args()
+    if args.agents_dir is not None and args.adapter is None:
+        parser.error("--agents-dir exige --adapter")
     root = Path(__file__).resolve().parents[1]
     try:
         if args.agents_dir is not None:
@@ -83,9 +86,9 @@ def main():
             write_exclusive({args.agents_dir / name: text for name, text in agents.items()})
             print("\n".join(str(args.agents_dir / name) for name in sorted(agents)))
         elif args.output is not None:
-            write_exclusive({args.output: render_global(root, args.adapter)})
+            write_exclusive({args.output: render_global(root)})
         else:
-            print(render_global(root, args.adapter), end="")
+            print(render_global(root), end="")
     except OSError as error:
         parser.exit(1, f"Não foi possível criar o destino sem sobrescrever: {error}\n")
 
