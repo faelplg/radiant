@@ -22,20 +22,24 @@ registra o momento em que foi escrita, não o status desta reorganização.
 | [docs/capabilities.md](docs/capabilities.md)                               | Índice das capacidades disponíveis                       |
 | [docs/design-layer.md](docs/design-layer.md)                               | Camada canônica de design do Radiant                     |
 | [skills/radiant-cycle/SKILL.md](skills/radiant-cycle/SKILL.md)             | Procedimento reutilizável do ciclo                       |
+| [skills/radiant-delegation/SKILL.md](skills/radiant-delegation/SKILL.md)   | Papéis, capacidades e delegação                          |
 | [templates/](templates/README.md)                                          | Formulários de Frame, Contract, Design e mapa do projeto |
 | [contracts/README.md](contracts/README.md)                                 | Convenção compartilhada de contratos                     |
-| [adapters/codex/](adapters/codex/README.md)                                | Bootstrap específico do harness atual                    |
+| [adapters/codex/](adapters/codex/README.md)                                | Bootstrap e subagentes do Codex                          |
+| [adapters/claude-code/](adapters/claude-code/README.md)                    | Bootstrap e subagentes do Claude Code                    |
 | [validators/](validators/README.md)                                        | Checks locais de integridade e revisão                   |
 | [docs/contributing.md](docs/contributing.md)                               | Evolução e versionamento                                 |
 | [docs/verification.md](docs/verification.md)                               | Verificar mudanças neste sistema                         |
 | [docs/learn-back.md](docs/learn-back.md)                                   | Encaminhar aprendizado ao owner correto                  |
+| [docs/adrs/](docs/adrs/ADR-0001-delegation-roles.md)                       | Decisões estruturais do próprio Radiant                  |
 | [migration/](migration/README.md)                                          | Custódia temporária dos documentos AIKM                  |
 
 ## Usar em outro projeto
 
 1. Escolha um commit do Radiant e um checkout limpo dessa revisão.
-2. Gere o bloco global conforme o [adapter Codex](adapters/codex/README.md).
-3. No consumidor, use o template de `AGENTS.md` do adapter e declare a revisão
+2. Gere o bloco global conforme o adapter do seu harness:
+   [Codex](adapters/codex/README.md) ou [Claude Code](adapters/claude-code/README.md).
+3. No consumidor, use o [mapa neutro](templates/project-agents.md) como `AGENTS.md` e declare a revisão
    e os paths locais conforme a [convenção de integração](docs/integration.md).
 4. Crie Frame, Spec, Plan, Engineering Profile e Contracts no consumidor,
    proporcionalmente à tarefa. O Profile é recomendado quando houver stack,
@@ -54,7 +58,8 @@ skill, validator ou adapter pelo [Learn Back](docs/learn-back.md). Só invariant
 transversais justificam propostas constitucionais.
 
 Há uma skill de ciclo real, formulários de artefatos, uma camada de design e um mapa de integração.
-Não há engines, package manager, adapters futuros ou dependência de ferramenta específica.
+Não há engines, package manager ou dependência de ferramenta específica; cada
+adapter traduz o mesmo Core para um harness.
 O procedimento de workflow vive na skill; nenhum diretório vazio o duplica.
 
 Veja o [relatório da reorganização](docs/repository-report.md) para inventário,

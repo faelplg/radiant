@@ -10,9 +10,11 @@
 
 O repository é a autoridade. O Core é lógico, distribuído pelos diretórios
 listados no [README](../README.md); não exige uma pasta `core/` adicional.
-Configuração global é reconstruível. O
-[adapter Codex](../adapters/codex/README.md) implementa a descoberta no harness
-atual. Outros harnesses poderão localizar os mesmos corpos com adapters próprios.
+Configuração global é reconstruível. Os adapters
+[Codex](../adapters/codex/README.md) e
+[Claude Code](../adapters/claude-code/README.md) implementam a descoberta em
+cada harness. Outros harnesses poderão localizar os mesmos corpos com adapters
+próprios.
 
 ## Descoberta mínima
 
