@@ -118,6 +118,30 @@ class IntegrationTests(unittest.TestCase):
                 self.write_map()
                 self.assert_hold()
 
+    def test_maintenance_is_optional_and_may_not_exist_yet(self):
+        self.config.pop("maintenance", None)
+        self.write_map()
+        self.assertEqual(self.gate().returncode, 0)
+        for value in (None, "ops/maintenance"):
+            with self.subTest(value=value):
+                self.config["maintenance"] = value
+                self.write_map()
+                result = self.gate()
+                self.assertEqual(result.returncode, 0, result.stderr)
+        (self.project / "ops/maintenance").mkdir(parents=True)
+        self.assertEqual(self.gate().returncode, 0)
+
+    def test_maintenance_rejects_escapes_and_files(self):
+        outside = Path(self.temp.name) / "outside-dir"
+        outside.mkdir()
+        (self.project / "escape-dir").symlink_to(outside)
+        (self.project / "report.md").write_text("x\n", encoding="utf-8")
+        for value in ("../outside-dir", str(outside), "escape-dir", "report.md", "", ".", 3):
+            with self.subTest(value=value):
+                self.config["maintenance"] = value
+                self.write_map()
+                self.assert_hold()
+
     def test_invalid_duplicate_and_missing_map_are_rejected(self):
         mapping = self.project / ".radiant.json"
         for content in ("{", "[]", '{}', '{"radiant_revision":"a","radiant_revision":"b"}'):
