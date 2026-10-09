@@ -27,14 +27,14 @@ Não é necessária instalação em catálogo nativo para usar a skill por leitu
 Requisitos: Python 3.9+, Git e checkout acessível ao harness. Na raiz do Radiant:
 
 ```sh
-python3 adapters/codex/render_bootstrap.py
+python3 adapters/render_bootstrap.py --adapter codex
 ```
 
 O comando imprime o [template global](global.AGENTS.template.md) com o path
 absoluto deste checkout. Para criar um arquivo local inspecionável, ignorado no Git:
 
 ```sh
-python3 adapters/codex/render_bootstrap.py --output .local/codex-global.md
+python3 adapters/render_bootstrap.py --adapter codex --output .local/codex-global.md
 ```
 
 O gerador recusa sobrescrever arquivos e symlinks. Para regenerar, use outro

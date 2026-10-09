@@ -1,0 +1,91 @@
+#!/usr/bin/env python3
+"""Render a harness bootstrap block or Radiant subagents; never modify global configuration."""
+
+import argparse
+import json
+from pathlib import Path
+
+
+ADAPTERS = {
+    "codex": {"global": "global.AGENTS.template.md", "agent": "agent.template.toml", "ext": ".toml"},
+    "claude-code": {"global": "global.CLAUDE.template.md", "agent": "agent.template.md", "ext": ".md"},
+}
+
+
+def as_json(value):
+    return json.dumps(value, ensure_ascii=False)
+
+
+def render_global(root: Path, adapter: str) -> str:
+    template = root / "adapters" / adapter / ADAPTERS[adapter]["global"]
+    return template.read_text(encoding="utf-8").replace("{{RADIANT_ROOT_JSON}}", as_json(str(root)))
+
+
+def instructions(root: Path, agent: dict) -> str:
+    skill = root / "skills/radiant-delegation/SKILL.md"
+    return (
+        f"Você executa o perfil {agent['name']} do Radiant. Leia a seção `{agent['role']}` "
+        f"de {skill} e o pacote de delegação recebido; ele define entradas, fronteira e saída. "
+        "Não converse com o humano, não delegue a outros agentes e não amplie o escopo. "
+        "Retorne no formato da seção Retorno da mesma skill."
+    )
+
+
+def render_agents(root: Path, adapter: str) -> dict:
+    config = ADAPTERS[adapter]
+    template = (root / "adapters" / adapter / config["agent"]).read_text(encoding="utf-8")
+    models = json.loads((root / "adapters" / adapter / "capabilities.json").read_text(encoding="utf-8"))
+    registry = json.loads((root / "skills/radiant-delegation/agents.json").read_text(encoding="utf-8"))
+    files = {}
+    for agent in registry["agents"]:
+        text = instructions(root, agent)
+        values = {
+            "{{NAME_JSON}}": as_json(agent["name"]),
+            "{{DESCRIPTION_JSON}}": as_json(agent["description"]),
+            "{{MODEL_JSON}}": as_json(models[agent["capability"]]),
+            "{{INSTRUCTIONS_JSON}}": as_json(text),
+            "{{INSTRUCTIONS}}": text,
+        }
+        rendered = template
+        for placeholder, value in values.items():
+            rendered = rendered.replace(placeholder, value)
+        files[agent["name"] + config["ext"]] = rendered
+    return files
+
+
+def write_exclusive(files: dict) -> None:
+    """Refuse before writing anything if any destination exists or is a link."""
+    taken = [path for path in files if path.exists() or path.is_symlink()]
+    if taken:
+        raise FileExistsError(", ".join(str(path) for path in taken))
+    for path, content in files.items():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open("x", encoding="utf-8") as output:
+            output.write(content)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--adapter", required=True, choices=sorted(ADAPTERS))
+    target = parser.add_mutually_exclusive_group()
+    target.add_argument("--output", type=Path, help="create the global block in a new local file")
+    target.add_argument("--agents-dir", type=Path, help="create the Radiant subagents in this directory")
+    args = parser.parse_args()
+    root = Path(__file__).resolve().parents[1]
+    try:
+        if args.agents_dir is not None:
+            if args.agents_dir.is_symlink():
+                raise FileExistsError(f"{args.agents_dir} é um link")
+            agents = render_agents(root, args.adapter)
+            write_exclusive({args.agents_dir / name: text for name, text in agents.items()})
+            print("\n".join(str(args.agents_dir / name) for name in sorted(agents)))
+        elif args.output is not None:
+            write_exclusive({args.output: render_global(root, args.adapter)})
+        else:
+            print(render_global(root, args.adapter), end="")
+    except OSError as error:
+        parser.exit(1, f"Não foi possível criar o destino sem sobrescrever: {error}\n")
+
+
+if __name__ == "__main__":
+    main()
