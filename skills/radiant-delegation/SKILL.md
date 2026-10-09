@@ -126,6 +126,20 @@ faz readback do diff, executa checks e confronta com o contrato. `HOLD` é
 resolvido dentro da autorização vigente ou levado ao humano. `FAIL` preserva a
 evidência e segue para [Learn Back](../../docs/learn-back.md).
 
+## Acesso e fronteiras
+
+Cada perfil em [agents.json](agents.json) declara `access`: `read` para
+perfis que não alteram arquivos (pesquisa e crítica) e `write` para os demais.
+Os adapters traduzem `read` no mecanismo de menor privilégio do harness.
+
+As fronteiras específicas de um contrato (paths graváveis, rede, sistemas
+externos) não são impostas pelo harness nos perfis `write`: valem como
+instrução do pacote e são conferidas pelo orquestrador no readback, que
+compara o diff com os paths permitidos antes de aceitar. Quando o risco do
+contrato exigir enforcement real (`Risk tier` ≥ 2 com rede negada ou paths
+sensíveis), execute o Build em ambiente isolado oferecido pelo harness ou
+mantenha o papel na sessão do orquestrador sob as permissões dela.
+
 ## Paralelismo
 
 Somente entre tarefas independentes com paths de escrita disjuntos. Na dúvida,

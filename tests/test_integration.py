@@ -221,8 +221,26 @@ class IntegrationTests(unittest.TestCase):
         self.assertEqual(self.render("--adapter", "codex", "--agents-dir", str(target)).returncode, 0)
         for path in target.iterdir():
             data = tomllib.loads(path.read_text(encoding="utf-8"))
-            self.assertEqual({"name", "description", "model", "developer_instructions"}, set(data))
+            self.assertLessEqual({"name", "description", "model", "developer_instructions"}, set(data))
             self.assertIn(str(self.root), data["developer_instructions"])
+
+    def test_read_only_profiles_get_least_privilege(self):
+        agents = json.loads((self.root / "skills/radiant-delegation/agents.json").read_text())["agents"]
+        claude, codex = self.project / "claude", self.project / "codex"
+        self.assertEqual(self.render("--adapter", "claude-code", "--agents-dir", str(claude)).returncode, 0)
+        self.assertEqual(self.render("--adapter", "codex", "--agents-dir", str(codex)).returncode, 0)
+        self.assertEqual({a["name"] for a in agents if a["access"] == "read"},
+                         {"radiant-research", "radiant-grill"})
+        for agent in agents:
+            with self.subTest(agent=agent["name"]):
+                md = (claude / (agent["name"] + ".md")).read_text(encoding="utf-8")
+                toml = (codex / (agent["name"] + ".toml")).read_text(encoding="utf-8")
+                if agent["access"] == "read":
+                    self.assertIn("tools: Read, Grep, Glob, WebFetch, WebSearch\n", md)
+                    self.assertIn('sandbox_mode = "read-only"', toml)
+                else:
+                    self.assertNotIn("tools:", md)
+                    self.assertNotIn("sandbox_mode", toml)
 
     def test_agents_refuse_any_existing_or_symlinked_target(self):
         target = self.project / "agents"

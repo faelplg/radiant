@@ -7,8 +7,10 @@ from pathlib import Path
 
 
 ADAPTERS = {
-    "codex": {"global": "global.AGENTS.template.md", "agent": "agent.template.toml", "ext": ".toml"},
-    "claude-code": {"global": "global.CLAUDE.template.md", "agent": "agent.template.md", "ext": ".md"},
+    "codex": {"global": "global.AGENTS.template.md", "agent": "agent.template.toml", "ext": ".toml",
+              "read": 'sandbox_mode = "read-only"\n'},
+    "claude-code": {"global": "global.CLAUDE.template.md", "agent": "agent.template.md", "ext": ".md",
+                    "read": "tools: Read, Grep, Glob, WebFetch, WebSearch\n"},
 }
 
 
@@ -45,6 +47,7 @@ def render_agents(root: Path, adapter: str) -> dict:
             "{{MODEL_JSON}}": as_json(models[agent["capability"]]),
             "{{INSTRUCTIONS_JSON}}": as_json(text),
             "{{INSTRUCTIONS}}": text,
+            "{{ACCESS}}": config["read"] if agent["access"] == "read" else "",
         }
         rendered = template
         for placeholder, value in values.items():

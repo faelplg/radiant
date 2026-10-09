@@ -62,6 +62,10 @@ execução inteira se qualquer `radiant-*.md` já existir; para regenerar, remov
 os seis arquivos e execute de novo.
 
 - `disallowedTools: Agent` aplica a regra de que papéis delegados não delegam.
+- Perfis com `access: read` recebem `tools: Read, Grep, Glob, WebFetch,
+  WebSearch`, sem escrita nem shell. Perfis `write` herdam as ferramentas e
+  permissões da sessão; as fronteiras do contrato valem pela seção "Acesso e
+  fronteiras" da skill de delegação.
 - Override de capacidade pelo contrato: o papel roda na sessão do
   orquestrador, conforme a regra 5 da skill. O parâmetro `model` da invocação
   aceita apenas aliases de família e não é usado, para preservar a

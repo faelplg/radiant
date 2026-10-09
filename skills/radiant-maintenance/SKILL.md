@@ -25,9 +25,12 @@ o [template](../../templates/maintenance-report.md).
 2. Leia o documento de `workflow` e sua seção de Manutenção: comandos seguros
    para manutenção e fontes externas autorizadas. Sem essa seção, nenhum
    comando é executado e nenhuma fonte externa é consultada.
-3. Confirme que o diretório `maintenance` é ignorado pelo Git do consumidor
-   (por exemplo, `git check-ignore -q <maintenance>` com saída 0). Se não for,
-   termine em `HOLD`: gravar ali deixaria o projeto com mudanças rastreadas.
+3. Confirme que o path do relatório a gravar, dentro do diretório
+   `maintenance`, é ignorado pelo Git do consumidor (por exemplo,
+   `git check-ignore -q <maintenance>/<relatório>.md` com saída 0). Verifique
+   o arquivo, não o diretório: uma regra como `maintenance/` só casa com o
+   diretório depois que ele existe. Se não for ignorado, termine em `HOLD`:
+   gravar ali deixaria o projeto com mudanças rastreadas.
 4. Leia o relatório anterior mais recente no diretório `maintenance`, se
    existir.
 

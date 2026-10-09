@@ -49,7 +49,7 @@ class RepositoryCheckTests(unittest.TestCase):
     def test_agent_with_unknown_role_or_capability_fails(self):
         path = self.root / "skills/radiant-delegation/agents.json"
         original = path.read_text(encoding="utf-8")
-        for field, value in (("role", "inexistente"), ("capability", "turbo")):
+        for field, value in (("role", "inexistente"), ("capability", "turbo"), ("access", "admin")):
             with self.subTest(field=field):
                 data = json.loads(original)
                 data["agents"][0][field] = value

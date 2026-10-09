@@ -78,8 +78,9 @@ agentes customizados do Codex:
 python3 adapters/render_bootstrap.py --adapter codex --agents-dir ~/.codex/agents
 ```
 
-Cada TOML contém `name`, `description`, `model` e `developer_instructions`,
-este último apenas com o ponteiro para a seção do papel na
+Cada TOML contém `name`, `description`, `model`, `developer_instructions` e,
+nos perfis de leitura, `sandbox_mode`. O campo `developer_instructions` traz
+apenas o ponteiro para a seção do papel na
 [skill de delegação](../../skills/radiant-delegation/SKILL.md). O gerador
 recusa a execução inteira se qualquer `radiant-*.toml` já existir.
 
@@ -88,6 +89,9 @@ recusa a execução inteira se qualquer `radiant-*.toml` já existir.
   do orquestrador, conforme a regra 5 da skill.
 - O Codex não documenta bloqueio de delegação por agente; a regra de que
   papéis delegados não delegam está nas instruções do agente.
+- Perfis com `access: read` recebem `sandbox_mode = "read-only"`. Perfis
+  `write` herdam o sandbox da sessão; as fronteiras do contrato valem pela
+  seção "Acesso e fronteiras" da skill de delegação.
 
 Comportamentos conforme a
 [documentação oficial de subagentes](https://learn.chatgpt.com/docs/agent-configuration/subagents),

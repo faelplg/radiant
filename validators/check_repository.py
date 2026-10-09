@@ -48,6 +48,8 @@ def check_delegation(errors):
         names.add(name)
         if agent.get("capability") not in CAPABILITIES:
             errors.append(f"{registry}: {name}: capacidade desconhecida {agent.get('capability')!r}")
+        if agent.get("access") not in ("read", "write"):
+            errors.append(f"{registry}: {name}: acesso desconhecido {agent.get('access')!r}")
         if agent.get("role") not in roles:
             errors.append(f"{registry}: {name}: papel sem seção na skill: {agent.get('role')!r}")
     for adapter in sorted(p for p in (ROOT / "adapters").iterdir() if p.is_dir()):

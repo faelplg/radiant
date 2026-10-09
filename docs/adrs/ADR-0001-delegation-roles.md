@@ -319,6 +319,16 @@ conclui "nada material" é resultado válido.
 2. Merge na `main`; ADR passa a `accepted` com referência ao commit.
 3. PR no AIKM: TC-0019 com pin no commit de merge, seguido do ciclo TC-0020.
 
+## Limitação registrada na revisão do PR
+
+Perfis delegáveis declaram `access` (`read` ou `write`). Perfis de leitura
+recebem menor privilégio do harness (`tools` restritas no Claude Code,
+`sandbox_mode = "read-only"` no Codex). Fronteiras específicas de cada
+contrato nos perfis `write` não são impostas pelo harness: dependem do pacote
+e do readback do orquestrador, conforme a seção "Acesso e fronteiras" da skill
+de delegação. Enforcement por contrato é candidato a evolução com evidência do
+piloto.
+
 ## Fora de escopo
 
 - Execução automática de correções pela Manutenção.
