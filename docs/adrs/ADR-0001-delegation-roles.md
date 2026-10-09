@@ -41,13 +41,16 @@ Dois resultados são esperados:
   consumidor e o `AGENTS.md` do AIKM apontam diretamente para ele.
 - Skills externas (por exemplo superpowers e design-superpowers) produzem
   artefatos em paths próprios, concorrentes com os do Radiant.
-- Fatos de harness levantados em 2026-10-09:
-  - Claude Code: subagentes não criam subagentes; toda delegação parte do
-    orquestrador.
-  - Codex: subagentes disponíveis desde 2026-03-16, com agentes customizados em
-    TOML e modelo por agente. O suporte a override de modelo na criação do
-    subagente será confirmado na documentação oficial durante a
-    implementação.
+- Fatos de harness conferidos na documentação oficial em 2026-10-09:
+  - Claude Code: subagentes em Markdown com frontmatter em `~/.claude/agents/`;
+    `model` aceita ID completo; o parâmetro `model` da invocação prevalece
+    sobre o frontmatter. Subagentes podem criar subagentes até três camadas
+    abaixo da sessão principal; a criação é bloqueada por agente com
+    `disallowedTools: Agent`.
+  - Codex: subagentes em TOML em `~/.codex/agents/`, com `name`,
+    `description` e `developer_instructions` obrigatórios e `model` opcional.
+    O `model` declarado no arquivo do agente prevalece sobre o valor passado na
+    criação. Não há limite de profundidade documentado.
 - O [template de Task Contract](../../templates/task-contract.md) já possui
   `Risk tier`, `Independent critique` e `Completion report`, reutilizados por
   esta decisão.
@@ -131,6 +134,9 @@ completos de modelo.
    saídas. O mesmo vale quando o harness não permite o override pedido.
 6. Exceção do orquestrador: em execução de Manutenção, que apenas propõe, o
    orquestrador pode operar em `standard`.
+7. Papéis delegados não delegam. Toda delegação parte do orquestrador, para
+   que cada uma fique registrada na proveniência de custo e respeite a regra
+   de aceite.
 
 ## 2. Handoff e retorno
 
@@ -248,18 +254,19 @@ conclui "nada material" é resultado válido.
 
 - Bootstrap global: bloco `radiant:begin/end` para o arquivo de instruções
   globais do usuário, preservando o restante e removível isoladamente.
-- Subagentes em Markdown com frontmatter, no diretório de agentes do usuário.
-- Override de capacidade usa o parâmetro de modelo da delegação, sem um
-  arquivo por combinação.
-- Subagentes não criam subagentes: o orquestrador despacha toda delegação.
+- Subagentes em Markdown com frontmatter, no diretório de agentes do usuário,
+  com `disallowedTools: Agent` para aplicar a regra 7.
+- Override de capacidade usa o parâmetro `model` da invocação, sem um arquivo
+  por combinação.
 
 ### Codex (`adapters/codex/`)
 
 - Mantém o bootstrap atual.
-- Subagentes em TOML no diretório de agentes do usuário.
-- Modelos e suporte a override confirmados na documentação oficial durante a
-  implementação. Sem override, o papel com capacidade alterada roda na sessão
-  do orquestrador.
+- Subagentes em TOML no diretório de agentes do usuário. A regra 7 fica nas
+  instruções do agente, porque o Codex não documenta bloqueio por agente.
+- Como o `model` do arquivo prevalece, o override de capacidade não é
+  possível na criação: o papel com capacidade alterada roda na sessão do
+  orquestrador (regra 5).
 
 ### Consumidores
 
