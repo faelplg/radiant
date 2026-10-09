@@ -62,9 +62,10 @@ execução inteira se qualquer `radiant-*.md` já existir; para regenerar, remov
 os seis arquivos e execute de novo.
 
 - `disallowedTools: Agent` aplica a regra de que papéis delegados não delegam.
-- Override de capacidade pelo contrato: o orquestrador passa o parâmetro
-  `model` da invocação com o ID correspondente em `capabilities.json`; esse
-  parâmetro prevalece sobre o frontmatter.
+- Override de capacidade pelo contrato: o papel roda na sessão do
+  orquestrador, conforme a regra 5 da skill. O parâmetro `model` da invocação
+  aceita apenas aliases de família e não é usado, para preservar a
+  identificação do modelo efetivo.
 - A sessão principal deve rodar no modelo de `deep`.
 
 Comportamentos de subagentes conforme a

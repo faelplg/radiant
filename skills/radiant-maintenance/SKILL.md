@@ -25,7 +25,10 @@ o [template](../../templates/maintenance-report.md).
 2. Leia o documento de `workflow` e sua seção de Manutenção: comandos seguros
    para manutenção e fontes externas autorizadas. Sem essa seção, nenhum
    comando é executado e nenhuma fonte externa é consultada.
-3. Leia o relatório anterior mais recente no diretório `maintenance`, se
+3. Confirme que o diretório `maintenance` é ignorado pelo Git do consumidor
+   (por exemplo, `git check-ignore -q <maintenance>` com saída 0). Se não for,
+   termine em `HOLD`: gravar ali deixaria o projeto com mudanças rastreadas.
+4. Leia o relatório anterior mais recente no diretório `maintenance`, se
    existir.
 
 ## Fontes
@@ -55,7 +58,8 @@ Rascunhos não viram arquivos de contrato nem recebem ID.
 ## Fronteira
 
 - A única escrita é o relatório, no diretório `maintenance`, criado na
-  primeira execução se não existir. Esse diretório é ignorado pelo Git.
+  primeira execução se não existir, depois da confirmação do passo 3 da
+  Entrada.
 - Sem branch, PR, issue, commit, instalação ou atualização de dependência.
 - Execução somente local. Coleta em `light`; priorização, rascunhos e a sessão
   orquestradora em `standard`.

@@ -43,8 +43,10 @@ Dois resultados são esperados:
   artefatos em paths próprios, concorrentes com os do Radiant.
 - Fatos de harness conferidos na documentação oficial em 2026-10-09:
   - Claude Code: subagentes em Markdown com frontmatter em `~/.claude/agents/`;
-    `model` aceita ID completo; o parâmetro `model` da invocação prevalece
-    sobre o frontmatter. Subagentes podem criar subagentes até três camadas
+    `model` do frontmatter aceita ID completo. O parâmetro `model` da
+    invocação prevalece sobre o frontmatter, mas aceita apenas aliases de
+    família (`sonnet`, `opus`, `haiku`, `fable`), que não identificam o
+    modelo efetivo. Subagentes podem criar subagentes até três camadas
     abaixo da sessão principal; a criação é bloqueada por agente com
     `disallowedTools: Agent`.
   - Codex: subagentes em TOML em `~/.codex/agents/`, com `name`,
@@ -256,8 +258,9 @@ conclui "nada material" é resultado válido.
   globais do usuário, preservando o restante e removível isoladamente.
 - Subagentes em Markdown com frontmatter, no diretório de agentes do usuário,
   com `disallowedTools: Agent` para aplicar a regra 7.
-- Override de capacidade usa o parâmetro `model` da invocação, sem um arquivo
-  por combinação.
+- Override de capacidade não usa o parâmetro `model` da invocação, que só
+  aceita aliases: o papel com capacidade alterada roda na sessão do
+  orquestrador (regra 5), como no Codex.
 
 ### Codex (`adapters/codex/`)
 
