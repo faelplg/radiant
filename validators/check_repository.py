@@ -52,7 +52,10 @@ def check_delegation(errors):
             errors.append(f"{registry}: {name}: acesso desconhecido {agent.get('access')!r}")
         if agent.get("role") not in roles:
             errors.append(f"{registry}: {name}: papel sem seção na skill: {agent.get('role')!r}")
+    bootstrap = (ROOT / "adapters/global.template.md").read_text(encoding="utf-8")
     for adapter in sorted(p for p in (ROOT / "adapters").iterdir() if p.is_dir()):
+        if f"adapters/{adapter.name}/README.md" not in bootstrap:
+            errors.append(f"adapters/global.template.md: não aponta para adapters/{adapter.name}/README.md")
         mapping = adapter / "capabilities.json"
         relative = mapping.relative_to(ROOT).as_posix()
         if not mapping.is_file():

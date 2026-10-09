@@ -331,6 +331,15 @@ e do readback do orquestrador, conforme a seção "Acesso e fronteiras" da skill
 de delegação. Enforcement por contrato é candidato a evolução com evidência do
 piloto.
 
+## Emendas
+
+- 2026-10-09: o bloco global passa a ser um template único e neutro,
+  `adapters/global.template.md`, que indica o adapter de cada harness. Motivo:
+  no primeiro uso real, as instruções globais do Claude Code e do Codex eram o
+  mesmo arquivo (dotfiles), e um bloco por adapter fazia um harness ler o
+  adapter do outro. O gerador imprime o bloco sem `--adapter`, que passa a ser
+  exigido só com `--agents-dir`.
+
 ## Fora de escopo
 
 - Execução automática de correções pela Manutenção.

@@ -156,43 +156,40 @@ class IntegrationTests(unittest.TestCase):
         self.assert_hold()
 
     def test_global_output_is_small_portable_and_non_destructive(self):
-        result = self.render("--adapter", "codex")
+        result = self.render()
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn(str(self.root), result.stdout)
         self.assertNotIn(str(SOURCE), result.stdout)
         self.assertLess(len(result.stdout.encode()), 1024)
         self.assertNotIn("Artigo", result.stdout)
-        output = self.root / ".local/codex-global.md"
-        self.assertEqual(self.render("--adapter", "codex", "--output", str(output)).returncode, 0)
+        output = self.root / ".local/global.md"
+        self.assertEqual(self.render("--output", str(output)).returncode, 0)
         self.assertEqual(output.read_text(encoding="utf-8"), result.stdout)
         self.assertEqual(self.gate().returncode, 0)  # Generated output is ignored.
         output.write_text("existing preferences\n", encoding="utf-8")
-        self.assertNotEqual(self.render("--adapter", "codex", "--output", str(output)).returncode, 0)
+        self.assertNotEqual(self.render("--output", str(output)).returncode, 0)
         self.assertEqual(output.read_text(), "existing preferences\n")
         link = self.project / "global-link.md"
         link.symlink_to(output)
-        self.assertNotEqual(self.render("--adapter", "codex", "--output", str(link)).returncode, 0)
+        self.assertNotEqual(self.render("--output", str(link)).returncode, 0)
         self.assertEqual(output.read_text(), "existing preferences\n")
 
-
-    def test_adapter_is_required(self):
-        self.assertNotEqual(self.render().returncode, 0)
-
-    def test_codex_global_block_is_unchanged(self):
-        template = (self.root / "adapters/codex/global.AGENTS.template.md").read_text(encoding="utf-8")
-        expected = template.replace("{{RADIANT_ROOT_JSON}}",
-                                    json.dumps(str(self.root.resolve()), ensure_ascii=False))
-        self.assertEqual(self.render("--adapter", "codex").stdout, expected)
-
-    def test_claude_global_block_points_to_claude_adapter(self):
-        result = self.render("--adapter", "claude-code")
+    def test_global_block_is_neutral_and_names_every_adapter(self):
+        result = self.render()
         self.assertEqual(result.returncode, 0, result.stderr)
-        out = result.stdout
-        self.assertIn("radiant:begin", out)
-        self.assertIn("radiant:end", out)
-        self.assertIn("adapters/claude-code/README.md", out)
-        self.assertIn(str(self.root), out)
-        self.assertLess(len(out.encode()), 1024)
+        self.assertTrue(result.stdout.startswith("<!-- radiant:begin -->\n"))
+        self.assertTrue(result.stdout.endswith("<!-- radiant:end -->\n"))
+        for adapter in sorted(p.name for p in (self.root / "adapters").iterdir() if p.is_dir()):
+            with self.subTest(adapter=adapter):
+                self.assertIn(f"adapters/{adapter}/README.md", result.stdout)
+        for adapter in ("codex", "claude-code"):
+            with self.subTest(flag=adapter):
+                self.assertEqual(self.render("--adapter", adapter).stdout, result.stdout)
+
+    def test_agents_dir_requires_adapter(self):
+        result = self.render("--agents-dir", str(self.project / "agents"))
+        self.assertNotEqual(result.returncode, 0)
+        self.assertFalse((self.project / "agents").exists())
 
     def test_agents_render_one_file_per_profile(self):
         agents = json.loads((self.root / "skills/radiant-delegation/agents.json").read_text())["agents"]

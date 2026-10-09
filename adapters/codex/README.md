@@ -27,21 +27,24 @@ Não é necessária instalação em catálogo nativo para usar a skill por leitu
 Requisitos: Python 3.9+, Git e checkout acessível ao harness. Na raiz do Radiant:
 
 ```sh
-python3 adapters/render_bootstrap.py --adapter codex
+python3 adapters/render_bootstrap.py
 ```
 
-O comando imprime o [template global](global.AGENTS.template.md) com o path
-absoluto deste checkout. Para criar um arquivo local inspecionável, ignorado no Git:
+O comando imprime o [bloco global](../global.template.md) com o path absoluto
+deste checkout. O bloco é o mesmo para todos os harnesses e indica o adapter de
+cada um, então serve também quando Codex e outro harness leem o mesmo arquivo
+de instruções. Para criar um arquivo local inspecionável, ignorado no Git:
 
 ```sh
-python3 adapters/render_bootstrap.py --adapter codex --output .local/codex-global.md
+python3 adapters/render_bootstrap.py --output .local/global.md
 ```
 
 O gerador recusa sobrescrever arquivos e symlinks. Para regenerar, use outro
 destino ou a saída padrão. Ele não instala regras, altera preferências nem
 substitui o `AGENTS.md` do usuário.
 
-Inclua apenas o bloco gerado na fonte das instruções globais do perfil usado.
+Inclua apenas o bloco gerado, uma única vez, na fonte das instruções globais
+do perfil usado.
 No Codex, o local padrão é `~/.codex/AGENTS.md`; com `CODEX_HOME`, use o diretório
 desse perfil. Um `AGENTS.override.md` não vazio tem prioridade. São mecanismos
 do harness, não mecanismos de descoberta adicionais do Radiant.
