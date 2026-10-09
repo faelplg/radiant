@@ -35,11 +35,14 @@ Confronte os arquivos finais com estes critérios, depois dos checks:
 | Versionabilidade | Diff e referência Git permitem saber o estado aplicado |
 | Minimalismo | Cada arquivo tem função; nenhuma pasta vazia antecipatória |
 | Extensibilidade | Novas capabilities cabem na estrutura sem introduzi-las agora |
+| Agnosticismo de harness | Papéis e capacidades no Core; modelos e mecanismos só nos adapters; todo adapter mapeia as três capacidades |
 
 Simule A: entrar pelo AGENTS do Radiant, encontrar Constitution, tese, capability
 e verificação. Simule B: consumidor vazio, pin, bootstrap, Frame e estado local,
 contrato e leitura compartilhada. Simule C: AIKM independente com seus documentos,
-Learn Back e nenhum ownership sobre o Core.
+Learn Back e nenhum ownership sobre o Core. Simule D: sessão nova no Claude Code
+encontra o bloco global, o adapter, o gate de pin, a Constitution e a skill de
+delegação, e os subagentes gerados apontam para essa mesma revisão.
 
 Use verificadores determinísticos como evidência independente da redação e
 inspecione os percursos do consumidor. Declare se houve outro revisor ou apenas

@@ -75,7 +75,7 @@ devolve achados com evidência.
 
 Fora do ciclo de entrega; alimenta Frame com propostas. Coleta em `light`,
 priorização e rascunhos em `standard` (`radiant-maintenance`). Só propõe. O
-procedimento está em `skills/radiant-maintenance/SKILL.md`.
+procedimento está na [skill de manutenção](../radiant-maintenance/SKILL.md).
 
 ## Regras
 

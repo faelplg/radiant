@@ -73,7 +73,7 @@ consultada em 2026-10-09.
 
 ## Manutenção
 
-Execute a skill de manutenção (`skills/radiant-maintenance/SKILL.md`)
+Execute a [skill de manutenção](../../skills/radiant-maintenance/SKILL.md)
 localmente, manualmente ou por tarefa agendada na própria máquina, com a
 sessão principal em `standard`. Rotinas em nuvem estão fora de escopo: o
 relatório não pode ser persistido sem escrita externa.

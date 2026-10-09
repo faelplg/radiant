@@ -45,7 +45,7 @@ Na raiz do consumidor, `.radiant.json` declara o uso do sistema. Comece pelo
 - `contracts`, `adrs`, `verification`, `learning`: diretório relativo ou `null`.
 - `maintenance`: opcional; diretório relativo ignorado pelo Git onde a
   Manutenção grava seus relatórios, ou `null`. Pode ainda não existir: a skill
-  de manutenção (`skills/radiant-maintenance/SKILL.md`) o cria na primeira
+  de [manutenção](../skills/radiant-maintenance/SKILL.md) o cria na primeira
   execução. Campo ausente equivale a `null`.
 
 Todos os campos estão presentes, exceto o opcional `maintenance`; não inserir

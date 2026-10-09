@@ -23,6 +23,7 @@ registra o momento em que foi escrita, não o status desta reorganização.
 | [docs/design-layer.md](docs/design-layer.md)                               | Camada canônica de design do Radiant                     |
 | [skills/radiant-cycle/SKILL.md](skills/radiant-cycle/SKILL.md)             | Procedimento reutilizável do ciclo                       |
 | [skills/radiant-delegation/SKILL.md](skills/radiant-delegation/SKILL.md)   | Papéis, capacidades e delegação                          |
+| [skills/radiant-maintenance/SKILL.md](skills/radiant-maintenance/SKILL.md) | Triagem de manutenção que só propõe                      |
 | [templates/](templates/README.md)                                          | Formulários de Frame, Contract, Design e mapa do projeto |
 | [contracts/README.md](contracts/README.md)                                 | Convenção compartilhada de contratos                     |
 | [adapters/codex/](adapters/codex/README.md)                                | Bootstrap e subagentes do Codex                          |

@@ -6,6 +6,7 @@ Este índice não implementa comportamento. Leia somente o corpo aplicável.
 | ---------------------------------------- | -------------------------------------------------------------------------------- | ----------------------------------- |
 | Planejar, executar, verificar e aprender | [radiant-cycle](../skills/radiant-cycle/SKILL.md)                                | Incremento delimitado e evidência   |
 | Orquestrar papéis e delegar              | [radiant-delegation](../skills/radiant-delegation/SKILL.md)                      | Delegações com evidência e aceite   |
+| Triar manutenção de um consumidor        | [radiant-maintenance](../skills/radiant-maintenance/SKILL.md), [relatório](../templates/maintenance-report.md) | Relatório com propostas             |
 | Configurar o harness                     | [Codex](../adapters/codex/README.md), [Claude Code](../adapters/claude-code/README.md) | Bootstrap e subagentes do usuário   |
 | Enquadrar intenção                       | [Project Frame](../templates/project-frame.md)                                   | Frame preenchido                    |
 | Enquadrar a experiência                  | [Design Frame](../templates/design-frame.md)                                     | Design Frame preenchido             |
