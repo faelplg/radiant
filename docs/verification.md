@@ -14,10 +14,12 @@ git diff --cached --check
 ```
 
 O primeiro comando verifica links Markdown locais e anchors, inventário de
-custódia, integridade dos corpos preservados e ausência de paths pessoais nas
-camadas operacionais. Os testes exercitam o gerador de bootstrap e o gate de
-pin através dos seus comandos reais em diretórios temporários, incluindo
-divergência, sujeira no checkout e paths inválidos.
+custódia, integridade dos corpos preservados, ausência de paths pessoais nas
+camadas operacionais e coerência entre `agents.json`, as seções da skill de
+delegação e o `capabilities.json` de cada adapter. Os testes exercitam o
+gerador de bootstrap e subagentes, o gate de pin e o validator do repository
+através dos seus comandos reais em diretórios temporários, incluindo
+divergência, sujeira no checkout, paths inválidos e recusa de sobrescrita.
 
 ## Revisão estrutural separada do Build
 
