@@ -6,7 +6,7 @@ description:
   iniciar ou retomar uma entrega Radiant; uma consulta pontual não exige
   executar o ciclo inteiro.
 metadata:
-  version: "0.1.2"
+  version: "0.1.3"
 ---
 
 # Ciclo operacional Radiant
@@ -31,6 +31,10 @@ projeto consumidor.
 4. Informe de forma curta: objetivo, modo, contrato ou autorização documental,
    versão desta skill, evidência esperada e próxima ação. Reutilize contexto já
    carregado; não recomece etapas concluídas sem nova razão.
+5. Para coordenar papéis ou delegar trabalho a subagentes, leia a
+   [skill radiant-delegation](../radiant-delegation/SKILL.md). Para triagem
+   contínua de um consumidor, use a
+   [skill radiant-maintenance](../radiant-maintenance/SKILL.md).
 
 ## Planejar e enquadrar
 
@@ -84,7 +88,9 @@ projeto consumidor.
 - Escolha independência proporcional ao risco: verificadores determinísticos,
   inspeção do consumidor, outra execução ou revisão humana. Só use delegação
   quando disponível e autorizada. Diga qual método foi usado e suas limitações;
-  uma releitura própria não equivale a uma revisão independente.
+  uma releitura própria não equivale a uma revisão independente. Com papéis
+  delegados, siga a regra de aceite da
+  [skill de delegação](../radiant-delegation/SKILL.md#regras).
 - Relacione achado material, evidência, diagnóstico e menor `fixTarget`. Corrija
   dentro da autorização vigente; caso contrário registre a pendência. Distingua
   correção feita, correção verificada e reutilização posterior demonstrada.

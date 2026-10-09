@@ -11,6 +11,8 @@ from pathlib import Path
 FILES = ("frame", "spec", "plan", "workflow", "active_contract", "engineering_profile")
 DIRECTORIES = ("contracts", "adrs", "verification", "learning")
 FIELDS = {"radiant_revision", *FILES, *DIRECTORIES}
+# Optional: may be absent from the map, and its directory may not exist yet.
+OPTIONAL = ("maintenance",)
 
 
 def git(root, *args):
@@ -40,7 +42,7 @@ def validate(root, project):
     if not mapping.resolve().is_relative_to(project):
         raise ValueError(".radiant.json escapa do projeto")
     config = json.loads(mapping.read_text(encoding="utf-8"), object_pairs_hook=unique_object)
-    if not isinstance(config, dict) or set(config) != FIELDS:
+    if not isinstance(config, dict) or not FIELDS <= set(config) <= FIELDS | set(OPTIONAL):
         raise ValueError("campos do mapa diferem de templates/radiant-project.json")
     revision = config["radiant_revision"]
     if not isinstance(revision, str) or not re.fullmatch(r"[0-9a-f]{40}|[0-9a-f]{64}", revision):
@@ -49,8 +51,8 @@ def validate(root, project):
         raise ValueError("revisão do checkout difere do pin; não atualizar o pin automaticamente")
     if git(root, "status", "--porcelain", "--untracked-files=all"):
         raise ValueError("checkout Radiant contém mudanças locais; use a revisão limpa registrada")
-    for field in (*FILES, *DIRECTORIES):
-        value = config[field]
+    for field in (*FILES, *DIRECTORIES, *OPTIONAL):
+        value = config.get(field)
         if value is None:
             continue
         if not isinstance(value, str) or not value.strip():
@@ -59,6 +61,10 @@ def validate(root, project):
         target = project / path
         if path.is_absolute() or ".." in path.parts or not target.resolve().is_relative_to(project):
             raise ValueError(f"{field}: path escapa do projeto")
+        if field in OPTIONAL:
+            if path == Path(".") or (target.exists() and not target.is_dir()):
+                raise ValueError(f"{field}: diretório próprio dentro do projeto esperado")
+            continue
         valid = target.is_file() if field in FILES else target.is_dir()
         if not valid:
             raise ValueError(f"{field}: destino ausente ou tipo incorreto")

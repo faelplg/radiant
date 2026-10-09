@@ -1,0 +1,5 @@
+{
+  "deep": "gpt-6-astra",
+  "standard": "gpt-6.1-sol",
+  "light": "gpt-6-luna"
+}

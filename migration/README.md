@@ -25,7 +25,7 @@ entradas operacionais. A resolução correta é esta:
 | --- | --- |
 | `docs/radiant/CONSTITUTION.md` | Origem histórica: Constitution AIKM 0.1. Owner atual: [Constitution Radiant](../constitution/CONSTITUTION.md). Diferenças originais somente editoriais; não inferir pin retroativo. |
 | `docs/radiant/skills/radiant-cycle/SKILL.md` | Origem histórica: skill 0.1.0, digest no relatório. Owner atual: [skill Radiant](../skills/radiant-cycle/SKILL.md) 0.1.1. O link novo não muda qual corpo foi usado no passado. |
-| `AGENTS.md` da raiz AIKM | Adapter AIKM 0.2 existente no repositório AIKM. Não é o AGENTS desta raiz. Adoção futura usa o [template consumidor](../adapters/codex/project.AGENTS.template.md). |
+| `AGENTS.md` da raiz AIKM | Adapter AIKM 0.2 existente no repositório AIKM. Não é o AGENTS desta raiz. Adoção futura usa o [template consumidor](../templates/project-agents.md). |
 | `README.md#development` da raiz AIKM | Comandos de desenvolvimento do AIKM, não do Radiant. Consultar o repository AIKM ao retomar seu desenvolvimento. |
 | Literais `docs/project/...`, `src/**`, `npm run check` | Paths e comandos de execução no repository AIKM original. Não rebasear fronteiras de contratos encerrados para esta pasta. |
 

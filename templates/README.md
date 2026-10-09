@@ -17,6 +17,12 @@ uma cópia do template para distribuição a outros projetos.
   [integração](../docs/integration.md). Substituir `RADIANT_COMMIT` por commit
   completo real; `null` significa que o artefato ainda não existe.
 
-Templates de configuração do harness vivem no
-[adapter](../adapters/codex/README.md). Regras completas permanecem nos owners,
-não são copiadas para os formulários.
+- [maintenance-report.md](maintenance-report.md): relatório da triagem de
+  manutenção, gravado fora do Git no consumidor.
+- [project-agents.md](project-agents.md): mapa neutro de harness para o
+  `AGENTS.md` do consumidor.
+
+Templates de configuração do harness vivem nos adapters
+[Codex](../adapters/codex/README.md) e
+[Claude Code](../adapters/claude-code/README.md). Regras completas permanecem
+nos owners, não são copiadas para os formulários.

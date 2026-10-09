@@ -15,9 +15,12 @@ Para mudanças no sistema, siga [contribuição e versionamento](docs/contributi
 Comandos locais: `python3 validators/check_repository.py` e
 `python3 -m unittest discover -s tests -v`. Use Python 3.9+ e Git.
 
-Integração com consumidores está em [integração](docs/integration.md) e no
-[adapter Codex](adapters/codex/README.md). O Core compartilhado não depende do
-adapter. Trabalhando neste repositório, a árvore local é o alvo de edição;
+Integração com consumidores está em [integração](docs/integration.md) e nos
+adapters [Codex](adapters/codex/README.md) e
+[Claude Code](adapters/claude-code/README.md). O Core compartilhado não depende
+de adapter. Para coordenar papéis e delegar, leia a
+[skill radiant-delegation](skills/radiant-delegation/SKILL.md); decisões
+estruturais do Radiant ficam em [docs/adrs/](docs/adrs/ADR-0001-delegation-roles.md). Trabalhando neste repositório, a árvore local é o alvo de edição;
 o pin de um consumidor não impede desenvolver uma nova revisão do Radiant.
 
 `migration/aikm/` guarda snapshots externos, não contratos ativos deste

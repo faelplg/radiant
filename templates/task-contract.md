@@ -18,6 +18,7 @@
 **Status:** `READY | HOLD | IN_PROGRESS | VERIFY | DONE | FAIL`  
 **Owner:** `[human/agent]`  
 **Risk tier:** `0 | 1 | 2 | 3`  
+**Capability:** `default | deep | standard | light` - justificativa em uma linha quando diferente de default\
 **Engineering Baseline:** `Radiant Engineering Baseline v0.1`  
 **Engineering Profile:** `[project profile/version | none]`
 
@@ -273,7 +274,9 @@ O agente não pode, sem HOLD:
 
 # 16. Completion report
 
-Ao finalizar, responder de forma curta com:
+Ao finalizar, responder de forma curta com o formato abaixo. Na
+[delegação](../skills/radiant-delegation/SKILL.md), este relatório é o retorno
+do Build ao orquestrador.
 
 ### Status
 

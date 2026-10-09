@@ -27,14 +27,14 @@ Não é necessária instalação em catálogo nativo para usar a skill por leitu
 Requisitos: Python 3.9+, Git e checkout acessível ao harness. Na raiz do Radiant:
 
 ```sh
-python3 adapters/codex/render_bootstrap.py
+python3 adapters/render_bootstrap.py --adapter codex
 ```
 
 O comando imprime o [template global](global.AGENTS.template.md) com o path
 absoluto deste checkout. Para criar um arquivo local inspecionável, ignorado no Git:
 
 ```sh
-python3 adapters/codex/render_bootstrap.py --output .local/codex-global.md
+python3 adapters/render_bootstrap.py --adapter codex --output .local/codex-global.md
 ```
 
 O gerador recusa sobrescrever arquivos e symlinks. Para regenerar, use outro
@@ -63,9 +63,44 @@ das instruções globais e regenere quando aplicável. Não apague preferências
 restantes. Para relocação, regenere o bloco com o novo checkout. Nenhum arquivo
 do Core precisa mudar.
 
+## Capacidades
+
+O mapeamento capacidade → ID completo de modelo está em
+[capabilities.json](capabilities.json), única fonte deste adapter. Trocar de
+modelo é editar esse arquivo, verificar e regenerar os subagentes.
+
+## Subagentes
+
+Os perfis de [agents.json](../../skills/radiant-delegation/agents.json) viram
+agentes customizados do Codex:
+
+```sh
+python3 adapters/render_bootstrap.py --adapter codex --agents-dir ~/.codex/agents
+```
+
+Cada TOML contém `name`, `description`, `model`, `developer_instructions` e,
+nos perfis de leitura, `sandbox_mode`. O campo `developer_instructions` traz
+apenas o ponteiro para a seção do papel na
+[skill de delegação](../../skills/radiant-delegation/SKILL.md). O gerador
+recusa a execução inteira se qualquer `radiant-*.toml` já existir.
+
+- O `model` declarado no arquivo prevalece sobre o modelo pedido na criação do
+  subagente. Um override de capacidade pelo contrato, portanto, roda na sessão
+  do orquestrador, conforme a regra 5 da skill.
+- O Codex não documenta bloqueio de delegação por agente; a regra de que
+  papéis delegados não delegam está nas instruções do agente.
+- Perfis com `access: read` recebem `sandbox_mode = "read-only"`. Perfis
+  `write` herdam o sandbox da sessão; as fronteiras do contrato valem pela
+  seção "Acesso e fronteiras" da skill de delegação.
+
+Comportamentos conforme a
+[documentação oficial de subagentes](https://learn.chatgpt.com/docs/agent-configuration/subagents),
+consultada em 2026-10-09. Para desfazer, remova os seis arquivos
+`radiant-*.toml` de `~/.codex/agents/`.
+
 ## Configurar o consumidor
 
-Use [project.AGENTS.template.md](project.AGENTS.template.md) como mapa local e
+Use o [mapa neutro](../../templates/project-agents.md) como `AGENTS.md` e
 [radiant-project.json](../../templates/radiant-project.json) como `.radiant.json`.
 Preencha o commit e os paths conforme a [convenção](../../docs/integration.md),
 incluindo `engineering_profile` quando o projeto possuir um Profile.

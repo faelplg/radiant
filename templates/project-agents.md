@@ -1,8 +1,11 @@
 # Orientação do projeto
 
 Este projeto usa Radiant. Localize seu checkout pelo bootstrap global do usuário
-e leia `adapters/codex/README.md` nele para validar a revisão e carregar o Core.
-Se o pointer estiver ausente, configure-o antes de executar sob Radiant.
+e leia nele o README do adapter do harness em uso, em `adapters/<harness>/`,
+para validar a revisão e carregar o Core. Se o pointer estiver ausente,
+configure-o antes de executar sob Radiant. Em harnesses que leem outro arquivo
+de instruções, esse arquivo contém apenas um import deste mapa; no Claude Code,
+`CLAUDE.md` com a linha `@AGENTS.md`.
 
 O mapa de estado e o commit escolhido estão em `.radiant.json` nesta raiz.
 Leia os artefatos necessários à tarefa e o ponteiro de contrato indicado no

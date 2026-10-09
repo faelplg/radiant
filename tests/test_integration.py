@@ -8,6 +8,11 @@ import sys
 import tempfile
 import unittest
 
+try:
+    import tomllib
+except ImportError:  # Python < 3.11
+    tomllib = None
+
 
 SOURCE = Path(__file__).resolve().parents[1]
 
@@ -47,7 +52,7 @@ class IntegrationTests(unittest.TestCase):
                    cwd=self.project)
 
     def render(self, *args):
-        return run(sys.executable, str(self.root / "adapters/codex/render_bootstrap.py"), *args,
+        return run(sys.executable, str(self.root / "adapters/render_bootstrap.py"), *args,
                    cwd=self.project)
 
     def assert_hold(self):
@@ -118,6 +123,30 @@ class IntegrationTests(unittest.TestCase):
                 self.write_map()
                 self.assert_hold()
 
+    def test_maintenance_is_optional_and_may_not_exist_yet(self):
+        self.config.pop("maintenance", None)
+        self.write_map()
+        self.assertEqual(self.gate().returncode, 0)
+        for value in (None, "ops/maintenance"):
+            with self.subTest(value=value):
+                self.config["maintenance"] = value
+                self.write_map()
+                result = self.gate()
+                self.assertEqual(result.returncode, 0, result.stderr)
+        (self.project / "ops/maintenance").mkdir(parents=True)
+        self.assertEqual(self.gate().returncode, 0)
+
+    def test_maintenance_rejects_escapes_and_files(self):
+        outside = Path(self.temp.name) / "outside-dir"
+        outside.mkdir()
+        (self.project / "escape-dir").symlink_to(outside)
+        (self.project / "report.md").write_text("x\n", encoding="utf-8")
+        for value in ("../outside-dir", str(outside), "escape-dir", "report.md", "", ".", 3):
+            with self.subTest(value=value):
+                self.config["maintenance"] = value
+                self.write_map()
+                self.assert_hold()
+
     def test_invalid_duplicate_and_missing_map_are_rejected(self):
         mapping = self.project / ".radiant.json"
         for content in ("{", "[]", '{}', '{"radiant_revision":"a","radiant_revision":"b"}'):
@@ -127,24 +156,106 @@ class IntegrationTests(unittest.TestCase):
         self.assert_hold()
 
     def test_global_output_is_small_portable_and_non_destructive(self):
-        result = self.render()
+        result = self.render("--adapter", "codex")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn(str(self.root), result.stdout)
         self.assertNotIn(str(SOURCE), result.stdout)
         self.assertLess(len(result.stdout.encode()), 1024)
         self.assertNotIn("Artigo", result.stdout)
         output = self.root / ".local/codex-global.md"
-        self.assertEqual(self.render("--output", str(output)).returncode, 0)
+        self.assertEqual(self.render("--adapter", "codex", "--output", str(output)).returncode, 0)
         self.assertEqual(output.read_text(encoding="utf-8"), result.stdout)
         self.assertEqual(self.gate().returncode, 0)  # Generated output is ignored.
         output.write_text("existing preferences\n", encoding="utf-8")
-        self.assertNotEqual(self.render("--output", str(output)).returncode, 0)
+        self.assertNotEqual(self.render("--adapter", "codex", "--output", str(output)).returncode, 0)
         self.assertEqual(output.read_text(), "existing preferences\n")
         link = self.project / "global-link.md"
         link.symlink_to(output)
-        self.assertNotEqual(self.render("--output", str(link)).returncode, 0)
+        self.assertNotEqual(self.render("--adapter", "codex", "--output", str(link)).returncode, 0)
         self.assertEqual(output.read_text(), "existing preferences\n")
 
+
+    def test_adapter_is_required(self):
+        self.assertNotEqual(self.render().returncode, 0)
+
+    def test_codex_global_block_is_unchanged(self):
+        template = (self.root / "adapters/codex/global.AGENTS.template.md").read_text(encoding="utf-8")
+        expected = template.replace("{{RADIANT_ROOT_JSON}}",
+                                    json.dumps(str(self.root.resolve()), ensure_ascii=False))
+        self.assertEqual(self.render("--adapter", "codex").stdout, expected)
+
+    def test_claude_global_block_points_to_claude_adapter(self):
+        result = self.render("--adapter", "claude-code")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        out = result.stdout
+        self.assertIn("radiant:begin", out)
+        self.assertIn("radiant:end", out)
+        self.assertIn("adapters/claude-code/README.md", out)
+        self.assertIn(str(self.root), out)
+        self.assertLess(len(out.encode()), 1024)
+
+    def test_agents_render_one_file_per_profile(self):
+        agents = json.loads((self.root / "skills/radiant-delegation/agents.json").read_text())["agents"]
+        skill = str(self.root / "skills/radiant-delegation/SKILL.md")
+        for adapter, ext in (("claude-code", ".md"), ("codex", ".toml")):
+            with self.subTest(adapter=adapter):
+                models = json.loads((self.root / f"adapters/{adapter}/capabilities.json").read_text())
+                target = self.project / f"agents-{adapter}"
+                result = self.render("--adapter", adapter, "--agents-dir", str(target))
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual(sorted(p.name for p in target.iterdir()),
+                                 sorted(a["name"] + ext for a in agents))
+                for agent in agents:
+                    text = (target / (agent["name"] + ext)).read_text(encoding="utf-8")
+                    self.assertIn(models[agent["capability"]], text)
+                    self.assertIn(json.dumps(skill, ensure_ascii=False)[1:-1]
+                                  if adapter == "codex" else skill, text)
+                    self.assertNotIn(str(SOURCE), text)
+                    if adapter == "claude-code":
+                        self.assertTrue(text.startswith("---\n"))
+                        self.assertIn("disallowedTools: Agent", text)
+
+    @unittest.skipUnless(tomllib, "tomllib requer Python 3.11+")
+    def test_codex_agents_are_valid_toml(self):
+        target = self.project / "agents"
+        self.assertEqual(self.render("--adapter", "codex", "--agents-dir", str(target)).returncode, 0)
+        for path in target.iterdir():
+            data = tomllib.loads(path.read_text(encoding="utf-8"))
+            self.assertLessEqual({"name", "description", "model", "developer_instructions"}, set(data))
+            self.assertIn(str(self.root), data["developer_instructions"])
+
+    def test_read_only_profiles_get_least_privilege(self):
+        agents = json.loads((self.root / "skills/radiant-delegation/agents.json").read_text())["agents"]
+        claude, codex = self.project / "claude", self.project / "codex"
+        self.assertEqual(self.render("--adapter", "claude-code", "--agents-dir", str(claude)).returncode, 0)
+        self.assertEqual(self.render("--adapter", "codex", "--agents-dir", str(codex)).returncode, 0)
+        self.assertEqual({a["name"] for a in agents if a["access"] == "read"},
+                         {"radiant-research", "radiant-grill"})
+        for agent in agents:
+            with self.subTest(agent=agent["name"]):
+                md = (claude / (agent["name"] + ".md")).read_text(encoding="utf-8")
+                toml = (codex / (agent["name"] + ".toml")).read_text(encoding="utf-8")
+                if agent["access"] == "read":
+                    self.assertIn("tools: Read, Grep, Glob, WebFetch, WebSearch\n", md)
+                    self.assertIn('sandbox_mode = "read-only"', toml)
+                else:
+                    self.assertNotIn("tools:", md)
+                    self.assertNotIn("sandbox_mode", toml)
+
+    def test_agents_refuse_any_existing_or_symlinked_target(self):
+        target = self.project / "agents"
+        target.mkdir()
+        (target / "radiant-dev.md").write_text("keep\n", encoding="utf-8")
+        self.assertNotEqual(
+            self.render("--adapter", "claude-code", "--agents-dir", str(target)).returncode, 0)
+        self.assertEqual([p.name for p in target.iterdir()], ["radiant-dev.md"])
+        self.assertEqual((target / "radiant-dev.md").read_text(), "keep\n")
+        (target / "radiant-dev.md").unlink()
+        (target / "radiant-grill.md").symlink_to(self.project / "elsewhere.md")
+        self.assertNotEqual(
+            self.render("--adapter", "claude-code", "--agents-dir", str(target)).returncode, 0)
+        self.assertFalse((self.project / "elsewhere.md").exists())
+        self.assertEqual([p.name for p in target.iterdir()], ["radiant-grill.md"])
 
 if __name__ == "__main__":
     unittest.main()

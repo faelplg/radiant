@@ -12,7 +12,10 @@ destinos reais do repositório.
 | Delegação ambígua | `templates/task-contract.md` ou `contracts/README.md` |
 | Passo recorrente inadequado | `skills/radiant-cycle/SKILL.md` |
 | Verificação estrutural insuficiente | `validators/` ou `docs/verification.md` |
-| Harness não encontra o corpo correto | `adapters/codex/` |
+| Harness não encontra o corpo correto | `adapters/<harness>/` |
+| Papel, capacidade ou handoff inadequado | `skills/radiant-delegation/` |
+| Modelo inadequado para uma capacidade | `adapters/<harness>/capabilities.json` |
+| Triagem de manutenção ruidosa ou cega | `skills/radiant-maintenance/` ou workflow do consumidor |
 | Revisão aplicada não identificável | `docs/integration.md` e seu validador |
 | Invariante transversal demonstrado | Candidato a amendment constitucional |
 

@@ -1,0 +1,5 @@
+name = {{NAME_JSON}}
+description = {{DESCRIPTION_JSON}}
+model = {{MODEL_JSON}}
+developer_instructions = {{INSTRUCTIONS_JSON}}
+{{ACCESS}}

@@ -14,10 +14,12 @@ git diff --cached --check
 ```
 
 O primeiro comando verifica links Markdown locais e anchors, inventário de
-custódia, integridade dos corpos preservados e ausência de paths pessoais nas
-camadas operacionais. Os testes exercitam o gerador de bootstrap e o gate de
-pin através dos seus comandos reais em diretórios temporários, incluindo
-divergência, sujeira no checkout e paths inválidos.
+custódia, integridade dos corpos preservados, ausência de paths pessoais nas
+camadas operacionais e coerência entre `agents.json`, as seções da skill de
+delegação e o `capabilities.json` de cada adapter. Os testes exercitam o
+gerador de bootstrap e subagentes, o gate de pin e o validator do repository
+através dos seus comandos reais em diretórios temporários, incluindo
+divergência, sujeira no checkout, paths inválidos e recusa de sobrescrita.
 
 ## Revisão estrutural separada do Build
 
@@ -35,11 +37,14 @@ Confronte os arquivos finais com estes critérios, depois dos checks:
 | Versionabilidade | Diff e referência Git permitem saber o estado aplicado |
 | Minimalismo | Cada arquivo tem função; nenhuma pasta vazia antecipatória |
 | Extensibilidade | Novas capabilities cabem na estrutura sem introduzi-las agora |
+| Agnosticismo de harness | Papéis e capacidades no Core; modelos e mecanismos só nos adapters; todo adapter mapeia as três capacidades |
 
 Simule A: entrar pelo AGENTS do Radiant, encontrar Constitution, tese, capability
 e verificação. Simule B: consumidor vazio, pin, bootstrap, Frame e estado local,
 contrato e leitura compartilhada. Simule C: AIKM independente com seus documentos,
-Learn Back e nenhum ownership sobre o Core.
+Learn Back e nenhum ownership sobre o Core. Simule D: sessão nova no Claude Code
+encontra o bloco global, o adapter, o gate de pin, a Constitution e a skill de
+delegação, e os subagentes gerados apontam para essa mesma revisão.
 
 Use verificadores determinísticos como evidência independente da redação e
 inspecione os percursos do consumidor. Declare se houve outro revisor ou apenas

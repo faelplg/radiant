@@ -10,9 +10,11 @@
 
 O repository é a autoridade. O Core é lógico, distribuído pelos diretórios
 listados no [README](../README.md); não exige uma pasta `core/` adicional.
-Configuração global é reconstruível. O
-[adapter Codex](../adapters/codex/README.md) implementa a descoberta no harness
-atual. Outros harnesses poderão localizar os mesmos corpos com adapters próprios.
+Configuração global é reconstruível. Os adapters
+[Codex](../adapters/codex/README.md) e
+[Claude Code](../adapters/claude-code/README.md) implementam a descoberta em
+cada harness. Outros harnesses poderão localizar os mesmos corpos com adapters
+próprios.
 
 ## Descoberta mínima
 
@@ -41,9 +43,13 @@ Na raiz do consumidor, `.radiant.json` declara o uso do sistema. Comece pelo
 - `engineering_profile`: arquivo relativo ao consumidor ou `null` quando o
   Baseline for suficiente e não houver decisões específicas do projeto.
 - `contracts`, `adrs`, `verification`, `learning`: diretório relativo ou `null`.
+- `maintenance`: opcional; diretório relativo ignorado pelo Git onde a
+  Manutenção grava seus relatórios, ou `null`. Pode ainda não existir: a skill
+  de [manutenção](../skills/radiant-maintenance/SKILL.md) o cria na primeira
+  execução. Campo ausente equivale a `null`.
 
-Todos os campos estão presentes; não inserir paths absolutos, `..` ou symlinks
-que escapem do projeto. Quando um artefato for criado, atualize seu ponteiro.
+Todos os campos estão presentes, exceto o opcional `maintenance`; não inserir
+paths absolutos, `..` ou symlinks que escapem do projeto. Quando um artefato for criado, atualize seu ponteiro.
 `null` não dispensa um input necessário à tarefa: a skill identifica a lacuna
 e orienta seu enquadramento. O validador estrutural não concede autorização.
 

@@ -30,8 +30,43 @@ def anchors(text):
     return result
 
 
+CAPABILITIES = ["deep", "standard", "light"]
+
+
+def check_delegation(errors):
+    """Keep delegable profiles and every adapter's model map consistent with the core."""
+    registry = "skills/radiant-delegation/agents.json"
+    data = json.loads((ROOT / registry).read_text(encoding="utf-8"))
+    if data.get("capabilities") != CAPABILITIES:
+        errors.append(f"{registry}: capacidades devem ser exatamente {CAPABILITIES}")
+    roles = anchors((ROOT / "skills/radiant-delegation/SKILL.md").read_text(encoding="utf-8"))
+    names = set()
+    for agent in data.get("agents", []):
+        name = agent.get("name", "")
+        if not name.startswith("radiant-") or name in names:
+            errors.append(f"{registry}: nome de agente inválido ou repetido: {name!r}")
+        names.add(name)
+        if agent.get("capability") not in CAPABILITIES:
+            errors.append(f"{registry}: {name}: capacidade desconhecida {agent.get('capability')!r}")
+        if agent.get("access") not in ("read", "write"):
+            errors.append(f"{registry}: {name}: acesso desconhecido {agent.get('access')!r}")
+        if agent.get("role") not in roles:
+            errors.append(f"{registry}: {name}: papel sem seção na skill: {agent.get('role')!r}")
+    for adapter in sorted(p for p in (ROOT / "adapters").iterdir() if p.is_dir()):
+        mapping = adapter / "capabilities.json"
+        relative = mapping.relative_to(ROOT).as_posix()
+        if not mapping.is_file():
+            errors.append(f"{relative}: adapter sem mapa de capacidades")
+            continue
+        models = json.loads(mapping.read_text(encoding="utf-8"))
+        if (not isinstance(models, dict) or set(models) != set(CAPABILITIES)
+                or not all(isinstance(v, str) and v.strip() for v in models.values())):
+            errors.append(f"{relative}: deve mapear {CAPABILITIES} para IDs de modelo não vazios")
+
+
 def check():
     errors = []
+    check_delegation(errors)
     inventory = json.loads((ROOT / "migration/inventory.json").read_text(encoding="utf-8"))
     historical = json.loads((ROOT / "migration/historical-links.json").read_text(encoding="utf-8"))
     exceptions = {(item["source"], item["target"]) for item in historical}
