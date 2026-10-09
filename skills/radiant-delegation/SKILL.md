@@ -1,0 +1,138 @@
+---
+name: radiant-delegation
+description:
+  Coordenar papéis de um ciclo Radiant e delegar trabalho delimitado a
+  subagentes com a capacidade adequada. Usar ao orquestrar Ideação, Design,
+  Dev, Verificação ou Manutenção, ao montar um pacote de delegação ou ao
+  avaliar o retorno de um papel delegado.
+metadata:
+  version: "0.1.0"
+---
+
+# Delegação e papéis Radiant
+
+Esta skill define como o orquestrador distribui o
+[ciclo](../radiant-cycle/SKILL.md) entre papéis. A
+[Constitution](../../constitution/CONSTITUTION.md) continua superior; contratos
+seguem o [template](../../templates/task-contract.md) e a
+[convenção](../../contracts/README.md). Os perfis delegáveis, legíveis por
+máquina, estão em [agents.json](agents.json). Modelos concretos pertencem aos
+adapters; esta skill fala apenas em capacidades. A decisão que originou esta
+skill está no [ADR-0001](../../docs/adrs/ADR-0001-delegation-roles.md).
+
+## Capacidades
+
+| Capacidade | Uso |
+| --- | --- |
+| `deep` | Julgamento, crítica, decisões caras e aceite |
+| `standard` | Execução delimitada por artefato aprovado |
+| `light` | Busca, coleta, checks mecânicos e resumo |
+
+Cada adapter mapeia as três capacidades para IDs completos de modelo e declara
+como seu harness delega.
+
+## Papéis
+
+### Orquestrador
+
+Sessão principal, em `deep`. Conversa com o humano, enquadra a solicitação
+pelo ciclo, escolhe o que delegar, monta pacotes, aplica gates e faz o aceite
+final. Mantém para si: mudança de escopo, ativação de contrato, ações
+irreversíveis e aceitação de conhecimento canônico.
+
+### Ideação
+
+Etapas Frame e Challenge. O enquadramento é conduzido pelo orquestrador com o
+humano, porque exige conversa. Delegáveis: pesquisa em `light`
+(`radiant-research`), que devolve fontes inspecionadas e o que cada uma
+sustenta, e crítica adversarial em `deep` (`radiant-grill`), que ataca
+premissas, escopo e irreversibilidade de um Frame ou Spec existente e devolve
+objeções com evidência. Nenhum dos dois decide intenção ou escopo.
+
+### Design
+
+Etapas Spec e Design, nas duas trilhas da
+[Design Layer](../../docs/design-layer.md). System Design e ADRs em `deep`;
+Design Spec derivado de Frame e Design Frame aprovados em `standard`
+(`radiant-design`). Produz Spec, Design Frame, Design Spec e ADRs como
+propostas; a aprovação é humana, mediada pelo orquestrador.
+
+### Dev
+
+Etapas Plan, Contract e Build. O orquestrador propõe Plan e contratos; o Build
+de um contrato ativo é delegado em `standard` (`radiant-dev`), e tarefas
+mecânicas podem usar `light`. O contrato é o pacote e seu `Completion report`
+é o retorno.
+
+### Verificador
+
+Etapa Verify, em `deep` (`radiant-verifier`). Confronta outputs com contrato,
+Spec e critérios, executa os gates e inspeciona o resultado como consumidor.
+Checks determinísticos podem rodar em `light`. Não corrige o que verifica:
+devolve achados com evidência.
+
+### Manutenção
+
+Fora do ciclo de entrega; alimenta Frame com propostas. Coleta em `light`,
+priorização e rascunhos em `standard` (`radiant-maintenance`). Só propõe. O
+procedimento está em `skills/radiant-maintenance/SKILL.md`.
+
+## Regras
+
+1. Interação humana pertence ao orquestrador. Papéis delegados não conversam
+   com o humano.
+2. Aceite nunca usa capacidade inferior à do autor. Por tarefa, valem checks
+   determinísticos e o readback do orquestrador. O Verificador faz o aceite do
+   contrato uma vez, ao final, e é antecipado quando `Risk tier` ≥ 2 ou
+   `Independent critique: REQUIRED`.
+3. A capacidade padrão do papel só muda pelo campo `Capability` do Task
+   Contract, com justificativa de uma linha, registrada na evidência.
+4. Não são delegadas: mudança de escopo, ativação de contrato, ações
+   irreversíveis e aceitação de conhecimento canônico.
+5. Delegar é opcional. Sem suporte do harness, em tarefa pequena ou quando o
+   harness não permite a capacidade pedida, o orquestrador executa o papel na
+   própria sessão com as mesmas entradas e saídas.
+6. Em execução de Manutenção, que apenas propõe, o orquestrador pode operar em
+   `standard`.
+7. Papéis delegados não delegam. Toda delegação parte do orquestrador.
+
+## Pacote de delegação
+
+Ponteiros, não cópias:
+
+- papel e capacidade efetiva;
+- objetivo em uma ou duas frases;
+- entradas: paths de artefatos e revisão do Radiant;
+- fronteira: paths graváveis, paths somente leitura e non-goals;
+- saída esperada e formato do retorno;
+- condições de `HOLD`.
+
+Para Build, o Task Contract é o pacote. Para pesquisa, crítica e coleta, o
+pacote vai no próprio pedido e não vira arquivo.
+
+## Retorno
+
+Para Build, o retorno é o `Completion report` do contrato. Os demais papéis
+retornam:
+
+- estado: `DONE`, `HOLD` ou `FAIL`;
+- outputs: paths criados ou alterados;
+- evidência: comandos e resultados efetivos, incluindo bloqueios;
+- desvios: ambiguidades e o que ficou fora da fronteira;
+- findings candidatos a Learn Back.
+
+O retorno é um resumo. O orquestrador não aceita `DONE` apenas pelo relato:
+faz readback do diff, executa checks e confronta com o contrato. `HOLD` é
+resolvido dentro da autorização vigente ou levado ao humano. `FAIL` preserva a
+evidência e segue para [Learn Back](../../docs/learn-back.md).
+
+## Paralelismo
+
+Somente entre tarefas independentes com paths de escrita disjuntos. Na dúvida,
+execução sequencial.
+
+## Proveniência
+
+O relatório de verificação do contrato registra cada delegação: papel,
+capacidade, ID completo do modelo resolvido pelo adapter e estado. IDs de
+modelo aparecem apenas nessa evidência e nos adapters.

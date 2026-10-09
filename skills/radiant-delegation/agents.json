@@ -1,0 +1,41 @@
+{
+  "capabilities": ["deep", "standard", "light"],
+  "agents": [
+    {
+      "name": "radiant-research",
+      "role": "ideação",
+      "capability": "light",
+      "description": "Pesquisa delimitada para Frame e Challenge: devolve fontes inspecionadas e o que cada uma sustenta."
+    },
+    {
+      "name": "radiant-grill",
+      "role": "ideação",
+      "capability": "deep",
+      "description": "Crítica adversarial de um Frame, Spec ou decisão: devolve objeções com evidência, sem decidir escopo."
+    },
+    {
+      "name": "radiant-design",
+      "role": "design",
+      "capability": "standard",
+      "description": "Redige Design Spec ou Spec a partir de Frame e Design Frame aprovados."
+    },
+    {
+      "name": "radiant-dev",
+      "role": "dev",
+      "capability": "standard",
+      "description": "Executa o Build de um Task Contract ativo e retorna seu Completion report."
+    },
+    {
+      "name": "radiant-verifier",
+      "role": "verificador",
+      "capability": "deep",
+      "description": "Verifica outputs contra contrato, Spec e critérios, sem corrigir o que verifica."
+    },
+    {
+      "name": "radiant-maintenance",
+      "role": "manutenção",
+      "capability": "standard",
+      "description": "Triagem de manutenção de um consumidor: produz relatório com propostas, sem alterar o projeto."
+    }
+  ]
+}
