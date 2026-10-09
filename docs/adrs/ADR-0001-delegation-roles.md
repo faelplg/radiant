@@ -1,15 +1,16 @@
 # ADR-0001: papéis, capacidades e delegação
 
 - Data: 2026-10-08
-- Estado: `proposed`
+- Estado: `accepted` em 2026-10-09
 - Owner: Fael
 - Revisão de origem do Radiant: `160ef8edddd5893169e5c9d9d5375dd25be802b3`
+- Implementação: PR #2, merge `6074810e6d3ca3cc8f591b78d62272b26b6428a9`
 
-Enquanto `proposed`, este ADR contém o design detalhado que orienta a
-implementação. Quando `accepted`, as regras operacionais passam a viver em
-`skills/radiant-delegation/`, `skills/radiant-maintenance/` e nos adapters;
-em caso de divergência, esses corpos prevalecem e este ADR permanece como
-registro da decisão.
+As regras operacionais vivem em
+[radiant-delegation](../../skills/radiant-delegation/SKILL.md),
+[radiant-maintenance](../../skills/radiant-maintenance/SKILL.md) e nos
+adapters. Em caso de divergência, esses corpos prevalecem; este ADR permanece
+como registro da decisão e do design que orientou a implementação.
 
 ## Intenção
 
@@ -247,7 +248,8 @@ conclui "nada material" é resultado válido.
   `radiant-dev` (`standard`), `radiant-verifier` (`deep`) e
   `radiant-maintenance` (`standard`). O corpo contém apenas metadados do
   harness e ponteiro para a seção do papel em `radiant-delegation`.
-- Tabela única capacidade → ID completo de modelo no README de cada adapter.
+- Mapa único capacidade → ID completo de modelo em `capabilities.json` de
+  cada adapter, referenciado pelo README.
 - Tabela opcional papel → procedimento externo sugerido. Regra explícita: a
   saída vai para os paths do `.radiant.json`, nunca para paths padrão da skill
   externa.
