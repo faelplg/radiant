@@ -79,6 +79,14 @@ Comportamentos de subagentes conforme a
 [documentação oficial](https://code.claude.com/docs/en/sub-agents),
 consultada em 2026-10-09.
 
+## Medição de uso
+
+A métrica de uso deste adapter, por rodada delegada, é o `subagent_tokens` que
+o harness informa no fim da rodada, mais a duração em segundos. Ela mede
+contexto, não custo cobrado: quando uma rodada retoma o contexto da anterior, o
+número inclui o contexto herdado. A sessão principal não tem número por rodada;
+registre seu contexto aproximado ao fechar o relatório.
+
 ## Manutenção
 
 Execute a [skill de manutenção](../../skills/radiant-maintenance/SKILL.md)

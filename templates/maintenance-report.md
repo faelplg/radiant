@@ -9,7 +9,7 @@ pelo Git.
 - Revisão do Radiant: `[commit completo]`
 - Commit do consumidor: `[commit]`
 - Relatório anterior: `[path | nenhum]`
-- Delegações: `[perfil, capacidade, ID do modelo, estado]`
+- Delegações, uma por rodada: `[perfil, capacidade, ID do modelo, estado, métrica de uso do adapter | ausente]`
 
 ## Fontes
 
