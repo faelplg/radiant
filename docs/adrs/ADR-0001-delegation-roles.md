@@ -339,6 +339,48 @@ piloto.
   mesmo arquivo (dotfiles), e um bloco por adapter fazia um harness ler o
   adapter do outro. O gerador imprime o bloco sem `--adapter`, que passa a ser
   exigido só com `--agents-dir`.
+- 2026-10-10: o Learn Back do piloto alterou regras operacionais nas skills e
+  nos adapters, que prevalecem sobre este registro
+  ([PR #5](https://github.com/faelplg/radiant/pull/5) e
+  [PR #6](https://github.com/faelplg/radiant/pull/6)). O retorno de Build segue
+  a seção 16 do template mesmo quando o contrato não a reproduz. O readback
+  confere cada mudança e cada resultado relatados contra o working tree. O
+  pacote leva a raiz absoluta do Radiant. A proveniência registra uma linha
+  por rodada com a métrica de uso definida pelo adapter, ou a ausência dela.
+  Assim, a seção "Proveniência de custo" acima vale com esses acréscimos.
+
+## Resultado do piloto
+
+Registrado em 2026-10-10, com o AIKM fixado em `94926de`.
+
+| Etapa | Evidência | Situação |
+| --- | --- | --- |
+| 0. Adoção | TC-0019, [AIKM PR #13](https://github.com/faelplg/aikm/pull/13) | Concluída |
+| 1. Sessão nova | Sessões Claude Code e Codex abertas pelo owner localizaram e validaram o core sem ajuda (relatório do TC-0019) | Concluída |
+| 2. Manutenção | Execução manual em 2026-10-09, com relatório e `git status` limpo | Parcial: a execução agendada não foi feita |
+| 3. Ciclo | TC-0020, [AIKM PR #14](https://github.com/faelplg/aikm/pull/14), com Build, verificação e pesquisa delegados; TC-0021 e TC-0022 repetiram o ciclo | Concluída |
+| 4. Learn Back | LR-0002 do AIKM, [AIKM PR #17](https://github.com/faelplg/aikm/pull/17), e [PR #5](https://github.com/faelplg/radiant/pull/5) | Concluída |
+| 5. Regressão Codex | VR-0006 do AIKM, [AIKM PR #18](https://github.com/faelplg/aikm/pull/18): gate e uma delegação somente leitura; métrica no [PR #6](https://github.com/faelplg/radiant/pull/6) | Concluída, sem Build pelo Codex |
+
+Critérios de sucesso:
+
+- Intervenção fora dos gates: houve duas, ambas decisões do owner e
+  registradas no consumidor. Uma esclareceu o alcance de "error messages" no
+  TC-0020, depois do fechamento. A outra dispensou um critério inviável no
+  TC-0022 (emenda A3). As duas motivaram a regra de referente dos critérios no
+  template.
+- Aceite com capacidade inferior à do autor: nenhum. Builds `standard` foram
+  aceitos por verificador `deep` ou pelo orquestrador `deep` com o owner.
+- Linha de base de uso: registrada por rodada nos relatórios do consumidor. No
+  Claude Code, rodadas de Build `standard` ficaram entre 87 mil e 112 mil
+  tokens de contexto, e de verificação `deep`, entre 122 mil e 165 mil; a
+  pesquisa `light` ficou em cerca de 46 mil. No Codex, a rodada `light` teve
+  72 mil de contexto e 303 mil acumulados. As métricas dos dois harnesses não
+  são diretamente comparáveis, e nenhuma delas é custo cobrado.
+
+Pendências: a execução agendada da Manutenção (etapa 2); um Build delegado pelo
+Codex; e a evidência para enforcement de fronteiras por contrato, prevista na
+limitação registrada acima, que o piloto não produziu.
 
 ## Fora de escopo
 
