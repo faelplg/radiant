@@ -108,10 +108,13 @@ A métrica deste adapter vem do rollout local de cada thread, em
 `$CODEX_HOME/sessions/AAAA/MM/DD/rollout-*-<thread>.jsonl` (`~/.codex` por
 padrão). Por rodada delegada, registre:
 
-- contexto: `last_token_usage.total_tokens` do último evento `token_count`;
-- volume acumulado: `total_token_usage.total_tokens` do mesmo evento, que soma
-  todas as chamadas da rodada, incluindo entrada em cache;
-- duração: `duration_ms` do evento `task_complete`.
+- contexto: `last_token_usage.total_tokens` do último evento `token_count` da
+  rodada;
+- volume da rodada: `total_token_usage.total_tokens` do mesmo evento, menos o
+  valor do último `token_count` da rodada anterior na mesma thread. O total é
+  cumulativo na thread e inclui entrada em cache; numa thread nova, o valor
+  absoluto já é o da rodada;
+- duração: `duration_ms` do evento `task_complete` da rodada.
 
 O mesmo arquivo confirma o modelo efetivo em `turn_context.model`. A sessão
 principal tem os mesmos números no próprio rollout. Nenhum deles é custo
