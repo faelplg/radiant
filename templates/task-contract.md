@@ -220,6 +220,16 @@ A tarefa só pode ser declarada `DONE` quando:
 - [ ] limitações relevantes estão registradas;
 - [ ] a evidência final foi lida, não apenas presumida pelo exit code.
 
+Cada critério nomeia seu referente:
+
+- distinga comportamento ou texto do próprio projeto do que é gerado por
+  dependência;
+- em critério sobre artefato existente (formatação, lint, links), meça contra a
+  linha de base quando o arquivo já não atende à regra, por exemplo "nenhuma
+  divergência nova nas linhas alteradas";
+- confira contra o texto da norma todo nome de norma externa (RFC, ISO) usado
+  em critério; se o projeto diverge dela, nomeie um perfil próprio.
+
 ---
 
 # 13. HOLD conditions
@@ -284,7 +294,7 @@ do Build ao orquestrador.
 
 ### Changed
 
-- `[what changed]`
+- `[path]: [what changed]`, com referências de linha citadas junto ao commit
 
 ### Verification evidence
 
