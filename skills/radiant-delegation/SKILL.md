@@ -6,7 +6,7 @@ description:
   Dev, Verificação ou Manutenção, ao montar um pacote de delegação ou ao
   avaliar o retorno de um papel delegado.
 metadata:
-  version: "0.1.0"
+  version: "0.1.1"
 ---
 
 # Delegação e papéis Radiant
@@ -102,7 +102,9 @@ Ponteiros, não cópias:
 
 - papel e capacidade efetiva;
 - objetivo em uma ou duas frases;
-- entradas: paths de artefatos e revisão do Radiant;
+- entradas: paths de artefatos, revisão do Radiant e raiz absoluta do
+  checkout resolvida pelo bootstrap; paths relativos como `../radiant` não
+  resolvem dentro de worktrees do harness;
 - fronteira: paths graváveis, paths somente leitura e non-goals;
 - saída esperada e formato do retorno;
 - condições de `HOLD`.
@@ -112,19 +114,30 @@ pacote vai no próprio pedido e não vira arquivo.
 
 ## Retorno
 
-Para Build, o retorno é o `Completion report` do contrato. Os demais papéis
-retornam:
+Para Build, o retorno segue o `Completion report` da seção 16 do
+[template](../../templates/task-contract.md), mesmo quando o contrato do
+consumidor não reproduz essa seção. Os demais papéis retornam:
 
 - estado: `DONE`, `HOLD` ou `FAIL`;
 - outputs: paths criados ou alterados;
 - evidência: comandos e resultados efetivos, incluindo bloqueios;
+- cobertura: o que o pedido incluía e não foi inspecionado ou executado, com
+  o motivo;
 - desvios: ambiguidades e o que ficou fora da fronteira;
 - findings candidatos a Learn Back.
 
-O retorno é um resumo. O orquestrador não aceita `DONE` apenas pelo relato:
-faz readback do diff, executa checks e confronta com o contrato. `HOLD` é
-resolvido dentro da autorização vigente ou levado ao humano. `FAIL` preserva a
-evidência e segue para [Learn Back](../../docs/learn-back.md).
+O retorno é um resumo. O orquestrador não aceita `DONE` apenas pelo relato. No
+readback, ele:
+
+- confere cada mudança relatada no diff e confirma que o diff não traz mudança
+  não relatada;
+- confirma cada resultado de verificação alegado pela saída do comando ou
+  reexecutando-o;
+- confere as referências de linha citadas contra a revisão indicada;
+- executa os checks e confronta o resultado com o contrato.
+
+`HOLD` é resolvido dentro da autorização vigente ou levado ao humano. `FAIL`
+preserva a evidência e segue para [Learn Back](../../docs/learn-back.md).
 
 ## Acesso e fronteiras
 
