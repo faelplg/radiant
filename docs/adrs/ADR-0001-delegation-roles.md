@@ -351,7 +351,9 @@ piloto.
 
 ## Resultado do piloto
 
-Registrado em 2026-10-10, com o AIKM fixado em `6ad7ad2`.
+Registrado em 2026-10-10, com o AIKM em
+`31266c690e5b5cf84d2e576a0c73ee93caaa286e` e o Radiant fixado em
+`6ad7ad260ab4464023a7eea798530ad85d284faf`.
 
 | Etapa | Evidência | Situação |
 | --- | --- | --- |
@@ -362,9 +364,11 @@ Registrado em 2026-10-10, com o AIKM fixado em `6ad7ad2`.
 | 4. Learn Back | LR-0002 do AIKM, [AIKM PR #17](https://github.com/faelplg/aikm/pull/17), e [PR #5](https://github.com/faelplg/radiant/pull/5) | Concluída |
 | 5. Regressão Codex | VR-0006 do AIKM, [AIKM PR #18](https://github.com/faelplg/aikm/pull/18): gate e uma delegação somente leitura; métrica no [PR #6](https://github.com/faelplg/radiant/pull/6) | Concluída, sem Build pelo Codex |
 
-Critérios de sucesso:
+Critérios de sucesso: atendidos parcialmente. As etapas foram concluídas, mas
+não sem intervenção fora dos gates previstos, e a sessão agendada da Manutenção
+rodou em capacidade diferente da pedida.
 
-- Intervenção fora dos gates: houve duas, ambas decisões do owner e
+- Intervenção fora dos gates: não atendido. Houve duas, ambas decisões do owner e
   registradas no consumidor. Uma esclareceu o alcance de "error messages" no
   TC-0020, depois do fechamento. A outra dispensou um critério inviável no
   TC-0022 (emenda A3). As duas motivaram a regra de referente dos critérios no
