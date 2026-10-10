@@ -160,6 +160,8 @@ execução sequencial.
 
 ## Proveniência
 
-O relatório de verificação do contrato registra cada delegação: papel,
-capacidade, ID completo do modelo resolvido pelo adapter e estado. IDs de
-modelo aparecem apenas nessa evidência e nos adapters.
+O relatório de verificação do contrato registra cada delegação, uma linha por
+rodada: papel, capacidade, ID completo do modelo resolvido pelo adapter, estado
+e a métrica de uso definida pelo adapter. Sem métrica definida, o relatório
+registra a ausência. IDs de modelo aparecem apenas nessa evidência e nos
+adapters.
