@@ -5,7 +5,7 @@ description:
   produzir um relatório com propostas priorizadas e rascunhos de contrato,
   sem alterar o projeto. Usar em execução manual ou agendada localmente.
 metadata:
-  version: "0.1.0"
+  version: "0.1.1"
 ---
 
 # Manutenção Radiant
@@ -54,8 +54,17 @@ Cada omissão entra no relatório com o motivo (Artigo XII da
 Cada candidato precisa de evidência concreta: saída de comando, path, linha.
 Opinião sem evidência não é candidato. Ordene por risco, valor e
 reversibilidade, e marque cada um como novo, recorrente ou resolvido em
-relação ao relatório anterior. Para até três candidatos do topo, escreva um
-rascunho de contrato embutido no relatório: objetivo, outputs e verificação.
+relação ao relatório anterior, incluindo seus adendos:
+
+- um candidato que já constava mantém o ID; candidatos novos continuam a
+  numeração do relatório anterior;
+- `resolvido` exige evidência da resolução, como commit, PR ou saída de
+  comando;
+- um candidato anterior que nenhuma fonte desta execução reobserva continua
+  `recorrente`, com a nota de que não foi reobservado.
+
+Para até três candidatos do topo, escreva um rascunho de contrato embutido no
+relatório: objetivo, outputs e verificação.
 Rascunhos não viram arquivos de contrato nem recebem ID.
 
 ## Fronteira
