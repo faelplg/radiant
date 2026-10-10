@@ -339,6 +339,57 @@ piloto.
   mesmo arquivo (dotfiles), e um bloco por adapter fazia um harness ler o
   adapter do outro. O gerador imprime o bloco sem `--adapter`, que passa a ser
   exigido só com `--agents-dir`.
+- 2026-10-10: o Learn Back do piloto alterou regras operacionais nas skills e
+  nos adapters, que prevalecem sobre este registro
+  ([PR #5](https://github.com/faelplg/radiant/pull/5) e
+  [PR #6](https://github.com/faelplg/radiant/pull/6)). O retorno de Build segue
+  a seção 16 do template mesmo quando o contrato não a reproduz. O readback
+  confere cada mudança e cada resultado relatados contra o working tree. O
+  pacote leva a raiz absoluta do Radiant. A proveniência registra uma linha
+  por rodada com a métrica de uso definida pelo adapter, ou a ausência dela.
+  Assim, a seção "Proveniência de custo" acima vale com esses acréscimos.
+
+## Resultado do piloto
+
+Registrado em 2026-10-10, com o AIKM em
+`31266c690e5b5cf84d2e576a0c73ee93caaa286e` e o Radiant fixado em
+`6ad7ad260ab4464023a7eea798530ad85d284faf`.
+
+| Etapa | Evidência | Situação |
+| --- | --- | --- |
+| 0. Adoção | TC-0019, [AIKM PR #13](https://github.com/faelplg/aikm/pull/13) | Concluída |
+| 1. Sessão nova | Sessões Claude Code e Codex abertas pelo owner localizaram e validaram o core sem ajuda (relatório do TC-0019) | Concluída |
+| 2. Manutenção | Execução manual em 2026-10-09 e execução agendada localmente em 2026-10-10, com `radiant-maintenance` 0.1.1 ([PR #8](https://github.com/faelplg/radiant/pull/8)); relatórios com evidência e `git status` limpo | Concluída, com desvio: a sessão agendada rodou em `deep`, não em `standard` |
+| 3. Ciclo | TC-0020, [AIKM PR #14](https://github.com/faelplg/aikm/pull/14), com Build, verificação e pesquisa delegados; TC-0021 e TC-0022 repetiram o ciclo | Concluída |
+| 4. Learn Back | LR-0002 do AIKM, [AIKM PR #17](https://github.com/faelplg/aikm/pull/17), e [PR #5](https://github.com/faelplg/radiant/pull/5) | Concluída |
+| 5. Regressão Codex | VR-0006 do AIKM, [AIKM PR #18](https://github.com/faelplg/aikm/pull/18): gate e uma delegação somente leitura; métrica no [PR #6](https://github.com/faelplg/radiant/pull/6) | Concluída, sem Build pelo Codex |
+
+Critérios de sucesso: atendidos parcialmente. As etapas foram concluídas, mas
+não sem intervenção fora dos gates previstos, e a sessão agendada da Manutenção
+rodou em capacidade diferente da pedida.
+
+- Intervenção fora dos gates: não atendido. Houve duas, ambas decisões do owner e
+  registradas no consumidor. Uma esclareceu o alcance de "error messages" no
+  TC-0020, depois do fechamento. A outra dispensou um critério inviável no
+  TC-0022 (emenda A3). As duas motivaram a regra de referente dos critérios no
+  template.
+- Aceite com capacidade inferior à do autor: nenhum. Builds `standard` foram
+  aceitos por verificador `deep` ou pelo orquestrador `deep` com o owner.
+- Linha de base de uso: registrada por rodada nos relatórios do consumidor. No
+  Claude Code, rodadas de Build `standard` ficaram entre 87 mil e 112 mil
+  tokens de contexto, e de verificação `deep`, entre 122 mil e 165 mil; a
+  pesquisa `light` ficou em cerca de 46 mil. No Codex, a rodada `light` teve
+  72 mil de contexto e 303 mil acumulados. As métricas dos dois harnesses não
+  são diretamente comparáveis, e nenhuma delas é custo cobrado.
+
+Na execução agendada, a comparação com o relatório anterior manteve os IDs dos
+candidatos pendentes, inclusive os vindos de adendos, e não marcou como
+resolvido um candidato cujo alvo não mudou. O modelo da sessão vem da tarefa
+agendada, não do adapter; a execução registrou o modelo efetivo e o desvio.
+
+Pendências: definir como uma execução agendada usa a capacidade `standard`; um
+Build delegado pelo Codex; e a evidência para enforcement de fronteiras por
+contrato, prevista na limitação registrada acima, que o piloto não produziu.
 
 ## Fora de escopo
 
