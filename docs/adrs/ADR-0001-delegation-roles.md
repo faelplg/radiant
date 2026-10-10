@@ -351,13 +351,13 @@ piloto.
 
 ## Resultado do piloto
 
-Registrado em 2026-10-10, com o AIKM fixado em `94926de`.
+Registrado em 2026-10-10, com o AIKM fixado em `6ad7ad2`.
 
 | Etapa | Evidência | Situação |
 | --- | --- | --- |
 | 0. Adoção | TC-0019, [AIKM PR #13](https://github.com/faelplg/aikm/pull/13) | Concluída |
 | 1. Sessão nova | Sessões Claude Code e Codex abertas pelo owner localizaram e validaram o core sem ajuda (relatório do TC-0019) | Concluída |
-| 2. Manutenção | Execução manual em 2026-10-09, com relatório e `git status` limpo | Parcial: a execução agendada não foi feita |
+| 2. Manutenção | Execução manual em 2026-10-09 e execução agendada localmente em 2026-10-10, com `radiant-maintenance` 0.1.1 ([PR #8](https://github.com/faelplg/radiant/pull/8)); relatórios com evidência e `git status` limpo | Concluída, com desvio: a sessão agendada rodou em `deep`, não em `standard` |
 | 3. Ciclo | TC-0020, [AIKM PR #14](https://github.com/faelplg/aikm/pull/14), com Build, verificação e pesquisa delegados; TC-0021 e TC-0022 repetiram o ciclo | Concluída |
 | 4. Learn Back | LR-0002 do AIKM, [AIKM PR #17](https://github.com/faelplg/aikm/pull/17), e [PR #5](https://github.com/faelplg/radiant/pull/5) | Concluída |
 | 5. Regressão Codex | VR-0006 do AIKM, [AIKM PR #18](https://github.com/faelplg/aikm/pull/18): gate e uma delegação somente leitura; métrica no [PR #6](https://github.com/faelplg/radiant/pull/6) | Concluída, sem Build pelo Codex |
@@ -378,9 +378,14 @@ Critérios de sucesso:
   72 mil de contexto e 303 mil acumulados. As métricas dos dois harnesses não
   são diretamente comparáveis, e nenhuma delas é custo cobrado.
 
-Pendências: a execução agendada da Manutenção (etapa 2); um Build delegado pelo
-Codex; e a evidência para enforcement de fronteiras por contrato, prevista na
-limitação registrada acima, que o piloto não produziu.
+Na execução agendada, a comparação com o relatório anterior manteve os IDs dos
+candidatos pendentes, inclusive os vindos de adendos, e não marcou como
+resolvido um candidato cujo alvo não mudou. O modelo da sessão vem da tarefa
+agendada, não do adapter; a execução registrou o modelo efetivo e o desvio.
+
+Pendências: definir como uma execução agendada usa a capacidade `standard`; um
+Build delegado pelo Codex; e a evidência para enforcement de fronteiras por
+contrato, prevista na limitação registrada acima, que o piloto não produziu.
 
 ## Fora de escopo
 
