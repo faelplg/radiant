@@ -101,6 +101,28 @@ Comportamentos conforme a
 consultada em 2026-10-09. Para desfazer, remova os seis arquivos
 `radiant-*.toml` de `~/.codex/agents/`.
 
+## Medição de uso
+
+As ferramentas de delegação do Codex não devolvem contadores ao orquestrador.
+A métrica deste adapter vem do rollout local de cada thread, em
+`$CODEX_HOME/sessions/AAAA/MM/DD/rollout-*-<thread>.jsonl` (`~/.codex` por
+padrão). Por rodada delegada, registre:
+
+- contexto: `last_token_usage.total_tokens` do último evento `token_count` da
+  rodada;
+- volume da rodada: `total_token_usage.total_tokens` do mesmo evento, menos o
+  valor do último `token_count` da rodada anterior na mesma thread. O total é
+  cumulativo na thread e inclui entrada em cache; numa thread nova, o valor
+  absoluto já é o da rodada;
+- duração: `duration_ms` do evento `task_complete` da rodada.
+
+O mesmo arquivo confirma o modelo efetivo em `turn_context.model`. A sessão
+principal tem os mesmos números no próprio rollout. Nenhum deles é custo
+cobrado, e eles não são diretamente comparáveis aos de outro harness. O
+formato é do runtime, não da documentação oficial, e foi conferido em
+2026-10-10 com o Codex CLI 0.162.1; se ele mudar, registre a métrica como
+ausente, com o motivo.
+
 ## Configurar o consumidor
 
 Use o [mapa neutro](../../templates/project-agents.md) como `AGENTS.md` e
