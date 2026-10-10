@@ -56,10 +56,13 @@ Opinião sem evidência não é candidato. Ordene por risco, valor e
 reversibilidade, e marque cada um como novo, recorrente ou resolvido em
 relação ao relatório anterior, incluindo seus adendos:
 
-- um candidato que já constava mantém o ID; candidatos novos continuam a
-  numeração do relatório anterior;
-- `resolvido` exige evidência da resolução, como commit, PR ou saída de
-  comando;
+- um candidato é o mesmo quando aponta a mesma lacuna no mesmo alvo (path,
+  módulo, documento ou fonte), mesmo que a redação ou a evidência mudem; ele
+  mantém o ID, e candidatos novos recebem o número seguinte ao maior ID
+  anterior;
+- `resolvido` exige evidência de que o estado do próprio alvo mudou, como
+  commit, PR ou saída de comando sobre esse alvo; mudança em outro lugar, como
+  no Radiant, não resolve uma lacuna do consumidor;
 - um candidato anterior que nenhuma fonte desta execução reobserva continua
   `recorrente`, com a nota de que não foi reobservado.
 
