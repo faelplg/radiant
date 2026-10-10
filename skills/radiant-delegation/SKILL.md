@@ -109,8 +109,9 @@ Ponteiros, não cópias:
 - saída esperada e formato do retorno;
 - condições de `HOLD`.
 
-Para Build, o Task Contract é o pacote. Para pesquisa, crítica e coleta, o
-pacote vai no próprio pedido e não vira arquivo.
+Para Build, o Task Contract é o pacote; o pedido aponta para ele e acrescenta
+a revisão e a raiz absoluta do Radiant, que o contrato não carrega. Para
+pesquisa, crítica e coleta, o pacote vai no próprio pedido e não vira arquivo.
 
 ## Retorno
 
@@ -129,8 +130,9 @@ consumidor não reproduz essa seção. Os demais papéis retornam:
 O retorno é um resumo. O orquestrador não aceita `DONE` apenas pelo relato. No
 readback, ele:
 
-- confere cada mudança relatada no diff e confirma que o diff não traz mudança
-  não relatada;
+- confere cada mudança relatada no diff e confirma que o estado completo do
+  working tree, incluindo arquivos não rastreados, não traz mudança não
+  relatada;
 - confirma cada resultado de verificação alegado pela saída do comando ou
   reexecutando-o;
 - confere as referências de linha citadas contra a revisão indicada;
@@ -160,8 +162,8 @@ execução sequencial.
 
 ## Proveniência
 
-O relatório de verificação do contrato registra cada delegação, uma linha por
-rodada: papel, capacidade, ID completo do modelo resolvido pelo adapter, estado
-e a métrica de uso definida pelo adapter. Sem métrica definida, o relatório
-registra a ausência. IDs de modelo aparecem apenas nessa evidência e nos
-adapters.
+O relatório de verificação do contrato, ou o relatório de manutenção numa
+execução de Manutenção, registra cada delegação, uma linha por rodada: papel,
+capacidade, ID completo do modelo resolvido pelo adapter, estado e a métrica de
+uso definida pelo adapter. Sem métrica definida, o relatório registra a
+ausência. IDs de modelo aparecem apenas nesses relatórios e nos adapters.
