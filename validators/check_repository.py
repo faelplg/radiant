@@ -32,12 +32,14 @@ def anchors(text):
 
 def markdown_documents():
     """List tracked and untracked Markdown, honoring Git ignores such as harness worktrees."""
+    if not any((directory / ".git").exists() for directory in (ROOT, *ROOT.parents)):
+        return [path for path in ROOT.rglob("*.md")
+                if not {".local", "__pycache__"}.intersection(path.relative_to(ROOT).parts)]
     listing = subprocess.run(
         ["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard", "--", "*.md"],
         cwd=ROOT, capture_output=True, text=True)
     if listing.returncode != 0:
-        return [path for path in ROOT.rglob("*.md")
-                if not {".git", ".local", "__pycache__"}.intersection(path.relative_to(ROOT).parts)]
+        raise ValueError(f"git ls-files falhou: {listing.stderr.strip()}")
     return sorted({ROOT / relative for relative in listing.stdout.split("\0")
                    if relative and (ROOT / relative).is_file()})
 

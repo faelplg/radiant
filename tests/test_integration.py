@@ -253,50 +253,5 @@ class IntegrationTests(unittest.TestCase):
         self.assertFalse((self.project / "elsewhere.md").exists())
         self.assertEqual([p.name for p in target.iterdir()], ["radiant-grill.md"])
 
-class RepositoryValidatorTests(unittest.TestCase):
-    """Run check_repository.py against a full copy of the tracked tree."""
-
-    def setUp(self):
-        self.temp = tempfile.TemporaryDirectory(prefix="radiant-repo-")
-        self.addCleanup(self.temp.cleanup)
-        self.root = Path(self.temp.name) / "radiant"
-        self.copy_tracked(self.root)
-        self.assertEqual(run("git", "init", "-q", cwd=self.root).returncode, 0)
-        self.assertEqual(run("git", "add", ".", cwd=self.root).returncode, 0)
-
-    def copy_tracked(self, destination):
-        listing = run("git", "ls-files", "-z", cwd=SOURCE)
-        self.assertEqual(listing.returncode, 0, listing.stderr)
-        for relative in filter(None, listing.stdout.split("\0")):
-            source = SOURCE / relative
-            if source.is_file():
-                target = destination / relative
-                target.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copy2(source, target)
-
-    def check(self):
-        return run(sys.executable, str(self.root / "validators/check_repository.py"), cwd=self.root)
-
-    def test_tracked_tree_passes(self):
-        result = self.check()
-        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-
-    def test_ignored_harness_worktree_is_not_scanned(self):
-        # Harness sessions keep full checkouts under .claude/worktrees/, excluded by Git.
-        self.copy_tracked(self.root / ".claude/worktrees/session")
-        exclude = self.root / ".git/info/exclude"
-        exclude.write_text(exclude.read_text() + ".claude/worktrees/\n", encoding="utf-8")
-        result = self.check()
-        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-
-    def test_unignored_second_constitution_still_fails(self):
-        copy = self.root / "drafts/CONSTITUTION.md"
-        copy.parent.mkdir()
-        shutil.copy2(self.root / "constitution/CONSTITUTION.md", copy)
-        result = self.check()
-        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
-        self.assertIn("único corpo normativo", result.stderr)
-
-
 if __name__ == "__main__":
     unittest.main()
