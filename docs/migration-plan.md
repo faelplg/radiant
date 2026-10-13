@@ -95,7 +95,7 @@ working tree. O último estado com a custódia é o commit
 `2f81d6fd73928b52bab04aeaeb0b8d2b164188a1`, que continua acessível pelo
 histórico Git.
 
-| Passo | Evidência no AIKM (`origin/main` em `f905250`) |
+| Passo | Evidência no AIKM (`origin/main` em `f9052509b8caf7caff6134d2f18bb5e71cdc0149`) |
 | --- | --- |
 | 1. Comparar destino e snapshots | Os 12 snapshots têm blobs idênticos alcançáveis a partir de `origin/main` |
 | 2. Resolver conflitos | Não há conflito a resolver: o AIKM evoluiu os próprios documentos, arquivou os registros v1 na tag `v1-final` e os retirou de `docs/project/` |
