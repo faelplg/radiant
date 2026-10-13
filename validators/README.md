@@ -3,7 +3,7 @@
 Requisitos: Python 3.9+ e Git. Sem pacotes externos.
 
 - `python3 validators/check_repository.py`: integridade dos documentos,
-  links/anchors locais, snapshots preservados, portabilidade do Core e
+  links/anchors locais, Constitution única, portabilidade do Core e
   coerência entre perfis delegáveis e o mapa de capacidades de cada adapter.
   Read-only.
 - `python3 <radiant-root>/validators/check_project.py <project-root>`: valida

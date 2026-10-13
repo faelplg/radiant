@@ -13,9 +13,8 @@ git diff --check
 git diff --cached --check
 ```
 
-O primeiro comando verifica links Markdown locais e anchors, inventário de
-custódia, integridade dos corpos preservados, ausência de paths pessoais nas
-camadas operacionais e coerência entre `agents.json`, as seções da skill de
+O primeiro comando verifica links Markdown locais e anchors, unicidade da
+Constitution, ausência de paths pessoais nos documentos e coerência entre `agents.json`, as seções da skill de
 delegação e o `capabilities.json` de cada adapter. Os testes exercitam o
 gerador de bootstrap e subagentes, o gate de pin e o validator do repository
 através dos seus comandos reais em diretórios temporários, incluindo
@@ -51,10 +50,7 @@ inspecione os percursos do consumidor. Declare se houve outro revisor ou apenas
 readback próprio. Testes estruturais não demonstram que um modelo obedecerá ao
 adapter em uma nova sessão; simulação conceitual não é E2E real do harness.
 
-`migration/aikm/` é custódia histórica: links externos ao snapshot têm resolução
-explícita no [mapa](../migration/README.md) e inventário exato de exceções.
-Não confundir esses links com entradas operacionais válidas nem ignorar links
-novos quebrados. O validador não reescreve qualquer documento.
+O validador não ignora links quebrados nem reescreve qualquer documento.
 
 Registre resultados e limites no relatório autorizado. Se houver falha material,
 corrija dentro do escopo e repita a verificação afetada. Não declarar DONE por

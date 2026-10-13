@@ -111,4 +111,6 @@ capabilities Radiant continua neste repositório; conhecimento operacional de
 outros domínios pode pertencer ao AIKM. Capturar ou recuperar um pointer não
 transfere ownership nem autoriza egress de seu destino.
 
-Os snapshots atuais seguem o [plano de separação](../migration/README.md).
+Os documentos de projeto do AIKM vivem no repositório AIKM. A custódia que
+existia aqui foi encerrada conforme o
+[plano de migração](migration-plan.md#encerramento-da-custódia).

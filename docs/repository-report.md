@@ -126,7 +126,7 @@ versão foram preservados. A skill só mudou versão editorial e link para a
 Constitution. Nenhum conteúdo foi eliminado sem permanecer no histórico.
 
 Os 12 links históricos únicos que escapam do snapshot AIKM possuem resolução
-no [mapa de custódia](../migration/README.md). Não foram falsamente consertados
+no [mapa de custódia](https://github.com/faelplg/radiant/blob/2f81d6fd73928b52bab04aeaeb0b8d2b164188a1/migration/README.md). Não foram falsamente consertados
 para abrir arquivos de outro projeto. Todos os links operacionais novos são
 diretos e verificados; os corpos históricos não foram reescritos.
 

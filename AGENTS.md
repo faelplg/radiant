@@ -23,9 +23,9 @@ de adapter. Para coordenar papéis e delegar, leia a
 estruturais do Radiant ficam em [docs/adrs/](docs/adrs/ADR-0001-delegation-roles.md). Trabalhando neste repositório, a árvore local é o alvo de edição;
 o pin de um consumidor não impede desenvolver uma nova revisão do Radiant.
 
-`migration/aikm/` guarda snapshots externos, não contratos ativos deste
-repositório. Consulte o [mapa de custódia](migration/README.md) antes de mexer
-nesses arquivos. Não aplicar comandos AIKM como gates do Radiant.
+Os documentos AIKM que ficaram sob custódia aqui pertencem ao repositório AIKM;
+o encerramento está no [plano de migração](docs/migration-plan.md#encerramento-da-custódia).
+Não aplicar comandos AIKM como gates do Radiant.
 
 Preserve corpos históricos, evite reformatação em massa e não edite arquivos
 gerados ou CHANGELOG.md manualmente. Novos textos usam hífen simples e não

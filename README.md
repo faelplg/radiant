@@ -33,7 +33,6 @@ registra o momento em que foi escrita, não o status desta reorganização.
 | [docs/verification.md](docs/verification.md)                               | Verificar mudanças neste sistema                         |
 | [docs/learn-back.md](docs/learn-back.md)                                   | Encaminhar aprendizado ao owner correto                  |
 | [docs/adrs/](docs/adrs/ADR-0001-delegation-roles.md)                       | Decisões estruturais do próprio Radiant                  |
-| [migration/](migration/README.md)                                          | Custódia temporária dos documentos AIKM                  |
 
 ## Usar em outro projeto
 

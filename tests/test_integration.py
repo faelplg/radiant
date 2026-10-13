@@ -29,7 +29,7 @@ class IntegrationTests(unittest.TestCase):
         self.project = Path(self.temp.name) / "New product"
         self.project.mkdir()
         self.root.mkdir()
-        # Exclude AIKM custody entirely: the consumer must work without it.
+        # Copy only the shared layers: the consumer must work without anything else.
         for directory in ("constitution", "docs", "skills", "templates", "adapters", "validators"):
             shutil.copytree(SOURCE / directory, self.root / directory,
                             ignore=shutil.ignore_patterns("__pycache__"))
@@ -78,7 +78,6 @@ class IntegrationTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertFalse((self.project / "constitution").exists())
         self.assertFalse((self.project / "skills").exists())
-        self.assertFalse((self.root / "migration").exists())
 
     def test_mismatched_and_symbolic_revisions_are_rejected(self):
         for revision in ("0" * 40, "HEAD", "main", "RADIANT_COMMIT"):
