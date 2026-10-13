@@ -90,6 +90,9 @@ recusa a execução inteira se qualquer `radiant-*.toml` já existir.
 - O `model` declarado no arquivo prevalece sobre o modelo pedido na criação do
   subagente. Um override de capacidade pelo contrato, portanto, roda na sessão
   do orquestrador, conforme a regra 5 da skill.
+- A sessão principal deve rodar no modelo de `deep`. O modelo padrão do
+  `config.toml` vale para qualquer sessão; abra a do orquestrador com
+  `codex -m <ID de deep>` ou troque com `/model`.
 - O Codex não documenta bloqueio de delegação por agente; a regra de que
   papéis delegados não delegam está nas instruções do agente.
 - Perfis com `access: read` recebem `sandbox_mode = "read-only"`. Perfis
@@ -116,11 +119,14 @@ padrão). Por rodada delegada, registre:
   absoluto já é o da rodada;
 - duração: `duration_ms` do evento `task_complete` da rodada.
 
-O mesmo arquivo confirma o modelo efetivo em `turn_context.model`. A sessão
-principal tem os mesmos números no próprio rollout. Nenhum deles é custo
+O mesmo arquivo confirma o modelo efetivo em `turn_context.model` das turns da
+rodada. Uma thread delegada começa com turns copiadas do orquestrador, com o
+modelo dele e sem `token_count`; as turns do subagente vêm depois do evento
+`thread_settings_applied`, que traz o modelo do perfil. A sessão principal tem
+os mesmos números no próprio rollout. Nenhum deles é custo
 cobrado, e eles não são diretamente comparáveis aos de outro harness. O
 formato é do runtime, não da documentação oficial, e foi conferido em
-2026-10-10 com o Codex CLI 0.162.1; se ele mudar, registre a métrica como
+2026-10-10 e 2026-10-13 com o Codex CLI 0.162.1; se ele mudar, registre a métrica como
 ausente, com o motivo.
 
 ## Configurar o consumidor

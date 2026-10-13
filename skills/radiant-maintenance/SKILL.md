@@ -5,7 +5,7 @@ description:
   produzir um relatório com propostas priorizadas e rascunhos de contrato,
   sem alterar o projeto. Usar em execução manual ou agendada localmente.
 metadata:
-  version: "0.1.2"
+  version: "0.1.3"
 ---
 
 # Manutenção Radiant
@@ -46,6 +46,12 @@ o [template](../../templates/maintenance-report.md).
 | Pin do Radiant | Revisão mais nova disponível, como candidato e nunca como atualização |
 
 Comando não declarado seguro é pulado. Fonte externa não autorizada é pulada.
+Isso inclui diagnóstico improvisado, como um gate com outros argumentos. A
+revisão mais nova do Radiant é lida sem rede, nas refs que o checkout do
+Radiant já tem (`git rev-parse origin/main`). Consultar o remoto, com
+`git ls-remote` ou `git fetch`, é egress e só roda quando a política do
+consumidor autoriza essa fonte; sem isso, o relatório registra que o remoto
+não foi consultado.
 Cada omissão entra no relatório com o motivo (Artigo XII da
 [Constitution](../../constitution/CONSTITUTION.md)).
 
