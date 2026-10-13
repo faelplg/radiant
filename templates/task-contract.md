@@ -228,7 +228,11 @@ Cada critério nomeia seu referente:
   linha de base quando o arquivo já não atende à regra, por exemplo "nenhuma
   divergência nova nas linhas alteradas";
 - confira contra o texto da norma todo nome de norma externa (RFC, ISO) usado
-  em critério; se o projeto diverge dela, nomeie um perfil próprio.
+  em critério; se o projeto diverge dela, nomeie um perfil próprio;
+- antes da ativação, confirme que a evidência pedida é observável no ambiente
+  real, por exemplo se o harness exibe o que o critério exige; sem essa
+  certeza, faça uma sondagem ou escreva o critério com a evidência disponível e
+  a limitação explícita.
 
 ---
 
