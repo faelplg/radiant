@@ -2,7 +2,8 @@
 
 Esta é a convenção compartilhada. Instâncias, ativação e evidência pertencem ao
 projeto consumidor. Origem: convenção testada no primeiro projeto, identificada
-no [inventário](../docs/migration-plan.md); a cópia em migração é histórica.
+no [inventário](../docs/migration-plan.md). A cópia que ficou sob custódia foi
+retirada e só existe no histórico Git.
 
 ## Identidade e localização
 

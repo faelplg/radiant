@@ -86,3 +86,23 @@ transferência, usar HOLD; não sobrescrever nem inferir qual versão prevalece.
 
 Não implementar Experience Design, System Design ou qualquer artefato da futura
 Design Layer. Diretórios só serão criados com conteúdo operacional real.
+
+## Encerramento da custódia
+
+Registrado em 2026-10-13. Esta seção aceita a transferência prevista nos seis
+passos de separação do antigo `migration/README.md` e retira a custódia do
+working tree. O último estado com a custódia é o commit
+`2f81d6fd73928b52bab04aeaeb0b8d2b164188a1`, que continua acessível pelo
+histórico Git.
+
+| Passo | Evidência no AIKM (`origin/main` em `f9052509b8caf7caff6134d2f18bb5e71cdc0149`) |
+| --- | --- |
+| 1. Comparar destino e snapshots | Os 12 snapshots têm blobs idênticos alcançáveis a partir de `origin/main` |
+| 2. Resolver conflitos | Não há conflito a resolver: o AIKM evoluiu os próprios documentos, arquivou os registros v1 na tag `v1-final` e os retirou de `docs/project/` |
+| 3. Adoção e pointers | `.radiant.json` com pin revisado, `AGENTS.md` neutro com pointers ao Radiant e nenhuma cópia em `docs/radiant/` |
+| 4. Navegação operacional | Mapa do AIKM aponta para o Core Radiant, sem reatribuir versões em relatórios |
+| 5. Percurso verificado | Piloto do [ADR-0001](adrs/ADR-0001-delegation-roles.md#resultado-do-piloto), etapas 0 a 5 |
+| 6. Retirada | Remoção de `migration/` e das checagens de custódia do validador |
+
+O `.DS_Store` local nunca foi versionado. Os corpos AIKM continuam sendo do
+AIKM; o Radiant não guarda mais cópia deles.
