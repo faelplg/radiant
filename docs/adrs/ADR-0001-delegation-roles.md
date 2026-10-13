@@ -357,6 +357,30 @@ piloto.
   [template](../../templates/maintenance-report.md), e os mecanismos de
   agendamento, no
   [adapter Claude Code](../../adapters/claude-code/README.md#manutenção).
+  Evidência de uso: a manutenção do AIKM de 2026-10-13, executada sob demanda
+  pela tarefa do app, registrou a sessão em `claude-sonnet-5-5`, sem desvio.
+- 2026-10-13: fecha as outras duas pendências com o TC-0024 do AIKM
+  ([AIKM PR #29](https://github.com/faelplg/aikm/pull/29)), conduzido pelo
+  Codex com a sessão principal em `deep`.
+  - Build pelo Codex: três rodadas de `radiant-dev` em `standard`, mais uma de
+    `radiant-verifier` em `deep`, cada uma com a métrica do adapter Codex.
+  - Fronteiras por contrato: as quatro rodadas registraram zero escritas fora
+    dos paths graváveis, conferidas por readback de diff, staged, não
+    rastreados e diretórios temporários. Essa evidência não justifica
+    enforcement no harness; o readback continua sendo o mecanismo, e o
+    enforcement volta a ser candidato se uma rodada registrar violação.
+  - O C3 do contrato exigia prova de descoberta nativa que o Antigravity não
+    exibe. O owner aprovou uma emenda de critério no próprio contrato, a
+    terceira intervenção fora dos gates depois das duas do piloto. O
+    [template de contrato](../../templates/task-contract.md) passa a pedir que
+    a evidência de cada critério seja confirmada como observável antes da
+    ativação.
+  - O adapter Codex passa a dizer que a sessão principal roda em `deep` e que
+    o modelo de uma rodada se confere nas turns posteriores a
+    `thread_settings_applied`. A
+    [skill de manutenção](../../skills/radiant-maintenance/SKILL.md) 0.1.3
+    passa a ler a revisão nova do Radiant com `git ls-remote` e a pular
+    diagnóstico improvisado, achados da mesma manutenção.
 
 ## Resultado do piloto
 
