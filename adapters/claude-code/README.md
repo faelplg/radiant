@@ -94,6 +94,19 @@ localmente, manualmente ou por tarefa agendada na própria máquina, com a
 sessão principal em `standard`. Rotinas em nuvem estão fora de escopo: o
 relatório não pode ser persistido sem escrita externa.
 
+Para agendar, há dois caminhos:
+
+- Agendador do sistema (cron, launchd) chamando o CLI em modo não interativo
+  com `--model` igual ao ID de `standard` em
+  [capabilities.json](capabilities.json). O modelo da sessão fica fixado.
+- Tarefa agendada do app desktop. Ela não fixa o modelo: a sessão usa o modelo
+  escolhido no app, e por isso o prompt da tarefa manda delegar priorização e
+  rascunhos ao subagente `radiant-maintenance`. A sessão faz só o gate, o
+  pacote e o readback.
+
+Nos dois casos, o relatório registra o modelo efetivo da sessão. Flags
+conferidas com `claude --help` no Claude Code 2.1.286, em 2026-10-13.
+
 ## Procedimentos externos opcionais
 
 Quando instalados, podem servir como "como fazer" de um papel. A saída sempre

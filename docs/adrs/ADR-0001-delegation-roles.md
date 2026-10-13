@@ -348,6 +348,13 @@ piloto.
   pacote leva a raiz absoluta do Radiant. A proveniência registra uma linha
   por rodada com a métrica de uso definida pelo adapter, ou a ausência dela.
   Assim, a seção "Proveniência de custo" acima vale com esses acréscimos.
+- 2026-10-13: resolve a primeira pendência do resultado do piloto. Quando o
+  agendador não fixa o modelo da sessão, a execução agendada da Manutenção
+  delega priorização e rascunhos ao perfil `radiant-maintenance`, e a sessão
+  faz só gate, pacote e readback. A regra está na
+  [skill de manutenção](../../skills/radiant-maintenance/SKILL.md) 0.1.2, e os
+  dois caminhos de agendamento, no
+  [adapter Claude Code](../../adapters/claude-code/README.md#manutenção).
 
 ## Resultado do piloto
 
