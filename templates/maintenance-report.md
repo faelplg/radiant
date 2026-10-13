@@ -9,6 +9,8 @@ pelo Git.
 - Revisão do Radiant: `[commit completo]`
 - Commit do consumidor: `[commit]`
 - Relatório anterior: `[path | nenhum]`
+- Modo: `[manual | agendada, com o mecanismo]`
+- Sessão principal: `[capacidade pedida, ID do modelo efetivo, desvio | sem desvio]`
 - Delegações, uma por rodada: `[perfil, capacidade, ID do modelo, estado, métrica de uso do adapter | ausente]`
 
 ## Fontes

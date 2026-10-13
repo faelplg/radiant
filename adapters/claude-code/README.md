@@ -94,6 +94,22 @@ localmente, manualmente ou por tarefa agendada na própria máquina, com a
 sessão principal em `standard`. Rotinas em nuvem estão fora de escopo: o
 relatório não pode ser persistido sem escrita externa.
 
+Para agendar, fixe o modelo de `standard` em
+[capabilities.json](capabilities.json) no próprio agendador:
+
+- Tarefa local do app desktop, em Routines: escolha esse modelo no seletor de
+  modelo da tarefa. O modelo não fica no `SKILL.md` da tarefa, e uma tarefa
+  criada por ferramenta de agendamento a partir de uma sessão não recebe
+  modelo; confira o seletor no formulário de edição antes da primeira
+  execução.
+- Agendador do sistema (cron, launchd): chame o CLI em modo não interativo com
+  `--model` igual a esse ID.
+
+Seletor conforme a
+[documentação oficial](https://code.claude.com/docs/en/desktop-scheduled-tasks),
+consultada em 2026-10-13; flags conferidas com `claude --help` no Claude Code
+2.1.286, na mesma data.
+
 ## Procedimentos externos opcionais
 
 Quando instalados, podem servir como "como fazer" de um papel. A saída sempre

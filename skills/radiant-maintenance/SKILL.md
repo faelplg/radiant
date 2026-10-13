@@ -5,7 +5,7 @@ description:
   produzir um relatório com propostas priorizadas e rascunhos de contrato,
   sem alterar o projeto. Usar em execução manual ou agendada localmente.
 metadata:
-  version: "0.1.1"
+  version: "0.1.2"
 ---
 
 # Manutenção Radiant
@@ -78,6 +78,10 @@ Rascunhos não viram arquivos de contrato nem recebem ID.
 - Sem branch, PR, issue, commit, instalação ou atualização de dependência.
 - Execução somente local. Coleta em `light`; priorização, rascunhos e a sessão
   orquestradora em `standard`.
+- Uma execução agendada fixa no agendador o modelo de `standard`, conforme o
+  adapter. O relatório registra o modelo efetivo da sessão. Sessão acima de
+  `standard` é desvio registrado; abaixo, termina em `HOLD` antes da
+  priorização, porque o aceite não usa capacidade inferior à do autor.
 
 ## Saída
 
