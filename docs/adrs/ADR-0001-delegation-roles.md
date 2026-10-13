@@ -358,10 +358,15 @@ piloto.
   agendamento, no
   [adapter Claude Code](../../adapters/claude-code/README.md#manutenção).
   Evidência de uso: a manutenção do AIKM de 2026-10-13, executada sob demanda
-  pela tarefa do app, registrou a sessão em `claude-sonnet-5-5`, sem desvio.
+  pela tarefa do app com o AIKM em `6800f5a591793d82f573ae061008a670236c05d4`
+  e o Radiant fixado em `9581aa988cf5b6483bc0a3d276f5451275cffef2`, registrou a
+  sessão em `claude-sonnet-5-5`, sem desvio.
 - 2026-10-13: fecha as outras duas pendências com o TC-0024 do AIKM
-  ([AIKM PR #29](https://github.com/faelplg/aikm/pull/29)), conduzido pelo
-  Codex com a sessão principal em `deep`.
+  ([AIKM PR #29](https://github.com/faelplg/aikm/pull/29), merge
+  `c113e53215f8dfebf902c25ed7d6121509ca2003`; contrato fechado em
+  `0218852d94539ab6ac51cf23334bb4bdac453bd5`), conduzido pelo Codex com a
+  sessão principal em `deep` e o Radiant fixado em
+  `9581aa988cf5b6483bc0a3d276f5451275cffef2`.
   - Build pelo Codex: três rodadas de `radiant-dev` em `standard`, mais uma de
     `radiant-verifier` em `deep`, cada uma com a métrica do adapter Codex.
   - Fronteiras por contrato: as quatro rodadas registraram zero escritas fora
@@ -379,8 +384,9 @@ piloto.
     o modelo de uma rodada se confere nas turns posteriores a
     `thread_settings_applied`. A
     [skill de manutenção](../../skills/radiant-maintenance/SKILL.md) 0.1.3
-    passa a ler a revisão nova do Radiant com `git ls-remote` e a pular
-    diagnóstico improvisado, achados da mesma manutenção.
+    passa a ler a revisão nova do Radiant nas refs locais, consultando o
+    remoto só com egress autorizado, e a pular diagnóstico improvisado,
+    achados da mesma manutenção.
 
 ## Resultado do piloto
 

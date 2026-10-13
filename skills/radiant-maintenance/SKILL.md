@@ -47,9 +47,11 @@ o [template](../../templates/maintenance-report.md).
 
 Comando não declarado seguro é pulado. Fonte externa não autorizada é pulada.
 Isso inclui diagnóstico improvisado, como um gate com outros argumentos. A
-revisão mais nova do Radiant é a exceção: ela é lida com
-`git ls-remote origin` no checkout do Radiant, que não grava nada e não depende
-da política do consumidor.
+revisão mais nova do Radiant é lida sem rede, nas refs que o checkout do
+Radiant já tem (`git rev-parse origin/main`). Consultar o remoto, com
+`git ls-remote` ou `git fetch`, é egress e só roda quando a política do
+consumidor autoriza essa fonte; sem isso, o relatório registra que o remoto
+não foi consultado.
 Cada omissão entra no relatório com o motivo (Artigo XII da
 [Constitution](../../constitution/CONSTITUTION.md)).
 
