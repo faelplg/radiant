@@ -3,6 +3,7 @@
 
 import json
 import re
+import subprocess
 import sys
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
@@ -27,6 +28,18 @@ def anchors(text):
         counts[slug] = count + 1
         result.add(f"{slug}-{count}" if count else slug)
     return result
+
+
+def markdown_documents():
+    """List tracked and untracked Markdown, honoring Git ignores such as harness worktrees."""
+    listing = subprocess.run(
+        ["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard", "--", "*.md"],
+        cwd=ROOT, capture_output=True, text=True)
+    if listing.returncode != 0:
+        return [path for path in ROOT.rglob("*.md")
+                if not {".git", ".local", "__pycache__"}.intersection(path.relative_to(ROOT).parts)]
+    return sorted({ROOT / relative for relative in listing.stdout.split("\0")
+                   if relative and (ROOT / relative).is_file()})
 
 
 CAPABILITIES = ["deep", "standard", "light"]
@@ -70,8 +83,7 @@ def check():
     errors = []
     check_delegation(errors)
     link_count = 0
-    documents = [path for path in ROOT.rglob("*.md")
-                 if not {".git", ".local", "__pycache__"}.intersection(path.relative_to(ROOT).parts)]
+    documents = markdown_documents()
     for source in documents:
         relative = source.relative_to(ROOT).as_posix()
         body = prose(source.read_text(encoding="utf-8"))
