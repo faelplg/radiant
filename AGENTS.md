@@ -23,6 +23,16 @@ de adapter. Para coordenar papéis e delegar, leia a
 estruturais do Radiant ficam em [docs/adrs/](docs/adrs/ADR-0001-delegation-roles.md). Trabalhando neste repositório, a árvore local é o alvo de edição;
 o pin de um consumidor não impede desenvolver uma nova revisão do Radiant.
 
+Para contexto rápido, três páginas privadas no claude.ai resumem o sistema: o
+[mapa](https://claude.ai/artifact/7QZWWNTBv5NSxrePFBiaWg) em arc42 e C4, o
+[glossário](https://claude.ai/artifact/7aaAD9YCE2nkVTkm4EDa3L) e os
+[casos de uso](https://claude.ai/artifact/PEKb9oaxypnxxsQ1FTtoAQ). São visões
+derivadas: o texto deste repositório vence quando divergem. Ao mudar a
+Constitution, a tese, uma skill, um adapter, um template ou um ADR, atualize a
+página afetada; as fontes e os passos estão em `source/README.md` do mapa.
+Proponha evoluções citando sua base: documento canônico, código, evidência ou
+método nomeado.
+
 Os documentos AIKM que ficaram sob custódia aqui pertencem ao repositório AIKM;
 o encerramento está no [plano de migração](docs/migration-plan.md#encerramento-da-custódia).
 Não aplicar comandos AIKM como gates do Radiant.
