@@ -32,4 +32,4 @@ finding isolado não vira regra universal automaticamente.
 Uma correção verificada não demonstra reutilização posterior. O projeto só
 consome a revisão corrigida após adoção explícita do pin. Quando ela for usada,
 registre a evidência de aplicação no consumidor e referencie a mudança Radiant.
-AIKM poderá recuperar esse vínculo, mas não é necessário para fechar o ciclo.
+Esse vínculo fica no Git e nos artefatos do consumidor.

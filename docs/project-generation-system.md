@@ -781,6 +781,8 @@ Essa separação evita transformar “memória” em um depósito indiferenciado
 
 ## 20. Relação com AIKM
 
+> **Nota de estado (2026-10-15):** as menções ao AIKM nas seções 11, 20, 21, 32, 33, 37 e 42 descrevem o AIKM v1, uma camada de preservação e recuperação de conhecimento. Desde a revisão 2 do Frame AIKM (2026-10-12), o AIKM gerencia skills, contexto e servidores MCP por projeto, e essa camada de conhecimento é non-goal. A fronteira vigente está em [integração](integration.md#fronteira-aikm); o texto abaixo permanece como registro da tese 0.2.
+
 O **AI Knowledge Manager**, abreviado internamente como **AIKM**, é a infraestrutura candidata para preservar e recuperar o patrimônio operacional produzido pelo Radiant.
 
 As funções permanecem distintas:
