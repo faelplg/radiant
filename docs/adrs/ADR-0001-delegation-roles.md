@@ -426,9 +426,12 @@ candidatos pendentes, inclusive os vindos de adendos, e não marcou como
 resolvido um candidato cujo alvo não mudou. O modelo da sessão vem da tarefa
 agendada, não do adapter; a execução registrou o modelo efetivo e o desvio.
 
-Pendências: definir como uma execução agendada usa a capacidade `standard`; um
-Build delegado pelo Codex; e a evidência para enforcement de fronteiras por
-contrato, prevista na limitação registrada acima, que o piloto não produziu.
+Pendências registradas neste resultado: definir como uma execução agendada usa
+a capacidade `standard`; um Build delegado pelo Codex; e a evidência para
+enforcement de fronteiras por contrato, prevista na limitação registrada acima,
+que o piloto não produziu. As três foram fechadas em 2026-10-13, conforme as
+[Emendas](#emendas). O enforcement por contrato só volta a ser candidato se uma
+rodada registrar escrita fora dos paths graváveis.
 
 ## Fora de escopo
 
