@@ -29,7 +29,8 @@ Para contexto rápido, três páginas privadas no claude.ai resumem o sistema: o
 [casos de uso](https://claude.ai/artifact/PEKb9oaxypnxxsQ1FTtoAQ). São visões
 derivadas: o texto deste repositório vence quando divergem. Ao mudar a
 Constitution, a tese, uma skill, um adapter, um template ou um ADR, atualize a
-página afetada; as fontes e os passos estão em `source/README.md` do mapa.
+página afetada; as páginas são geradas e versionadas em
+`faelplg/design-systems`, na pasta `radiant-design-system/docs/`.
 Proponha evoluções citando sua base: documento canônico, código, evidência ou
 método nomeado.
 
