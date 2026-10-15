@@ -105,11 +105,14 @@ saída gerada. O setup detalhado e o rollback estão no adapter.
 
 ## Fronteira AIKM
 
-Radiant funciona com Git e arquivos sem instalar AIKM. AIKM pode preservar
-referências, proveniência, evidência e aprendizado do ciclo. O corpo das
-capabilities Radiant continua neste repositório; conhecimento operacional de
-outros domínios pode pertencer ao AIKM. Capturar ou recuperar um pointer não
-transfere ownership nem autoriza egress de seu destino.
+Radiant funciona com Git e arquivos sem instalar AIKM. Desde a revisão 2 do
+Frame AIKM (2026-10-12), AIKM é um consumidor do Radiant e uma ferramenta que
+gera, por projeto, os arquivos nativos de skills, contexto e servidores MCP de
+cada harness. Ele não preserva nem recupera evidência ou aprendizado do ciclo:
+essa camada de conhecimento da v1 é non-goal. Evidência e Learn Back ficam nos
+artefatos do consumidor e no histórico Git do Radiant. O corpo das capabilities
+Radiant continua neste repositório; distribuir um pointer ou uma cópia gerada
+não transfere ownership nem autoriza egress de seu destino.
 
 Os documentos de projeto do AIKM vivem no repositório AIKM. A custódia que
 existia aqui foi encerrada conforme o
