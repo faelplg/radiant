@@ -359,3 +359,14 @@ falhar, conforme o gate do `test-audit` do eve.
 | Alterar | `skills/radiant-delegation/SKILL.md` (despacho por backend, proveniência) |
 | Alterar | `docs/integration.md`, `docs/project-generation-system.md` (nota na seção 30), `docs/capabilities.md`, `README.md` |
 | Alterar | `validators/check_repository.py`, `tests/test_repository.py` |
+
+## Emendas
+
+- 2026-10-16: a pedido do owner, o validator do Radiant lê o bloco
+  `radiant-units` com `validators/radiant_yaml.py`, um leitor de YAML restrito
+  só com biblioteca padrão. O subconjunto está em
+  [unidades de execução](../../contracts/README.md#unidades-de-execução); todo
+  bloco aceito é YAML válido com o mesmo valor. Arquivos acrescentados à tabela
+  acima: `validators/radiant_yaml.py`, `validators/dispatch_formats.py`,
+  `validators/README.md`, `contracts/README.md`, `docs/verification.md`,
+  `tests/test_radiant_yaml.py` e `tests/test_dispatch_formats.py`.

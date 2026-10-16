@@ -15,6 +15,7 @@ Este índice não implementa comportamento. Leia somente o corpo aplicável.
 | Mapear estado do consumidor              | [Integração](integration.md), [formulário](../templates/radiant-project.json)    | Paths e revisão do Radiant          |
 | Verificar o Radiant                      | [Verification](verification.md), [validators](../validators/README.md)           | Evidência sobre a alteração         |
 | Encaminhar aprendizado                   | [Learn Back](learn-back.md)                                                      | Correção no owner responsável       |
+| Despachar unidades por backend           | [radiant-delegation](../skills/radiant-delegation/SKILL.md#despacho-por-backend), [roteamento](routing.md) | Unidades rodando em harnesses escolhidos |
 | Operar a camada de design                | [Design Layer](design-layer.md)                                                  | Sistema de design dentro do Radiant |
 
 Spec e Plan são orientados pela skill e pelas seções 6.3 e 6.5 da

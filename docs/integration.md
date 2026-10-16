@@ -169,3 +169,14 @@ não transfere ownership nem autoriza egress de seu destino.
 Os documentos de projeto do AIKM vivem no repositório AIKM. A custódia que
 existia aqui foi encerrada conforme o
 [plano de migração](migration-plan.md#encerramento-da-custódia).
+
+## Fronteira Demerzel
+
+O Demerzel é um consumidor do Radiant que despacha as unidades de execução de
+um contrato, cada uma numa sessão própria do harness escolhido pelas
+[regras de roteamento](routing.md). Ele lê contratos e regras do usuário e
+grava só seu registro de despachos. Não altera contratos, não aceita entregas
+e não faz merge, push ou mudança de escopo. Consome o Radiant pelo mesmo pin
+de qualquer projeto, e o consumidor que despacha ignora `.radiant/reports/` no
+Git. O Radiant funciona sem ele; a decisão está no
+[ADR-0002](adrs/ADR-0002-backend-dispatch-demerzel.md).

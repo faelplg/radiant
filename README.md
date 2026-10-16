@@ -32,6 +32,7 @@ registra o momento em que foi escrita, não o status desta reorganização.
 | [docs/contributing.md](docs/contributing.md)                               | Evolução e versionamento                                 |
 | [docs/verification.md](docs/verification.md)                               | Verificar mudanças neste sistema                         |
 | [docs/learn-back.md](docs/learn-back.md)                                   | Encaminhar aprendizado ao owner correto                  |
+| [docs/routing.md](docs/routing.md)                                         | Regras de roteamento de unidades para harnesses          |
 | [docs/adrs/](docs/adrs/ADR-0001-delegation-roles.md)                       | Decisões estruturais do próprio Radiant                  |
 
 ## Usar em outro projeto
