@@ -62,6 +62,22 @@ class RepositoryCheckTests(RepositoryFixture):
         self.assertEqual(result.returncode, 1)
         self.assertIn("adapters/claude-code", result.stderr)
 
+    def test_template_units_example_must_validate(self):
+        path = self.root / "templates/task-contract.md"
+        text = path.read_text(encoding="utf-8")
+        path.write_text(text.replace("role: radiant-dev", "role: radiant-x", 1), encoding="utf-8")
+        result = self.check()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("templates/task-contract.md", result.stderr)
+
+    def test_routing_example_with_unknown_harness_fails(self):
+        path = self.root / "docs/routing.example.json"
+        text = path.read_text(encoding="utf-8")
+        path.write_text(text.replace('"claude-code"', '"copilot"', 1), encoding="utf-8")
+        result = self.check()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("docs/routing.example.json", result.stderr)
+
     def test_adapter_missing_from_global_block_fails(self):
         adapter = self.root / "adapters/new-harness"
         adapter.mkdir()
@@ -82,6 +98,19 @@ class RepositoryCheckTests(RepositoryFixture):
                 self.assertEqual(result.returncode, 1)
                 self.assertIn("agents.json", result.stderr)
                 path.write_text(original, encoding="utf-8")
+
+    def test_provides_with_unknown_requirement_fails(self):
+        path = self.root / "adapters/codex/provides.json"
+        path.write_text(json.dumps({"provides": ["turbo"]}), encoding="utf-8")
+        result = self.check()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("adapters/codex/provides.json", result.stderr)
+
+    def test_adapter_without_provides_fails(self):
+        (self.root / "adapters/claude-code/provides.json").unlink()
+        result = self.check()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("adapters/claude-code", result.stderr)
 
 
 

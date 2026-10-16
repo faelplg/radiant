@@ -81,6 +81,34 @@ Não inferir inputs ausentes que mudariam materialmente a solução.
 
 `DENIED | ALLOWED FOR: [purpose]`
 
+### Execution units
+
+Opcional. Sem esta subseção, o contrato é uma unidade só. Use-a para dividir o
+Build em unidades delegáveis, cada uma com papel, capacidade e requisitos, que
+um operador de despacho ou o orquestrador consegue configurar sem reinterpretar
+o contrato. As regras e o YAML aceito estão em
+[unidades de execução](../contracts/README.md#unidades-de-execução).
+
+```yaml radiant-units
+units:
+  - id: TC-0025.1
+    role: radiant-dev
+    requires: []
+    objective: Buscar fontes externas por rev para o cache.
+    writes: [src/sources/, tests/sources/]
+    depends_on: []
+    done_when: Os testes de tests/sources passam e o cache recusa digest divergente.
+  - id: TC-0025.2
+    role: radiant-dev
+    capability: deep
+    capability_reason: A recusa de digest exige julgamento de segurança.
+    requires: []
+    objective: Integrar a verificação de digest ao sync.
+    writes: [src/sync/]
+    depends_on: [TC-0025.1]
+    done_when: bun run check passa e o sync recusa conteúdo sem digest correspondente.
+```
+
 ---
 
 ## 5. Required outputs

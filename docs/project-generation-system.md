@@ -1089,6 +1089,8 @@ A métrica principal continua sendo:
 
 ## 30. O que Radiant não é
 
+> **Nota de estado (2026-10-16):** o Radiant define como fluxos agênticos são divididos em unidades, roteados para harnesses e aceitos. A execução e a observação ficam com os harnesses e com um operador externo, o Demerzel, conforme o [ADR-0002](adrs/ADR-0002-backend-dispatch-demerzel.md) e a [integração](integration.md#fronteira-demerzel). O texto abaixo permanece como registro da tese 0.2.
+
 Radiant não é:
 
 - framework de agentes;

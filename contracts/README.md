@@ -39,3 +39,46 @@ commit/digest. Atualizações compartilhadas não reescrevem execução passada.
 Relatórios de verificação e aprendizado apontam para ID/path do contrato, sem
 copiar seu corpo. Feche o contrato e atualize `ACTIVE.md` quando a conclusão
 estiver sustentada. Não crie contratos retroativos para fabricar conformidade.
+
+## Unidades de execução
+
+Um contrato pode dividir o trabalho em unidades, num bloco ` ```yaml radiant-units `
+do [template](../templates/task-contract.md). O bloco usa YAML restrito, lido
+por `validators/radiant_yaml.py` sem dependências. Todo bloco válido nesse
+subconjunto é YAML válido com o mesmo valor, então leitores com parser
+completo, como um operador de despacho, leem o mesmo conteúdo.
+
+Aceito: mapeamentos e sequências em bloco, inclusive `- chave: valor` com
+continuação alinhada à chave; listas de escalares entre colchetes, sem
+aninhamento; valores entre aspas duplas (escapes `\"`, `\\` e `\n`) ou
+simples (`''` como aspa); `true`, `false`, `null` e inteiros; comentários `#`
+em linha própria ou depois de valor entre aspas ou lista; indentação só com
+espaços.
+
+Um valor sem aspas começa com letra, `_`, `/` ou `.` seguido de letra, e não
+pode ser lido por YAML como outro tipo. Use aspas quando o texto começar com
+dígito, crase ou outro símbolo, for uma palavra como `yes`, `on` ou `True`, ou
+tiver `: `, ` #`, tab ou caractere de controle. Dentro de colchetes, use aspas
+também para `,`, `[`, `]`, `{` e `}`.
+
+Recusado, com o número da linha: tudo o que a regra acima exige entre aspas,
+tab na indentação, chave repetida ou que YAML lê como booleano ou nulo,
+âncoras (`&`, `*`), tags (`!`), blocos `|` e `>`, mapeamentos entre chaves,
+marcadores de documento, comentário depois de valor sem aspas e valor sem
+aspas em várias linhas.
+
+Regras do bloco:
+
+- `id` segue `TC-0000.N`, com o mesmo prefixo em todas as unidades, e nunca é
+  renumerado. `role` é um perfil de
+  [agents.json](../skills/radiant-delegation/agents.json).
+- `capability` ausente usa o padrão do perfil; presente, exige
+  `capability_reason`. `requires` usa os termos de
+  [requirements.json](../skills/radiant-delegation/requirements.json).
+- `writes` é subconjunto dos paths graváveis do contrato, sem `..` nem path
+  absoluto, e normalizado: sem `.`, `./` ou `//`. Unidades sem dependência entre
+  si não se sobrepõem.
+- `depends_on` cita só unidades do mesmo contrato, sem ciclo.
+- A soma das unidades não ultrapassa objetivo, outputs e fronteira do
+  contrato. Mudar a divisão depois do início é amendment quando a fronteira não
+  muda e exige `HOLD` quando muda.

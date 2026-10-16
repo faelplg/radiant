@@ -8,6 +8,10 @@ import sys
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
+import radiant_yaml
+from dispatch_formats import (CAPABILITIES, extract_units_block, load_requirements,
+                              validate_provides, validate_routing, validate_units)
+
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -44,9 +48,6 @@ def markdown_documents():
                    if relative and (ROOT / relative).is_file()})
 
 
-CAPABILITIES = ["deep", "standard", "light"]
-
-
 def check_delegation(errors):
     """Keep delegable profiles and every adapter's model map consistent with the core."""
     registry = "skills/radiant-delegation/agents.json"
@@ -81,9 +82,46 @@ def check_delegation(errors):
             errors.append(f"{relative}: deve mapear {CAPABILITIES} para IDs de modelo não vazios")
 
 
+def check_dispatch(errors):
+    """Keep requirements, provides, the template units example and the routing example consistent."""
+    example = "docs/routing.example.json"
+    adapters = {p.name for p in (ROOT / "adapters").iterdir() if p.is_dir()}
+    try:
+        routing = json.loads((ROOT / example).read_text(encoding="utf-8"))
+        errors.extend(f"{example}: {message}" for message in validate_routing(routing, adapters))
+    except ValueError as error:
+        errors.append(f"{example}: JSON inválido: {error}")
+    requirements = load_requirements(ROOT / "skills/radiant-delegation/requirements.json")
+    for adapter in sorted(p for p in (ROOT / "adapters").iterdir() if p.is_dir()):
+        path = adapter / "provides.json"
+        relative = path.relative_to(ROOT).as_posix()
+        if not path.is_file():
+            errors.append(f"{relative}: adapter sem declaração de requisitos atendidos")
+            continue
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except ValueError as error:
+            errors.append(f"{relative}: JSON inválido: {error}")
+            continue
+        errors.extend(f"{relative}: {message}" for message in validate_provides(data, requirements))
+    template = "templates/task-contract.md"
+    try:
+        block = extract_units_block((ROOT / template).read_text(encoding="utf-8"))
+        if block is None:
+            raise ValueError("sem exemplo radiant-units")
+        units = radiant_yaml.load(block)
+    except ValueError as error:
+        errors.append(f"{template}: {error}")
+        return
+    registry = json.loads((ROOT / "skills/radiant-delegation/agents.json").read_text(encoding="utf-8"))
+    agents = {agent.get("name"): agent.get("capability") for agent in registry.get("agents", [])}
+    errors.extend(f"{template}: {message}" for message in validate_units(units, agents, requirements))
+
+
 def check():
     errors = []
     check_delegation(errors)
+    check_dispatch(errors)
     link_count = 0
     documents = markdown_documents()
     for source in documents:
