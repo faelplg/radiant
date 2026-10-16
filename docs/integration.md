@@ -70,10 +70,10 @@ O orquestrador conduz a adoção quando o humano pede e o projeto ainda não tem
 
 1. **Conferir o Radiant.** O bootstrap global aponta para um checkout limpo,
    num commit alcançável a partir de `main`. Se o checkout estiver limpo em
-   `main` e só atrás do remoto, faça fast-forward até o commit escolhido; com
-   trabalho em andamento, não troque a branch. Se o bootstrap não apontar
-   para um checkout, pare em `HOLD` e indique o setup do adapter. A
-   configuração global é feita pelo humano.
+   `main` e só atrás do remoto, faça fast-forward até o commit escolhido. Em
+   qualquer outro caso (sem checkout, checkout sujo, outra branch ou commit
+   fora de `main`), pare em `HOLD` antes de escrever: indique o setup do
+   adapter e não troque a branch. A configuração global é feita pelo humano.
 2. **Diagnosticar, só lendo.** Levante, com path e linha, os comandos de
    build, teste, lint e typecheck (manifests, scripts e CI), as instruções que
    já existem (`AGENTS.md`, arquivo do harness, README) e as decisões
@@ -98,14 +98,17 @@ O orquestrador conduz a adoção quando o humano pede e o projeto ainda não tem
    arquivo do harness valem para todo contribuidor, inclusive quem não usa o
    Radiant. O humano decide se a adoção entra no repositório.
 4. **Escrever o aprovado.** Antes, guarde `git status --porcelain --ignored`.
-   Escreva só os arquivos aprovados, num branch, sem push. O corpo do commit
-   de adoção registra o diagnóstico resumido e a lista aprovada; essa é a
-   evidência da adoção.
+   Escreva só os arquivos aprovados, num branch, sem push e ainda sem
+   commit.
 5. **Verificar.** `check_project.py` sai com 0 sem mudar o pin. Compare
    `git status --porcelain --ignored` com o estado guardado: a diferença,
    incluindo arquivos não rastreados e ignorados, contém só a lista aprovada,
    e o conteúdo de cada arquivo novo confere com a proposta. O check confirma
-   a estrutura, não a qualidade do diagnóstico.
+   a estrutura do mapa e a limpeza do checkout Radiant, não o diff do
+   consumidor nem a qualidade do diagnóstico.
+6. **Commitar.** Só depois do passo 5, faça o commit de adoção. O corpo
+   registra o diagnóstico resumido e a lista aprovada; essa é a evidência da
+   adoção.
 
 O pin é decisão humana. Um comando proposto como seguro roda localmente, sem
 rede e sem escrita fora do projeto. A seção e os comentários que a adoção
