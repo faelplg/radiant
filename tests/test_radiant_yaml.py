@@ -52,6 +52,13 @@ class RadiantYamlTests(unittest.TestCase):
     def test_apostrophe_inside_plain_scalar_is_literal(self):
         self.assertEqual(load("a: it's done\nb: d'água\n"), {"a": "it's done", "b": "d'água"})
 
+    def test_doubled_single_quote_before_hash_is_kept(self):
+        self.assertEqual(load("objective: 'it''s issue #12'\n"), {"objective": "it's issue #12"})
+
+    def test_escaped_double_quote_inside_flow_list_is_kept(self):
+        self.assertEqual(load('writes: ["src/a\\"b/", tests/]\n'), {"writes": ['src/a"b/', "tests/"]})
+        self.assertEqual(load("writes: ['it''s, ok', b]\n"), {"writes": ["it's, ok", "b"]})
+
     def test_implicitly_typed_plain_scalars_are_refused(self):
         for value in ("True", "TRUE", "Null", "1.5", ".5", "0x10", "0b11", "007", "+1", ".inf",
                       ".NaN", "1_000", "1:30", "2026-10-16", "yes", "no", "on", "Off", "3 testes"):
@@ -81,6 +88,8 @@ class RadiantYamlTests(unittest.TestCase):
             "a: it's done\nb: d'água\nc: src/sync/\nd: TC-0025.1\ne: _x\nf: .gitignore\n",
             "a:\n- b\n- c: d\n  e: [f, 'g h']\n",
             "a: 'it''s'\nb: \"l1\\nl2\"\n",
+            "objective: 'it''s issue #12'\n",
+            'writes: ["src/a\\"b/", tests/]\nc: [\'it\'\'s, ok\', b]\n',
         ]
         documents.append(extract_template_block())
         for text in documents:

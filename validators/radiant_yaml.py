@@ -25,6 +25,15 @@ class YamlError(ValueError):
         super().__init__(f"linha {number}: {message}")
 
 
+def quoted_pair(text, index, quote):
+    """Length of an escape that keeps a quoted value open: \\x in double, '' in single."""
+    if quote == '"' and text[index] == "\\":
+        return 2
+    if quote == "'" and text[index:index + 2] == "''":
+        return 2
+    return 0
+
+
 def strip_comment(text):
     """Split off a trailing comment, honoring quotes that open a value.
 
@@ -35,8 +44,9 @@ def strip_comment(text):
     index = 0
     while index < len(text):
         char = text[index]
-        if quote == '"' and char == "\\":
-            index += 2
+        skip = quoted_pair(text, index, quote)
+        if skip:
+            index += skip
             continue
         if quote:
             if char == quote:
@@ -71,7 +81,15 @@ def is_item(content):
 
 def split_flow(inner, number):
     parts, current, quote = [], "", None
-    for char in inner:
+    index = 0
+    while index < len(inner):
+        char = inner[index]
+        index += 1
+        skip = quoted_pair(inner, index - 1, quote)
+        if skip:
+            current += inner[index - 1:index - 1 + skip]
+            index += skip - 1
+            continue
         if quote:
             current += char
             if char == quote:
