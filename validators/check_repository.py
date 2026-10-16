@@ -10,7 +10,7 @@ from urllib.parse import unquote, urlsplit
 
 import radiant_yaml
 from dispatch_formats import (CAPABILITIES, extract_units_block, load_requirements,
-                              validate_provides, validate_units)
+                              validate_provides, validate_routing, validate_units)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -83,7 +83,14 @@ def check_delegation(errors):
 
 
 def check_dispatch(errors):
-    """Keep the requirement vocabulary and what each adapter provides consistent."""
+    """Keep requirements, provides, the template units example and the routing example consistent."""
+    example = "docs/routing.example.json"
+    adapters = {p.name for p in (ROOT / "adapters").iterdir() if p.is_dir()}
+    try:
+        routing = json.loads((ROOT / example).read_text(encoding="utf-8"))
+        errors.extend(f"{example}: {message}" for message in validate_routing(routing, adapters))
+    except ValueError as error:
+        errors.append(f"{example}: JSON inválido: {error}")
     requirements = load_requirements(ROOT / "skills/radiant-delegation/requirements.json")
     for adapter in sorted(p for p in (ROOT / "adapters").iterdir() if p.is_dir()):
         path = adapter / "provides.json"

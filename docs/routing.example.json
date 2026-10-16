@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "rules": [
+    {
+      "id": "ui-browser",
+      "when": "Unidades de interface que precisam abrir e inspecionar páginas",
+      "use": [{ "harness": "claude-code" }, { "harness": "codex" }],
+      "why": "Preferência do owner para inspeção visual"
+    },
+    {
+      "id": "independent-critique",
+      "when": "Crítica de um Build feito por modelo de outro fornecedor",
+      "use": [{ "harness": "codex", "capability": "deep" }],
+      "approval": "human"
+    }
+  ],
+  "default": [{ "harness": "claude-code" }]
+}

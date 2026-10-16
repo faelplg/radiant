@@ -144,3 +144,59 @@ def validate_units(data, agents, requirements):
                     if overlaps(path, other):
                         errors.append(f"{first['id']} e {second['id']}: writes se sobrepõem em {path!r} e {other!r}")
     return errors
+
+
+RULE_ID = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*$")
+RULE_KEYS = {"id", "when", "use", "approval", "why"}
+CANDIDATE_KEYS = {"harness", "capability", "effort"}
+
+
+def validate_candidates(candidates, adapters, where):
+    if not isinstance(candidates, list) or not candidates:
+        return [f"{where}: lista de candidatos não vazia é obrigatória"]
+    errors = []
+    for candidate in candidates:
+        if not isinstance(candidate, dict):
+            errors.append(f"{where}: candidato deve ser um objeto")
+            continue
+        errors += [f"{where}: chave desconhecida {key!r}" for key in sorted(set(candidate) - CANDIDATE_KEYS)]
+        if candidate.get("harness") not in adapters:
+            errors.append(f"{where}: harness sem adapter {candidate.get('harness')!r}")
+        if "capability" in candidate and candidate["capability"] not in CAPABILITIES:
+            errors.append(f"{where}: capacidade desconhecida {candidate['capability']!r}")
+        effort = candidate.get("effort", "x")
+        if not isinstance(effort, str) or not effort.strip():
+            errors.append(f"{where}: effort deve ser texto não vazio")
+    return errors
+
+
+def validate_routing(data, adapters):
+    if not isinstance(data, dict) or set(data) != {"schema", "rules", "default"}:
+        return ["esperado {schema, rules, default}"]
+    errors = []
+    if data["schema"] != 1:
+        errors.append(f"schema desconhecido {data['schema']!r}")
+    rules = data["rules"]
+    if not isinstance(rules, list):
+        return errors + ["rules deve ser lista"]
+    seen = set()
+    for rule in rules:
+        if not isinstance(rule, dict):
+            errors.append("regra deve ser um objeto")
+            continue
+        rule_id = rule.get("id")
+        where = f"regra {rule_id!r}"
+        errors += [f"{where}: chave desconhecida {key!r}" for key in sorted(set(rule) - RULE_KEYS)]
+        if not isinstance(rule_id, str) or not RULE_ID.match(rule_id):
+            errors.append(f"{where}: id fora do padrão kebab-case")
+        elif rule_id in seen:
+            errors.append(f"{where}: id repetido")
+        seen.add(rule_id)
+        for key in ("when", "why"):
+            if (key == "when" or key in rule) and (not isinstance(rule.get(key), str) or not rule[key].strip()):
+                errors.append(f"{where}: {key} deve ser texto não vazio")
+        if "approval" in rule and rule["approval"] != "human":
+            errors.append(f"{where}: approval só aceita 'human'")
+        errors += validate_candidates(rule.get("use"), adapters, where)
+    errors += validate_candidates(data["default"], adapters, "default")
+    return errors

@@ -8,7 +8,8 @@ import unittest
 SOURCE = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(SOURCE / "validators"))
 
-from dispatch_formats import extract_units_block, validate_provides, validate_units  # noqa: E402
+from dispatch_formats import (extract_units_block, validate_provides, validate_routing,  # noqa: E402
+                              validate_units)
 
 
 class ProvidesTests(unittest.TestCase):
@@ -102,6 +103,49 @@ class UnitsTests(unittest.TestCase):
     def test_block_body_is_extracted(self):
         self.assertEqual(extract_units_block("x\n```yaml radiant-units\nunits: []\n```\n"), "units: []\n")
         self.assertIsNone(extract_units_block("```yaml\na: 1\n```\n"))
+
+
+ROUTING = {
+    "schema": 1,
+    "rules": [
+        {"id": "ui-browser", "when": "Unidades de interface que precisam abrir e inspecionar páginas",
+         "use": [{"harness": "claude-code"}, {"harness": "codex"}],
+         "why": "Preferência do owner para inspeção visual"},
+        {"id": "independent-critique", "when": "Crítica de um Build feito por modelo de outro fornecedor",
+         "use": [{"harness": "codex", "capability": "deep"}], "approval": "human"},
+    ],
+    "default": [{"harness": "claude-code"}],
+}
+ADAPTERS = {"claude-code", "codex"}
+
+
+class RoutingTests(unittest.TestCase):
+    def assertError(self, data, fragment):
+        errors = validate_routing(data, ADAPTERS)
+        self.assertTrue(any(fragment in error for error in errors), errors)
+
+    def test_example_passes(self):
+        self.assertEqual(validate_routing(ROUTING, ADAPTERS), [])
+
+    def test_unknown_harness_fails(self):
+        data = copy.deepcopy(ROUTING)
+        data["rules"][0]["use"][0]["harness"] = "copilot"
+        self.assertError(data, "'copilot'")
+
+    def test_unknown_approval_fails(self):
+        data = copy.deepcopy(ROUTING)
+        data["rules"][1]["approval"] = "auto"
+        self.assertError(data, "approval")
+
+    def test_repeated_rule_id_fails(self):
+        data = copy.deepcopy(ROUTING)
+        data["rules"][1]["id"] = "ui-browser"
+        self.assertError(data, "repetido")
+
+    def test_unknown_schema_fails(self):
+        data = copy.deepcopy(ROUTING)
+        data["schema"] = 2
+        self.assertError(data, "schema")
 
 
 if __name__ == "__main__":
