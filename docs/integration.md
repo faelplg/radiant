@@ -88,10 +88,13 @@ O orquestrador conduz a adoção quando o humano pede e o projeto ainda não tem
    - lacunas: Frame, Spec, Plan e Engineering Profile ausentes, encaminhados
      à [skill de ciclo](../skills/radiant-cycle/SKILL.md). Nada é inventado
      para preenchê-los.
-4. **Escrever o aprovado.** Só os arquivos aprovados, num branch, sem push.
-5. **Verificar.** `check_project.py` sai com 0 sem mudar o pin, e o diff
-   contém só a lista aprovada. O check confirma a estrutura, não a qualidade
-   do diagnóstico.
+4. **Escrever o aprovado.** Antes, guarde `git status --porcelain --ignored`.
+   Escreva só os arquivos aprovados, num branch, sem push.
+5. **Verificar.** `check_project.py` sai com 0 sem mudar o pin. Compare
+   `git status --porcelain --ignored` com o estado guardado: a diferença,
+   incluindo arquivos não rastreados e ignorados, contém só a lista aprovada,
+   e o conteúdo de cada arquivo novo confere com a proposta. O check confirma
+   a estrutura, não a qualidade do diagnóstico.
 
 O pin é decisão humana. Um comando proposto como seguro roda localmente, sem
 rede e sem escrita fora do projeto. O Radiant escreve só os arquivos acima;
