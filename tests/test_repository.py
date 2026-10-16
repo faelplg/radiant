@@ -62,6 +62,14 @@ class RepositoryCheckTests(RepositoryFixture):
         self.assertEqual(result.returncode, 1)
         self.assertIn("adapters/claude-code", result.stderr)
 
+    def test_template_units_example_must_validate(self):
+        path = self.root / "templates/task-contract.md"
+        text = path.read_text(encoding="utf-8")
+        path.write_text(text.replace("role: radiant-dev", "role: radiant-x", 1), encoding="utf-8")
+        result = self.check()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("templates/task-contract.md", result.stderr)
+
     def test_adapter_missing_from_global_block_fails(self):
         adapter = self.root / "adapters/new-harness"
         adapter.mkdir()

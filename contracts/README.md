@@ -58,3 +58,18 @@ Recusado, com o número da linha: tab na indentação, chave repetida, âncoras
 (`&`, `*`), tags (`!`), blocos `|` e `>`, mapeamentos entre chaves, marcadores
 de documento, valor simples com `: ` ou terminado em `:` (use aspas) e valor
 simples em várias linhas.
+
+Regras do bloco:
+
+- `id` segue `TC-0000.N`, com o mesmo prefixo em todas as unidades, e nunca é
+  renumerado. `role` é um perfil de
+  [agents.json](../skills/radiant-delegation/agents.json).
+- `capability` ausente usa o padrão do perfil; presente, exige
+  `capability_reason`. `requires` usa os termos de
+  [requirements.json](../skills/radiant-delegation/requirements.json).
+- `writes` é subconjunto dos paths graváveis do contrato, sem `..` nem path
+  absoluto. Unidades sem dependência entre si não se sobrepõem.
+- `depends_on` cita só unidades do mesmo contrato, sem ciclo.
+- A soma das unidades não ultrapassa objetivo, outputs e fronteira do
+  contrato. Mudar a divisão depois do início é amendment quando a fronteira não
+  muda e exige `HOLD` quando muda.

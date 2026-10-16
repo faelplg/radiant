@@ -8,7 +8,9 @@ import sys
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
-from dispatch_formats import load_requirements, validate_provides
+import radiant_yaml
+from dispatch_formats import (CAPABILITIES, extract_units_block, load_requirements,
+                              validate_provides, validate_units)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -44,9 +46,6 @@ def markdown_documents():
         raise ValueError(f"git ls-files falhou: {listing.stderr.strip()}")
     return sorted({ROOT / relative for relative in listing.stdout.split("\0")
                    if relative and (ROOT / relative).is_file()})
-
-
-CAPABILITIES = ["deep", "standard", "light"]
 
 
 def check_delegation(errors):
@@ -98,6 +97,18 @@ def check_dispatch(errors):
             errors.append(f"{relative}: JSON inválido: {error}")
             continue
         errors.extend(f"{relative}: {message}" for message in validate_provides(data, requirements))
+    template = "templates/task-contract.md"
+    try:
+        block = extract_units_block((ROOT / template).read_text(encoding="utf-8"))
+        if block is None:
+            raise ValueError("sem exemplo radiant-units")
+        units = radiant_yaml.load(block)
+    except ValueError as error:
+        errors.append(f"{template}: {error}")
+        return
+    registry = json.loads((ROOT / "skills/radiant-delegation/agents.json").read_text(encoding="utf-8"))
+    agents = {agent.get("name"): agent.get("capability") for agent in registry.get("agents", [])}
+    errors.extend(f"{template}: {message}" for message in validate_units(units, agents, requirements))
 
 
 def check():
