@@ -1,6 +1,6 @@
 # Project Frame: adoção do Radiant
 
-Revisão do Frame: 2 (2026-10-15), aguardando aprovação humana
+Revisão do Frame: 4 (2026-10-16), encerrado na etapa 2; a skill não será criada
 Referência Radiant: 604c2a0b5103005e54b6a6089433f42d10d31320
 
 ## Intenção e participante
@@ -47,23 +47,26 @@ basta e a skill não é criada.
 Etapa 2 no projeto `faelplg/lab-ai-usage-quota`. Ele tem testes, typecheck e
 CI, não publica o repositório como site e ainda não tem `AGENTS.md`.
 
-1. Antes de começar, o humano escreve um gabarito com os comandos, as regras e
-   as decisões que espera ver no setup.
-2. O pin é o commit de `main` que contém a etapa 1, com o checkout principal
+1. O pin é o commit de `main` que contém a etapa 1, com o checkout principal
    limpo nesse commit. Nada muda no bootstrap global.
-3. O orquestrador faz o diagnóstico só lendo, e propõe a lista exata de
+2. O orquestrador faz o diagnóstico só lendo, e propõe a lista exata de
    arquivos e o conteúdo de cada um.
-4. Depois da aprovação, ele escreve num branch local, sem push.
-5. O humano compara o resultado com o gabarito.
+3. O humano revisa a proposta direto, marcando o que está errado, o que sobra
+   e o que falta.
+4. Depois da aprovação, o orquestrador escreve num branch local, sem push.
 
 Evidência:
 
-- itens do gabarito encontrados e itens omitidos;
+- correções do humano na revisão: erros, sobras e omissões;
 - fatos inventados, com meta zero;
 - arquivos tocados fora da lista aprovada, com meta zero, conferidos pelo diff
   e pelo `git status --ignored`;
 - `check_project.py` saindo com 0, sem mudar o pin para passar;
 - atritos anotados durante a adoção.
+
+A revisão 3 tirou o gabarito escrito antes da proposta. Para um projeto pequeno
+e local, o custo não compensava (Artigo XVII). A perda aceita é que uma
+omissão pode passar sem ser vista na revisão.
 
 O `check_project.py` sozinho não prova a adoção, porque aceita um mapa todo
 `null`. Ele só confirma a estrutura.
@@ -97,3 +100,31 @@ Non-goals:
 Em aberto:
 
 - O que a etapa 2 revelar decide se a etapa 3 existe e qual é o seu escopo.
+
+## Resultado da etapa 2
+
+Adoção do `lab-ai-usage-quota` em 2026-10-16, no commit local `63576da` do
+branch `chore/radiant-adoption`, sem push. Pin
+`238190aa4918c74a7f1de99907e8215c7e96a443`.
+
+| Evidência | Resultado |
+| --- | --- |
+| Correções do humano na revisão | 0 |
+| Fatos inventados | 0 |
+| Arquivos fora da lista aprovada | 0: só `.radiant.json`, `AGENTS.md`, `CLAUDE.md` e `.gitignore` |
+| `check_project.py` | Saída 0, pin intacto |
+
+Atritos, todos corrigidos na [integração](../integration.md#adotar-num-projeto)
+e no [mapa neutro](../../templates/project-agents.md):
+
+1. O checkout estava atrás do pin. O passo 1 agora diz quando fazer
+   fast-forward.
+2. O repositório é público. A proposta agora avisa que a seção vale para todo
+   contribuidor, e o mapa diz o que segue quem não usa o Radiant.
+3. O projeto é em inglês e o mapa em português. A seção fica em português.
+4. Não havia lugar para a evidência. Ela vai no corpo do commit de adoção.
+5. Classificar comando seguro exigiu ler os testes. O passo 2 agora diz isso e
+   manda tratar a dúvida como não seguro.
+
+Decisão humana: não houve erro nem invenção, e os atritos se resolveram no
+checklist. A etapa 3 não acontece e a `radiant-adopt` não será criada.
