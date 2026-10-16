@@ -6,7 +6,7 @@ description:
   Dev, Verificação ou Manutenção, ao montar um pacote de delegação ou ao
   avaliar o retorno de um papel delegado.
 metadata:
-  version: "0.1.1"
+  version: "0.2.0"
 ---
 
 # Delegação e papéis Radiant
@@ -160,10 +160,29 @@ mantenha o papel na sessão do orquestrador sob as permissões dela.
 Somente entre tarefas independentes com paths de escrita disjuntos. Na dúvida,
 execução sequencial.
 
+## Despacho por backend
+
+Um operador externo pode substituir o subagente nativo: cada unidade de
+execução do contrato roda numa sessão própria do harness escolhido, com
+worktree próprio, e o orquestrador continua sendo a sessão com o humano.
+
+- O pacote é o caminho do contrato e o ID da unidade, como ponteiro, mais a
+  revisão e a raiz absoluta do Radiant. A divisão e suas regras estão em
+  [unidades de execução](../../contracts/README.md#unidades-de-execução).
+- O orquestrador escolhe a [regra de roteamento](../../docs/routing.md); o
+  operador resolve harness e modelo. Requisitos vêm de
+  [requirements.json](requirements.json), e o que cada harness oferece, de
+  `adapters/<harness>/provides.json`.
+- O retorno de Build continua sendo o `Completion report`, gravado em
+  `.radiant/reports/<id>.md` no worktree. O consumidor ignora esse path no Git.
+- O aceite, o readback e as regras 1 a 7 não mudam. O operador não aceita,
+  não faz merge nem push e não muda escopo.
+
 ## Proveniência
 
 O relatório de verificação do contrato, ou o relatório de manutenção numa
 execução de Manutenção, registra cada delegação, uma linha por rodada: papel,
 capacidade, ID completo do modelo resolvido pelo adapter, estado e a métrica de
-uso definida pelo adapter. Sem métrica definida, o relatório registra a
+uso definida pelo adapter. No despacho por backend, a linha inclui também o
+harness e o identificador do despacho. Sem métrica definida, o relatório registra a
 ausência. IDs de modelo aparecem apenas nesses relatórios e nos adapters.
