@@ -69,12 +69,17 @@ O orquestrador conduz a adoção quando o humano pede e o projeto ainda não tem
 `.radiant.json`. Os passos valem para projeto novo e existente.
 
 1. **Conferir o Radiant.** O bootstrap global aponta para um checkout limpo,
-   num commit alcançável a partir de `main`. Se não apontar, pare em `HOLD` e
-   indique o setup do adapter. A configuração global é feita pelo humano.
+   num commit alcançável a partir de `main`. Se o checkout estiver limpo em
+   `main` e só atrás do remoto, faça fast-forward até o commit escolhido; com
+   trabalho em andamento, não troque a branch. Se o bootstrap não apontar
+   para um checkout, pare em `HOLD` e indique o setup do adapter. A
+   configuração global é feita pelo humano.
 2. **Diagnosticar, só lendo.** Levante, com path e linha, os comandos de
    build, teste, lint e typecheck (manifests, scripts e CI), as instruções que
    já existem (`AGENTS.md`, arquivo do harness, README) e as decisões
-   registradas. Não execute comandos nesta etapa.
+   registradas. Não execute comandos nesta etapa. Para classificar um comando
+   como seguro, leia o script e os testes que ele roda; na dúvida, ele não é
+   seguro.
 3. **Propor.** Apresente a lista exata de arquivos e o conteúdo de cada um:
    - `.radiant.json` com o pin proposto e `null` em todo artefato que ainda
      não existe;
@@ -88,8 +93,14 @@ O orquestrador conduz a adoção quando o humano pede e o projeto ainda não tem
    - lacunas: Frame, Spec, Plan e Engineering Profile ausentes, encaminhados
      à [skill de ciclo](../skills/radiant-cycle/SKILL.md). Nada é inventado
      para preenchê-los.
+
+   Em repositório público ou compartilhado, diga na proposta que a seção e o
+   arquivo do harness valem para todo contribuidor, inclusive quem não usa o
+   Radiant. O humano decide se a adoção entra no repositório.
 4. **Escrever o aprovado.** Antes, guarde `git status --porcelain --ignored`.
-   Escreva só os arquivos aprovados, num branch, sem push.
+   Escreva só os arquivos aprovados, num branch, sem push. O corpo do commit
+   de adoção registra o diagnóstico resumido e a lista aprovada; essa é a
+   evidência da adoção.
 5. **Verificar.** `check_project.py` sai com 0 sem mudar o pin. Compare
    `git status --porcelain --ignored` com o estado guardado: a diferença,
    incluindo arquivos não rastreados e ignorados, contém só a lista aprovada,
@@ -97,7 +108,9 @@ O orquestrador conduz a adoção quando o humano pede e o projeto ainda não tem
    a estrutura, não a qualidade do diagnóstico.
 
 O pin é decisão humana. Um comando proposto como seguro roda localmente, sem
-rede e sem escrita fora do projeto. O Radiant escreve só os arquivos acima;
+rede e sem escrita fora do projeto. A seção e os comentários que a adoção
+escreve ficam em português, como o mapa neutro, mesmo num projeto em outro
+idioma. O Radiant escreve só os arquivos acima;
 outra ferramenta no mesmo projeto convive com ele porque o conteúdo fora da
 seção do Radiant é preservado.
 
