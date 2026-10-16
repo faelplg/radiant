@@ -9,7 +9,10 @@ pertencem à [integração](../../docs/integration.md); papéis e delegação, �
 1. Resolva a raiz indicada pelo bootstrap global e a raiz do consumidor.
 2. Leia `.radiant.json` local e execute
    `python3 <radiant-root>/validators/check_project.py <project-root>`.
-   Siga o resultado antes de carregar instruções compartilhadas.
+   Siga o resultado antes de carregar instruções compartilhadas. Sem
+   `.radiant.json`, o projeto ainda não é consumidor: se o humano pedir a
+   adoção, siga [Adotar num projeto](../../docs/integration.md#adotar-num-projeto);
+   se não pedir, não trate o projeto como consumidor.
 3. Com o gate satisfeito, leia a
    [Constitution](../../constitution/CONSTITUTION.md) dessa revisão, o
    [Engineering Baseline](../../engineering/engineering-baseline.md), o
@@ -125,10 +128,9 @@ externa. Sem eles, o papel segue apenas o Radiant.
 
 ## Configurar o consumidor
 
-Use o [mapa neutro](../../templates/project-agents.md) como `AGENTS.md` e crie
-um `CLAUDE.md` com a única linha `@AGENTS.md`. Use
-[radiant-project.json](../../templates/radiant-project.json) como
-`.radiant.json`, conforme a [convenção](../../docs/integration.md).
+Siga [Adotar num projeto](../../docs/integration.md#adotar-num-projeto). Neste
+harness, o arquivo de instruções é o `CLAUDE.md` com a única linha
+`@AGENTS.md`.
 
 ## Desfazer
 

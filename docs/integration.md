@@ -60,10 +60,46 @@ Restrições, comandos e referências a ADRs locais podem ficar nele ou em
 `workflow`, conforme o volume. A lista de contratos ativos existe somente no
 `ACTIVE.md` apontado, nunca no mapa e no adapter simultaneamente.
 
-Para começar: selecionar a revisão, configurar o mapa e o adapter local,
-enquadrar a intenção com o template de Frame, escrever Spec e Plan locais
-orientados pela skill e criar Contracts locais quando aplicáveis. O formulário
+Para começar, siga [Adotar num projeto](#adotar-num-projeto). O formulário
 preenchido vira instância; o corpo da skill continua no Radiant.
+
+## Adotar num projeto
+
+O orquestrador conduz a adoção quando o humano pede e o projeto ainda não tem
+`.radiant.json`. Os passos valem para projeto novo e existente.
+
+1. **Conferir o Radiant.** O bootstrap global aponta para um checkout limpo,
+   num commit alcançável a partir de `main`. Se não apontar, pare em `HOLD` e
+   indique o setup do adapter. A configuração global é feita pelo humano.
+2. **Diagnosticar, só lendo.** Levante, com path e linha, os comandos de
+   build, teste, lint e typecheck (manifests, scripts e CI), as instruções que
+   já existem (`AGENTS.md`, arquivo do harness, README) e as decisões
+   registradas. Não execute comandos nesta etapa.
+3. **Propor.** Apresente a lista exata de arquivos e o conteúdo de cada um:
+   - `.radiant.json` com o pin proposto e `null` em todo artefato que ainda
+     não existe;
+   - no `AGENTS.md`, uma seção entre `<!-- radiant:begin -->` e
+     `<!-- radiant:end -->` a partir do [mapa neutro](../templates/project-agents.md),
+     com os comandos encontrados. Crie o arquivo se faltar e preserve todo o
+     resto;
+   - o arquivo de instruções do harness, só se ele não existir, conforme o
+     adapter. Se existir sem apontar para o `AGENTS.md`, registre como lacuna;
+   - opcionais: `maintenance` e sua entrada no `.gitignore`;
+   - lacunas: Frame, Spec, Plan e Engineering Profile ausentes, encaminhados
+     à [skill de ciclo](../skills/radiant-cycle/SKILL.md). Nada é inventado
+     para preenchê-los.
+4. **Escrever o aprovado.** Antes, guarde `git status --porcelain --ignored`.
+   Escreva só os arquivos aprovados, num branch, sem push.
+5. **Verificar.** `check_project.py` sai com 0 sem mudar o pin. Compare
+   `git status --porcelain --ignored` com o estado guardado: a diferença,
+   incluindo arquivos não rastreados e ignorados, contém só a lista aprovada,
+   e o conteúdo de cada arquivo novo confere com a proposta. O check confirma
+   a estrutura, não a qualidade do diagnóstico.
+
+O pin é decisão humana. Um comando proposto como seguro roda localmente, sem
+rede e sem escrita fora do projeto. O Radiant escreve só os arquivos acima;
+outra ferramenta no mesmo projeto convive com ele porque o conteúdo fora da
+seção do Radiant é preservado.
 
 ## Sem atualização silenciosa
 

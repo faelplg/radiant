@@ -39,8 +39,8 @@ registra o momento em que foi escrita, não o status desta reorganização.
 1. Escolha um commit do Radiant e um checkout limpo dessa revisão.
 2. Gere o bloco global conforme o adapter do seu harness:
    [Codex](adapters/codex/README.md) ou [Claude Code](adapters/claude-code/README.md).
-3. No consumidor, use o [mapa neutro](templates/project-agents.md) como `AGENTS.md` e declare a revisão
-   e os paths locais conforme a [convenção de integração](docs/integration.md).
+3. No consumidor, siga [Adotar num projeto](docs/integration.md#adotar-num-projeto):
+   declare a revisão e os paths locais e acrescente a seção do Radiant ao `AGENTS.md`.
 4. Crie Frame, Spec, Plan, Engineering Profile e Contracts no consumidor,
    proporcionalmente à tarefa. O Profile é recomendado quando houver stack,
    segurança, integração ou risco específico; o Baseline permanece no Radiant.
