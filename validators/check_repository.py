@@ -8,6 +8,8 @@ import sys
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
+from dispatch_formats import load_requirements, validate_provides
+
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -81,9 +83,27 @@ def check_delegation(errors):
             errors.append(f"{relative}: deve mapear {CAPABILITIES} para IDs de modelo não vazios")
 
 
+def check_dispatch(errors):
+    """Keep the requirement vocabulary and what each adapter provides consistent."""
+    requirements = load_requirements(ROOT / "skills/radiant-delegation/requirements.json")
+    for adapter in sorted(p for p in (ROOT / "adapters").iterdir() if p.is_dir()):
+        path = adapter / "provides.json"
+        relative = path.relative_to(ROOT).as_posix()
+        if not path.is_file():
+            errors.append(f"{relative}: adapter sem declaração de requisitos atendidos")
+            continue
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except ValueError as error:
+            errors.append(f"{relative}: JSON inválido: {error}")
+            continue
+        errors.extend(f"{relative}: {message}" for message in validate_provides(data, requirements))
+
+
 def check():
     errors = []
     check_delegation(errors)
+    check_dispatch(errors)
     link_count = 0
     documents = markdown_documents()
     for source in documents:

@@ -83,6 +83,19 @@ class RepositoryCheckTests(RepositoryFixture):
                 self.assertIn("agents.json", result.stderr)
                 path.write_text(original, encoding="utf-8")
 
+    def test_provides_with_unknown_requirement_fails(self):
+        path = self.root / "adapters/codex/provides.json"
+        path.write_text(json.dumps({"provides": ["turbo"]}), encoding="utf-8")
+        result = self.check()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("adapters/codex/provides.json", result.stderr)
+
+    def test_adapter_without_provides_fails(self):
+        (self.root / "adapters/claude-code/provides.json").unlink()
+        result = self.check()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("adapters/claude-code", result.stderr)
+
 
 
 class GitRepositoryCheckTests(RepositoryFixture):
