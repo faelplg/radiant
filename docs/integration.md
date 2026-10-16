@@ -131,7 +131,7 @@ e adapta o método de context control do eve
 | --- | --- | --- | --- |
 | Ponteiros e regras necessários em quase toda sessão para localizar ou usar o sistema | `AGENTS.md` do consumidor | Em toda sessão | Consumidor |
 | Restrições e comandos do projeto que valem para a maioria das tarefas | `AGENTS.md`, ou o `workflow` do mapa quando o volume crescer | Em toda sessão, ou ao entrar no ciclo | Consumidor |
-| Procedimento usado só em algumas tarefas | Skill | A descrição sempre; o corpo quando a tarefa a aciona | Quem mantém a skill |
+| Procedimento usado só em algumas tarefas | Skill | A descrição, quando o harness carrega a skill num catálogo nativo; fora dele, o ponteiro do mapa ou do índice de capabilities. O corpo, quando a tarefa a aciona | Quem mantém a skill |
 | Intenção, comportamento e decisões do produto | Frame, Spec, Plan e ADRs apontados pelo mapa | Quando a tarefa precisa deles | Consumidor |
 | Fronteira do incremento atual | Task Contract apontado por `ACTIVE.md` | Antes de alterar arquivos de implementação | Consumidor |
 | Regra que uma ferramenta consegue impor | Configuração, linter ou validator | Só a saída de uma falha, que diz o motivo e a correção | Consumidor ou Radiant |
@@ -145,6 +145,10 @@ Ao decidir:
 - Só entra no `AGENTS.md` o que um agente precisa em quase toda sessão
   relevante. Se apenas parte das tarefas precisa, a informação é skill ou
   documento apontado.
+- Uma skill fora do catálogo nativo do harness, como as do Radiant lidas pelo
+  path, só é descoberta por um ponteiro com o gatilho de uso no `AGENTS.md` ou
+  num índice que ele aponta. Ao mover um procedimento para uma skill, mantenha
+  esse ponteiro.
 - O `AGENTS.md` aponta para Frame, Spec, skills e Contracts sem copiar seu
   texto ([Artigo XI](../constitution/CONSTITUTION.md#artigo-xi--uma-fonte-canônica-ponteiros-nos-demais-lugares)).
   Árvores de arquivos e dados extensos ficam nos arquivos, que o agente lê com
