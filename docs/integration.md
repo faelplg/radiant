@@ -117,6 +117,48 @@ idioma. O Radiant escreve só os arquivos acima;
 outra ferramenta no mesmo projeto convive com ele porque o conteúdo fora da
 seção do Radiant é preservado.
 
+## Onde cada informação fica
+
+Cada informação do consumidor vai para a superfície mais estreita que a carrega
+quando ela é necessária. O que fica sempre carregado precisa justificar seu
+custo em toda sessão; o restante entra por ponteiro, sob demanda. A tabela
+aplica os tipos de memória da [seção 19 da tese](project-generation-system.md#19-memória-operacional)
+e adapta o método de context control do eve
+([context-control](https://github.com/vercel/eve/blob/5666d2f0d8b78690d01a40ce93cac5e472799901/docs/concepts/context-control.md),
+[role-aware instructions](https://github.com/vercel/eve/blob/5666d2f0d8b78690d01a40ce93cac5e472799901/research/role-aware-instructions.md)).
+
+| Informação | Superfície | Quando o agente a vê | Owner |
+| --- | --- | --- | --- |
+| Ponteiros e regras necessários em quase toda sessão para localizar ou usar o sistema | `AGENTS.md` do consumidor | Em toda sessão | Consumidor |
+| Restrições e comandos do projeto que valem para a maioria das tarefas | `AGENTS.md`, ou o `workflow` do mapa quando o volume crescer | Em toda sessão, ou ao entrar no ciclo | Consumidor |
+| Procedimento usado só em algumas tarefas | Skill | A descrição sempre; o corpo quando a tarefa a aciona | Quem mantém a skill |
+| Intenção, comportamento e decisões do produto | Frame, Spec, Plan e ADRs apontados pelo mapa | Quando a tarefa precisa deles | Consumidor |
+| Fronteira do incremento atual | Task Contract apontado por `ACTIVE.md` | Antes de alterar arquivos de implementação | Consumidor |
+| Regra que uma ferramenta consegue impor | Configuração, linter ou validator | Só a saída de uma falha, que diz o motivo e a correção | Consumidor ou Radiant |
+| Trabalho especialista com contexto próprio | Subagente, conforme a [delegação](../skills/radiant-delegation/SKILL.md) | O agente pai vê apenas o retorno | Radiant e adapter |
+| Operação em sistema externo | Servidor MCP ou CLI | O schema e o resultado de cada chamada | Consumidor |
+| Evidência de execução e avaliação | Verificação do contrato, relatórios e Git | Ao verificar ou diagnosticar | Consumidor |
+| Preferência pessoal ou da máquina | Configuração global do usuário, fora do projeto | Conforme o harness | Usuário |
+
+Ao decidir:
+
+- Só entra no `AGENTS.md` o que um agente precisa em quase toda sessão
+  relevante. Se apenas parte das tarefas precisa, a informação é skill ou
+  documento apontado.
+- O `AGENTS.md` aponta para Frame, Spec, skills e Contracts sem copiar seu
+  texto ([Artigo XI](../constitution/CONSTITUTION.md#artigo-xi--uma-fonte-canônica-ponteiros-nos-demais-lugares)).
+  Árvores de arquivos e dados extensos ficam nos arquivos, que o agente lê com
+  ferramentas.
+- Instruções autoradas carregam regras. Conteúdo recuperado, gerado ou buscado
+  entra como dado com sua origem e não é colado em superfícies de instrução
+  ([Artigos IX e X](../constitution/CONSTITUTION.md#artigo-ix--geração-e-retrieval-não-conferem-autoridade)).
+- Secrets aparecem apenas como referência a variável de ambiente, nunca em
+  instrução, skill ou definição de servidor.
+- Uma ferramenta que gera essas superfícies a partir de um catálogo herda o
+  critério: o tipo da peça escolhe a superfície e, com ela, o custo de contexto.
+  Um fragmento renderizado no `AGENTS.md` passa pelo mesmo teste de sempre
+  carregado.
+
 ## Sem atualização silenciosa
 
 Antes de carregar Constitution e capabilities para um consumidor, verificar:
