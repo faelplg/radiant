@@ -39,3 +39,22 @@ commit/digest. Atualizações compartilhadas não reescrevem execução passada.
 Relatórios de verificação e aprendizado apontam para ID/path do contrato, sem
 copiar seu corpo. Feche o contrato e atualize `ACTIVE.md` quando a conclusão
 estiver sustentada. Não crie contratos retroativos para fabricar conformidade.
+
+## Unidades de execução
+
+Um contrato pode dividir o trabalho em unidades, num bloco ` ```yaml radiant-units `
+do [template](../templates/task-contract.md). O bloco usa YAML restrito, lido
+por `validators/radiant_yaml.py` sem dependências. Todo bloco válido nesse
+subconjunto é YAML válido com o mesmo valor, então leitores com parser
+completo, como um operador de despacho, leem o mesmo conteúdo.
+
+Aceito: mapeamentos e sequências em bloco, inclusive `- chave: valor` com
+continuação alinhada à chave; listas de escalares entre colchetes, sem
+aninhamento; escalares simples, entre aspas duplas (escapes `\"`, `\\` e `\n`)
+ou simples (`''` como aspa); `true`, `false`, `null` e inteiros; comentários
+`#` no início da linha ou depois de espaço; indentação só com espaços.
+
+Recusado, com o número da linha: tab na indentação, chave repetida, âncoras
+(`&`, `*`), tags (`!`), blocos `|` e `>`, mapeamentos entre chaves, marcadores
+de documento, valor simples com `: ` ou terminado em `:` (use aspas) e valor
+simples em várias linhas.
