@@ -26,9 +26,10 @@ def validate_provides(data, requirements):
         return ["esperado {\"provides\": [termo, ...]}"]
     errors, seen = [], set()
     for term in data["provides"]:
-        if term not in requirements:
+        if not isinstance(term, str) or term not in requirements:
             errors.append(f"requisito desconhecido {term!r}")
-        elif term in seen:
+            continue
+        if term in seen:
             errors.append(f"requisito repetido {term!r}")
         seen.add(term)
     return errors
@@ -76,10 +77,10 @@ def validate_unit(unit, agents, requirements):
     errors += [f"{name}: falta {key!r}" for key in UNIT_REQUIRED if key not in unit]
     if not isinstance(unit.get("id"), str) or not UNIT_ID.match(unit.get("id", "")):
         errors.append(f"{name}: id fora do padrão TC-0000.N")
-    if "role" in unit and unit["role"] not in agents:
+    if "role" in unit and (not isinstance(unit["role"], str) or unit["role"] not in agents):
         errors.append(f"{name}: perfil desconhecido {unit['role']!r}")
     if "capability" in unit:
-        if unit["capability"] not in CAPABILITIES:
+        if not isinstance(unit["capability"], str) or unit["capability"] not in CAPABILITIES:
             errors.append(f"{name}: capacidade desconhecida {unit['capability']!r}")
         reason = unit.get("capability_reason")
         if not isinstance(reason, str) or not reason.strip():
@@ -90,15 +91,17 @@ def validate_unit(unit, agents, requirements):
     if not isinstance(requires, list):
         errors.append(f"{name}: requires deve ser lista")
     else:
-        errors += [f"{name}: requisito desconhecido {term!r}" for term in requires if term not in requirements]
+        errors += [f"{name}: requisito desconhecido {term!r}" for term in requires
+                   if not isinstance(term, str) or term not in requirements]
     writes = unit.get("writes")
     if "writes" in unit:
         if not text_list(writes) or not writes:
             errors.append(f"{name}: writes deve ser lista não vazia de paths")
         else:
             for path in writes:
-                if path.startswith("/") or ".." in path.split("/"):
-                    errors.append(f"{name}: path fora do projeto {path!r}")
+                segments = (path[:-1] if path.endswith("/") else path).split("/")
+                if path.startswith("/") or any(segment in ("", ".", "..") for segment in segments):
+                    errors.append(f"{name}: path fora do projeto ou não normalizado {path!r}")
     if not text_list(unit.get("depends_on", [])):
         errors.append(f"{name}: depends_on deve ser lista de ids")
     for key in ("objective", "done_when"):
@@ -160,9 +163,11 @@ def validate_candidates(candidates, adapters, where):
             errors.append(f"{where}: candidato deve ser um objeto")
             continue
         errors += [f"{where}: chave desconhecida {key!r}" for key in sorted(set(candidate) - CANDIDATE_KEYS)]
-        if candidate.get("harness") not in adapters:
+        harness = candidate.get("harness")
+        if not isinstance(harness, str) or harness not in adapters:
             errors.append(f"{where}: harness sem adapter {candidate.get('harness')!r}")
-        if "capability" in candidate and candidate["capability"] not in CAPABILITIES:
+        if "capability" in candidate and (not isinstance(candidate["capability"], str)
+                                          or candidate["capability"] not in CAPABILITIES):
             errors.append(f"{where}: capacidade desconhecida {candidate['capability']!r}")
         effort = candidate.get("effort", "x")
         if not isinstance(effort, str) or not effort.strip():
@@ -191,7 +196,8 @@ def validate_routing(data, adapters):
             errors.append(f"{where}: id fora do padrão kebab-case")
         elif rule_id in seen:
             errors.append(f"{where}: id repetido")
-        seen.add(rule_id)
+        else:
+            seen.add(rule_id)
         for key in ("when", "why"):
             if (key == "when" or key in rule) and (not isinstance(rule.get(key), str) or not rule[key].strip()):
                 errors.append(f"{where}: {key} deve ser texto não vazio")

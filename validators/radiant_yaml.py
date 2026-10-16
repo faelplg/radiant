@@ -10,6 +10,14 @@ import re
 KEY = re.compile(r"([A-Za-z_][A-Za-z0-9_-]*):(?: (.*))?$")
 INTEGER = re.compile(r"-?(?:0|[1-9][0-9]*)$")
 ESCAPES = {'"': '"', "\\": "\\", "n": "\n"}
+# Words YAML 1.1 or 1.2 reads as booleans or nulls in some spelling; only the
+# lowercase true, false and null are accepted, everything else needs quotes.
+TYPED_WORDS = {"y", "Y", "yes", "Yes", "YES", "n", "N", "no", "No", "NO", "true", "True", "TRUE",
+               "false", "False", "FALSE", "on", "On", "ON", "off", "Off", "OFF", "null", "Null",
+               "NULL", "~"}
+SPECIAL_FLOATS = {".inf", "-.inf", "+.inf", ".nan"}
+FLOW_INDICATORS = set(",[]{}")
+VALUE_START = re.compile(r"(?:^|:[ ]+|(?:^|[ ])-[ ]+|[\[,][ ]*)$")
 
 
 class YamlError(ValueError):
@@ -18,7 +26,11 @@ class YamlError(ValueError):
 
 
 def strip_comment(text):
-    """Drop a trailing comment, honoring quotes; '#' starts one only after whitespace."""
+    """Split off a trailing comment, honoring quotes that open a value.
+
+    A quote inside a plain value, as in "it's", is a literal character. Returns
+    the content and whether a comment followed it.
+    """
     quote = None
     index = 0
     while index < len(text):
@@ -29,12 +41,12 @@ def strip_comment(text):
         if quote:
             if char == quote:
                 quote = None
-        elif char in "\"'":
+        elif char in "\"'" and VALUE_START.search(text[:index]):
             quote = char
         elif char == "#" and (index == 0 or text[index - 1] in " \t"):
-            return text[:index]
+            return text[:index], True
         index += 1
-    return text
+    return text, False
 
 
 def logical_lines(text):
@@ -43,12 +55,13 @@ def logical_lines(text):
         body = raw.lstrip(" ")
         if body.startswith("\t"):
             raise YamlError(number, "tab na indentação; use espaços")
-        content = strip_comment(body).rstrip()
+        content, commented = strip_comment(body)
+        content = content.rstrip(" ")
         if not content:
             continue
         if content.startswith("---") or content.startswith("..."):
             raise YamlError(number, "marcador de documento não é aceito")
-        lines.append([number, len(raw) - len(body), content])
+        lines.append([number, len(raw) - len(body), content, commented])
     return lines
 
 
@@ -79,7 +92,33 @@ def split_flow(inner, number):
     return parts
 
 
-def scalar(text, number):
+def plain(text, number, flow):
+    """Accept a plain value only when every YAML reader agrees it is this exact string."""
+    if text in ("true", "false"):
+        return text == "true"
+    if text == "null":
+        return None
+    if INTEGER.match(text):
+        return int(text)
+    if text in TYPED_WORDS or text.lower() in SPECIAL_FLOATS:
+        raise YamlError(number, f"{text!r} tem tipo implícito em YAML; use aspas")
+    first = text[0]
+    starts_well = first.isalpha() or first in "_/" or (
+        first == "." and len(text) > 1 and (text[1].isalpha() or text[1] == "/"))
+    if not starts_well:
+        raise YamlError(number, f"valor simples deve começar com letra, '_', '/' ou '.' seguido de letra; use aspas em {text!r}")
+    if any(not char.isprintable() for char in text):
+        raise YamlError(number, "caractere de controle ou espaço especial em valor simples; use aspas")
+    if ": " in text or text.endswith(":"):
+        raise YamlError(number, "valor com ':' precisa de aspas")
+    if " #" in text:
+        raise YamlError(number, "valor com ' #' precisa de aspas")
+    if flow and FLOW_INDICATORS.intersection(text):
+        raise YamlError(number, "item de lista com ',', '[', ']', '{' ou '}' precisa de aspas")
+    return text
+
+
+def scalar(text, number, flow=False):
     if text[0] in "&*!|>{[":
         raise YamlError(number, f"recurso de YAML fora do subconjunto: {text[0]!r}")
     if text[0] == '"':
@@ -104,18 +143,10 @@ def scalar(text, number):
         if len(text) < 2 or not text.endswith("'") or "'" in text[1:-1].replace("''", ""):
             raise YamlError(number, "aspas simples sem fechamento")
         return text[1:-1].replace("''", "'")
-    if ": " in text or text.endswith(":"):
-        raise YamlError(number, "valor com ':' precisa de aspas")
-    if text in ("true", "false"):
-        return text == "true"
-    if text in ("null", "~"):
-        return None
-    if INTEGER.match(text):
-        return int(text)
-    return text
+    return plain(text, number, flow)
 
 
-def inline(text, number):
+def inline(text, number, commented=False):
     if text.startswith("["):
         if not text.endswith("]"):
             raise YamlError(number, "lista entre colchetes sem fechamento")
@@ -126,8 +157,10 @@ def inline(text, number):
         for part in split_flow(inner, number):
             if part[0] in "[{":
                 raise YamlError(number, "lista aninhada não é aceita")
-            values.append(scalar(part, number))
+            values.append(scalar(part, number, flow=True))
         return values
+    if commented and text[0] not in "\"'":
+        raise YamlError(number, "comentário depois de valor simples; use aspas ou ponha o comentário na própria linha")
     return scalar(text, number)
 
 
@@ -149,7 +182,7 @@ class Parser:
             line = self.current()
             if line is None or line[1] < indent:
                 return result
-            number, column, content = line
+            number, column, content, commented = line
             if column > indent:
                 raise YamlError(number, "indentação inesperada")
             if is_item(content):
@@ -158,11 +191,13 @@ class Parser:
             if not match:
                 raise YamlError(number, "esperado 'chave: valor'")
             key, rest = match.group(1), match.group(2)
+            if key in TYPED_WORDS:
+                raise YamlError(number, f"chave {key!r} tem tipo implícito em YAML")
             if key in result:
                 raise YamlError(number, f"chave repetida {key!r}")
             self.index += 1
             if rest is not None and rest.strip():
-                result[key] = inline(rest.strip(), number)
+                result[key] = inline(rest.strip(" "), number, commented)
                 continue
             following = self.current()
             if following is not None and following[1] > indent:
@@ -178,7 +213,7 @@ class Parser:
             line = self.current()
             if line is None or line[1] < indent:
                 return result
-            number, column, content = line
+            number, column, content, commented = line
             if column > indent:
                 raise YamlError(number, "indentação inesperada")
             if not is_item(content):
@@ -197,7 +232,7 @@ class Parser:
                 result.append(self.mapping(line[1]))
             else:
                 self.index += 1
-                result.append(inline(item, number))
+                result.append(inline(item, number, commented))
 
 
 def load(text):

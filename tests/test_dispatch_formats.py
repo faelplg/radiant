@@ -16,6 +16,9 @@ class ProvidesTests(unittest.TestCase):
     def test_known_requirement_passes(self):
         self.assertEqual(validate_provides({"provides": ["browser"]}, {"browser"}), [])
 
+    def test_non_string_term_is_reported_not_raised(self):
+        self.assertNotEqual(validate_provides({"provides": [["browser"]]}, {"browser"}), [])
+
     def test_unknown_requirement_fails(self):
         errors = validate_provides({"provides": ["turbo"]}, {"browser"})
         self.assertTrue(any("'turbo'" in error for error in errors), errors)
@@ -95,6 +98,17 @@ class UnitsTests(unittest.TestCase):
             with self.subTest(path=path):
                 self.assertError(variant(writes=[path]), path)
 
+    def test_non_string_values_are_reported_not_raised(self):
+        for changes in ({"role": ["x"]}, {"requires": [["a"]]}, {"capability": ["deep"]},
+                        {"depends_on": [["TC-0025.1"]]}, {"writes": [["src/x/"]]}):
+            with self.subTest(changes=changes):
+                self.assertNotEqual(self.errors(variant(**changes)), [])
+
+    def test_unnormalized_write_paths_fail(self):
+        for path in ("./src/sync", "src//sync", ".", "./", "src/./x"):
+            with self.subTest(path=path):
+                self.assertError(variant(depends_on=[], writes=[path]), repr(path))
+
     def test_two_blocks_are_refused(self):
         block = "```yaml radiant-units\nunits: []\n```\n"
         with self.assertRaisesRegex(ValueError, "mais de um bloco"):
@@ -141,6 +155,18 @@ class RoutingTests(unittest.TestCase):
         data = copy.deepcopy(ROUTING)
         data["rules"][1]["id"] = "ui-browser"
         self.assertError(data, "repetido")
+
+    def test_non_string_values_are_reported_not_raised(self):
+        for path, value in ((("rules", 0, "use", 0, "harness"), ["codex"]),
+                            (("rules", 0, "use", 0, "capability"), ["deep"]),
+                            (("rules", 0, "id"), ["x"])):
+            with self.subTest(path=path):
+                data = copy.deepcopy(ROUTING)
+                target = data
+                for step in path[:-1]:
+                    target = target[step]
+                target[path[-1]] = value
+                self.assertNotEqual(validate_routing(data, ADAPTERS), [])
 
     def test_unknown_schema_fails(self):
         data = copy.deepcopy(ROUTING)
