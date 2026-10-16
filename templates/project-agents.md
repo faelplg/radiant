@@ -1,3 +1,4 @@
+<!-- radiant:begin -->
 # Orientação do projeto
 
 Este projeto usa Radiant. Localize seu checkout pelo bootstrap global do usuário
@@ -14,3 +15,4 @@ Quando houver `engineering_profile` no mapa, leia-o junto com o Baseline do
 checkout Radiant antes de iniciar um Build.
 
 <Adicionar somente restrições, comandos e referências específicos deste projeto.>
+<!-- radiant:end -->
