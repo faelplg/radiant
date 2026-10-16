@@ -1,16 +1,16 @@
 # ADR-0002: despacho por backend e o operador Demerzel
 
 - Data: 2026-10-16
-- Estado: `proposed`
+- Estado: `accepted` em 2026-10-16
 - Owner: Fael
 - Revisão de origem do Radiant: `604c2a0b5103005e54b6a6089433f42d10d31320`
-- Implementação: pendente
+- Implementação: PR #20, merge `78f133c82deabf96871ee92fa50632db99acf494`
 
-Este ADR registra o desenho aprovado em conversa com o owner. Quando
-implementado, as regras operacionais passam a viver no template de contrato,
-na [skill de delegação](../../skills/radiant-delegation/SKILL.md), nos
-adapters e no repositório do Demerzel; em caso de divergência, esses corpos
-prevalecem.
+Este ADR registra o desenho aprovado em conversa com o owner. As regras
+operacionais vivem no template de contrato, na
+[skill de delegação](../../skills/radiant-delegation/SKILL.md), nos adapters
+e, quando existir, no repositório do Demerzel; em caso de divergência, esses
+corpos prevalecem.
 
 ## Intenção
 
