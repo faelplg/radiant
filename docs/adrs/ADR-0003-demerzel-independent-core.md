@@ -106,7 +106,22 @@ As recusas da seção 4 do ADR-0002 continuam todas valendo. Pin divergente,
 bloco `radiant-units` inválido, harness sem adapter Radiant e
 `.radiant/reports/` não ignorado pelo Git são verificados pela integração.
 
-## 3. Verificação
+## 3. Correção de egress
+
+Substitui, na seção 4 do ADR-0002, a frase "O pedido leva só paths, e o
+conteúdo do contrato não sai da máquina (Artigo XII)". O Demerzel não controla
+o que o harness lançado envia: ele lê o contrato e o manda ao seu provedor de
+modelo, como faria numa sessão aberta à mão. A garantia possível é menor.
+
+- O Demerzel não embute conteúdo do contrato nem secrets no pedido; o pedido
+  leva só paths.
+- Rotear uma unidade para um harness é também uma decisão de egress
+  (Artigo XII). Ela segue as mesmas regras que valeriam para abrir aquele
+  harness à mão no projeto.
+
+A revisão de 2026-10-17 do Frame do Demerzel já registra essa correção.
+
+## 4. Verificação
 
 O menor experimento da seção 5 do ADR-0002 continua. Acrescenta-se uma
 condição de refutação da fronteira: a hipótese cai se o núcleo precisar de um
@@ -123,4 +138,4 @@ checkout Radiant para despachar uma tarefa já resolvida.
 | Ação | Path |
 | --- | --- |
 | Alterar | `docs/integration.md` ("Fronteira Demerzel": núcleo e integração) |
-| Alterar | `docs/adrs/ADR-0002-backend-dispatch-demerzel.md` (ponteiro para este ADR) |
+| Alterar | `docs/adrs/ADR-0002-backend-dispatch-demerzel.md` (ponteiro para este ADR, inclusive na frase de egress da seção 4) |
