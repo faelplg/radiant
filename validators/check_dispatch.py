@@ -17,6 +17,7 @@ from dispatch_formats import extract_units_block, load_requirements, validate_ro
 
 
 ROOT = Path(__file__).resolve().parents[1]
+ADAPTER_FILES = ("README.md", "capabilities.json", "provides.json")
 
 
 def read_text(source):
@@ -41,7 +42,9 @@ def check_units(source):
 
 def check_routing(source):
     data = json.loads(read_text(source))
-    adapters = {path.name for path in (ROOT / "adapters").iterdir() if path.is_dir()}
+    # An empty or ignored directory is not an adapter: Git does not see it, so the pin gate passes.
+    adapters = {path.name for path in (ROOT / "adapters").iterdir()
+                if all((path / name).is_file() for name in ADAPTER_FILES)}
     return data, validate_routing(data, adapters)
 
 

@@ -2,6 +2,7 @@
 
 import json
 import os
+import shutil
 from pathlib import Path
 import subprocess
 import sys
@@ -121,6 +122,22 @@ class RoutingCommandTests(unittest.TestCase):
         self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
         errors = json.loads(result.stdout)["errors"]
         self.assertTrue(any("sem adapter" in error for error in errors), errors)
+
+    def test_directory_without_adapter_files_is_not_an_adapter(self):
+        # An empty directory is invisible to Git, so the pin gate would not catch it.
+        root = self.dir / "radiant"
+        for directory in ("adapters", "skills", "validators"):
+            shutil.copytree(SOURCE / directory, root / directory,
+                            ignore=shutil.ignore_patterns("__pycache__"))
+        (root / "adapters/ghost").mkdir()
+        data = json.loads(ROUTING.read_text(encoding="utf-8"))
+        data["default"] = [{"harness": "ghost"}]
+        path = self.dir / "routing.json"
+        path.write_text(json.dumps(data), encoding="utf-8")
+        result = subprocess.run([sys.executable, str(root / "validators/check_dispatch.py"), "routing",
+                                 str(path)], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+        self.assertTrue(any("'ghost'" in error for error in json.loads(result.stdout)["errors"]))
 
     def test_invalid_json_and_missing_file_exit_1(self):
         path = self.dir / "routing.json"
