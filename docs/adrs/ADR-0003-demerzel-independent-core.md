@@ -1,10 +1,10 @@
 # ADR-0003: núcleo do Demerzel independente do Radiant
 
 - Data: 2026-10-17
-- Estado: `proposed`
+- Estado: `accepted` em 2026-10-17
 - Owner: Fael
 - Revisão de origem do Radiant: `c5cf46774fe567b49d7f5af1e22056286a14f1db`
-- Implementação: pendente
+- Implementação: PR #22, merge `cc398b624af872152d8242cf2b28a1ab515ec277`
 - Substitui em parte: [ADR-0002](ADR-0002-backend-dispatch-demerzel.md)
 
 Este ADR registra uma decisão do owner tomada em conversa em 2026-10-17,
