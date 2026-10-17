@@ -218,11 +218,17 @@ existia aqui foi encerrada conforme o
 
 ## Fronteira Demerzel
 
-O Demerzel é um consumidor do Radiant que despacha as unidades de execução de
-um contrato, cada uma numa sessão própria do harness escolhido pelas
-[regras de roteamento](routing.md). Ele lê contratos e regras do usuário e
-grava só seu registro de despachos. Não altera contratos, não aceita entregas
-e não faz merge, push ou mudança de escopo. Consome o Radiant pelo mesmo pin
-de qualquer projeto, e o consumidor que despacha ignora `.radiant/reports/` no
-Git. O Radiant funciona sem ele; a decisão está no
-[ADR-0002](adrs/ADR-0002-backend-dispatch-demerzel.md).
+O Demerzel despacha as unidades de execução de um contrato, cada uma numa
+sessão própria do harness escolhido pelas [regras de roteamento](routing.md).
+Ele lê contratos e regras do usuário e grava só seu registro de despachos. Não
+altera contratos, não aceita entregas e não faz merge, push ou mudança de
+escopo. O pedido leva só paths; o harness lançado lê o contrato e o envia ao
+seu provedor, então rotear também é decisão de egress.
+
+O núcleo do Demerzel não depende do Radiant. A dependência fica numa integração
+Radiant dentro dele: leitura de `radiant-units`, gate de pin pelo mesmo
+`radiant_revision` de qualquer projeto, roteamento pelas regras e adapters do
+Radiant e retorno em `.radiant/reports/`, que o consumidor que despacha ignora
+no Git. O Radiant funciona sem ele; as decisões estão no
+[ADR-0002](adrs/ADR-0002-backend-dispatch-demerzel.md) e no
+[ADR-0003](adrs/ADR-0003-demerzel-independent-core.md).

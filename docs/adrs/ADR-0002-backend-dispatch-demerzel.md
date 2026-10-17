@@ -5,6 +5,7 @@
 - Owner: Fael
 - Revisão de origem do Radiant: `604c2a0b5103005e54b6a6089433f42d10d31320`
 - Implementação: PR #20, merge `78f133c82deabf96871ee92fa50632db99acf494`
+- Substituído em parte por: [ADR-0003](ADR-0003-demerzel-independent-core.md)
 
 Este ADR registra o desenho aprovado em conversa com o owner. As regras
 operacionais vivem no template de contrato, na
@@ -289,7 +290,9 @@ Demais regras:
   HOLD. Não há rebaixamento silencioso.
 - O Demerzel nunca faz merge, push, abertura de PR, remoção de branch ou
   mudança de escopo, nem passa secrets no pedido. O pedido leva só paths, e o
-  conteúdo do contrato não sai da máquina (Artigo XII).
+  conteúdo do contrato não sai da máquina (Artigo XII). Corrigido pela
+  seção 3 do [ADR-0003](ADR-0003-demerzel-independent-core.md): o harness
+  lançado envia o contrato ao seu provedor.
 - `--trust-repository` só é usado quando o usuário liga a opção na
   configuração do Demerzel. Sem isso, um prompt de confiança aparece como
   `blocked`.
@@ -370,3 +373,6 @@ falhar, conforme o gate do `test-audit` do eve.
   acima: `validators/radiant_yaml.py`, `validators/dispatch_formats.py`,
   `validators/README.md`, `contracts/README.md`, `docs/verification.md`,
   `tests/test_radiant_yaml.py` e `tests/test_dispatch_formats.py`.
+- 2026-10-17: o [ADR-0003](ADR-0003-demerzel-independent-core.md) substitui
+  a linha Demerzel da seção 1, confina a dependência do Radiant numa
+  integração dentro do Demerzel e corrige a frase de egress da seção 4.
