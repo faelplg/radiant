@@ -229,6 +229,8 @@ O núcleo do Demerzel não depende do Radiant. A dependência fica numa integra�
 Radiant dentro dele: leitura de `radiant-units`, gate de pin pelo mesmo
 `radiant_revision` de qualquer projeto, roteamento pelas regras e adapters do
 Radiant e retorno em `.radiant/reports/`, que o consumidor que despacha ignora
-no Git. O Radiant funciona sem ele; as decisões estão no
+no Git. A integração valida unidades e regras pelo
+`validators/check_dispatch.py` da revisão fixada, sem um segundo leitor. O
+Radiant funciona sem ele; as decisões estão no
 [ADR-0002](adrs/ADR-0002-backend-dispatch-demerzel.md) e no
 [ADR-0003](adrs/ADR-0003-demerzel-independent-core.md).
