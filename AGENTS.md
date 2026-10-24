@@ -38,6 +38,13 @@ Os documentos AIKM que ficaram sob custódia aqui pertencem ao repositório AIKM
 o encerramento está no [plano de migração](docs/migration-plan.md#encerramento-da-custódia).
 Não aplicar comandos AIKM como gates do Radiant.
 
+Uma revisão de pendências feita aqui cobre só o Radiant. De AIKM, Demerzel e
+outros consumidores entra apenas a interface com o Radiant, vista deste lado:
+pin, `validators/check_dispatch.py` e adapters. Pendência de um consumidor é
+tratada numa sessão aberta no repositório dele, que segue o `AGENTS.md` de lá;
+aqui fica só um ponteiro por repositório. O que volta ao Radiant chega como
+[Learn Back](docs/learn-back.md), não como o trabalho do consumidor.
+
 Preserve corpos históricos, evite reformatação em massa e não edite arquivos
 gerados ou CHANGELOG.md manualmente. Novos textos usam hífen simples e não
 adicionam divisores horizontais. Não implementar a futura Design Layer nesta
