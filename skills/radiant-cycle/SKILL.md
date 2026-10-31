@@ -6,7 +6,7 @@ description:
   iniciar ou retomar uma entrega Radiant; uma consulta pontual não exige
   executar o ciclo inteiro.
 metadata:
-  version: "0.1.3"
+  version: "0.1.4"
 ---
 
 # Ciclo operacional Radiant
@@ -46,8 +46,14 @@ projeto consumidor.
   Registre a resposta no artefato responsável quando material; não crie um
   documento por etapa apenas para preencher um fluxo.
 - Compare Spec, Plan e realidade. Encaminhe divergências à camada responsável,
-  respeitando a autorização atual. Defina o percurso observável de uso e a
-  evidência que distingue implementação técnica de utilidade do produto.
+  respeitando a autorização atual. Quando a Spec depende de uma ferramenta
+  externa, confira por sondagem o efeito de cada comando e flag usados, não só
+  a existência deles na ajuda.
+- Defina o percurso observável de uso e a evidência que distingue implementação
+  técnica e sucesso operacional de utilidade do produto. Num experimento, cada
+  condição de refutação termina sustentada, refutada ou inconclusiva.
+- Dê a cada verificação da Spec um incremento dono no Plan, inclusive a cada
+  parte de uma verificação dividida entre incrementos.
 - Prepare ou refine o contrato antes de sua execução, com inputs, outputs,
   paths, non-goals e verificações executáveis. Use a convenção do projeto para
   identidade e ativação. Não reformule um contrato já executado para acomodar um

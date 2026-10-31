@@ -6,7 +6,7 @@ description:
   Dev, Verificação ou Manutenção, ao montar um pacote de delegação ou ao
   avaliar o retorno de um papel delegado.
 metadata:
-  version: "0.2.0"
+  version: "0.2.1"
 ---
 
 # Delegação e papéis Radiant
@@ -69,7 +69,10 @@ mecânicas podem usar `light`. O contrato é o pacote e seu `Completion report`
 Etapa Verify, em `deep` (`radiant-verifier`). Confronta outputs com contrato,
 Spec e critérios, executa os gates e inspeciona o resultado como consumidor.
 Checks determinísticos podem rodar em `light`. Não corrige o que verifica:
-devolve achados com evidência.
+devolve achados com evidência. Numa rodada depois de correções, o pacote
+aponta o retorno da rodada anterior, e o verificador confirma cada correção
+antes de procurar achados novos. Se o harness do verificador ficar
+indisponível, o humano escolhe outro, diferente do que fez o Build.
 
 ### Manutenção
 

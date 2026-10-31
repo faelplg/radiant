@@ -219,13 +219,27 @@ Remover comandos não aplicáveis.
 - `[security case]`
 - `[error case]`
 
+Cada teste de regressão é mostrado falhando com a regressão que nomeia, por
+mutação, inclusive em fórmulas e seleção de contexto, não só em caminhos de
+erro. Um dublê de teste usado como evidência tem conferida, por teste próprio,
+a propriedade de que essa evidência depende, como persistência ou
+concorrência.
+
+Com estado persistente, trate em separado escrita atômica, exclusão mútua e
+recuperação após interrupção. Prove escrita e recuperação por interrupção
+determinística em pontos fixos, como limite de tamanho de arquivo ou `SIGKILL`
+depois de cada gravação; uma corrida entre processos pode não expor escrita
+parcial.
+
 ## Readback
 
 Após a execução:
 
 - reabrir arquivos gerados/modificados relevantes;
 - verificar que o output persistido é o esperado;
-- confirmar que nenhum path fora do escopo foi alterado.
+- confirmar que nenhum path fora do escopo foi alterado, contra o commit de
+  entrada do Build fixado neste contrato, incluindo mudanças commitadas,
+  staged, unstaged e não rastreadas (`git status --porcelain`).
 
 ## Independent critique
 
@@ -234,6 +248,8 @@ Após a execução:
 Quando required:
 
 - `[second agent / human / verification skill]`
+- quem lança e coleta a crítica: `[orchestrator / human]`, nunca o Build;
+- pré-requisitos externos: `[harness authenticated / service running]`.
 
 ---
 
