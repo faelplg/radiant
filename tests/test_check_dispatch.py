@@ -62,7 +62,7 @@ class UnitsCommandTests(unittest.TestCase):
         text = TEMPLATE.read_text(encoding="utf-8").replace("depends_on: []", "depends_on: &a []", 1)
         result = run("units", str(self.contract(text)))
         self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
-        self.assertIn("linha", json.loads(result.stdout)["errors"][0])
+        self.assertIn("line", json.loads(result.stdout)["errors"][0])
 
     def test_contract_without_block_exits_1(self):
         # Without units the contract is a single package; there is nothing to dispatch.
@@ -121,7 +121,7 @@ class RoutingCommandTests(unittest.TestCase):
         result = run("routing", str(path))
         self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
         errors = json.loads(result.stdout)["errors"]
-        self.assertTrue(any("sem adapter" in error for error in errors), errors)
+        self.assertTrue(any("without an adapter" in error for error in errors), errors)
 
     def test_directory_without_adapter_files_is_not_an_adapter(self):
         # An empty directory is invisible to Git, so the pin gate would not catch it.

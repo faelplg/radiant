@@ -32,7 +32,7 @@ def default_routing():
 def check_units(source):
     block = extract_units_block(read_text(source))
     if block is None:
-        raise ValueError("contrato sem bloco radiant-units")
+        raise ValueError("contract without a radiant-units block")
     data = radiant_yaml.load(block)
     registry = json.loads((ROOT / "skills/radiant-delegation/agents.json").read_text(encoding="utf-8"))
     agents = {agent.get("name"): agent.get("capability") for agent in registry.get("agents", [])}
@@ -51,11 +51,11 @@ def check_routing(source):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
-    units = commands.add_parser("units", help="validar o bloco radiant-units de um contrato")
-    units.add_argument("contract", help="path do contrato, ou - para ler da entrada padrão")
-    routing = commands.add_parser("routing", help="validar as regras de roteamento do usuário")
+    units = commands.add_parser("units", help="validate a contract's radiant-units block")
+    units.add_argument("contract", help="contract path, or - to read from standard input")
+    routing = commands.add_parser("routing", help="validate the user's routing rules")
     routing.add_argument("rules", nargs="?", default=None,
-                         help="path do routing.json; padrão $XDG_CONFIG_HOME/radiant/routing.json")
+                         help="routing.json path; defaults to $XDG_CONFIG_HOME/radiant/routing.json")
     args = parser.parse_args()
     try:
         if args.command == "units":

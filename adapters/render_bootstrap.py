@@ -76,12 +76,12 @@ def main():
     target.add_argument("--agents-dir", type=Path, help="create the Radiant subagents in this directory")
     args = parser.parse_args()
     if args.agents_dir is not None and args.adapter is None:
-        parser.error("--agents-dir exige --adapter")
+        parser.error("--agents-dir requires --adapter")
     root = Path(__file__).resolve().parents[1]
     try:
         if args.agents_dir is not None:
             if args.agents_dir.is_symlink():
-                raise FileExistsError(f"{args.agents_dir} é um link")
+                raise FileExistsError(f"{args.agents_dir} is a link")
             agents = render_agents(root, args.adapter)
             write_exclusive({args.agents_dir / name: text for name, text in agents.items()})
             print("\n".join(str(args.agents_dir / name) for name in sorted(agents)))
@@ -90,7 +90,7 @@ def main():
         else:
             print(render_global(root), end="")
     except OSError as error:
-        parser.exit(1, f"Não foi possível criar o destino sem sobrescrever: {error}\n")
+        parser.exit(1, f"Could not create the destination without overwriting: {error}\n")
 
 
 if __name__ == "__main__":
