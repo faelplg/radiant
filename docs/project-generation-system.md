@@ -129,7 +129,7 @@ It tries to consciously organize:
 - what needs to be verified;
 - which evidence supports a conclusion;
 - where an error needs to be fixed;
-- what should remain available for the next project.
+- what must remain available for the next project.
 
 The expected result of a cycle is not just software.
 
@@ -181,7 +181,7 @@ Main artifact:
 
 **Radiant Project Frame**
 
-It should record:
+It must record:
 
 - intent;
 - problem;
@@ -275,7 +275,7 @@ Concerns how people perceive, understand and use the system:
 
 Radiant's Design Layer formalizes this separation without creating a parallel process. The Design stage must preserve the difference between system structure and user experience. The specialized canonical body is in [Radiant Design Layer](design-layer.md).
 
-Radiant should favor reversible decisions while uncertainty is high and keep formality proportional to risk.
+Radiant must favor reversible decisions while uncertainty is high and keep formality proportional to risk.
 
 ---
 
@@ -304,7 +304,7 @@ Before delegating relevant agentic work, Radiant may generate a **Task Contract*
 
 The contract exists to keep agents from freely interpreting a broad intent.
 
-A Task Contract should declare, in proportion to the task:
+A Task Contract must declare, in proportion to the task:
 
 - task identity;
 - goal;
@@ -321,7 +321,7 @@ A Task Contract should declare, in proportion to the task:
 - external blockers;
 - execution limit when applicable.
 
-The contract should be small.
+The contract must be small.
 
 Its job is to make delegation verifiable.
 
@@ -369,15 +369,15 @@ It may involve:
 
 The principle is:
 
-> **whoever creates should not be the only entity responsible for declaring it correct.**
+> **whoever creates must not be the only entity responsible for declaring it correct.**
 
 ---
 
 ### 6.9. Learn Back
 
-Radiant should not only record lessons.
+Radiant must not only record lessons.
 
-It should determine:
+It must determine:
 
 > **which part of the system needs to be fixed so the next execution is better?**
 
@@ -409,7 +409,7 @@ Flow:
 
 > **Outcome → Evidence → Diagnosis → Fix Target → Change → Reuse**
 
-Every relevant failure should be able to answer:
+Every relevant failure must be able to answer:
 
 1. What happened?
 2. What evidence do we have?
@@ -430,7 +430,7 @@ It is not a full PRD.
 
 Its job is to keep a project from starting directly with features.
 
-It should be small enough to be used.
+It must be small enough to be used.
 
 And explicit enough to let another person or agent understand:
 
@@ -460,7 +460,7 @@ and Learn Back fixes the responsible layer when a rule proves insufficient.
 
 ## 10. Core and adapters
 
-Radiant should separate:
+Radiant must separate:
 
 ```text
 Radiant Core
@@ -498,9 +498,9 @@ Connect Radiant to environments such as:
 - local runtimes;
 - future harnesses.
 
-Adapters should not duplicate core rules.
+Adapters must not duplicate core rules.
 
-They should point to them.
+They must point to them.
 
 ---
 
@@ -562,7 +562,7 @@ Skills turn operational experience into infrastructure.
 
 ## 13. Grill as a pressure mechanism
 
-Radiant should have an explicit capability for adversarial critique.
+Radiant must have an explicit capability for adversarial critique.
 
 **Grill** challenges:
 
@@ -576,7 +576,7 @@ Radiant should have an explicit capability for adversarial critique.
 - evidence;
 - irreversibility.
 
-Grill should happen before expensive decisions.
+Grill must happen before expensive decisions.
 
 It can also be reapplied when the project starts accumulating unplanned complexity.
 
@@ -592,7 +592,7 @@ Flow:
 
 The spec is not frozen documentation.
 
-When reality contradicts the specification, Radiant should record:
+When reality contradicts the specification, Radiant must record:
 
 - what changed;
 - why it changed;
@@ -624,7 +624,7 @@ This reduces self-confirmation.
 
 Not every task needs the same rigor.
 
-Radiant should choose the depth of verification based on:
+Radiant must choose the depth of verification based on:
 
 - durability;
 - reversibility;
@@ -676,13 +676,13 @@ Add:
 - approval gates;
 - a rollback plan when applicable.
 
-Rigor should follow risk, not the length of the text.
+Rigor must follow risk, not the length of the text.
 
 ---
 
 ## 17. Evidence
 
-Radiant should distinguish:
+Radiant must distinguish:
 
 - something retrieved;
 - something actually inspected;
@@ -696,7 +696,7 @@ Especially in research and technical decisions:
 
 A source that was found does not automatically support a decision.
 
-Radiant may later structure evidence packets, but that capability should only be born when usage justifies it.
+Radiant may later structure evidence packets, but that capability must be born only when usage justifies it.
 
 ---
 
@@ -708,7 +708,7 @@ A contract exists to answer:
 
 > **Does the agent know exactly what it must produce, where, under which limits and how completion will be verified?**
 
-A good contract should avoid:
+A good contract must avoid:
 
 - implicit scope;
 - vague outputs;
@@ -717,9 +717,9 @@ A good contract should avoid:
 - silent expansion;
 - open-ended execution.
 
-Task Contracts should not turn into a new PRD.
+Task Contracts must not turn into a new PRD.
 
-They should stay bounded.
+They must stay bounded.
 
 Beyond functional limits, a contract may declare Baseline and Profile,
 Engineering Check, dependency policy, verification commands and
@@ -745,11 +745,11 @@ Radiant needs to accumulate:
 - experiment results;
 - prevention rules.
 
-This memory should be organized by function.
+This memory must be organized by function.
 
 Not everything needs to be loaded all the time.
 
-Radiant should distinguish, at least conceptually:
+Radiant must distinguish, at least conceptually:
 
 ### Knowledge
 
@@ -799,7 +799,7 @@ The desired relation is:
 
 > **Radiant executes → produces evidence and learning → AIKM preserves → Radiant retrieves → the next cycle starts with more capability.**
 
-This relation should not create duplication.
+This relation must not create duplication.
 
 Radiant is process.
 
@@ -809,7 +809,7 @@ AIKM is knowledge infrastructure.
 
 ## 21. Intake and classification
 
-Radiant should avoid requiring perfect classification at capture time.
+Radiant must avoid requiring perfect classification at capture time.
 
 A healthy architecture allows:
 
@@ -833,7 +833,7 @@ AIKM may implement this intake and routing function.
 
 ## 22. Knowledge and lifecycle
 
-AI-produced content should not become canonical automatically.
+AI-produced content must not become canonical automatically.
 
 A useful conceptual lifecycle is:
 
@@ -857,7 +857,7 @@ The principle remains:
 
 ## 23. Security and egress
 
-Radiant should distinguish:
+Radiant must distinguish:
 
 - the ability to read locally;
 - permission to send to an external tool.
@@ -885,7 +885,7 @@ Adapters and agents must respect this boundary.
 
 ## 24. Radiant artifacts
 
-Radiant should only produce artifacts that have an operational function.
+Radiant must produce only artifacts that have an operational function.
 
 ### Radiant Project Frame
 
@@ -961,7 +961,7 @@ Learn Back
 Knowledge / Skill / Context / Rule
 ```
 
-Each stage should be able to point to the previous one when that improves traceability.
+Each stage must be able to point to the previous one when that improves traceability.
 
 ---
 
@@ -1002,7 +1002,7 @@ It is to expand their capability without eliminating responsibility.
 
 ## 27. Model-agnostic and tool-agnostic
 
-Radiant should work with different:
+Radiant must work with different:
 
 - models;
 - IDEs;
@@ -1023,7 +1023,7 @@ The execution belongs to the chosen runtime.
 
 An agentic system needs to operate within explicit boundaries.
 
-Radiant should consider:
+Radiant must consider:
 
 - minimum permissions;
 - isolated environments;
@@ -1037,13 +1037,13 @@ Radiant should consider:
 - approval gates;
 - rollback when relevant.
 
-Autonomy should be proportional to reversibility.
+Autonomy must be proportional to reversibility.
 
 ---
 
 ## 29. Metrics
 
-Radiant should not be evaluated by speed alone.
+Radiant must not be evaluated by speed alone.
 
 ### Intention-to-Working-System
 
@@ -1110,9 +1110,9 @@ Radiant is an operational layer on top of these capabilities.
 
 ## 31. Principle of proportionality
 
-Small projects should generate little bureaucracy.
+Small projects must generate little bureaucracy.
 
-Larger or riskier projects should generate more structure.
+Larger or riskier projects must generate more structure.
 
 ### Small experiment
 
@@ -1182,7 +1182,7 @@ Recommended initial components:
 10. gradual integration with AIKM.
 11. Radiant Engineering Baseline and Profile template.
 
-The infrastructure should grow from real use.
+The infrastructure must grow from real use.
 
 ---
 
@@ -1200,7 +1200,7 @@ This test is suitable because:
 - it allows testing core-adapter separation;
 - it allows testing Learn Back.
 
-The initial cycle should produce:
+The initial cycle must produce:
 
 ### Project Frame
 
@@ -1250,13 +1250,13 @@ The first test will be promising when we observe:
 
 The decisive point is:
 
-> **the second cycle should start better because of the first.**
+> **the second cycle must start better because of the first.**
 
 ---
 
 ## 35. System evolution
 
-Radiant should evolve through its own projects.
+Radiant must evolve through its own projects.
 
 A capability only enters the core when:
 
@@ -1276,7 +1276,7 @@ This may produce new:
 - rubrics;
 - Constitution rules.
 
-The system should grow from the inside out.
+The system must grow from the inside out.
 
 ---
 
@@ -1298,7 +1298,7 @@ Real lessons may lead to publications by fael.tech about:
 - operational memory;
 - AI-assisted engineering.
 
-Publication should come from the evidence produced by the work.
+Publication must come from the evidence produced by the work.
 
 Not from a methodology presented as universal before it is tested.
 
@@ -1320,7 +1320,7 @@ A relevant example is the **DECK6/akm** project, which demonstrates practices su
 - explicit lifecycle;
 - distinction between local availability and egress.
 
-Radiant should not copy its architecture wholesale.
+Radiant must not copy its architecture wholesale.
 
 Radiant's problem is different:
 
@@ -1330,13 +1330,13 @@ AIKM's problem is:
 
 > **preserving and retrieving operational knowledge.**
 
-External references should improve our principles without erasing the specific nature of our systems.
+External references must improve our principles without erasing the specific nature of our systems.
 
 ---
 
 ## 38. Long-term hypothesis
 
-If Radiant works, each new project should start with more capability than the previous one.
+If Radiant works, each new project must start with more capability than the previous one.
 
 Not just because the models got better.
 
@@ -1378,9 +1378,9 @@ A system where:
 - learning is preserved;
 - new projects reuse earlier capability.
 
-Radiant should not only help build faster.
+Radiant must not only help build faster.
 
-It should help:
+It must help:
 
 > **build with continuity and learn operationally.**
 
@@ -1388,7 +1388,7 @@ It should help:
 
 ## 41. Fundamental question
 
-Every evolution of Radiant should answer:
+Every evolution of Radiant must answer:
 
 > **Does this capability reduce uncertainty, improve verification, reduce duplication or turn experience into reusable capability?**
 

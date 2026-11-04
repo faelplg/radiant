@@ -79,7 +79,7 @@ remove the six files and run it again.
   orchestrator's session, according to rule 5 of the skill. The invocation's
   `model` parameter only accepts family aliases and is not used, to preserve
   identification of the effective model.
-- The main session should run on the `deep` model.
+- The main session must run on the `deep` model.
 
 Subagent behavior according to the
 [official documentation](https://code.claude.com/docs/en/sub-agents),

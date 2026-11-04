@@ -10,7 +10,7 @@
 
 ## 1. Goal
 
-The **Radiant Engineering Baseline** defines the minimum set of engineering expectations that should guide implementation and verification of projects carried out with Radiant.
+The **Radiant Engineering Baseline** defines the minimum set of engineering expectations that must guide implementation and verification of projects carried out with Radiant.
 
 It exists so agents do not have to infer, on every iteration, what "good engineering" means.
 
@@ -34,7 +34,7 @@ How to meet them depends on the project.
 
 Not every rule needs the same depth in every task.
 
-Application should consider:
+Application must consider:
 
 - impact of the change;
 - cost of reversal;
@@ -102,7 +102,7 @@ It means not applying it was deliberate.
 - invalid states rejected early when reasonable;
 - unhandled errors must not be used as normal flow;
 - destructive or mutating operations must have clear semantics;
-- idempotency should be sought when the operation can be safely repeated.
+- idempotency must be sought when the operation can be safely repeated.
 
 ### Signs of violation
 
@@ -169,7 +169,7 @@ The Task Contract must declare:
 - distinction between local reading and egress authorization;
 - paths, commands and destructive operations treated as security surfaces;
 - sensitive data must not appear in logs, error messages or real fixtures;
-- dependencies that execute code or access the network should receive proportional scrutiny.
+- dependencies that execute code or access the network must receive proportional scrutiny.
 
 ### Raising rigor
 
@@ -192,7 +192,7 @@ must receive specific security verification.
 
 ## Rule
 
-> **The next human or agent should be able to understand the intent of the code without needlessly rebuilding the reasoning that created it.**
+> **The next human or agent must be able to understand the intent of the code without needlessly rebuilding the reasoning that created it.**
 
 ### Expected
 
@@ -210,7 +210,7 @@ must receive specific security verification.
 
 SOLID, Clean Code, Clean Architecture, DRY, KISS and design patterns are useful references.
 
-None of them should be applied mechanically.
+None of them is to be applied mechanically.
 
 The right decision is the one that improves clarity, correctness, ability to change and verifiability in the real context.
 
@@ -329,7 +329,7 @@ The Profile may define:
 - compatibility requirements;
 - verification commands.
 
-The Profile should not duplicate the Baseline.
+The Profile must not duplicate the Baseline.
 
 It records only what is specific to that project.
 
@@ -337,14 +337,14 @@ It records only what is specific to that project.
 
 # 12. Integration with Task Contracts
 
-Every implementation Task Contract should reference:
+Every implementation Task Contract must reference:
 
 - this version of the Engineering Baseline;
 - the project's Engineering Profile, when there is one.
 
 The contract does not need to copy the rules.
 
-It should only declare:
+It must declare only:
 
 - which rules are especially relevant;
 - which have a specific adaptation;
@@ -355,7 +355,7 @@ It should only declare:
 
 # 13. Integration with Verify
 
-Verify should evaluate two things separately:
+Verify must evaluate two things separately:
 
 ### Product correctness
 
@@ -373,7 +373,7 @@ Likewise, a technically elegant implementation that does not meet the hypothesis
 
 # 14. Learn Back
 
-When an engineering failure is observed, Learn Back should identify the right level.
+When an engineering failure is observed, Learn Back must identify the right level.
 
 Examples:
 
@@ -383,9 +383,9 @@ Examples:
 - verification that did not catch a regression → update the Verify procedure;
 - recurring implementation failure → create or update a skill/validator.
 
-The Baseline should not grow with every isolated error.
+The Baseline must not grow with every isolated error.
 
-A rule should only enter here when it is:
+A rule must enter here only when it is:
 
 - recurring;
 - applicable to multiple projects;
@@ -396,6 +396,6 @@ A rule should only enter here when it is:
 
 # 15. Final rule
 
-> **Radiant should not replace engineering with generation. It should turn engineering into an explicit, proportional and verifiable constraint of the generation process.**
+> **Radiant must not replace engineering with generation. It must turn engineering into an explicit, proportional and verifiable constraint of the generation process.**
 
 The goal of this Baseline is to let agents have autonomy to implement without getting freedom to silently redefine the quality standard.

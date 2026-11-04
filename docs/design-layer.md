@@ -45,7 +45,7 @@ These tracks influence each other, but they are not synonyms. The system's struc
 
 ## When design is needed
 
-Design should be applied in proportion to risk, reversibility and the relevance of the experience.
+Design must be applied in proportion to risk, reversibility and the relevance of the experience.
 
 ### Projects without a relevant experience
 
@@ -65,7 +65,7 @@ May require:
 - prototyping or flow readback;
 - validation with users or with real-use criteria.
 
-The procedural requirement should grow with the product's relevance and the cost of error.
+The procedural requirement must grow with the product's relevance and the cost of error.
 
 ## Relation to the Radiant cycle
 
@@ -84,7 +84,7 @@ The Design Layer does not replace the Spec. It makes the intent of the experienc
 
 ### Design Frame
 
-Used to frame the experience before detailing the solution. It should answer:
+Used to frame the experience before detailing the solution. It must answer:
 
 - what the experience needs to allow;
 - who uses it and in which context;
@@ -112,7 +112,7 @@ Used when the experience requires more precision. It may describe:
 - indicators of coherence with the product;
 - experience acceptance criteria.
 
-The Design Spec should be implementable and verifiable, not a collection of screenshots without semantics.
+The Design Spec must be implementable and verifiable, not a collection of screenshots without semantics.
 
 ## Design principles
 
@@ -140,7 +140,7 @@ The Design Layer accepts prototyping when it reduces uncertainty. But it does no
 - perception of hierarchy;
 - labels, feedback and actions.
 
-Design review should observe the system as a real experience, and not just as a set of components or a layout. It evaluates:
+Design review must observe the system as a real experience, and not just as a set of components or a layout. It evaluates:
 
 - intent;
 - clarity of structure;
@@ -152,7 +152,7 @@ Design review should observe the system as a real experience, and not just as a 
 
 ## Verification and Learn Back
 
-Design verification should include relevant evidence:
+Design verification must include relevant evidence:
 
 - contrast and legibility;
 - clarity of flow;
@@ -161,7 +161,7 @@ Design verification should include relevant evidence:
 - coherence with the Spec;
 - preservation of intent against the implementation.
 
-If the experience fails, the problem should go back to the responsible layer:
+If the experience fails, the problem must go back to the responsible layer:
 
 - intent problem → Frame or Design Frame;
 - structure problem → Design Frame or Design Spec;
@@ -170,7 +170,7 @@ If the experience fails, the problem should go back to the responsible layer:
 - implementation problem → Build and Verification;
 - recurring accessibility or clarity problem → Design Principle, Verification Rule or process.
 
-This mapping preserves Radiant's central rule: relevant learning should fix the responsible layer.
+This mapping preserves Radiant's central rule: relevant learning must fix the responsible layer.
 
 ## Tools
 

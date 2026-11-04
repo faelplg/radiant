@@ -93,7 +93,7 @@ refuses the whole run if any `radiant-*.toml` already exists.
 - The `model` declared in the file wins over the model requested when the
   subagent is created. A capability override through the contract therefore
   runs in the orchestrator's session, according to rule 5 of the skill.
-- The main session should run on the `deep` model. The default model in
+- The main session must run on the `deep` model. The default model in
   `config.toml` applies to any session; open the orchestrator's session with
   `codex -m <deep ID>` or switch with `/model`.
 - Codex does not document per-agent blocking of delegation; the rule that

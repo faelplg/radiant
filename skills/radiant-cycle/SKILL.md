@@ -112,7 +112,7 @@ come from the consumer project's operational map.
 
 ## Minimum evidence of a relevant cycle
 
-The authorized report, existing or new, should make it possible to recover:
+The authorized report, existing or new, must make it possible to recover:
 
 - goal, contract and version, or the documentation request that authorized
   the cycle;
