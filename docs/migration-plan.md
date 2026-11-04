@@ -1,108 +1,114 @@
-# Inventário e plano de migração
+# Inventory and migration plan
 
-Análise realizada antes dos moves em 2026-09-15. A pasta não tinha `.git`;
-`AGENTS.md` tinha zero bytes. Todos os 15 documentos Markdown foram lidos
-integralmente. `.DS_Store` é metadata binária do Finder, sem papel operacional.
+Analysis done before the moves on 2026-09-15. The folder had no `.git`;
+`AGENTS.md` was zero bytes. All 15 Markdown documents were read in full.
+`.DS_Store` is Finder binary metadata, with no operational role.
 
-## Inventário completo e ownership
+## Full inventory and ownership
 
-| Current path | Responsabilidade / classificação | Owner canônico | Destino proposto | Ação | Razão |
+| Current path | Responsibility / classification | Canonical owner | Proposed destination | Action | Reason |
 | --- | --- | --- | --- | --- | --- |
-| `AGENTS.md` | Radiant adapter, vazio | Radiant | `AGENTS.md` | Preencher | Entrada do agente no próprio sistema |
-| `constitution.md` | Radiant normative | Radiant | `constitution/CONSTITUTION.md` | Mover sem editar | Fonte normativa inequívoca |
-| `project-generation-system.md` | Radiant Core, tese 0.2 | Radiant | `docs/project-generation-system.md` | Mover; deduplicar seção 9 | Explicação distinta da norma |
-| `aikm-context/FRAME.md` | AIKM project state, 0.2.1 | AIKM | `migration/aikm/FRAME.md` | Mover sem editar | Intenção do consumidor |
-| `aikm-context/SPEC.md` | AIKM project state, 0.3.1 | AIKM | `migration/aikm/SPEC.md` | Mover sem editar | Comportamento do consumidor |
-| `aikm-context/PLAN.md` | AIKM project state, 0.3.1 | AIKM | `migration/aikm/PLAN.md` | Mover sem editar | Incrementos do consumidor |
-| `aikm-context/WORKFLOW.md` | AIKM project state / adapter local | AIKM | `migration/aikm/WORKFLOW.md` | Mover sem editar | Mapa local, não procedure compartilhada |
-| `aikm-context/adrs/ADR-0001-technical-bootstrap.md` | AIKM project state | AIKM | `migration/aikm/adrs/ADR-0001-technical-bootstrap.md` | Mover sem editar | Stack AIKM não é stack Radiant |
-| `aikm-context/contracts/README.md` | Convenção genérica + contexto AIKM | AIKM (snapshot); Radiant (convenção extraída) | `migration/aikm/contracts/README.md` | Preservar; extrair convenção | Não converter instância histórica em norma viva |
-| `aikm-context/contracts/ACTIVE.md` | AIKM project state | AIKM | `migration/aikm/contracts/ACTIVE.md` | Mover sem editar | Nenhum contrato ativo; TC-0002 não autorizado |
-| `aikm-context/contracts/TC-0001-iteration-00-bootstrap.md` | AIKM project state, contrato encerrado | AIKM | `migration/aikm/contracts/TC-0001-iteration-00-bootstrap.md` | Mover sem editar | Preservar delegação e aceite históricos |
-| `aikm-context/contracts/TC-0002-capture-search.md` | AIKM project state, proposta | AIKM | `migration/aikm/contracts/TC-0002-capture-search.md` | Mover sem editar | Não ativar nem reescrever proposta |
-| `aikm-context/learning/LR-0001-workflow-activation.md` | AIKM project state, evidência | AIKM | `migration/aikm/learning/LR-0001-workflow-activation.md` | Mover sem editar | Proveniência de Learn Back |
-| `aikm-context/verification/VR-0001-workflow-setup.md` | AIKM project state, evidência | AIKM | `migration/aikm/verification/VR-0001-workflow-setup.md` | Mover sem editar | Não atribuir uso retroativo |
-| `aikm-context/verification/VR-0002-bootstrap-acceptance.md` | AIKM project state, evidência | AIKM | `migration/aikm/verification/VR-0002-bootstrap-acceptance.md` | Mover sem editar | Aceite de implementação externa |
-| `aikm-context/.DS_Store` | Historical/transitional, metadata Finder | Máquina | `migration/aikm/.DS_Store` | Mover; ignorar no Git | Preservar sem poluir histórico |
+| `AGENTS.md` | Radiant adapter, empty | Radiant | `AGENTS.md` | Fill in | Agent entry into the system itself |
+| `constitution.md` | Radiant normative | Radiant | `constitution/CONSTITUTION.md` | Move without editing | Unambiguous normative source |
+| `project-generation-system.md` | Radiant Core, thesis 0.2 | Radiant | `docs/project-generation-system.md` | Move; deduplicate section 9 | Explanation distinct from the norm |
+| `aikm-context/FRAME.md` | AIKM project state, 0.2.1 | AIKM | `migration/aikm/FRAME.md` | Move without editing | The consumer's intent |
+| `aikm-context/SPEC.md` | AIKM project state, 0.3.1 | AIKM | `migration/aikm/SPEC.md` | Move without editing | The consumer's behavior |
+| `aikm-context/PLAN.md` | AIKM project state, 0.3.1 | AIKM | `migration/aikm/PLAN.md` | Move without editing | The consumer's increments |
+| `aikm-context/WORKFLOW.md` | AIKM project state / local adapter | AIKM | `migration/aikm/WORKFLOW.md` | Move without editing | Local map, not a shared procedure |
+| `aikm-context/adrs/ADR-0001-technical-bootstrap.md` | AIKM project state | AIKM | `migration/aikm/adrs/ADR-0001-technical-bootstrap.md` | Move without editing | The AIKM stack is not the Radiant stack |
+| `aikm-context/contracts/README.md` | Generic convention + AIKM context | AIKM (snapshot); Radiant (extracted convention) | `migration/aikm/contracts/README.md` | Preserve; extract the convention | Do not turn a historical instance into a living norm |
+| `aikm-context/contracts/ACTIVE.md` | AIKM project state | AIKM | `migration/aikm/contracts/ACTIVE.md` | Move without editing | No active contract; TC-0002 not authorized |
+| `aikm-context/contracts/TC-0001-iteration-00-bootstrap.md` | AIKM project state, closed contract | AIKM | `migration/aikm/contracts/TC-0001-iteration-00-bootstrap.md` | Move without editing | Preserve historical delegation and acceptance |
+| `aikm-context/contracts/TC-0002-capture-search.md` | AIKM project state, proposal | AIKM | `migration/aikm/contracts/TC-0002-capture-search.md` | Move without editing | Do not activate or rewrite a proposal |
+| `aikm-context/learning/LR-0001-workflow-activation.md` | AIKM project state, evidence | AIKM | `migration/aikm/learning/LR-0001-workflow-activation.md` | Move without editing | Learn Back provenance |
+| `aikm-context/verification/VR-0001-workflow-setup.md` | AIKM project state, evidence | AIKM | `migration/aikm/verification/VR-0001-workflow-setup.md` | Move without editing | Do not attribute retroactive use |
+| `aikm-context/verification/VR-0002-bootstrap-acceptance.md` | AIKM project state, evidence | AIKM | `migration/aikm/verification/VR-0002-bootstrap-acceptance.md` | Move without editing | Acceptance of an external implementation |
+| `aikm-context/.DS_Store` | Historical/transitional, Finder metadata | Machine | `migration/aikm/.DS_Store` | Move; ignore in Git | Preserve without polluting history |
 
-Diretórios anteriores: raiz, `aikm-context/` e seus filhos `adrs/`,
-`contracts/`, `learning/`, `verification/`. Não havia templates, capabilities,
-skills, validators, workflows ou exemplos independentes na pasta. Nenhum
-artefato textual ficou com classificação unknown; nenhum foi classificado como
-exemplo permanente.
+Previous directories: the root, `aikm-context/` and its children `adrs/`,
+`contracts/`, `learning/`, `verification/`. There were no templates,
+capabilities, skills, validators, workflows or independent examples in the
+folder. No textual artifact was left classified as unknown; none was
+classified as a permanent example.
 
-## Evidência complementar inspecionada
+## Complementary evidence inspected
 
-O repositório AIKM vizinho já existe. Somente seus artefatos relacionados ao
-Radiant foram consultados; nenhuma escrita externa faz parte desta migração.
+The neighboring AIKM repository already exists. Only its artifacts related to
+Radiant were consulted; no external write is part of this migration.
 
-| Fonte externa | Responsabilidade | Decisão |
+| External source | Responsibility | Decision |
 | --- | --- | --- |
-| AIKM `AGENTS.md` | Primeiro adapter Codex 0.2 | Evidência de navegação; novo adapter não copia suas regras |
-| AIKM `docs/radiant/CONSTITUTION.md` | Cópia transitória | Difere apenas em frontmatter e divisores; a fonte fornecida nesta pasta vence |
-| AIKM `docs/radiant/skills/radiant-cycle/SKILL.md` | Radiant capability 0.1.0 | Incorporar em `skills/radiant-cycle/SKILL.md`, corrigindo link e versão editorial |
+| AIKM `AGENTS.md` | First Codex adapter 0.2 | Navigation evidence; the new adapter does not copy its rules |
+| AIKM `docs/radiant/CONSTITUTION.md` | Transitional copy | Differs only in frontmatter and dividers; the source provided in this folder wins |
+| AIKM `docs/radiant/skills/radiant-cycle/SKILL.md` | Radiant capability 0.1.0 | Incorporate into `skills/radiant-cycle/SKILL.md`, fixing the link and editorial version |
 
-Origem da skill: AIKM commit `3e896d441a7ce3563531f923861ad1f109f809ce`,
+Origin of the skill: AIKM commit `3e896d441a7ce3563531f923861ad1f109f809ce`,
 SHA-256 `5b7c61260188afab1e7f9b561130829b655412b20aff6bd8bbb26660b8401c06`,
-igual ao registrado em VR-0001/VR-0002. O adapter externo e as cópias externas
-permanecem transitórios até adoção explícita pelo AIKM.
+the same as recorded in VR-0001/VR-0002. The external adapter and the external
+copies remain transitional until AIKM explicitly adopts them.
 
-## Canonicality e decisões
+## Canonicality and decisions
 
-- Constitution: um corpo em `constitution/CONSTITUTION.md`. A lista normativa
-  repetida na seção 9 da tese passa a ser referência; demais ideias permanecem.
-- Ciclo: reutilizar a skill existente. `docs/capabilities.md` será só índice;
-  não criar um workflow paralelo com o mesmo corpo.
-- Contracts: convenção genérica em `contracts/README.md`, formulário em
-  `templates/task-contract.md`; contratos e ativação pertencem ao consumidor.
-- Frame: formulário mínimo baseado na tese, sem copiar o Frame AIKM.
-- Verification e Learn Back: procedimentos da skill e critérios específicos
-  em `docs/verification.md` e `docs/learn-back.md`, subordinados à Constitution.
-- Integração: um path configurado no bootstrap global gerado a partir de
-  template; nenhum registry, variável adicional obrigatória ou package manager.
-- Revisão: commit Git completo por projeto e por ciclo. Versões de documentos
-  não identificam todo o sistema. Não adotar SemVer do repositório agora.
+- Constitution: one body in `constitution/CONSTITUTION.md`. The normative list
+  repeated in section 9 of the thesis becomes a reference; the other ideas
+  remain.
+- Cycle: reuse the existing skill. `docs/capabilities.md` will be only an
+  index; do not create a parallel workflow with the same body.
+- Contracts: generic convention in `contracts/README.md`, form in
+  `templates/task-contract.md`; contracts and activation belong to the
+  consumer.
+- Frame: a minimal form based on the thesis, without copying the AIKM Frame.
+- Verification and Learn Back: procedures in the skill and specific criteria
+  in `docs/verification.md` and `docs/learn-back.md`, subordinate to the
+  Constitution.
+- Integration: a path configured in the global bootstrap generated from a
+  template; no registry, additional mandatory variable or package manager.
+- Revision: a full Git commit per project and per cycle. Document versions do
+  not identify the whole system. Do not adopt repository SemVer now.
 
-## Riscos e contenções antes da execução
+## Risks and containment before execution
 
-Moves internos são reversíveis. O índice Git guarda o estado original antes
-das mudanças; hashes verificam a preservação. Não apagar documentos nem editar
-artefatos gerados. Não sobrescrever destinos existentes.
+Internal moves are reversible. The Git index keeps the original state before
+the changes; hashes verify preservation. Do not delete documents or edit
+generated artifacts. Do not overwrite existing destinations.
 
-Referências históricas AIKM pressupõem `docs/project/` e `docs/radiant/` no
-repositório original, já ausentes nesta pasta. Serão inventariadas em
-`migration/README.md` com resolução explícita, sem mudar corpos de contratos ou
-evidências. O validador distinguirá links operacionais de referências históricas
-conhecidas, detectando novos links quebrados em ambos.
+Historical AIKM references assume `docs/project/` and `docs/radiant/` in the
+original repository, already absent from this folder. They will be inventoried
+in `migration/README.md` with an explicit resolution, without changing the
+bodies of contracts or evidence. The validator will distinguish operational
+links from known historical references, detecting new broken links in both.
 
-O `AGENTS.md` global observado é um symlink gerenciado por Nix. Gerar um bloco
-local para inspeção e documentar inclusão na configuração fonte; não alterar o
-symlink nem o store. Instalação real não é condição da arquitetura solicitada.
+The observed global `AGENTS.md` is a symlink managed by Nix. Generate a local
+block for inspection and document its inclusion in the source configuration;
+do not change the symlink or the store. A real installation is not a condition
+of the requested architecture.
 
-Transferência definitiva de documentos AIKM e substituição de suas cópias do
-Core ficam fora desta execução. Exigem comparar com o estado do repositório
-destino e autorizar a mudança nele. Havendo conflito material nessa futura
-transferência, usar HOLD; não sobrescrever nem inferir qual versão prevalece.
+Final transfer of the AIKM documents and replacement of its Core copies stay
+outside this execution. They require comparing with the state of the
+destination repository and authorizing the change there. If there is a
+material conflict in that future transfer, use HOLD; do not overwrite or infer
+which version prevails.
 
-Não implementar Experience Design, System Design ou qualquer artefato da futura
-Design Layer. Diretórios só serão criados com conteúdo operacional real.
+Do not implement Experience Design, System Design or any artifact of the
+future Design Layer. Directories will only be created with real operational
+content.
 
-## Encerramento da custódia
+## End of custody
 
-Registrado em 2026-10-13. Esta seção aceita a transferência prevista nos seis
-passos de separação do antigo `migration/README.md` e retira a custódia do
-working tree. O último estado com a custódia é o commit
-`2f81d6fd73928b52bab04aeaeb0b8d2b164188a1`, que continua acessível pelo
-histórico Git.
+Recorded on 2026-10-13. This section accepts the transfer planned in the six
+separation steps of the former `migration/README.md` and removes the custody
+from the working tree. The last state with the custody is commit
+`2f81d6fd73928b52bab04aeaeb0b8d2b164188a1`, which remains reachable through
+Git history.
 
-| Passo | Evidência no AIKM (`origin/main` em `f9052509b8caf7caff6134d2f18bb5e71cdc0149`) |
+| Step | Evidence in AIKM (`origin/main` at `f9052509b8caf7caff6134d2f18bb5e71cdc0149`) |
 | --- | --- |
-| 1. Comparar destino e snapshots | Os 12 snapshots têm blobs idênticos alcançáveis a partir de `origin/main` |
-| 2. Resolver conflitos | Não há conflito a resolver: o AIKM evoluiu os próprios documentos, arquivou os registros v1 na tag `v1-final` e os retirou de `docs/project/` |
-| 3. Adoção e pointers | `.radiant.json` com pin revisado, `AGENTS.md` neutro com pointers ao Radiant e nenhuma cópia em `docs/radiant/` |
-| 4. Navegação operacional | Mapa do AIKM aponta para o Core Radiant, sem reatribuir versões em relatórios |
-| 5. Percurso verificado | Piloto do [ADR-0001](adrs/ADR-0001-delegation-roles.md#resultado-do-piloto), etapas 0 a 5 |
-| 6. Retirada | Remoção de `migration/` e das checagens de custódia do validador |
+| 1. Compare destination and snapshots | The 12 snapshots have identical blobs reachable from `origin/main` |
+| 2. Resolve conflicts | There is no conflict to resolve: AIKM evolved its own documents, archived the v1 records in the `v1-final` tag and removed them from `docs/project/` |
+| 3. Adoption and pointers | `.radiant.json` with a reviewed pin, a neutral `AGENTS.md` with pointers to Radiant and no copy in `docs/radiant/` |
+| 4. Operational navigation | The AIKM map points to the Radiant Core, without reassigning versions in reports |
+| 5. Verified path | Pilot of [ADR-0001](adrs/ADR-0001-delegation-roles.md#pilot-result), stages 0 to 5 |
+| 6. Removal | Removal of `migration/` and of the validator's custody checks |
 
-O `.DS_Store` local nunca foi versionado. Os corpos AIKM continuam sendo do
-AIKM; o Radiant não guarda mais cópia deles.
+The local `.DS_Store` was never versioned. The AIKM bodies still belong to
+AIKM; Radiant no longer keeps a copy of them.

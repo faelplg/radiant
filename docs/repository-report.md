@@ -1,26 +1,28 @@
-# Relatório da reorganização canônica
+# Canonical reorganization report
 
-Estado: **DONE** para organização, integração projetada e verificação local.
-Conclusão em 2026-09-16. Instalação global efetiva e adoção do novo adapter pelo
-AIKM não fazem parte da execução externa desta entrega.
+State: **DONE** for organization, designed integration and local verification.
+Completed on 2026-09-16. Actual global installation and adoption of the new
+adapter by AIKM are not part of the external execution of this delivery.
 
-Autoridade: solicitação do responsável para transformar esta pasta em repository
-Radiant independente, seguida da autorização para dois commits locais. A
-[análise anterior aos moves](migration-plan.md) preserva inventário, ownership,
-decisões e riscos. Não houve push, remoto ou escrita em outro projeto.
+Authority: the owner's request to turn this folder into an independent Radiant
+repository, followed by authorization for two local commits. The
+[analysis before the moves](migration-plan.md) preserves inventory, ownership,
+decisions and risks. There was no push, remote or write to another project.
 
-## Estrutura anterior
+## Previous structure
 
-Uma pasta sem Git, `AGENTS.md` vazio, tese 0.2 e Constitution 0.1 na raiz, mais
-12 documentos AIKM em `aikm-context/` e um `.DS_Store`. Frame era 0.2.1;
-Spec/Plan, 0.3.1. O contexto continha TC-0001 encerrado e TC-0002 proposto.
-Faltavam os corpos da skill e do adapter referenciados nesses documentos.
+A folder without Git, an empty `AGENTS.md`, thesis 0.2 and Constitution 0.1 at
+the root, plus 12 AIKM documents in `aikm-context/` and a `.DS_Store`. The
+Frame was 0.2.1; Spec/Plan, 0.3.1. The context held a closed TC-0001 and a
+proposed TC-0002. The skill and adapter bodies referenced in those documents
+were missing.
 
-A consulta delimitada ao AIKM existente recuperou o adapter original e a skill
-0.1.0 com digest compatível com os relatórios. A Constitution externa só diferia
-editorialmente; a fonte fornecida nesta pasta foi preservada como owner.
+The bounded query to the existing AIKM recovered the original adapter and
+skill 0.1.0 with a digest matching the reports. The external Constitution only
+differed editorially; the source provided in this folder was kept as the
+owner.
 
-## Estrutura final
+## Final structure
 
 ```text
 radiant/
@@ -59,15 +61,16 @@ radiant/
     AGENTS.md
     inventory.json
     historical-links.json
-    aikm/  (snapshot recebido, sem alterações)
-  .local/codex-global.md  (gerado, ignorado no Git)
+    aikm/  (snapshot received, unchanged)
+  .local/codex-global.md  (generated, ignored by Git)
 ```
 
-Não há `projects/`, `knowledge/`, `workflows/` ou pastas de adapters futuros sem
-função presente. O workflow é a skill real; `docs/capabilities.md` apenas a
-indexa. A futura Design Layer pode acrescentar capabilities sem mudar owners.
+There are no `projects/`, `knowledge/`, `workflows/` or folders for future
+adapters without a present function. The workflow is the real skill;
+`docs/capabilities.md` only indexes it. The future Design Layer can add
+capabilities without changing owners.
 
-## Arquivos movidos
+## Moved files
 
 | From | To |
 | --- | --- |
@@ -85,183 +88,196 @@ indexa. A futura Design Layer pode acrescentar capabilities sem mudar owners.
 | `aikm-context/learning/LR-0001-workflow-activation.md` | `migration/aikm/learning/LR-0001-workflow-activation.md` |
 | `aikm-context/verification/VR-0001-workflow-setup.md` | `migration/aikm/verification/VR-0001-workflow-setup.md` |
 | `aikm-context/verification/VR-0002-bootstrap-acceptance.md` | `migration/aikm/verification/VR-0002-bootstrap-acceptance.md` |
-| `aikm-context/.DS_Store` | `migration/aikm/.DS_Store` (somente local, ignorado) |
+| `aikm-context/.DS_Store` | `migration/aikm/.DS_Store` (local only, ignored) |
 
-## Criados, preservados e ajustados
+## Created, preserved and adjusted
 
-| Arquivo(s) criado(s) | Função |
+| Created file(s) | Function |
 | --- | --- |
-| `README.md` | Entrada humana e índice da árvore |
-| `.gitignore` | Excluir metadata Finder, cache Python e saída local |
-| `docs/capabilities.md` | Descoberta de corpos disponíveis |
-| `docs/integration.md` | Três níveis, mapa local e pin |
-| `docs/contributing.md` | Evolução e identidade Git |
-| `docs/verification.md` | Gates e critérios estruturais |
-| `docs/learn-back.md` | Destinos reais de correção |
-| `docs/migration-plan.md` | Inventário e decisões antes dos moves |
-| `docs/repository-report.md` | Este relatório |
-| `skills/radiant-cycle/SKILL.md` | Skill incorporada do primeiro experimento |
-| `templates/README.md` | Uso e ownership dos formulários |
-| `templates/project-frame.md` | Formulário mínimo de intenção |
-| `templates/task-contract.md` | Formulário de delegação |
-| `templates/radiant-project.json` | Configuração portátil do consumidor |
-| `contracts/README.md` | Convenção genérica extraída do experimento |
-| `adapters/codex/README.md` | Entrada e bootstrap do harness |
-| `adapters/codex/global.AGENTS.template.md` | Fonte portátil do bloco global |
-| `adapters/codex/project.AGENTS.template.md` | Ponteiros do consumidor |
-| `adapters/codex/render_bootstrap.py` | Geração local sem sobrescrita |
-| `validators/README.md` | Comandos e limites dos validators |
-| `validators/check_repository.py` | Links, custódia e portabilidade |
-| `validators/check_project.py` | Pin, checkout limpo e paths do consumidor |
-| `tests/test_integration.py` | Percursos reais dos scripts em ambiente isolado |
-| `migration/README.md`, `migration/AGENTS.md` | Ownership e proteção da custódia |
-| `migration/inventory.json` | SHA-256 dos originais e destinos |
-| `migration/historical-links.json` | Exceções exatas de navegação histórica |
-| `.local/codex-global.md` | Configuração local gerada, não fonte versionada |
+| `README.md` | Human entry and index of the tree |
+| `.gitignore` | Exclude Finder metadata, Python cache and local output |
+| `docs/capabilities.md` | Discovery of available bodies |
+| `docs/integration.md` | Three levels, local map and pin |
+| `docs/contributing.md` | Evolution and Git identity |
+| `docs/verification.md` | Gates and structural criteria |
+| `docs/learn-back.md` | Real fix destinations |
+| `docs/migration-plan.md` | Inventory and decisions before the moves |
+| `docs/repository-report.md` | This report |
+| `skills/radiant-cycle/SKILL.md` | Skill incorporated from the first experiment |
+| `templates/README.md` | Use and ownership of the forms |
+| `templates/project-frame.md` | Minimal intent form |
+| `templates/task-contract.md` | Delegation form |
+| `templates/radiant-project.json` | Portable consumer configuration |
+| `contracts/README.md` | Generic convention extracted from the experiment |
+| `adapters/codex/README.md` | Harness entry and bootstrap |
+| `adapters/codex/global.AGENTS.template.md` | Portable source of the global block |
+| `adapters/codex/project.AGENTS.template.md` | Consumer pointers |
+| `adapters/codex/render_bootstrap.py` | Local generation without overwriting |
+| `validators/README.md` | Validator commands and limits |
+| `validators/check_repository.py` | Links, custody and portability |
+| `validators/check_project.py` | Pin, clean checkout and consumer paths |
+| `tests/test_integration.py` | Real paths of the scripts in an isolated environment |
+| `migration/README.md`, `migration/AGENTS.md` | Ownership and protection of the custody |
+| `migration/inventory.json` | SHA-256 of the originals and destinations |
+| `migration/historical-links.json` | Exact exceptions for historical navigation |
+| `.local/codex-global.md` | Generated local configuration, not a versioned source |
 
-O `AGENTS.md` existente foi preenchido. Constitution, 12 documentos AIKM e
-metadata Finder foram preservados byte a byte. A tese só perdeu a duplicação
-normativa da seção 9, substituída por link; seu texto conceitual restante e
-versão foram preservados. A skill só mudou versão editorial e link para a
-Constitution. Nenhum conteúdo foi eliminado sem permanecer no histórico.
+The existing `AGENTS.md` was filled in. The Constitution, 12 AIKM documents and
+Finder metadata were preserved byte for byte. The thesis only lost the
+normative duplication in section 9, replaced by a link; its remaining
+conceptual text and version were preserved. The skill only changed its
+editorial version and the link to the Constitution. No content was removed
+without remaining in history.
 
-Os 12 links históricos únicos que escapam do snapshot AIKM possuem resolução
-no [mapa de custódia](https://github.com/faelplg/radiant/blob/2f81d6fd73928b52bab04aeaeb0b8d2b164188a1/migration/README.md). Não foram falsamente consertados
-para abrir arquivos de outro projeto. Todos os links operacionais novos são
-diretos e verificados; os corpos históricos não foram reescritos.
+The 12 unique historical links that escape the AIKM snapshot have a resolution
+in the [custody map](https://github.com/faelplg/radiant/blob/2f81d6fd73928b52bab04aeaeb0b8d2b164188a1/migration/README.md).
+They were not falsely fixed to open files of another project. All new
+operational links are direct and verified; the historical bodies were not
+rewritten.
 
-## Fontes canônicas
+## Canonical sources
 
-- Tese: [docs/project-generation-system.md](project-generation-system.md).
-- Constituição: [constitution/CONSTITUTION.md](../constitution/CONSTITUTION.md).
-- Procedure/capability de ciclo: [radiant-cycle](../skills/radiant-cycle/SKILL.md).
+- Thesis: [docs/project-generation-system.md](project-generation-system.md).
+- Constitution: [constitution/CONSTITUTION.md](../constitution/CONSTITUTION.md).
+- Cycle procedure/capability: [radiant-cycle](../skills/radiant-cycle/SKILL.md).
 - Templates: [templates/](../templates/README.md).
 - Contract system: [contracts/README.md](../contracts/README.md).
-- Integração compartilhada: [integration.md](integration.md).
+- Shared integration: [integration.md](integration.md).
 - Harness: [adapters/codex/](../adapters/codex/README.md).
-- Verification e Learn Back: seus [checks](verification.md) e
-  [mapa de destinos](learn-back.md), subordinados à Constitution e à skill.
+- Verification and Learn Back: their [checks](verification.md) and
+  [destination map](learn-back.md), subordinate to the Constitution and the
+  skill.
 
-## Configuração global, projeto e AGENTS
+## Global configuration, project and AGENTS
 
-O mecanismo escolhido é um path configurado pelo usuário. O gerador preenche um
-template pequeno com o checkout descoberto pelo próprio script. Não exige
-variável adicional, symlink, registry ou instalação do Core em outro lugar.
-Mudar de máquina ou path exige regenerar somente o bloco.
+The chosen mechanism is a path configured by the user. The generator fills a
+small template with the checkout found by the script itself. It requires no
+additional variable, symlink, registry or installing the Core elsewhere.
+Changing machine or path only requires regenerating the block.
 
-O bloco fica nas instruções globais efetivas do perfil Codex, por inclusão na
-configuração fonte do usuário. A documentação oficial, consultada pela skill
-OpenAI Docs, determinou o tratamento do perfil e do override; veja
-[adapter](../adapters/codex/README.md). A configuração atual é gerenciada por
-Nix: foi gerado apenas `.local/codex-global.md`, sem modificar sua fonte ou saída.
+The block lives in the effective global instructions of the Codex profile,
+through inclusion in the user's source configuration. The official
+documentation, consulted through the OpenAI Docs skill, determined how the
+profile and the override are handled; see the
+[adapter](../adapters/codex/README.md). The current configuration is managed
+by Nix: only `.local/codex-global.md` was generated, without changing its
+source or output.
 
-Global AGENTS localiza o checkout e o adapter. O AGENTS do Radiant orienta
-trabalho neste repository. O AGENTS consumidor aponta para o adapter e seu
-`.radiant.json`, além de comandos/restrições específicos. Nenhum recebe a tese,
-a Constitution ou a skill como cópia.
+The global AGENTS locates the checkout and the adapter. Radiant's AGENTS guides
+work in this repository. The consumer's AGENTS points to the adapter and its
+`.radiant.json`, plus specific commands/constraints. None of them receives the
+thesis, the Constitution or the skill as a copy.
 
-## Versionamento
+## Versioning
 
-O commit `471c65085ff5e9271c27e8fa24b62d37bd80ba0f` preserva o estado recebido.
-O segundo commit introduz esta reorganização e este relatório. Sua identidade
-é recuperável por `git log`, sem autorreferência impossível no próprio arquivo.
+Commit `471c65085ff5e9271c27e8fa24b62d37bd80ba0f` preserves the received state.
+The second commit introduces this reorganization and this report. Its identity
+is recoverable through `git log`, without an impossible self-reference in the
+file itself.
 
-Um consumidor registra o SHA completo em `radiant_revision`; relatórios de
-ciclo preservam a revisão realmente usada. O gate recusa divergência de HEAD e
-checkout alterado. Atualização é adoção explícita, nunca efeito silencioso de
-`git pull`. Não há SemVer do repository; versões existentes da tese,
-Constitution e skill conservam seus escopos próprios.
+A consumer records the full SHA in `radiant_revision`; cycle reports preserve
+the revision actually used. The gate refuses a HEAD divergence and a changed
+checkout. An update is an explicit adoption, never a silent effect of
+`git pull`. There is no repository SemVer; the existing versions of the
+thesis, Constitution and skill keep their own scopes.
 
-## Revisão e simulações
+## Review and simulations
 
-Houve uma passagem de revisão após o Build contra os critérios do pedido e de
-[Verification](verification.md). A evidência independente da narrativa inclui
-Git, SHA-256 dos inputs anteriores e o validador preexistente da skill, além de
-execução dos scripts em subprocessos. Não houve outro agente/revisor; o readback
-arquitetural próprio não é apresentado como uma revisão humana independente.
+There was one review pass after the Build against the criteria of the request
+and of [Verification](verification.md). Evidence independent of the narrative
+includes Git, SHA-256 of the earlier inputs and the skill's pre-existing
+validator, plus running the scripts in subprocesses. There was no other
+agent/reviewer; the self architectural readback is not presented as an
+independent human review.
 
-| Critério | Resultado observado |
+| Criterion | Observed result |
 | --- | --- |
-| Canonicality | Constitution única; tese aponta para ela; snapshots rotulados históricos |
-| Core/adapter | Regras de revisão no Core; tradução de descoberta no Codex |
-| Global | Bloco inferior a 1 KiB; regenerável; sem cópia de corpos |
-| Portabilidade | Bootstrap e gate passam em checkout temporário com espaços/acentos |
-| Projeto independente | Estado próprio no consumidor; nenhum Core copiado |
-| AIKM independente | Testes de consumo funcionam sem a pasta de custódia |
-| One body/pointers | Skill e convenção vivas únicas; exceções históricas explícitas |
-| Discoverability | Percursos A/B/C abaixo inspecionados |
-| Versionabilidade | Baseline recuperável, renames verificáveis, pin obrigatório |
-| Minimalismo | Nenhum diretório vazio ou adapter especulativo |
-| Extensibilidade | Novas capabilities podem usar os mesmos owners/diretórios |
+| Canonicality | A single Constitution; the thesis points to it; snapshots labeled historical |
+| Core/adapter | Revision rules in the Core; discovery translation in Codex |
+| Global | Block under 1 KiB; regenerable; no copy of bodies |
+| Portability | Bootstrap and gate pass in a temporary checkout with spaces/accents |
+| Independent project | Own state in the consumer; no Core copied |
+| Independent AIKM | Consumption tests work without the custody folder |
+| One body/pointers | Single living skill and convention; explicit historical exceptions |
+| Discoverability | Paths A/B/C below inspected |
+| Versionability | Recoverable baseline, verifiable renames, mandatory pin |
+| Minimalism | No empty directory or speculative adapter |
+| Extensibility | New capabilities can use the same owners/directories |
 
-**A - Trabalhar no Radiant.** O AGENTS leva à Constitution, tese e índice; este
-leva à skill. O modo de revisão leva aos checks do repository e ao roteamento
-de Learn Back. O checkout de desenvolvimento não é bloqueado por um pin de
-consumidor; alterações são justamente o objeto dessa sessão.
+**A - Working on Radiant.** AGENTS leads to the Constitution, thesis and index;
+the index leads to the skill. Review mode leads to the repository checks and
+the Learn Back routing. The development checkout is not blocked by a
+consumer's pin; changes are precisely the object of that session.
 
-**B - Novo projeto.** O bootstrap global localiza Radiant; o AGENTS consumidor
-lê o adapter e seu mapa. O commit é conferido antes de carregar regras. O projeto
-cria seu Frame, Spec e Plan e registra os paths; cria contratos e `ACTIVE.md`
-localmente. A skill continua no checkout compartilhado. Testes exercitaram mapa
-inicial, criação de estado, relocação, gate e atualização explícita de revisão.
+**B - New project.** The global bootstrap locates Radiant; the consumer's
+AGENTS reads the adapter and its map. The commit is checked before loading
+rules. The project creates its Frame, Spec and Plan and records the paths; it
+creates contracts and `ACTIVE.md` locally. The skill stays in the shared
+checkout. Tests exercised the initial map, state creation, relocation, gate
+and explicit revision update.
 
-**C - AIKM.** A comparação read-only confirmou que seus 12 documentos já existem
-no repository AIKM com conteúdo igual aos snapshots. A adoção futura pode
-referenciar Radiant e manter esses documentos no lugar; não precisa mover o
-produto para este repository. Evidência e aprendizado ficam no AIKM; uma
-correção reutilizável pode apontar para um arquivo Radiant. O AIKM não vira owner
-do sistema nem requisito do bootstrap.
+**C - AIKM.** The read-only comparison confirmed that its 12 documents already
+exist in the AIKM repository with content equal to the snapshots. Future
+adoption can reference Radiant and keep those documents in place; it does not
+need to move the product into this repository. Evidence and learning stay in
+AIKM; a reusable fix can point to a Radiant file. AIKM does not become owner of
+the system or a requirement of the bootstrap.
 
-## Evidência executada e limites
+## Executed evidence and limits
 
-- `python3 validators/check_repository.py`: passou; links locais, anchors,
-  exceções históricas explícitas e digests preservados.
-- `python3 -m unittest discover -s tests -v`: sete testes passaram. Cobrem
-  novo consumidor, paths inválidos e escape por symlink, JSON inválido/duplicado,
-  pin divergente/simbólico, mudanças tracked/staged/untracked, adoção explícita
-  após novo commit, geração portátil e recusa de sobrescrita.
-- `render_bootstrap.py --output .local/codex-global.md`: criou saída local;
-  leitura confirmou pointer para este checkout e ausência de corpos do Core.
-- `quick_validate.py skills/radiant-cycle`: `Skill is valid!`. A primeira
-  tentativa encontrou PyYAML ausente. PyYAML 6.0.3 foi instalado somente em
-  diretório temporário para executar o verificador, sem dependência no Radiant.
-- `git diff --check` e revisão do índice/diff: integridade da alteração
-  conferida; conteúdo anterior preservado no baseline. Hard breaks Markdown dos
-  originais não foram reformados para satisfazer whitespace de importação.
-- Ambiente executado: macOS, Python 3.14.7 e Git 2.55.0. Compatibilidade declarada
-  com Python 3.9+ usa somente APIs dessa base; outras versões não foram executadas.
+- `python3 validators/check_repository.py`: passed; local links, anchors,
+  explicit historical exceptions and preserved digests.
+- `python3 -m unittest discover -s tests -v`: seven tests passed. They cover a
+  new consumer, invalid paths and escape through a symlink, invalid/duplicate
+  JSON, a divergent/symbolic pin, tracked/staged/untracked changes, explicit
+  adoption after a new commit, portable generation and refusal to overwrite.
+- `render_bootstrap.py --output .local/codex-global.md`: created local output;
+  reading it confirmed the pointer to this checkout and the absence of Core
+  bodies.
+- `quick_validate.py skills/radiant-cycle`: `Skill is valid!`. The first
+  attempt found PyYAML missing. PyYAML 6.0.3 was installed only in a temporary
+  directory to run the verifier, with no dependency in Radiant.
+- `git diff --check` and review of the index/diff: integrity of the change
+  checked; previous content preserved in the baseline. Markdown hard breaks in
+  the originals were not reformatted to satisfy import whitespace.
+- Environment used: macOS, Python 3.14.7 and Git 2.55.0. The declared
+  compatibility with Python 3.9+ uses only APIs from that base; other versions
+  were not run.
 
-A skill 0.1.0 recuperada orientou o planejamento. A 0.1.1 incorporada foi lida
-para a revisão, SHA-256
+The recovered skill 0.1.0 guided the planning. The incorporated 0.1.1 was read
+for the review, SHA-256
 `daaf24af79f42aad54a3e66f4854f586c7504758086507b1d7e87ace61af3f25`.
-Skill Creator orientou a validação da incorporação mínima; Conventional Commits
-orientou os dois registros de histórico.
+Skill Creator guided the validation of the minimal incorporation; Conventional
+Commits guided the two history records.
 
-Não foi iniciada uma sessão nova real do Codex nem instalado o bloco global.
-Os cenários A/B/C são simulações conceituais acompanhadas de execução real dos
-scripts, não prova de comportamento futuro do modelo ou de utilidade AIKM.
+No real new Codex session was started and the global block was not installed.
+Scenarios A/B/C are conceptual simulations accompanied by real execution of
+the scripts, not proof of the model's future behavior or of AIKM usefulness.
 
-## Learn Back desta reorganização
+## Learn Back from this reorganization
 
-Finding: referências ao Core dentro do AIKM tornavam sua localização dependente
-do primeiro consumidor. Evidência: links originais quebrados nesta pasta, skill
-ausente e adapter recuperado no AIKM. Fix targets: repository, integração e
-adapter. Correção: corpos com owner Radiant e pointers de consumo com revisão
-explícita. Verificação: navegação, preservação e testes de consumidor realocado.
-Reutilização em uma futura entrega de produto permanece por demonstrar.
+Finding: references to the Core inside AIKM made its location depend on the
+first consumer. Evidence: original links broken in this folder, the skill
+missing and the adapter recovered in AIKM. Fix targets: repository,
+integration and adapter. Fix: bodies owned by Radiant and consumption pointers
+with an explicit revision. Verification: navigation, preservation and tests of
+a relocated consumer. Reuse in a future product delivery remains to be
+demonstrated.
 
-Findings futuros ficam locais quando específicos; os reutilizáveis podem
-originar alteração no arquivo Radiant responsável, com razão, evidência e
-verificação. Uma Constitution amendment exige a justificativa transversal
-prevista na própria Constitution, nunca promoção automática.
+Future findings stay local when specific; reusable ones may originate a change
+in the responsible Radiant file, with reason, evidence and verification. A
+Constitution amendment requires the cross-cutting justification set out in the
+Constitution itself, never automatic promotion.
 
-## Questões abertas e trabalho adiado
+## Open questions and deferred work
 
-Nenhuma decisão material impede a organização entregue. Permanecem para a
-adoção externa: o ciclo/revisão que o AIKM escolherá, a inclusão do bloco na fonte
-Nix do usuário e a retirada posterior da custódia depois de conferir o destino.
+No material decision blocks the delivered organization. Remaining for the
+external adoption: the cycle/revision AIKM will choose, the inclusion of the
+block in the user's Nix source and the later removal of the custody after
+checking the destination.
 
-Não implementados: Experience Design, System Design, Design Layer e seus
-artefatos; outros adapters; publicação; releases/tags e changelog automatizado;
-package management; registro automático de skills no harness; integração de
-captura/retrieval com AIKM; alterações no produto ou ativação de TC-0002.
+Not implemented: Experience Design, System Design, the Design Layer and its
+artifacts; other adapters; publication; releases/tags and automated
+changelog; package management; automatic skill registration in the harness;
+capture/retrieval integration with AIKM; changes to the product or activation
+of TC-0002.
