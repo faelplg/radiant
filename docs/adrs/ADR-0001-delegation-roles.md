@@ -1,462 +1,470 @@
-# ADR-0001: papéis, capacidades e delegação
+# ADR-0001: roles, capabilities and delegation
 
-- Data: 2026-10-08
-- Estado: `accepted` em 2026-10-09
+- Date: 2026-10-08
+- State: `accepted` on 2026-10-09
 - Owner: Fael
-- Revisão de origem do Radiant: `160ef8edddd5893169e5c9d9d5375dd25be802b3`
-- Implementação: PR #2, merge `6074810e6d3ca3cc8f591b78d62272b26b6428a9`
+- Originating Radiant revision: `160ef8edddd5893169e5c9d9d5375dd25be802b3`
+- Implementation: PR #2, merge `6074810e6d3ca3cc8f591b78d62272b26b6428a9`
 
-As regras operacionais vivem em
+The operational rules live in
 [radiant-delegation](../../skills/radiant-delegation/SKILL.md),
-[radiant-maintenance](../../skills/radiant-maintenance/SKILL.md) e nos
-adapters. Em caso de divergência, esses corpos prevalecem; este ADR permanece
-como registro da decisão e do design que orientou a implementação.
+[radiant-maintenance](../../skills/radiant-maintenance/SKILL.md) and the
+adapters. When they diverge, those bodies prevail; this ADR remains as the
+record of the decision and of the design that guided the implementation.
 
-## Intenção
+## Intent
 
-Permitir que projetos conduzidos pelo Radiant sejam tocados por papéis
-especializados (Ideação, Design, Dev, Verificador e Manutenção) coordenados por
-um orquestrador, com aprovação humana entre fases, sem amarrar o Radiant a um
-harness ou modelo.
+Allow projects carried out with Radiant to be handled by specialized roles
+(Ideation, Design, Dev, Verifier and Maintenance) coordinated by an
+orchestrator, with human approval between phases, without tying Radiant to a
+harness or model.
 
-Dois resultados são esperados:
+Two outcomes are expected:
 
-1. Radiant explicitamente agnóstico a harness: o mesmo core é consumido por
-   dois adapters que delegam de fato (Codex e Claude Code).
-2. Custo proporcional ao trabalho: o orquestrador usa a capacidade mais alta e
-   o trabalho delimitado é delegado a capacidades mais baratas, sem enfraquecer
-   crítica e verificação.
+1. Radiant explicitly harness-agnostic: the same core is consumed by two
+   adapters that actually delegate (Codex and Claude Code).
+2. Cost proportional to the work: the orchestrator uses the highest capability
+   and bounded work is delegated to cheaper capabilities, without weakening
+   critique and verification.
 
-## Contexto e restrições
+## Context and constraints
 
-- O ciclo Frame → Challenge → Spec → Design → Plan → Contract → Build → Verify
-  → Learn Back já cobre Ideação, Design e Dev. Manutenção contínua não tem
-  etapa correspondente.
-- A [Constitution](../../constitution/CONSTITUTION.md) exige: core independente
-  de ferramenta (Artigo XIV), um corpo canônico (Artigo XI), autonomia
-  proporcional à reversibilidade (Artigo IV), verificação e crítica
-  independentes (Artigos VII e VIII), agência humana (Artigo XIII), default
-  deny para egress (Artigo XII), proveniência (Artigo X) e simplicidade
-  (Artigo XVII). Nomes de modelo não pertencem ao core (seção 7).
-- Só existe o [adapter Codex](../../adapters/codex/README.md). O template de
-  consumidor e o `AGENTS.md` do AIKM apontam diretamente para ele.
-- Skills externas (por exemplo superpowers e design-superpowers) produzem
-  artefatos em paths próprios, concorrentes com os do Radiant.
-- Fatos de harness conferidos na documentação oficial em 2026-10-09:
-  - Claude Code: subagentes em Markdown com frontmatter em `~/.claude/agents/`;
-    `model` do frontmatter aceita ID completo. O parâmetro `model` da
-    invocação prevalece sobre o frontmatter, mas aceita apenas aliases de
-    família (`sonnet`, `opus`, `haiku`, `fable`), que não identificam o
-    modelo efetivo. Subagentes podem criar subagentes até três camadas
-    abaixo da sessão principal; a criação é bloqueada por agente com
-    `disallowedTools: Agent`.
-  - Codex: subagentes em TOML em `~/.codex/agents/`, com `name`,
-    `description` e `developer_instructions` obrigatórios e `model` opcional.
-    O `model` declarado no arquivo do agente prevalece sobre o valor passado na
-    criação. Não há limite de profundidade documentado.
-- O [template de Task Contract](../../templates/task-contract.md) já possui
-  `Risk tier`, `Independent critique` e `Completion report`, reutilizados por
-  esta decisão.
+- The cycle Frame → Challenge → Spec → Design → Plan → Contract → Build →
+  Verify → Learn Back already covers Ideation, Design and Dev. Continuous
+  maintenance has no corresponding stage.
+- The [Constitution](../../constitution/CONSTITUTION.md) requires: a
+  tool-independent core (Article XIV), one canonical body (Article XI),
+  autonomy proportional to reversibility (Article IV), independent
+  verification and critique (Articles VII and VIII), human agency
+  (Article XIII), default deny for egress (Article XII), provenance
+  (Article X) and simplicity (Article XVII). Model names do not belong in the
+  core (section 7).
+- Only the [Codex adapter](../../adapters/codex/README.md) exists. The
+  consumer template and AIKM's `AGENTS.md` point directly to it.
+- External skills (for example superpowers and design-superpowers) produce
+  artifacts at their own paths, competing with Radiant's.
+- Harness facts checked in the official documentation on 2026-10-09:
+  - Claude Code: subagents in Markdown with frontmatter in `~/.claude/agents/`;
+    the frontmatter `model` accepts a full ID. The invocation's `model`
+    parameter wins over the frontmatter, but only accepts family aliases
+    (`sonnet`, `opus`, `haiku`, `fable`), which do not identify the effective
+    model. Subagents can create subagents up to three layers below the main
+    session; creation is blocked per agent with `disallowedTools: Agent`.
+  - Codex: subagents in TOML in `~/.codex/agents/`, with `name`,
+    `description` and `developer_instructions` required and `model` optional.
+    The `model` declared in the agent's file wins over the value passed at
+    creation. There is no documented depth limit.
+- The [Task Contract template](../../templates/task-contract.md) already has
+  `Risk tier`, `Independent critique` and `Completion report`, reused by this
+  decision.
 
-## Decisões
+## Decisions
 
-| Decisão | Escolha |
+| Decision | Choice |
 | --- | --- |
-| Onde vivem os papéis | Core agnóstico; adapters traduzem para cada harness |
-| Nome do conceito | Capacidade (`deep`, `standard`, `light`); campo `Capability` no contrato |
-| Escolha da capacidade | Padrão por papel, com override justificado no Task Contract |
-| Aceite independente | Uma vez por contrato em `deep`; antecipado quando `Risk tier` ≥ 2 ou `Independent critique: REQUIRED` |
-| Proveniência de modelo | Adapters mapeiam capacidade para ID completo de modelo, não alias |
-| Skills externas | Radiant canônico; skills externas são procedimentos opcionais apontados pelo adapter |
-| Autonomia da Manutenção | Só propõe; a única escrita é o relatório, em diretório ignorado pelo Git |
-| Execução da Manutenção | Somente local; rotinas em nuvem fora de escopo |
-| Política da Manutenção | Comandos seguros e egress autorizados declarados no workflow do consumidor |
-| Estrutura no core | Skills `radiant-delegation` e `radiant-maintenance`; `radiant-cycle` recebe apenas ponteiros |
-| Adapters | Claude Code novo e Codex completo, ambos gerando os seis subagentes |
-| Piloto | AIKM: adoção como TC-0019; ciclo do candidato da Manutenção como TC-0020 |
+| Where the roles live | Agnostic core; adapters translate for each harness |
+| Name of the concept | Capability (`deep`, `standard`, `light`); `Capability` field in the contract |
+| Choosing the capability | Default per role, with a justified override in the Task Contract |
+| Independent acceptance | Once per contract in `deep`; brought forward when `Risk tier` ≥ 2 or `Independent critique: REQUIRED` |
+| Model provenance | Adapters map capability to a full model ID, not an alias |
+| External skills | Radiant is canonical; external skills are optional procedures the adapter points to |
+| Maintenance autonomy | Only proposes; the only write is the report, in a directory ignored by Git |
+| Maintenance execution | Local only; cloud routines out of scope |
+| Maintenance policy | Safe commands and authorized egress declared in the consumer's workflow |
+| Structure in the core | Skills `radiant-delegation` and `radiant-maintenance`; `radiant-cycle` only gets pointers |
+| Adapters | New Claude Code and complete Codex, both generating the six subagents |
+| Pilot | AIKM: adoption as TC-0019; cycle of the Maintenance candidate as TC-0020 |
 
-Alternativas descartadas:
+Discarded alternatives:
 
-- Papéis somente no adapter: prende papéis a um harness.
-- Papéis fora do Radiant: sem Learn Back nem pin.
-- Capacidade fixa por papel: rígida para tarefas difíceis.
-- Capacidade decidida caso a caso pelo orquestrador: imprevisível e sem
-  proveniência.
-- Tudo dentro de `radiant-cycle`: a skill carregada por todos cresce sem
-  necessidade.
-- Uma skill por time: duplica o procedimento do ciclo.
-- Aceite `deep` por tarefa: anula a economia de delegar Build.
-- Aliases de modelo: a evidência deixa de identificar o modelo efetivo.
-- Relatório de Manutenção versionado ou publicado no forge: conflita com
-  trabalho em andamento ou exige escrita e egress externos.
-- Política de Manutenção em campos do `.radiant.json`: transforma o mapa de
-  paths em arquivo de política.
-- Adapter Codex mínimo: deixa a separação core/adapter sem teste real.
-- Termo `tier`: colide com `Risk tier` dos contratos existentes.
+- Roles only in the adapter: ties roles to a harness.
+- Roles outside Radiant: no Learn Back or pin.
+- Fixed capability per role: rigid for hard tasks.
+- Capability decided case by case by the orchestrator: unpredictable and
+  without provenance.
+- Everything inside `radiant-cycle`: the skill everyone loads grows without
+  need.
+- One skill per team: duplicates the cycle procedure.
+- `deep` acceptance per task: cancels the savings of delegating Build.
+- Model aliases: the evidence stops identifying the effective model.
+- Maintenance report versioned or published to the forge: conflicts with work
+  in progress or requires external writes and egress.
+- Maintenance policy in `.radiant.json` fields: turns the path map into a
+  policy file.
+- Minimal Codex adapter: leaves the core/adapter separation without a real
+  test.
+- The term `tier`: collides with the `Risk tier` of existing contracts.
 
-## 1. Papéis e capacidades
+## 1. Roles and capabilities
 
-### Capacidades
+### Capabilities
 
-O core define capacidades abstratas. Cada adapter mapeia capacidades para IDs
-completos de modelo.
+The core defines abstract capabilities. Each adapter maps capabilities to full
+model IDs.
 
-| Capacidade | Uso |
+| Capability | Use |
 | --- | --- |
-| `deep` | Julgamento, crítica, decisões caras e aceite |
-| `standard` | Execução delimitada por artefato aprovado |
-| `light` | Busca, coleta, checks mecânicos e resumo |
+| `deep` | Judgment, critique, expensive decisions and acceptance |
+| `standard` | Execution bounded by an approved artifact |
+| `light` | Search, collection, mechanical checks and summaries |
 
-### Papéis
+### Roles
 
-| Papel | Etapas | Capacidade padrão | Produz |
+| Role | Stages | Default capability | Produces |
 | --- | --- | --- | --- |
-| Orquestrador | Coordenação de todas | `deep` | Pacotes de delegação, decisões de gate, aceite final |
-| Ideação | Frame, Challenge | `deep` para Grill; `light` para pesquisa | Frame e Challenge registrados |
-| Design | Spec, Design | `deep` para System Design e ADR; `standard` para Design Spec derivado de Frame aprovado | Spec, Design Frame, Design Spec, ADRs |
-| Dev | Plan, Contract, Build | `standard`; `light` para tarefas mecânicas | Plano, contratos propostos, diff |
-| Verificador | Verify | `deep` para aceite; `light` para checks determinísticos | Relatório de verificação |
-| Manutenção | Fora do ciclo; alimenta Frame | `light` para coleta; `standard` para priorização | Relatório de manutenção com propostas |
+| Orchestrator | Coordination of all | `deep` | Delegation packages, gate decisions, final acceptance |
+| Ideation | Frame, Challenge | `deep` for Grill; `light` for research | Recorded Frame and Challenge |
+| Design | Spec, Design | `deep` for System Design and ADR; `standard` for a Design Spec derived from an approved Frame | Spec, Design Frame, Design Spec, ADRs |
+| Dev | Plan, Contract, Build | `standard`; `light` for mechanical tasks | Plan, proposed contracts, diff |
+| Verifier | Verify | `deep` for acceptance; `light` for deterministic checks | Verification report |
+| Maintenance | Outside the cycle; feeds the Frame | `light` for collection; `standard` for prioritization | Maintenance report with proposals |
 
-### Regras
+### Rules
 
-1. Interação humana pertence ao orquestrador. Papéis delegados não conversam
-   com o humano; perguntas de enquadramento, Challenge e aprovações passam pela
-   sessão principal.
-2. Aceite nunca usa capacidade inferior à do autor. Por tarefa, valem checks
-   determinísticos e o readback do orquestrador `deep`. O Verificador `deep`
-   dedicado faz o aceite do contrato uma vez, ao final, e é antecipado quando
-   `Risk tier` ≥ 2 ou `Independent critique: REQUIRED`.
-3. Override de capacidade somente pelo Task Contract, em campo opcional
-   `Capability` com justificativa de uma linha, registrado na evidência de
-   execução.
-4. Não são delegadas: mudança de escopo, ativação de contrato, ações
-   irreversíveis e aceitação de conhecimento canônico.
-5. Delegar é opcional. Sem suporte do harness, ou em tarefa pequena, o
-   orquestrador executa o papel na própria sessão com as mesmas entradas e
-   saídas. O mesmo vale quando o harness não permite o override pedido.
-6. Exceção do orquestrador: em execução de Manutenção, que apenas propõe, o
-   orquestrador pode operar em `standard`.
-7. Papéis delegados não delegam. Toda delegação parte do orquestrador, para
-   que cada uma fique registrada na proveniência de custo e respeite a regra
-   de aceite.
+1. Human interaction belongs to the orchestrator. Delegated roles do not talk
+   with the human; framing questions, Challenge and approvals go through the
+   main session.
+2. Acceptance never uses a capability lower than the author's. Per task,
+   deterministic checks and the `deep` orchestrator's readback apply. The
+   dedicated `deep` Verifier accepts the contract once, at the end, and is
+   brought forward when `Risk tier` ≥ 2 or `Independent critique: REQUIRED`.
+3. Capability override only through the Task Contract, in an optional
+   `Capability` field with a one-line justification, recorded in the
+   execution evidence.
+4. Not delegated: scope changes, contract activation, irreversible actions and
+   acceptance of canonical knowledge.
+5. Delegating is optional. Without harness support, or in a small task, the
+   orchestrator runs the role in its own session with the same inputs and
+   outputs. The same applies when the harness does not allow the requested
+   override.
+6. Orchestrator exception: in a Maintenance run, which only proposes, the
+   orchestrator may operate in `standard`.
+7. Delegated roles do not delegate. Every delegation starts from the
+   orchestrator, so each one is recorded in the cost provenance and respects
+   the acceptance rule.
 
-## 2. Handoff e retorno
+## 2. Handoff and return
 
-### Pacote de delegação
+### Delegation package
 
-Contém ponteiros, não cópias:
+Holds pointers, not copies:
 
-- papel e capacidade efetiva;
-- objetivo em uma ou duas frases;
-- entradas: paths de artefatos e revisão do Radiant;
-- fronteira: paths graváveis, paths somente leitura e non-goals;
-- saída esperada e formato do retorno;
-- condições de `HOLD`.
+- role and effective capability;
+- goal in one or two sentences;
+- inputs: artifact paths and the Radiant revision;
+- boundary: writable paths, read-only paths and non-goals;
+- expected output and return format;
+- `HOLD` conditions.
 
-Para Build, o Task Contract é o pacote; o handoff aponta para ele. Para
-trabalhos pequenos (pesquisa, Grill, coleta), o pacote vai no próprio pedido e
-não vira arquivo.
+For Build, the Task Contract is the package; the handoff points to it. For
+small jobs (research, Grill, collection), the package goes in the request
+itself and does not become a file.
 
-### Retorno
+### Return
 
-Para Build, o retorno é o `Completion report` do Task Contract. Para os demais
-papéis, o retorno contém:
+For Build, the return is the Task Contract's `Completion report`. For the
+other roles, the return holds:
 
-- estado: `DONE`, `HOLD` ou `FAIL`;
-- outputs: paths criados ou alterados;
-- evidência: comandos e resultados efetivos, incluindo bloqueios;
-- desvios: ambiguidades e o que ficou fora da fronteira;
-- findings candidatos a Learn Back.
+- state: `DONE`, `HOLD` or `FAIL`;
+- outputs: paths created or changed;
+- evidence: commands and results actually obtained, including blockers;
+- deviations: ambiguities and what stayed outside the boundary;
+- findings that are candidates for Learn Back.
 
-O retorno é um resumo, não um despejo de conteúdo.
+The return is a summary, not a content dump.
 
-### Tratamento pelo orquestrador
+### Handling by the orchestrator
 
-1. Não aceita `DONE` apenas pelo relato. Faz readback do diff, executa checks e
-   confronta com o contrato.
-2. `HOLD` é resolvido dentro da autorização vigente ou levado ao humano.
-3. `FAIL` preserva evidência e segue para Learn Back.
+1. It does not accept `DONE` on the account alone. It reads back the diff,
+   runs checks and compares with the contract.
+2. `HOLD` is resolved within the current authorization or taken to the human.
+3. `FAIL` preserves evidence and goes to Learn Back.
 
-### Paralelismo
+### Parallelism
 
-Somente entre tarefas independentes com paths de escrita disjuntos. Na dúvida,
-execução sequencial.
+Only between independent tasks with disjoint write paths. When in doubt, run
+sequentially.
 
-### Proveniência de custo
+### Cost provenance
 
-O relatório de verificação do contrato registra cada delegação: papel,
-capacidade, ID completo do modelo resolvido pelo adapter e estado. IDs de
-modelo aparecem apenas na evidência do consumidor e nos adapters.
+The contract's verification report records each delegation: role, capability,
+full model ID resolved by the adapter and state. Model IDs appear only in the
+consumer's evidence and in the adapters.
 
-## 3. Manutenção
+## 3. Maintenance
 
-### Fontes observadas
+### Observed sources
 
-| Fonte | Candidatos típicos |
+| Source | Typical candidates |
 | --- | --- |
-| Estado do ciclo | Contrato `held` esquecido; Learning Record com `fixTarget` sem correção |
-| Gates do projeto | Falhas nos comandos declarados seguros para manutenção |
-| Drift | Spec ou Plan em desacordo com o código; links quebrados nos artefatos |
-| Dependências | Versões desatualizadas ou vulneráveis |
-| Forge | Issues abertas; falhas de CI na branch principal |
-| Pin do Radiant | Revisão mais nova disponível, como candidato e nunca como atualização automática |
+| Cycle state | A forgotten `held` contract; a Learning Record with a `fixTarget` and no fix |
+| Project gates | Failures in the commands declared safe for maintenance |
+| Drift | Spec or Plan in disagreement with the code; broken links in the artifacts |
+| Dependencies | Outdated or vulnerable versions |
+| Forge | Open issues; CI failures on the main branch |
+| Radiant pin | A newer available revision, as a candidate and never as an automatic update |
 
-### Política declarada pelo consumidor
+### Policy declared by the consumer
 
-O documento de `workflow` do consumidor contém uma seção de Manutenção com:
+The consumer's `workflow` document holds a Maintenance section with:
 
-- comandos seguros para manutenção: somente estes são executados; os demais
-  são pulados e registrados como omitidos;
-- fontes externas autorizadas (registry de pacotes, forge): sem autorização,
-  a fonte é pulada e a omissão é registrada.
+- commands safe for maintenance: only these run; the others are skipped and
+  recorded as omitted;
+- authorized external sources (package registry, forge): without
+  authorization, the source is skipped and the omission is recorded.
 
-### Relatório
+### Report
 
-Uma execução produz um relatório, conforme `templates/maintenance-report.md`,
-com:
+A run produces a report, following `templates/maintenance-report.md`, with:
 
-- candidatos priorizados por risco, valor e reversibilidade, cada um com
-  evidência concreta (saída de comando, path, linha);
-- comparação com o relatório anterior: novo, recorrente, resolvido;
-- rascunho de contrato embutido para até três candidatos do topo (objetivo,
-  outputs, verificação).
+- candidates prioritized by risk, value and reversibility, each with concrete
+  evidence (command output, path, line);
+- comparison with the previous report: new, recurring, resolved;
+- an embedded contract draft for up to three candidates at the top (goal,
+  outputs, verification).
 
-Rascunhos não viram arquivos `TC-xxxx`. O contrato com ID é criado pelo
-orquestrador somente quando o humano seleciona um candidato. Uma execução que
-conclui "nada material" é resultado válido.
+Drafts do not become `TC-xxxx` files. The contract with an ID is created by
+the orchestrator only when the human selects a candidate. A run that
+concludes "nothing material" is a valid result.
 
-### Localização e fronteira
+### Location and boundary
 
-- Novo campo opcional `maintenance` em `.radiant.json`: diretório relativo ou
-  `null`. Campo ausente equivale a `null`.
-- O diretório é ignorado pelo Git no consumidor. O validator exige apenas path
-  relativo dentro do projeto e aceita que ele não exista; a skill o cria na
-  primeira execução. A exceção vale somente para este campo.
-- A única escrita permitida é o relatório. Sem branch, PR, issue ou commit.
-- Execução somente local, manual ou agendada na máquina do usuário.
+- New optional `maintenance` field in `.radiant.json`: a relative directory or
+  `null`. A missing field is the same as `null`.
+- The directory is ignored by Git in the consumer. The validator only requires
+  a relative path inside the project and accepts that it does not exist; the
+  skill creates it on the first run. The exception applies only to this field.
+- The only write allowed is the report. No branch, PR, issue or commit.
+- Local execution only, manual or scheduled on the user's machine.
 
 ## 4. Adapters
 
-### Comum aos adapters
+### Common to the adapters
 
-- Gerador único: o script atual passa a aceitar `--adapter codex|claude-code`,
-  com templates por adapter. A saída Codex existente permanece compatível.
-- Seis subagentes finos, gerados no diretório de agentes do usuário, fora do
-  Git, regeneráveis e sem sobrescrever arquivos existentes: `radiant-research`
+- A single generator: the current script starts accepting
+  `--adapter codex|claude-code`, with templates per adapter. The existing
+  Codex output stays compatible.
+- Six thin subagents, generated in the user's agents directory, outside Git,
+  regenerable and without overwriting existing files: `radiant-research`
   (`light`), `radiant-grill` (`deep`), `radiant-design` (`standard`),
-  `radiant-dev` (`standard`), `radiant-verifier` (`deep`) e
-  `radiant-maintenance` (`standard`). O corpo contém apenas metadados do
-  harness e ponteiro para a seção do papel em `radiant-delegation`.
-- Mapa único capacidade → ID completo de modelo em `capabilities.json` de
-  cada adapter, referenciado pelo README.
-- Tabela opcional papel → procedimento externo sugerido. Regra explícita: a
-  saída vai para os paths do `.radiant.json`, nunca para paths padrão da skill
-  externa.
+  `radiant-dev` (`standard`), `radiant-verifier` (`deep`) and
+  `radiant-maintenance` (`standard`). The body holds only harness metadata and
+  a pointer to the role's section in `radiant-delegation`.
+- A single capability → full model ID map in each adapter's
+  `capabilities.json`, referenced by the README.
+- An optional role → suggested external procedure table. Explicit rule: the
+  output goes to the paths in `.radiant.json`, never to the external skill's
+  default paths.
 
-### Claude Code (novo, `adapters/claude-code/`)
+### Claude Code (new, `adapters/claude-code/`)
 
-- Bootstrap global: bloco `radiant:begin/end` para o arquivo de instruções
-  globais do usuário, preservando o restante e removível isoladamente.
-- Subagentes em Markdown com frontmatter, no diretório de agentes do usuário,
-  com `disallowedTools: Agent` para aplicar a regra 7.
-- Override de capacidade não usa o parâmetro `model` da invocação, que só
-  aceita aliases: o papel com capacidade alterada roda na sessão do
-  orquestrador (regra 5), como no Codex.
+- Global bootstrap: a `radiant:begin/end` block for the user's global
+  instructions file, preserving the rest and removable on its own.
+- Subagents in Markdown with frontmatter, in the user's agents directory, with
+  `disallowedTools: Agent` to enforce rule 7.
+- Capability override does not use the invocation's `model` parameter, which
+  only accepts aliases: the role with a changed capability runs in the
+  orchestrator's session (rule 5), as in Codex.
 
 ### Codex (`adapters/codex/`)
 
-- Mantém o bootstrap atual.
-- Subagentes em TOML no diretório de agentes do usuário. A regra 7 fica nas
-  instruções do agente, porque o Codex não documenta bloqueio por agente.
-- Como o `model` do arquivo prevalece, o override de capacidade não é
-  possível na criação: o papel com capacidade alterada roda na sessão do
-  orquestrador (regra 5).
+- Keeps the current bootstrap.
+- Subagents in TOML in the user's agents directory. Rule 7 lives in the
+  agent's instructions, because Codex does not document per-agent blocking.
+- Since the file's `model` wins, capability override is not possible at
+  creation: the role with a changed capability runs in the orchestrator's
+  session (rule 5).
 
-### Consumidores
+### Consumers
 
-- O template de `AGENTS.md` do consumidor sai de `adapters/codex/` e passa a
-  ser um mapa neutro de harness em `templates/`, que manda ler o adapter do
-  harness em uso.
-- Consumidores que usam Claude Code têm um `CLAUDE.md` de uma linha com
-  `@AGENTS.md`, mantendo um único corpo.
-- O próprio Radiant recebe o mesmo `CLAUDE.md` de uma linha.
+- The consumer's `AGENTS.md` template leaves `adapters/codex/` and becomes a
+  neutral harness map in `templates/`, which says to read the adapter of the
+  harness in use.
+- Consumers that use Claude Code have a one-line `CLAUDE.md` with
+  `@AGENTS.md`, keeping a single body.
+- Radiant itself gets the same one-line `CLAUDE.md`.
 
-## 5. Verificação e piloto
+## 5. Verification and pilot
 
-### Verificação determinística no Radiant
+### Deterministic verification in Radiant
 
-- Testes do gerador com cada adapter: bloco global, seis subagentes, recusa de
-  sobrescrita e path com espaços.
-- Regressão: bloco global Codex igual ao atual, exceto mudanças intencionais.
-- `check_project.py`: `maintenance` com `null`, diretório existente, diretório
-  inexistente (aceito), path que escapa do projeto (rejeitado) e campo ausente
-  (aceito).
-- `check_repository.py`: todo adapter mapeia as três capacidades definidas em
+- Generator tests with each adapter: global block, six subagents, refusal to
+  overwrite and a path with spaces.
+- Regression: the Codex global block equal to the current one, except for
+  intentional changes.
+- `check_project.py`: `maintenance` with `null`, an existing directory, a
+  nonexistent directory (accepted), a path that escapes the project (rejected)
+  and a missing field (accepted).
+- `check_repository.py`: every adapter maps the three capabilities defined in
   `radiant-delegation`.
-- [Verification](../verification.md): simulação D (entrada pelo Claude Code) e
-  critério de agnosticismo de harness na revisão estrutural.
+- [Verification](../verification.md): simulation D (entry through Claude Code)
+  and the harness agnosticism criterion in the structural review.
 
-### Piloto no AIKM
+### Pilot in AIKM
 
-| Etapa | Ação | Evidência |
+| Stage | Action | Evidence |
 | --- | --- | --- |
-| 0. Adoção (TC-0019) | Pin no commit de merge, `AGENTS.md` neutro, `CLAUDE.md` de uma linha, campo `maintenance`, `.gitignore` e seção de Manutenção no workflow | `check_project.py` aprovado |
-| 1. Sessão nova | Sessão Claude Code nova identifica pointer, valida pin e carrega Constitution e mapa sem ajuda | Transcrição |
-| 2. Manutenção | Execução manual, depois uma agendada localmente | Relatório com evidência; `git status` sem mudanças rastreadas |
-| 3. Ciclo (TC-0020) | Humano seleciona candidato do relatório ou, sem candidato material, item do horizonte do Plan; TC-0020 percorre os papéis até `DONE` | Relatório de verificação com delegações registradas |
-| 4. Learn Back | Findings sobre o Radiant roteados ao owner | Learning Record e mudança ou pendência |
-| 5. Regressão Codex | Humano confirma que uma sessão Codex no AIKM continua validando e delega a um subagente Radiant | Confirmação registrada |
+| 0. Adoption (TC-0019) | Pin at the merge commit, neutral `AGENTS.md`, one-line `CLAUDE.md`, `maintenance` field, `.gitignore` and a Maintenance section in the workflow | `check_project.py` passes |
+| 1. New session | A new Claude Code session identifies the pointer, validates the pin and loads the Constitution and map without help | Transcript |
+| 2. Maintenance | Manual run, then one scheduled locally | Report with evidence; `git status` without tracked changes |
+| 3. Cycle (TC-0020) | The human selects a candidate from the report or, without a material candidate, an item from the Plan's horizon; TC-0020 goes through the roles to `DONE` | Verification report with recorded delegations |
+| 4. Learn Back | Findings about Radiant routed to the owner | Learning Record and a change or open item |
+| 5. Codex regression | The human confirms that a Codex session in AIKM still validates and delegates to a Radiant subagent | Recorded confirmation |
 
-### Critérios de sucesso
+### Success criteria
 
-- Etapas 1 a 5 concluídas sem intervenção fora dos gates previstos.
-- Nenhum aceite com capacidade inferior à do autor.
-- Divisão de uso por capacidade registrada como linha de base. Não há meta
-  numérica neste piloto; limitações de medição por subagente são registradas.
+- Stages 1 to 5 completed without intervention outside the planned gates.
+- No acceptance with a capability lower than the author's.
+- Usage split by capability recorded as a baseline. There is no numeric target
+  in this pilot; per-subagent measurement limitations are recorded.
 
-### Ordem de entrega
+### Delivery order
 
-1. PR no Radiant: core, adapters, validators e este ADR.
-2. Merge na `main`; ADR passa a `accepted` com referência ao commit.
-3. PR no AIKM: TC-0019 com pin no commit de merge, seguido do ciclo TC-0020.
+1. PR in Radiant: core, adapters, validators and this ADR.
+2. Merge into `main`; the ADR becomes `accepted` with a reference to the
+   commit.
+3. PR in AIKM: TC-0019 with the pin at the merge commit, followed by the
+   TC-0020 cycle.
 
-## Limitação registrada na revisão do PR
+## Limitation recorded in the PR review
 
-Perfis delegáveis declaram `access` (`read` ou `write`). Perfis de leitura
-recebem menor privilégio do harness (`tools` restritas no Claude Code,
-`sandbox_mode = "read-only"` no Codex). Fronteiras específicas de cada
-contrato nos perfis `write` não são impostas pelo harness: dependem do pacote
-e do readback do orquestrador, conforme a seção "Acesso e fronteiras" da skill
-de delegação. Enforcement por contrato é candidato a evolução com evidência do
-piloto.
+Delegable profiles declare `access` (`read` or `write`). Read profiles get the
+harness's least privilege (restricted `tools` in Claude Code,
+`sandbox_mode = "read-only"` in Codex). Each contract's specific boundaries on
+`write` profiles are not enforced by the harness: they depend on the package
+and on the orchestrator's readback, according to the "Access and boundaries"
+section of the delegation skill. Per-contract enforcement is a candidate for
+evolution with evidence from the pilot.
 
-## Emendas
+## Amendments
 
-- 2026-10-09: o bloco global passa a ser um template único e neutro,
-  `adapters/global.template.md`, que indica o adapter de cada harness. Motivo:
-  no primeiro uso real, as instruções globais do Claude Code e do Codex eram o
-  mesmo arquivo (dotfiles), e um bloco por adapter fazia um harness ler o
-  adapter do outro. O gerador imprime o bloco sem `--adapter`, que passa a ser
-  exigido só com `--agents-dir`.
-- 2026-10-10: o Learn Back do piloto alterou regras operacionais nas skills e
-  nos adapters, que prevalecem sobre este registro
-  ([PR #5](https://github.com/faelplg/radiant/pull/5) e
-  [PR #6](https://github.com/faelplg/radiant/pull/6)). O retorno de Build segue
-  a seção 16 do template mesmo quando o contrato não a reproduz. O readback
-  confere cada mudança e cada resultado relatados contra o working tree. O
-  pacote leva a raiz absoluta do Radiant. A proveniência registra uma linha
-  por rodada com a métrica de uso definida pelo adapter, ou a ausência dela.
-  Assim, a seção "Proveniência de custo" acima vale com esses acréscimos.
-- 2026-10-13: resolve a primeira pendência do resultado do piloto. A tarefa
-  do piloto foi criada por ferramenta de agendamento, que não define modelo, e
-  rodou no modelo padrão. A execução agendada passa a fixar no agendador o
-  modelo de `standard` e a registrar o modelo efetivo da sessão no relatório;
-  abaixo de `standard`, termina em `HOLD`. A regra está na
-  [skill de manutenção](../../skills/radiant-maintenance/SKILL.md) 0.1.2 e no
-  [template](../../templates/maintenance-report.md), e os mecanismos de
-  agendamento, no
-  [adapter Claude Code](../../adapters/claude-code/README.md#manutenção).
-  Evidência de uso: a manutenção do AIKM de 2026-10-13, executada sob demanda
-  pela tarefa do app com o AIKM em `6800f5a591793d82f573ae061008a670236c05d4`
-  e o Radiant fixado em `9581aa988cf5b6483bc0a3d276f5451275cffef2`, registrou a
-  sessão em `claude-sonnet-5-5`, sem desvio.
-- 2026-10-13: fecha as outras duas pendências com o TC-0024 do AIKM
+- 2026-10-09: the global block becomes a single neutral template,
+  `adapters/global.template.md`, that names each harness's adapter. Reason: in
+  the first real use, the global instructions of Claude Code and Codex were
+  the same file (dotfiles), and one block per adapter made one harness read
+  the other's adapter. The generator prints the block without `--adapter`,
+  which becomes required only with `--agents-dir`.
+- 2026-10-10: the pilot's Learn Back changed operational rules in the skills
+  and adapters, which prevail over this record
+  ([PR #5](https://github.com/faelplg/radiant/pull/5) and
+  [PR #6](https://github.com/faelplg/radiant/pull/6)). The Build return
+  follows section 16 of the template even when the contract does not
+  reproduce it. The readback checks each reported change and each reported
+  result against the working tree. The package carries the absolute Radiant
+  root. The provenance records one line per round with the usage metric
+  defined by the adapter, or its absence. So the "Cost provenance" section
+  above holds with these additions.
+- 2026-10-13: resolves the first open item of the pilot result. The pilot's
+  task was created by a scheduling tool, which sets no model, and ran on the
+  default model. A scheduled run now pins the `standard` model in the
+  scheduler and records the session's effective model in the report; below
+  `standard`, it ends in `HOLD`. The rule is in the
+  [maintenance skill](../../skills/radiant-maintenance/SKILL.md) 0.1.2 and the
+  [template](../../templates/maintenance-report.md), and the scheduling
+  mechanisms, in the
+  [Claude Code adapter](../../adapters/claude-code/README.md#maintenance).
+  Usage evidence: AIKM's maintenance on 2026-10-13, run on demand by the app's
+  task with AIKM at `6800f5a591793d82f573ae061008a670236c05d4` and Radiant
+  pinned at `9581aa988cf5b6483bc0a3d276f5451275cffef2`, recorded the session
+  on `claude-sonnet-5-5`, without deviation.
+- 2026-10-13: closes the other two open items with AIKM's TC-0024
   ([AIKM PR #29](https://github.com/faelplg/aikm/pull/29), merge
-  `c113e53215f8dfebf902c25ed7d6121509ca2003`; contrato fechado em
-  `0218852d94539ab6ac51cf23334bb4bdac453bd5`), conduzido pelo Codex com a
-  sessão principal em `deep` e o Radiant fixado em
+  `c113e53215f8dfebf902c25ed7d6121509ca2003`; contract closed at
+  `0218852d94539ab6ac51cf23334bb4bdac453bd5`), run by Codex with the main
+  session in `deep` and Radiant pinned at
   `9581aa988cf5b6483bc0a3d276f5451275cffef2`.
-  - Build pelo Codex: três rodadas de `radiant-dev` em `standard`, mais uma de
-    `radiant-verifier` em `deep`, cada uma com a métrica do adapter Codex.
-  - Fronteiras por contrato: as quatro rodadas registraram zero escritas fora
-    dos paths graváveis, conferidas por readback de diff, staged, não
-    rastreados e diretórios temporários. Essa evidência não justifica
-    enforcement no harness; o readback continua sendo o mecanismo, e o
-    enforcement volta a ser candidato se uma rodada registrar violação.
-  - O C3 do contrato exigia prova de descoberta nativa que o Antigravity não
-    exibe. O owner aprovou uma emenda de critério no próprio contrato, a
-    terceira intervenção fora dos gates depois das duas do piloto. O
-    [template de contrato](../../templates/task-contract.md) passa a pedir que
-    a evidência de cada critério seja confirmada como observável antes da
-    ativação.
-  - O adapter Codex passa a dizer que a sessão principal roda em `deep` e que
-    o modelo de uma rodada se confere nas turns posteriores a
-    `thread_settings_applied`. A
-    [skill de manutenção](../../skills/radiant-maintenance/SKILL.md) 0.1.3
-    passa a ler a revisão nova do Radiant nas refs locais, consultando o
-    remoto só com egress autorizado, e a pular diagnóstico improvisado,
-    achados da mesma manutenção.
+  - Build by Codex: three `radiant-dev` rounds in `standard`, plus one
+    `radiant-verifier` round in `deep`, each with the Codex adapter's metric.
+  - Per-contract boundaries: the four rounds recorded zero writes outside the
+    writable paths, checked by readback of the diff, staged and untracked
+    files and temporary directories. This evidence does not justify
+    enforcement in the harness; the readback remains the mechanism, and
+    enforcement becomes a candidate again if a round records a violation.
+  - The contract's C3 required proof of native discovery that Antigravity does
+    not show. The owner approved a criterion amendment in the contract itself,
+    the third intervention outside the gates after the pilot's two. The
+    [contract template](../../templates/task-contract.md) now asks that each
+    criterion's evidence be confirmed as observable before activation.
+  - The Codex adapter now says that the main session runs in `deep` and that a
+    round's model is checked in the turns after `thread_settings_applied`. The
+    [maintenance skill](../../skills/radiant-maintenance/SKILL.md) 0.1.3 now
+    reads the new Radiant revision from the local refs, querying the remote
+    only with authorized egress, and skips improvised diagnosis, findings from
+    the same maintenance.
 
-## Resultado do piloto
+## Pilot result
 
-Registrado em 2026-10-10, com o AIKM em
-`31266c690e5b5cf84d2e576a0c73ee93caaa286e` e o Radiant fixado em
+Recorded on 2026-10-10, with AIKM at
+`31266c690e5b5cf84d2e576a0c73ee93caaa286e` and Radiant pinned at
 `6ad7ad260ab4464023a7eea798530ad85d284faf`.
 
-| Etapa | Evidência | Situação |
+| Stage | Evidence | Status |
 | --- | --- | --- |
-| 0. Adoção | TC-0019, [AIKM PR #13](https://github.com/faelplg/aikm/pull/13) | Concluída |
-| 1. Sessão nova | Sessões Claude Code e Codex abertas pelo owner localizaram e validaram o core sem ajuda (relatório do TC-0019) | Concluída |
-| 2. Manutenção | Execução manual em 2026-10-09 e execução agendada localmente em 2026-10-10, com `radiant-maintenance` 0.1.1 ([PR #8](https://github.com/faelplg/radiant/pull/8)); relatórios com evidência e `git status` limpo | Concluída, com desvio: a sessão agendada rodou em `deep`, não em `standard` |
-| 3. Ciclo | TC-0020, [AIKM PR #14](https://github.com/faelplg/aikm/pull/14), com Build, verificação e pesquisa delegados; TC-0021 e TC-0022 repetiram o ciclo | Concluída |
-| 4. Learn Back | LR-0002 do AIKM, [AIKM PR #17](https://github.com/faelplg/aikm/pull/17), e [PR #5](https://github.com/faelplg/radiant/pull/5) | Concluída |
-| 5. Regressão Codex | VR-0006 do AIKM, [AIKM PR #18](https://github.com/faelplg/aikm/pull/18): gate e uma delegação somente leitura; métrica no [PR #6](https://github.com/faelplg/radiant/pull/6) | Concluída, sem Build pelo Codex |
+| 0. Adoption | TC-0019, [AIKM PR #13](https://github.com/faelplg/aikm/pull/13) | Completed |
+| 1. New session | Claude Code and Codex sessions opened by the owner located and validated the core without help (TC-0019 report) | Completed |
+| 2. Maintenance | Manual run on 2026-10-09 and a locally scheduled run on 2026-10-10, with `radiant-maintenance` 0.1.1 ([PR #8](https://github.com/faelplg/radiant/pull/8)); reports with evidence and a clean `git status` | Completed, with a deviation: the scheduled session ran in `deep`, not `standard` |
+| 3. Cycle | TC-0020, [AIKM PR #14](https://github.com/faelplg/aikm/pull/14), with Build, verification and research delegated; TC-0021 and TC-0022 repeated the cycle | Completed |
+| 4. Learn Back | AIKM's LR-0002, [AIKM PR #17](https://github.com/faelplg/aikm/pull/17), and [PR #5](https://github.com/faelplg/radiant/pull/5) | Completed |
+| 5. Codex regression | AIKM's VR-0006, [AIKM PR #18](https://github.com/faelplg/aikm/pull/18): gate and one read-only delegation; metric in [PR #6](https://github.com/faelplg/radiant/pull/6) | Completed, without a Build by Codex |
 
-Critérios de sucesso: atendidos parcialmente. As etapas foram concluídas, mas
-não sem intervenção fora dos gates previstos, e a sessão agendada da Manutenção
-rodou em capacidade diferente da pedida.
+Success criteria: partially met. The stages were completed, but not without
+intervention outside the planned gates, and the scheduled Maintenance session
+ran on a capability different from the one requested.
 
-- Intervenção fora dos gates: não atendido. Houve duas, ambas decisões do owner e
-  registradas no consumidor. Uma esclareceu o alcance de "error messages" no
-  TC-0020, depois do fechamento. A outra dispensou um critério inviável no
-  TC-0022 (emenda A3). As duas motivaram a regra de referente dos critérios no
-  template.
-- Aceite com capacidade inferior à do autor: nenhum. Builds `standard` foram
-  aceitos por verificador `deep` ou pelo orquestrador `deep` com o owner.
-- Linha de base de uso: registrada por rodada nos relatórios do consumidor. No
-  Claude Code, rodadas de Build `standard` ficaram entre 87 mil e 112 mil
-  tokens de contexto, e de verificação `deep`, entre 122 mil e 165 mil; a
-  pesquisa `light` ficou em cerca de 46 mil. No Codex, a rodada `light` teve
-  72 mil de contexto e 303 mil acumulados. As métricas dos dois harnesses não
-  são diretamente comparáveis, e nenhuma delas é custo cobrado.
+- Intervention outside the gates: not met. There were two, both owner
+  decisions recorded in the consumer. One clarified the reach of "error
+  messages" in TC-0020, after closing. The other waived an infeasible
+  criterion in TC-0022 (amendment A3). Both motivated the referent rule for
+  criteria in the template.
+- Acceptance with a capability lower than the author's: none. `standard`
+  Builds were accepted by a `deep` verifier or by the `deep` orchestrator with
+  the owner.
+- Usage baseline: recorded per round in the consumer's reports. In Claude
+  Code, `standard` Build rounds were between 87 thousand and 112 thousand
+  tokens of context, and `deep` verification rounds between 122 thousand and
+  165 thousand; the `light` research was about 46 thousand. In Codex, the
+  `light` round had 72 thousand of context and 303 thousand accumulated. The
+  two harnesses' metrics are not directly comparable, and neither is billed
+  cost.
 
-Na execução agendada, a comparação com o relatório anterior manteve os IDs dos
-candidatos pendentes, inclusive os vindos de adendos, e não marcou como
-resolvido um candidato cujo alvo não mudou. O modelo da sessão vem da tarefa
-agendada, não do adapter; a execução registrou o modelo efetivo e o desvio.
+In the scheduled run, the comparison with the previous report kept the IDs of
+the pending candidates, including those from addenda, and did not mark as
+resolved a candidate whose target did not change. The session's model comes
+from the scheduled task, not from the adapter; the run recorded the effective
+model and the deviation.
 
-Pendências registradas neste resultado: definir como uma execução agendada usa
-a capacidade `standard`; um Build delegado pelo Codex; e a evidência para
-enforcement de fronteiras por contrato, prevista na limitação registrada acima,
-que o piloto não produziu. As três foram fechadas em 2026-10-13, conforme as
-[Emendas](#emendas). O enforcement por contrato só volta a ser candidato se uma
-rodada registrar escrita fora dos paths graváveis.
+Open items recorded in this result: define how a scheduled run uses the
+`standard` capability; a Build delegated by Codex; and the evidence for
+per-contract boundary enforcement, foreseen in the limitation recorded above,
+which the pilot did not produce. All three were closed on 2026-10-13,
+according to the [Amendments](#amendments). Per-contract enforcement only
+becomes a candidate again if a round records a write outside the writable
+paths.
 
-## Fora de escopo
+## Out of scope
 
-- Execução automática de correções pela Manutenção.
-- Rotinas de Manutenção em nuvem.
-- Board externo (GitHub Projects, Notion); o estado continua nos artefatos do
-  consumidor e em `ACTIVE.md`.
-- Adapters para outros harnesses além de Claude Code e Codex.
-- Metas numéricas de custo.
-- Alterações na Constitution. Se o piloto mostrar um invariante novo, ele segue
-  o fluxo constitucional de proposta.
+- Automatic execution of fixes by Maintenance.
+- Maintenance routines in the cloud.
+- External board (GitHub Projects, Notion); the state stays in the consumer's
+  artifacts and in `ACTIVE.md`.
+- Adapters for harnesses other than Claude Code and Codex.
+- Numeric cost targets.
+- Changes to the Constitution. If the pilot shows a new invariant, it follows
+  the constitutional proposal flow.
 
-## Arquivos previstos
+## Planned files
 
-| Ação | Path |
+| Action | Path |
 | --- | --- |
-| Criar | `skills/radiant-delegation/SKILL.md` |
-| Criar | `skills/radiant-maintenance/SKILL.md` |
-| Criar | `templates/maintenance-report.md` |
-| Criar | `adapters/claude-code/README.md`, template global e template de subagente |
-| Criar | Template de subagente TOML em `adapters/codex/` |
-| Criar | `CLAUDE.md` na raiz do Radiant |
-| Alterar | `skills/radiant-cycle/SKILL.md` (ponteiros) |
-| Alterar | `adapters/codex/README.md` e gerador (`--adapter`, subagentes, capacidades) |
-| Alterar | `templates/task-contract.md` (campo `Capability`), `templates/radiant-project.json` (`maintenance`) |
-| Mover | `adapters/codex/project.AGENTS.template.md` para `templates/project-agents.md`, como mapa neutro de harness |
-| Alterar | `docs/capabilities.md`, `docs/integration.md`, `docs/verification.md`, `docs/learn-back.md`, `README.md`, `AGENTS.md` |
-| Alterar | `validators/check_project.py`, `validators/check_repository.py`, `tests/test_integration.py` |
+| Create | `skills/radiant-delegation/SKILL.md` |
+| Create | `skills/radiant-maintenance/SKILL.md` |
+| Create | `templates/maintenance-report.md` |
+| Create | `adapters/claude-code/README.md`, global template and subagent template |
+| Create | TOML subagent template in `adapters/codex/` |
+| Create | `CLAUDE.md` at the Radiant root |
+| Change | `skills/radiant-cycle/SKILL.md` (pointers) |
+| Change | `adapters/codex/README.md` and generator (`--adapter`, subagents, capabilities) |
+| Change | `templates/task-contract.md` (`Capability` field), `templates/radiant-project.json` (`maintenance`) |
+| Move | `adapters/codex/project.AGENTS.template.md` to `templates/project-agents.md`, as a neutral harness map |
+| Change | `docs/capabilities.md`, `docs/integration.md`, `docs/verification.md`, `docs/learn-back.md`, `README.md`, `AGENTS.md` |
+| Change | `validators/check_project.py`, `validators/check_repository.py`, `tests/test_integration.py` |

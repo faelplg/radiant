@@ -89,7 +89,7 @@ class RepositoryCheckTests(RepositoryFixture):
     def test_agent_with_unknown_role_or_capability_fails(self):
         path = self.root / "skills/radiant-delegation/agents.json"
         original = path.read_text(encoding="utf-8")
-        for field, value in (("role", "inexistente"), ("capability", "turbo"), ("access", "admin")):
+        for field, value in (("role", "missing"), ("capability", "turbo"), ("access", "admin")):
             with self.subTest(field=field):
                 data = json.loads(original)
                 data["agents"][0][field] = value
@@ -140,7 +140,7 @@ class GitRepositoryCheckTests(RepositoryFixture):
         shutil.copy2(self.root / "constitution/CONSTITUTION.md", copy)
         result = self.check()
         self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
-        self.assertIn("único corpo normativo", result.stderr)
+        self.assertIn("single normative body", result.stderr)
 
     def test_git_failure_is_reported_instead_of_scanning_disk(self):
         (self.root / ".git/index").write_bytes(b"not an index")

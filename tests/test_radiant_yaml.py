@@ -46,7 +46,7 @@ class RadiantYamlTests(unittest.TestCase):
 
     def test_comment_after_plain_scalar_is_refused(self):
         for text in ("a: corrige o bug #12\n", "- b # fim\n"):
-            with self.subTest(text=text), self.assertRaisesRegex(YamlError, r"^linha 1: .*aspas"):
+            with self.subTest(text=text), self.assertRaisesRegex(YamlError, r"^line 1: .*quotes"):
                 load(text)
 
     def test_apostrophe_inside_plain_scalar_is_literal(self):
@@ -63,7 +63,7 @@ class RadiantYamlTests(unittest.TestCase):
         for value in ("True", "TRUE", "Null", "1.5", ".5", "0x10", "0b11", "007", "+1", ".inf",
                       ".NaN", "1_000", "1:30", "2026-10-16", "yes", "no", "on", "Off", "3 testes"):
             for text in (f"k: {value}\n", f"k: [{value}]\n"):
-                with self.subTest(text=text), self.assertRaisesRegex(YamlError, "aspas"):
+                with self.subTest(text=text), self.assertRaisesRegex(YamlError, "quotes"):
                     load(text)
 
     def test_typed_keys_are_refused(self):
@@ -97,15 +97,15 @@ class RadiantYamlTests(unittest.TestCase):
                 self.assertEqual(typed(load(text)), typed(yaml.safe_load(text)))
 
     def test_plain_scalar_with_colon_is_refused(self):
-        with self.assertRaisesRegex(YamlError, r"^linha 1: .*aspas"):
+        with self.assertRaisesRegex(YamlError, r"^line 1: .*quotes"):
             load("done_when: passa: ok\n")
 
     def test_duplicate_key_is_refused(self):
-        with self.assertRaisesRegex(YamlError, r"^linha 2: .*repetida"):
+        with self.assertRaisesRegex(YamlError, r"^line 2: .*repeated"):
             load("a: 1\na: 2\n")
 
     def test_tab_indentation_is_refused(self):
-        with self.assertRaisesRegex(YamlError, r"^linha 2: .*tab"):
+        with self.assertRaisesRegex(YamlError, r"^line 2: .*tab"):
             load("a:\n\t- b\n")
 
     def test_unsupported_features_are_refused(self):

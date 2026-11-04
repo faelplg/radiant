@@ -1,191 +1,197 @@
 ---
 name: radiant-delegation
 description:
-  Coordenar papéis de um ciclo Radiant e delegar trabalho delimitado a
-  subagentes com a capacidade adequada. Usar ao orquestrar Ideação, Design,
-  Dev, Verificação ou Manutenção, ao montar um pacote de delegação ou ao
-  avaliar o retorno de um papel delegado.
+  Coordinate the roles of a Radiant cycle and delegate bounded work to
+  subagents with the right capability. Use when orchestrating Ideation,
+  Design, Dev, Verification or Maintenance, when assembling a delegation
+  package or when evaluating the return of a delegated role.
 metadata:
-  version: "0.2.1"
+  version: "0.2.2"
 ---
 
-# Delegação e papéis Radiant
+# Radiant delegation and roles
 
-Esta skill define como o orquestrador distribui o
-[ciclo](../radiant-cycle/SKILL.md) entre papéis. A
-[Constitution](../../constitution/CONSTITUTION.md) continua superior; contratos
-seguem o [template](../../templates/task-contract.md) e a
-[convenção](../../contracts/README.md). Os perfis delegáveis, legíveis por
-máquina, estão em [agents.json](agents.json). Modelos concretos pertencem aos
-adapters; esta skill fala apenas em capacidades. A decisão que originou esta
-skill está no [ADR-0001](../../docs/adrs/ADR-0001-delegation-roles.md).
+This skill defines how the orchestrator distributes the
+[cycle](../radiant-cycle/SKILL.md) across roles. The
+[Constitution](../../constitution/CONSTITUTION.md) remains higher; contracts
+follow the [template](../../templates/task-contract.md) and the
+[convention](../../contracts/README.md). The delegable profiles, machine
+readable, are in [agents.json](agents.json). Concrete models belong to the
+adapters; this skill only talks about capabilities. The decision that gave
+rise to this skill is in [ADR-0001](../../docs/adrs/ADR-0001-delegation-roles.md).
 
-## Capacidades
+## Capabilities
 
-| Capacidade | Uso |
+| Capability | Use |
 | --- | --- |
-| `deep` | Julgamento, crítica, decisões caras e aceite |
-| `standard` | Execução delimitada por artefato aprovado |
-| `light` | Busca, coleta, checks mecânicos e resumo |
+| `deep` | Judgment, critique, expensive decisions and acceptance |
+| `standard` | Execution bounded by an approved artifact |
+| `light` | Search, collection, mechanical checks and summaries |
 
-Cada adapter mapeia as três capacidades para IDs completos de modelo e declara
-como seu harness delega.
+Each adapter maps the three capabilities to full model IDs and declares how
+its harness delegates.
 
-## Papéis
+## Roles
 
-### Orquestrador
+### Orchestrator
 
-Sessão principal, em `deep`. Conversa com o humano, enquadra a solicitação
-pelo ciclo, escolhe o que delegar, monta pacotes, aplica gates e faz o aceite
-final. Mantém para si: mudança de escopo, ativação de contrato, ações
-irreversíveis e aceitação de conhecimento canônico.
+Main session, in `deep`. Talks with the human, frames the request through the
+cycle, chooses what to delegate, assembles packages, applies gates and makes
+the final acceptance. Keeps for itself: scope changes, contract activation,
+irreversible actions and acceptance of canonical knowledge.
 
-### Ideação
+### Ideation
 
-Etapas Frame e Challenge. O enquadramento é conduzido pelo orquestrador com o
-humano, porque exige conversa. Delegáveis: pesquisa em `light`
-(`radiant-research`), que devolve fontes inspecionadas e o que cada uma
-sustenta, e crítica adversarial em `deep` (`radiant-grill`), que ataca
-premissas, escopo e irreversibilidade de um Frame ou Spec existente e devolve
-objeções com evidência. Nenhum dos dois decide intenção ou escopo.
+Frame and Challenge stages. Framing is carried out by the orchestrator with
+the human, because it requires conversation. Delegable: research in `light`
+(`radiant-research`), which returns inspected sources and what each one
+supports, and adversarial critique in `deep` (`radiant-grill`), which attacks
+the assumptions, scope and irreversibility of an existing Frame or Spec and
+returns objections with evidence. Neither decides intent or scope.
 
 ### Design
 
-Etapas Spec e Design, nas duas trilhas da
-[Design Layer](../../docs/design-layer.md). System Design e ADRs em `deep`;
-Design Spec derivado de Frame e Design Frame aprovados em `standard`
-(`radiant-design`). Produz Spec, Design Frame, Design Spec e ADRs como
-propostas; a aprovação é humana, mediada pelo orquestrador.
+Spec and Design stages, in both tracks of the
+[Design Layer](../../docs/design-layer.md). System Design and ADRs in `deep`;
+a Design Spec derived from an approved Frame and Design Frame in `standard`
+(`radiant-design`). Produces Spec, Design Frame, Design Spec and ADRs as
+proposals; approval is human, mediated by the orchestrator.
 
 ### Dev
 
-Etapas Plan, Contract e Build. O orquestrador propõe Plan e contratos; o Build
-de um contrato ativo é delegado em `standard` (`radiant-dev`), e tarefas
-mecânicas podem usar `light`. O contrato é o pacote e seu `Completion report`
-é o retorno.
+Plan, Contract and Build stages. The orchestrator proposes the Plan and
+contracts; the Build of an active contract is delegated in `standard`
+(`radiant-dev`), and mechanical tasks may use `light`. The contract is the
+package and its `Completion report` is the return.
 
-### Verificador
+### Verifier
 
-Etapa Verify, em `deep` (`radiant-verifier`). Confronta outputs com contrato,
-Spec e critérios, executa os gates e inspeciona o resultado como consumidor.
-Checks determinísticos podem rodar em `light`. Não corrige o que verifica:
-devolve achados com evidência. Numa rodada depois de correções, o pacote
-aponta o retorno da rodada anterior, e o verificador confirma cada correção
-antes de procurar achados novos. Se o harness do verificador ficar
-indisponível, o humano escolhe outro, diferente do que fez o Build.
+Verify stage, in `deep` (`radiant-verifier`). Checks outputs against the
+contract, Spec and criteria, runs the gates and inspects the result as a
+consumer. Deterministic checks may run in `light`. It does not fix what it
+verifies: it returns findings with evidence. In a round after fixes, the
+package points to the previous round's return, and the verifier confirms each
+fix before looking for new findings. If the verifier's harness becomes
+unavailable, the human chooses another one, different from the one that did
+the Build.
 
-### Manutenção
+### Maintenance
 
-Fora do ciclo de entrega; alimenta Frame com propostas. Coleta em `light`,
-priorização e rascunhos em `standard` (`radiant-maintenance`). Só propõe. O
-procedimento está na [skill de manutenção](../radiant-maintenance/SKILL.md).
+Outside the delivery cycle; feeds the Frame with proposals. Collection in
+`light`, prioritization and drafts in `standard` (`radiant-maintenance`). It
+only proposes. The procedure is in the
+[maintenance skill](../radiant-maintenance/SKILL.md).
 
-## Regras
+## Rules
 
-1. Interação humana pertence ao orquestrador. Papéis delegados não conversam
-   com o humano.
-2. Aceite nunca usa capacidade inferior à do autor. Por tarefa, valem checks
-   determinísticos e o readback do orquestrador. O Verificador faz o aceite do
-   contrato uma vez, ao final, e é antecipado quando `Risk tier` ≥ 2 ou
-   `Independent critique: REQUIRED`.
-3. A capacidade padrão do papel só muda pelo campo `Capability` do Task
-   Contract, com justificativa de uma linha, registrada na evidência.
-4. Não são delegadas: mudança de escopo, ativação de contrato, ações
-   irreversíveis e aceitação de conhecimento canônico.
-5. Delegar é opcional. Sem suporte do harness, em tarefa pequena ou quando o
-   harness não permite a capacidade pedida, o orquestrador executa o papel na
-   própria sessão com as mesmas entradas e saídas.
-6. Em execução de Manutenção, que apenas propõe, o orquestrador pode operar em
+1. Human interaction belongs to the orchestrator. Delegated roles do not talk
+   with the human.
+2. Acceptance never uses a capability lower than the author's. Per task,
+   deterministic checks and the orchestrator's readback apply. The Verifier
+   accepts the contract once, at the end, and is brought forward when
+   `Risk tier` ≥ 2 or `Independent critique: REQUIRED`.
+3. A role's default capability only changes through the Task Contract's
+   `Capability` field, with a one-line justification recorded in the evidence.
+4. Not delegated: scope changes, contract activation, irreversible actions and
+   acceptance of canonical knowledge.
+5. Delegating is optional. Without harness support, in a small task or when
+   the harness does not allow the requested capability, the orchestrator runs
+   the role in its own session with the same inputs and outputs.
+6. In a Maintenance run, which only proposes, the orchestrator may operate in
    `standard`.
-7. Papéis delegados não delegam. Toda delegação parte do orquestrador.
+7. Delegated roles do not delegate. Every delegation starts from the
+   orchestrator.
 
-## Pacote de delegação
+## Delegation package
 
-Ponteiros, não cópias:
+Pointers, not copies:
 
-- papel e capacidade efetiva;
-- objetivo em uma ou duas frases;
-- entradas: paths de artefatos, revisão do Radiant e raiz absoluta do
-  checkout resolvida pelo bootstrap; paths relativos como `../radiant` não
-  resolvem dentro de worktrees do harness;
-- fronteira: paths graváveis, paths somente leitura e non-goals;
-- saída esperada e formato do retorno;
-- condições de `HOLD`.
+- role and effective capability;
+- goal in one or two sentences;
+- inputs: artifact paths, the Radiant revision and the absolute root of the
+  checkout resolved by the bootstrap; relative paths such as `../radiant` do
+  not resolve inside harness worktrees;
+- boundary: writable paths, read-only paths and non-goals;
+- expected output and return format;
+- `HOLD` conditions.
 
-Para Build, o Task Contract é o pacote; o pedido aponta para ele e acrescenta
-a revisão e a raiz absoluta do Radiant, que o contrato não carrega. Para
-pesquisa, crítica e coleta, o pacote vai no próprio pedido e não vira arquivo.
+For Build, the Task Contract is the package; the request points to it and adds
+the Radiant revision and absolute root, which the contract does not carry. For
+research, critique and collection, the package goes in the request itself and
+does not become a file.
 
-## Retorno
+## Return
 
-Para Build, o retorno segue o `Completion report` da seção 16 do
-[template](../../templates/task-contract.md), mesmo quando o contrato do
-consumidor não reproduz essa seção. Os demais papéis retornam:
+For Build, the return follows the `Completion report` in section 16 of the
+[template](../../templates/task-contract.md), even when the consumer's contract
+does not reproduce that section. The other roles return:
 
-- estado: `DONE`, `HOLD` ou `FAIL`;
-- outputs: paths criados ou alterados;
-- evidência: comandos e resultados efetivos, incluindo bloqueios;
-- cobertura: o que o pedido incluía e não foi inspecionado ou executado, com
-  o motivo;
-- desvios: ambiguidades e o que ficou fora da fronteira;
-- findings candidatos a Learn Back.
+- state: `DONE`, `HOLD` or `FAIL`;
+- outputs: paths created or changed;
+- evidence: commands and results actually obtained, including blockers;
+- coverage: what the request included and was not inspected or run, with the
+  reason;
+- deviations: ambiguities and what stayed outside the boundary;
+- findings that are candidates for Learn Back.
 
-O retorno é um resumo. O orquestrador não aceita `DONE` apenas pelo relato. No
-readback, ele:
+The return is a summary. The orchestrator does not accept `DONE` on the
+account alone. In the readback, it:
 
-- confere cada mudança relatada no diff e confirma que o estado completo do
-  working tree, incluindo arquivos não rastreados, não traz mudança não
-  relatada;
-- confirma cada resultado de verificação alegado pela saída do comando ou
-  reexecutando-o;
-- confere as referências de linha citadas contra a revisão indicada;
-- executa os checks e confronta o resultado com o contrato.
+- checks each reported change in the diff and confirms that the full state of
+  the working tree, including untracked files, has no unreported change;
+- confirms each claimed verification result from the command output or by
+  running it again;
+- checks the cited line references against the indicated revision;
+- runs the checks and compares the result with the contract.
 
-`HOLD` é resolvido dentro da autorização vigente ou levado ao humano. `FAIL`
-preserva a evidência e segue para [Learn Back](../../docs/learn-back.md).
+`HOLD` is resolved within the current authorization or taken to the human.
+`FAIL` preserves the evidence and goes to [Learn Back](../../docs/learn-back.md).
 
-## Acesso e fronteiras
+## Access and boundaries
 
-Cada perfil em [agents.json](agents.json) declara `access`: `read` para
-perfis que não alteram arquivos (pesquisa e crítica) e `write` para os demais.
-Os adapters traduzem `read` no mecanismo de menor privilégio do harness.
+Each profile in [agents.json](agents.json) declares `access`: `read` for
+profiles that do not change files (research and critique) and `write` for the
+others. The adapters translate `read` into the harness's least-privilege
+mechanism.
 
-As fronteiras específicas de um contrato (paths graváveis, rede, sistemas
-externos) não são impostas pelo harness nos perfis `write`: valem como
-instrução do pacote e são conferidas pelo orquestrador no readback, que
-compara o diff com os paths permitidos antes de aceitar. Quando o risco do
-contrato exigir enforcement real (`Risk tier` ≥ 2 com rede negada ou paths
-sensíveis), execute o Build em ambiente isolado oferecido pelo harness ou
-mantenha o papel na sessão do orquestrador sob as permissões dela.
+A contract's specific boundaries (writable paths, network, external systems)
+are not enforced by the harness on `write` profiles: they hold as package
+instructions and are checked by the orchestrator in the readback, which
+compares the diff with the allowed paths before accepting. When the
+contract's risk requires real enforcement (`Risk tier` ≥ 2 with network denied
+or sensitive paths), run the Build in an isolated environment offered by the
+harness or keep the role in the orchestrator's session under its permissions.
 
-## Paralelismo
+## Parallelism
 
-Somente entre tarefas independentes com paths de escrita disjuntos. Na dúvida,
-execução sequencial.
+Only between independent tasks with disjoint write paths. When in doubt, run
+sequentially.
 
-## Despacho por backend
+## Backend dispatch
 
-Um operador externo pode substituir o subagente nativo: cada unidade de
-execução do contrato roda numa sessão própria do harness escolhido, com
-worktree próprio, e o orquestrador continua sendo a sessão com o humano.
+An external operator may replace the native subagent: each execution unit of
+the contract runs in its own session of the chosen harness, with its own
+worktree, and the orchestrator remains the session with the human.
 
-- O pacote é o caminho do contrato e o ID da unidade, como ponteiro, mais a
-  revisão e a raiz absoluta do Radiant. A divisão e suas regras estão em
-  [unidades de execução](../../contracts/README.md#unidades-de-execução).
-- O orquestrador escolhe a [regra de roteamento](../../docs/routing.md); o
-  operador resolve harness e modelo. Requisitos vêm de
-  [requirements.json](requirements.json), e o que cada harness oferece, de
+- The package is the contract path and the unit ID, as a pointer, plus the
+  Radiant revision and absolute root. The split and its rules are in
+  [execution units](../../contracts/README.md#execution-units).
+- The orchestrator chooses the [routing rule](../../docs/routing.md); the
+  operator resolves harness and model. Requirements come from
+  [requirements.json](requirements.json), and what each harness offers, from
   `adapters/<harness>/provides.json`.
-- O retorno de Build continua sendo o `Completion report`, gravado em
-  `.radiant/reports/<id>.md` no worktree. O consumidor ignora esse path no Git.
-- O aceite, o readback e as regras 1 a 7 não mudam. O operador não aceita,
-  não faz merge nem push e não muda escopo.
+- The Build return is still the `Completion report`, written to
+  `.radiant/reports/<id>.md` in the worktree. The consumer ignores that path
+  in Git.
+- Acceptance, readback and rules 1 to 7 do not change. The operator does not
+  accept, does not merge or push and does not change scope.
 
-## Proveniência
+## Provenance
 
-O relatório de verificação do contrato, ou o relatório de manutenção numa
-execução de Manutenção, registra cada delegação, uma linha por rodada: papel,
-capacidade, ID completo do modelo resolvido pelo adapter, estado e a métrica de
-uso definida pelo adapter. No despacho por backend, a linha inclui também o
-harness e o identificador do despacho. Sem métrica definida, o relatório registra a
-ausência. IDs de modelo aparecem apenas nesses relatórios e nos adapters.
+The contract's verification report, or the maintenance report in a
+Maintenance run, records each delegation, one line per round: role,
+capability, full model ID resolved by the adapter, state and the usage metric
+defined by the adapter. In backend dispatch, the line also includes the
+harness and the dispatch identifier. Without a defined metric, the report
+records its absence. Model IDs appear only in these reports and in the
+adapters.

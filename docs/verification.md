@@ -1,10 +1,12 @@
-# Verificar alterações no Radiant
+# Verify changes to Radiant
 
-A [Constitution](../constitution/CONSTITUTION.md) define o significado de
-conclusão. A [skill](../skills/radiant-cycle/SKILL.md), modo verificar e aprender,
-define o procedimento. Aqui ficam os checks concretos deste repositório.
+The [Constitution](../constitution/CONSTITUTION.md) defines what completion
+means. The [skill](../skills/radiant-cycle/SKILL.md), in its verify and learn
+mode, defines the procedure. This page holds the concrete checks for this
+repository.
 
-Execute na raiz com Python 3.9+ e Git, sem dependências de runtime adicionais:
+Run at the root with Python 3.9+ and Git, without additional runtime
+dependencies:
 
 ```sh
 python3 validators/check_repository.py
@@ -13,48 +15,51 @@ git diff --check
 git diff --cached --check
 ```
 
-O primeiro comando verifica links Markdown locais e anchors, unicidade da
-Constitution, ausência de paths pessoais nos documentos e coerência entre `agents.json`, as seções da skill de
-delegação e o `capabilities.json` de cada adapter. Confere também o vocabulário
-de requisitos, o `provides.json` de cada adapter, o exemplo de unidades do
-template de contrato, lido como YAML restrito sem dependências, e o
-[exemplo de roteamento](routing.example.json). Os testes exercitam o
-gerador de bootstrap e subagentes, o gate de pin e o validator do repository
-através dos seus comandos reais em diretórios temporários, incluindo
-divergência, sujeira no checkout, paths inválidos e recusa de sobrescrita.
+The first command checks local Markdown links and anchors, uniqueness of the
+Constitution, absence of personal paths in the documents and coherence between
+`agents.json`, the sections of the delegation skill and each adapter's
+`capabilities.json`. It also checks the requirements vocabulary, each
+adapter's `provides.json`, the units example in the contract template, read as
+restricted YAML without dependencies, and the
+[routing example](routing.example.json). The tests exercise the bootstrap and
+subagent generator, the pin gate and the repository validator through their
+real commands in temporary directories, including divergence, a dirty
+checkout, invalid paths and refusal to overwrite.
 
-## Revisão estrutural separada do Build
+## Structural review separate from the Build
 
-Confronte os arquivos finais com estes critérios, depois dos checks:
+Check the final files against these criteria, after the checks:
 
-| Critério | Evidência a inspecionar |
+| Criterion | Evidence to inspect |
 | --- | --- |
-| Canonicality | Constitution única; índices e adapters apontam para owners |
-| Core/adapter | Nenhuma regra geral exclusiva do harness |
-| Global | Bloco pequeno, regenerável, sem corpos ou estado local de produto |
-| Portabilidade | Repetir bootstrap em outro path, inclusive com espaços |
-| Independência do projeto | Frame/Spec/Plan/Contracts no consumidor; pin conferido |
-| Independência AIKM | Checks operacionais não dependem de executar o produto |
-| Discoverability | Percursos abaixo alcançam fontes reais a partir da raiz |
-| Versionabilidade | Diff e referência Git permitem saber o estado aplicado |
-| Minimalismo | Cada arquivo tem função; nenhuma pasta vazia antecipatória |
-| Extensibilidade | Novas capabilities cabem na estrutura sem introduzi-las agora |
-| Agnosticismo de harness | Papéis e capacidades no Core; modelos e mecanismos só nos adapters; todo adapter mapeia as três capacidades |
+| Canonicality | A single Constitution; indexes and adapters point to owners |
+| Core/adapter | No general rule exclusive to a harness |
+| Global | Small, regenerable block, without bodies or local product state |
+| Portability | Repeat the bootstrap at another path, including one with spaces |
+| Project independence | Frame/Spec/Plan/Contracts in the consumer; pin checked |
+| AIKM independence | Operational checks do not depend on running the product |
+| Discoverability | The paths below reach real sources from the root |
+| Versionability | Diff and Git reference make it possible to know the applied state |
+| Minimalism | Each file has a function; no anticipatory empty folder |
+| Extensibility | New capabilities fit the structure without introducing them now |
+| Harness agnosticism | Roles and capabilities in the Core; models and mechanisms only in the adapters; every adapter maps the three capabilities |
 
-Simule A: entrar pelo AGENTS do Radiant, encontrar Constitution, tese, capability
-e verificação. Simule B: consumidor vazio, pin, bootstrap, Frame e estado local,
-contrato e leitura compartilhada. Simule C: AIKM independente com seus documentos,
-Learn Back e nenhum ownership sobre o Core. Simule D: sessão nova no Claude Code
-encontra o bloco global, o adapter, o gate de pin, a Constitution e a skill de
-delegação, e os subagentes gerados apontam para essa mesma revisão.
+Simulate A: enter through Radiant's AGENTS, find the Constitution, thesis,
+capability and verification. Simulate B: an empty consumer, pin, bootstrap,
+Frame and local state, contract and shared reading. Simulate C: an independent
+AIKM with its documents, Learn Back and no ownership over the Core. Simulate
+D: a new Claude Code session finds the global block, the adapter, the pin
+gate, the Constitution and the delegation skill, and the generated subagents
+point to that same revision.
 
-Use verificadores determinísticos como evidência independente da redação e
-inspecione os percursos do consumidor. Declare se houve outro revisor ou apenas
-readback próprio. Testes estruturais não demonstram que um modelo obedecerá ao
-adapter em uma nova sessão; simulação conceitual não é E2E real do harness.
+Use deterministic verifiers as evidence independent of the wording and inspect
+the consumer's paths. State whether there was another reviewer or only a
+self-readback. Structural tests do not show that a model will obey the adapter
+in a new session; a conceptual simulation is not a real E2E run of the
+harness.
 
-O validador não ignora links quebrados nem reescreve qualquer documento.
+The validator does not ignore broken links and does not rewrite any document.
 
-Registre resultados e limites no relatório autorizado. Se houver falha material,
-corrija dentro do escopo e repita a verificação afetada. Não declarar DONE por
-passagem de testes apenas.
+Record results and limits in the authorized report. If there is a material
+failure, fix it within scope and repeat the affected verification. Do not
+declare DONE just because tests pass.

@@ -1,59 +1,59 @@
 # Radiant Design Spec v0.1
 
-## Escopo
+## Scope
 
-- Projeto ou parte do sistema:
-- Contexto do design:
-- Por que este design exige maior detalhamento:
-- Relação com Frame, Spec e Plan:
+- Project or part of the system:
+- Design context:
+- Why this design needs more detail:
+- Relation to Frame, Spec and Plan:
 
-## Arquitetura da informação
+## Information architecture
 
-- Estrutura principal:
-- Navegação e organização:
-- Relações entre conteúdos, módulos e ações:
-- Hierarquia observável:
+- Main structure:
+- Navigation and organization:
+- Relations between content, modules and actions:
+- Observable hierarchy:
 
-## Fluxos e estados
+## Flows and states
 
-- Fluxos principais:
-- Estado inicial:
-- Estado de sucesso:
-- Estado de erro:
-- Estado vazio:
-- Estado de carregamento:
-- Permissões e limites relevantes:
+- Main flows:
+- Initial state:
+- Success state:
+- Error state:
+- Empty state:
+- Loading state:
+- Relevant permissions and limits:
 
-## Interação
+## Interaction
 
-- Padrões de interação principais:
-- Feedback observável:
-- Mensagens e confirmação:
-- Situações de risco ou ação destrutiva:
-- Ações críticas e restrições:
+- Main interaction patterns:
+- Observable feedback:
+- Messages and confirmation:
+- Risky or destructive situations:
+- Critical actions and constraints:
 
-## Responsividade e contexto
+## Responsiveness and context
 
-- Dispositivos ou contextos relevantes:
-- Regras de adaptação:
-- Ajustes por tamanho de tela ou capacidade:
+- Relevant devices or contexts:
+- Adaptation rules:
+- Adjustments by screen size or capability:
 
-## Acessibilidade
+## Accessibility
 
-- Requisitos de contraste, leitura e navegação:
-- Critérios de teclado, foco e semântica:
-- Limitações e evidências a verificar:
+- Contrast, reading and navigation requirements:
+- Keyboard, focus and semantics criteria:
+- Limitations and evidence to verify:
 
-## Linguagem e coerência
+## Language and coherence
 
-- Direção visual ou linguagem de produto:
-- Regras de consistência:
-- Padrões a reutilizar:
-- Onde a variedade é intencional e não aleatória:
+- Visual direction or product language:
+- Consistency rules:
+- Patterns to reuse:
+- Where variety is intentional and not random:
 
-## Verificação
+## Verification
 
-- Critérios de aceitação da experiência:
-- Evidência esperada:
-- Mecanismos de revisão e validação:
-- Riscos de implementação que merecem atenção:
+- Experience acceptance criteria:
+- Expected evidence:
+- Review and validation mechanisms:
+- Implementation risks that deserve attention:

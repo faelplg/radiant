@@ -1,98 +1,99 @@
 ---
 name: radiant-maintenance
 description:
-  Fazer a triagem de manutenção de um projeto consumidor do Radiant e
-  produzir um relatório com propostas priorizadas e rascunhos de contrato,
-  sem alterar o projeto. Usar em execução manual ou agendada localmente.
+  Run maintenance triage of a Radiant consumer project and produce a report
+  with prioritized proposals and contract drafts, without changing the
+  project. Use in a manual run or a locally scheduled one.
 metadata:
-  version: "0.1.3"
+  version: "0.1.4"
 ---
 
-# Manutenção Radiant
+# Radiant maintenance
 
-A Manutenção observa um consumidor e alimenta o
-[ciclo](../radiant-cycle/SKILL.md) com propostas. Ela só propõe: nada muda no
-projeto sem que o humano selecione um candidato e o orquestrador crie e ative
-um contrato. Papéis, capacidades e retorno seguem a
-[skill de delegação](../radiant-delegation/SKILL.md); o formato do relatório,
-o [template](../../templates/maintenance-report.md).
+Maintenance observes a consumer and feeds the
+[cycle](../radiant-cycle/SKILL.md) with proposals. It only proposes: nothing
+changes in the project until the human selects a candidate and the
+orchestrator creates and activates a contract. Roles, capabilities and return
+follow the [delegation skill](../radiant-delegation/SKILL.md); the report
+format follows the [template](../../templates/maintenance-report.md).
 
-## Entrada
+## Entry
 
-1. Leia `.radiant.json` e execute o gate do adapter. Sem campo
-   `maintenance`, ou com `maintenance: null`, termine em `HOLD`: o consumidor
-   não declarou onde relatórios podem ser gravados.
-2. Leia o documento de `workflow` e sua seção de Manutenção: comandos seguros
-   para manutenção e fontes externas autorizadas. Sem essa seção, nenhum
-   comando é executado e nenhuma fonte externa é consultada.
-3. Confirme que o path do relatório a gravar, dentro do diretório
-   `maintenance`, é ignorado pelo Git do consumidor (por exemplo,
-   `git check-ignore -q <maintenance>/<relatório>.md` com saída 0). Verifique
-   o arquivo, não o diretório: uma regra como `maintenance/` só casa com o
-   diretório depois que ele existe. Se não for ignorado, termine em `HOLD`:
-   gravar ali deixaria o projeto com mudanças rastreadas.
-4. Leia o relatório anterior mais recente no diretório `maintenance`, se
-   existir.
+1. Read `.radiant.json` and run the adapter's gate. Without a `maintenance`
+   field, or with `maintenance: null`, end in `HOLD`: the consumer has not
+   declared where reports may be written.
+2. Read the `workflow` document and its Maintenance section: commands safe for
+   maintenance and authorized external sources. Without that section, no
+   command runs and no external source is consulted.
+3. Confirm that the path of the report to be written, inside the
+   `maintenance` directory, is ignored by the consumer's Git (for example,
+   `git check-ignore -q <maintenance>/<report>.md` exiting 0). Check the file,
+   not the directory: a rule like `maintenance/` only matches the directory
+   once it exists. If it is not ignored, end in `HOLD`: writing there would
+   leave the project with tracked changes.
+4. Read the most recent previous report in the `maintenance` directory, if
+   there is one.
 
-## Fontes
+## Sources
 
-| Fonte | O que procurar |
+| Source | What to look for |
 | --- | --- |
-| Estado do ciclo | Contrato `held` sem decisão; Learning Record com `fixTarget` sem correção; `ACTIVE.md` incoerente com os contratos |
-| Gates do projeto | Falhas nos comandos declarados seguros |
-| Drift | Spec ou Plan afirmando o que o código não faz; links quebrados nos artefatos |
-| Dependências | Versões desatualizadas ou vulneráveis, somente via comandos e fontes autorizados |
-| Forge | Issues abertas e CI da branch principal, somente se autorizado |
-| Pin do Radiant | Revisão mais nova disponível, como candidato e nunca como atualização |
+| Cycle state | A `held` contract without a decision; a Learning Record with a `fixTarget` and no fix; `ACTIVE.md` inconsistent with the contracts |
+| Project gates | Failures in the commands declared safe |
+| Drift | Spec or Plan claiming what the code does not do; broken links in the artifacts |
+| Dependencies | Outdated or vulnerable versions, only through authorized commands and sources |
+| Forge | Open issues and CI of the main branch, only if authorized |
+| Radiant pin | A newer available revision, as a candidate and never as an update |
 
-Comando não declarado seguro é pulado. Fonte externa não autorizada é pulada.
-Isso inclui diagnóstico improvisado, como um gate com outros argumentos. A
-revisão mais nova do Radiant é lida sem rede, nas refs que o checkout do
-Radiant já tem (`git rev-parse origin/main`). Consultar o remoto, com
-`git ls-remote` ou `git fetch`, é egress e só roda quando a política do
-consumidor autoriza essa fonte; sem isso, o relatório registra que o remoto
-não foi consultado.
-Cada omissão entra no relatório com o motivo (Artigo XII da
+A command not declared safe is skipped. An unauthorized external source is
+skipped. That includes improvised diagnosis, such as a gate with other
+arguments. The newest Radiant revision is read without network, from the refs
+the Radiant checkout already has (`git rev-parse origin/main`). Querying the
+remote, with `git ls-remote` or `git fetch`, is egress and only runs when the
+consumer's policy authorizes that source; without it, the report records that
+the remote was not queried.
+Each omission goes into the report with its reason (Article XII of the
 [Constitution](../../constitution/CONSTITUTION.md)).
 
-## Priorização
+## Prioritization
 
-Cada candidato precisa de evidência concreta: saída de comando, path, linha.
-Opinião sem evidência não é candidato. Ordene por risco, valor e
-reversibilidade, e marque cada um como novo, recorrente ou resolvido em
-relação ao relatório anterior, incluindo seus adendos:
+Each candidate needs concrete evidence: command output, path, line. An opinion
+without evidence is not a candidate. Order by risk, value and reversibility,
+and mark each one as new, recurring or resolved relative to the previous
+report, including its addenda:
 
-- um candidato é o mesmo quando aponta a mesma lacuna no mesmo alvo (path,
-  módulo, documento ou fonte), mesmo que a redação ou a evidência mudem; ele
-  mantém o ID, e candidatos novos recebem o número seguinte ao maior ID
-  anterior;
-- `resolvido` exige evidência de que o estado do próprio alvo mudou, como
-  commit, PR ou saída de comando sobre esse alvo; mudança em outro lugar, como
-  no Radiant, não resolve uma lacuna do consumidor;
-- um candidato anterior que nenhuma fonte desta execução reobserva continua
-  `recorrente`, com a nota de que não foi reobservado.
+- a candidate is the same when it points to the same gap in the same target
+  (path, module, document or source), even if the wording or evidence changes;
+  it keeps its ID, and new candidates get the number after the highest
+  previous ID;
+- `resolved` requires evidence that the state of the target itself changed,
+  such as a commit, PR or command output about that target; a change
+  elsewhere, such as in Radiant, does not resolve a consumer's gap;
+- a previous candidate that no source in this run observes again stays
+  `recurring`, with a note that it was not observed again.
 
-Para até três candidatos do topo, escreva um rascunho de contrato embutido no
-relatório: objetivo, outputs e verificação.
-Rascunhos não viram arquivos de contrato nem recebem ID.
+For up to three candidates at the top, write a contract draft embedded in the
+report: goal, outputs and verification.
+Drafts do not become contract files and do not get an ID.
 
-## Fronteira
+## Boundary
 
-- A única escrita é o relatório, no diretório `maintenance`, criado na
-  primeira execução se não existir, depois da confirmação do passo 3 da
-  Entrada.
-- Sem branch, PR, issue, commit, instalação ou atualização de dependência.
-- Execução somente local. Coleta em `light`; priorização, rascunhos e a sessão
-  orquestradora em `standard`.
-- Uma execução agendada fixa no agendador o modelo de `standard`, conforme o
-  adapter. O relatório registra o modelo efetivo da sessão. Sessão acima de
-  `standard` é desvio registrado; abaixo, termina em `HOLD` antes da
-  priorização, porque o aceite não usa capacidade inferior à do autor.
+- The only write is the report, in the `maintenance` directory, created on
+  the first run if it does not exist, after the confirmation in step 3 of
+  Entry.
+- No branch, PR, issue, commit, installation or dependency update.
+- Local execution only. Collection in `light`; prioritization, drafts and the
+  orchestrating session in `standard`.
+- A scheduled run pins the `standard` model in the scheduler, according to the
+  adapter. The report records the session's effective model. A session above
+  `standard` is a recorded deviation; below it, the run ends in `HOLD` before
+  prioritization, because acceptance does not use a capability lower than the
+  author's.
 
-## Saída
+## Output
 
-Termine em `DONE` com o path do relatório, mesmo que a conclusão seja "nada
-material": é um resultado válido. Use `HOLD` quando a entrada estiver
-incompleta e `FAIL` quando a triagem não puder ser feita. A seleção de um
-candidato é humana; a partir dela, o orquestrador cria o contrato pela
-[convenção](../../contracts/README.md) e segue o ciclo.
+End in `DONE` with the report path, even if the conclusion is "nothing
+material": that is a valid result. Use `HOLD` when the entry is incomplete and
+`FAIL` when the triage cannot be done. Selecting a candidate is a human
+decision; from there, the orchestrator creates the contract through the
+[convention](../../contracts/README.md) and follows the cycle.

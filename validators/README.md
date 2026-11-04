@@ -1,26 +1,27 @@
 # Validators
 
-Requisitos: Python 3.9+ e Git. Sem pacotes externos.
+Requirements: Python 3.9+ and Git. No external packages.
 
-- `python3 validators/check_repository.py`: integridade dos documentos,
-  links/anchors locais, Constitution única, portabilidade do Core e
-  coerência entre perfis delegáveis e o mapa de capacidades de cada adapter,
-  requisitos e `provides.json` dos adapters, o exemplo de unidades do template
-  e o exemplo de roteamento. Read-only.
-- `radiant_yaml.py` lê o YAML restrito dos blocos `radiant-units`, e
-  `dispatch_formats.py` valida unidades, `provides` e regras de roteamento.
-- `python3 <radiant-root>/validators/check_project.py <project-root>`: valida
-  `.radiant.json`, pin, checkout limpo e paths locais. Read-only; divergências
-  produzem `HOLD` e saída 1. Sucesso estrutural não ativa contratos.
-- `python3 <radiant-root>/validators/check_dispatch.py units <contrato|->` e
+- `python3 validators/check_repository.py`: document integrity, local
+  links/anchors, a single Constitution, Core portability and coherence between
+  delegable profiles and each adapter's capability map, requirements and the
+  adapters' `provides.json`, the template's units example and the routing
+  example. Read-only.
+- `radiant_yaml.py` reads the restricted YAML of `radiant-units` blocks, and
+  `dispatch_formats.py` validates units, `provides` and routing rules.
+- `python3 <radiant-root>/validators/check_project.py <project-root>`: checks
+  `.radiant.json`, the pin, a clean checkout and local paths. Read-only;
+  divergences produce `HOLD` and exit 1. Structural success does not activate
+  contracts.
+- `python3 <radiant-root>/validators/check_dispatch.py units <contract|->` and
   `python3 <radiant-root>/validators/check_dispatch.py routing [<routing.json>]`:
-  validam o bloco `radiant-units` de um contrato, lido do path ou da entrada
-  padrão, e as regras de roteamento do usuário, no path de
-  [roteamento](../docs/routing.md#onde-ficam) quando omitido. Read-only.
-  Sucesso imprime o valor lido em JSON e sai com 0, para que um operador de
-  despacho use este leitor em vez de outro; conteúdo inválido imprime
-  `{"errors": [...]}` e sai com 1; erro de uso sai com 2.
+  validate a contract's `radiant-units` block, read from the path or from
+  standard input, and the user's routing rules, at the
+  [routing](../docs/routing.md#where-they-live) path when omitted. Read-only.
+  Success prints the parsed value as JSON and exits 0, so a dispatch operator
+  uses this reader instead of another one; invalid content prints
+  `{"errors": [...]}` and exits 1; a usage error exits 2.
 
-Os limites semânticos e a revisão dos percursos estão em
-[Verification](../docs/verification.md). Os checks não validam verdade factual,
-política de egress de AIKM, execução de produto nem obediência de um modelo.
+The semantic limits and the review of the paths are in
+[Verification](../docs/verification.md). The checks do not validate factual
+truth, AIKM egress policy, product execution or a model's obedience.

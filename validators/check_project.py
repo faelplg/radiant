@@ -26,7 +26,7 @@ def unique_object(pairs):
     result = {}
     for key, value in pairs:
         if key in result:
-            raise ValueError(f"campo repetido: {key}")
+            raise ValueError(f"repeated field: {key}")
         result[key] = value
     return result
 
@@ -35,39 +35,39 @@ def validate(root, project):
     required = ("constitution/CONSTITUTION.md", "docs/integration.md",
                 "skills/radiant-cycle/SKILL.md")
     if not all((root / path).is_file() for path in required):
-        raise ValueError("checkout Radiant incompleto")
+        raise ValueError("incomplete Radiant checkout")
     if Path(git(root, "rev-parse", "--show-toplevel")).resolve() != root:
-        raise ValueError("a raiz Radiant não é a raiz do repositório Git")
+        raise ValueError("the Radiant root is not the Git repository root")
     mapping = project / ".radiant.json"
     if not mapping.resolve().is_relative_to(project):
-        raise ValueError(".radiant.json escapa do projeto")
+        raise ValueError(".radiant.json escapes the project")
     config = json.loads(mapping.read_text(encoding="utf-8"), object_pairs_hook=unique_object)
     if not isinstance(config, dict) or not FIELDS <= set(config) <= FIELDS | set(OPTIONAL):
-        raise ValueError("campos do mapa diferem de templates/radiant-project.json")
+        raise ValueError("map fields differ from templates/radiant-project.json")
     revision = config["radiant_revision"]
     if not isinstance(revision, str) or not re.fullmatch(r"[0-9a-f]{40}|[0-9a-f]{64}", revision):
-        raise ValueError("radiant_revision deve ser um commit completo, não branch/HEAD/template")
+        raise ValueError("radiant_revision must be a full commit, not a branch, HEAD or template")
     if git(root, "rev-parse", "HEAD") != revision:
-        raise ValueError("revisão do checkout difere do pin; não atualizar o pin automaticamente")
+        raise ValueError("checkout revision differs from the pin; do not update the pin automatically")
     if git(root, "status", "--porcelain", "--untracked-files=all"):
-        raise ValueError("checkout Radiant contém mudanças locais; use a revisão limpa registrada")
+        raise ValueError("Radiant checkout has local changes; use the recorded clean revision")
     for field in (*FILES, *DIRECTORIES, *OPTIONAL):
         value = config.get(field)
         if value is None:
             continue
         if not isinstance(value, str) or not value.strip():
-            raise ValueError(f"{field}: path relativo ou null esperado")
+            raise ValueError(f"{field}: expected a relative path or null")
         path = Path(value)
         target = project / path
         if path.is_absolute() or ".." in path.parts or not target.resolve().is_relative_to(project):
-            raise ValueError(f"{field}: path escapa do projeto")
+            raise ValueError(f"{field}: path escapes the project")
         if field in OPTIONAL:
             if path == Path(".") or (target.exists() and not target.is_dir()):
-                raise ValueError(f"{field}: diretório próprio dentro do projeto esperado")
+                raise ValueError(f"{field}: expected its own directory inside the project")
             continue
         valid = target.is_file() if field in FILES else target.is_dir()
         if not valid:
-            raise ValueError(f"{field}: destino ausente ou tipo incorreto")
+            raise ValueError(f"{field}: target missing or of the wrong type")
     return revision
 
 
@@ -81,7 +81,7 @@ def main():
     except (OSError, ValueError, subprocess.CalledProcessError) as error:
         detail = error.stderr.strip() if isinstance(error, subprocess.CalledProcessError) else str(error)
         parser.exit(1, f"HOLD: {detail}\n")
-    print(f"PASS: Radiant {revision}; pin e paths conferidos. Autorização da tarefa é separada.")
+    print(f"PASS: Radiant {revision}; pin and paths checked. Task authorization is separate.")
 
 
 if __name__ == "__main__":

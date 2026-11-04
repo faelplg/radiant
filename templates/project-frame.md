@@ -1,20 +1,20 @@
-# Project Frame: <projeto>
+# Project Frame: <project>
 
-Revisão do Frame: <revisão local>
-Referência Radiant: <commit completo>
+Frame revision: <local revision>
+Radiant reference: <full commit>
 
-## Intenção e participante
+## Intent and participant
 
-<Problema, para quem e transformação desejada.>
+<Problem, for whom and desired transformation.>
 
-## Hipótese e Challenge
+## Hypothesis and Challenge
 
-<Hipótese central, premissas críticas, alternativa menor e o que a refutaria.>
+<Central hypothesis, critical assumptions, smaller alternative and what would refute it.>
 
-## Menor experimento
+## Smallest experiment
 
-<Comportamento observável e evidência mínima de sucesso.>
+<Observable behavior and minimum evidence of success.>
 
-## Fronteiras
+## Boundaries
 
-<Restrições, non-goals e questões realmente em aberto.>
+<Constraints, non-goals and questions that are truly open.>

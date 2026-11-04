@@ -3,13 +3,13 @@
   "rules": [
     {
       "id": "ui-browser",
-      "when": "Unidades de interface que precisam abrir e inspecionar páginas",
+      "when": "Interface units that need to open and inspect pages",
       "use": [{ "harness": "claude-code" }, { "harness": "codex" }],
-      "why": "Preferência do owner para inspeção visual"
+      "why": "Owner preference for visual inspection"
     },
     {
       "id": "independent-critique",
-      "when": "Crítica de um Build feito por modelo de outro fornecedor",
+      "when": "Critique of a Build made by another vendor's model",
       "use": [{ "harness": "codex", "capability": "deep" }],
       "approval": "human"
     }

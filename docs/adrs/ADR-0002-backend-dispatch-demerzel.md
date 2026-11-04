@@ -1,194 +1,199 @@
-# ADR-0002: despacho por backend e o operador Demerzel
+# ADR-0002: backend dispatch and the Demerzel operator
 
-- Data: 2026-10-16
-- Estado: `accepted` em 2026-10-16
+- Date: 2026-10-16
+- State: `accepted` on 2026-10-16
 - Owner: Fael
-- Revisão de origem do Radiant: `604c2a0b5103005e54b6a6089433f42d10d31320`
-- Implementação: PR #20, merge `78f133c82deabf96871ee92fa50632db99acf494`
-- Substituído em parte por: [ADR-0003](ADR-0003-demerzel-independent-core.md)
+- Originating Radiant revision: `604c2a0b5103005e54b6a6089433f42d10d31320`
+- Implementation: PR #20, merge `78f133c82deabf96871ee92fa50632db99acf494`
+- Partly superseded by: [ADR-0003](ADR-0003-demerzel-independent-core.md)
 
-Este ADR registra o desenho aprovado em conversa com o owner. As regras
-operacionais vivem no template de contrato, na
-[skill de delegação](../../skills/radiant-delegation/SKILL.md), nos adapters
-e, quando existir, no repositório do Demerzel; em caso de divergência, esses
-corpos prevalecem.
+This ADR records the design approved in conversation with the owner. The
+operational rules live in the contract template, in the
+[delegation skill](../../skills/radiant-delegation/SKILL.md), in the adapters
+and, when it exists, in the Demerzel repository; when they diverge, those
+bodies prevail.
 
-## Intenção
+## Intent
 
-Fazer o Radiant orquestrar os orquestradores de desenvolvimento sem se tornar
-o runtime. Hoje, montar uma subtarefa exige criar worktree e branch, abrir uma
-aba, escolher harness e modelo, iniciar o harness e colar contexto e contrato à
-mão. O mecanismo de subagente de cada harness evita parte disso, mas prende a
-subtarefa ao harness da sessão principal e não deixa a divisão registrada.
+Make Radiant orchestrate the development orchestrators without becoming the
+runtime. Today, setting up a subtask requires creating a worktree and branch,
+opening a tab, choosing harness and model, starting the harness and pasting
+context and contract by hand. Each harness's subagent mechanism avoids part of
+this, but ties the subtask to the main session's harness and leaves the split
+unrecorded.
 
-Resultados esperados:
+Expected outcomes:
 
-1. O Task Contract declara a divisão do trabalho em unidades, e cada unidade
-   já diz o necessário para configurar o subagente adequado.
-2. Um operador externo, o Demerzel, transforma cada unidade numa sessão do
-   harness escolhido, numa aba própria do herdr, e acompanha seu estado.
-3. Monitorar e gerenciar os fluxos fica possível por uma interface, num
-   incremento posterior.
+1. The Task Contract declares how the work is split into units, and each unit
+   already says what is needed to configure the right subagent.
+2. An external operator, Demerzel, turns each unit into a session of the
+   chosen harness, in its own herdr tab, and tracks its state.
+3. Monitoring and managing the flows becomes possible through an interface,
+   in a later increment.
 
-## Contexto e restrições
+## Context and constraints
 
-- A [Constitution](../../constitution/CONSTITUTION.md) exige core independente
-  de ferramenta (Artigo XIV), um corpo canônico (Artigo XI), autonomia
-  proporcional à reversibilidade (Artigo IV), agência humana (Artigo XIII),
-  default deny para egress (Artigo XII) e simplicidade (Artigo XVII). Nomes de
-  modelo e ferramenta não pertencem ao core (seção 7).
-- A tese declara que o Radiant não é framework de agentes
-  ([seção 30](../project-generation-system.md#30-o-que-radiant-não-é)), e o
-  README declara que não há engines.
-- Pela [skill de delegação](../../skills/radiant-delegation/SKILL.md) 0.1.1,
-  um contrato inteiro é o pacote de um único `radiant-dev`. Papéis delegados
-  não delegam (regra 7), e paralelismo exige paths de escrita disjuntos.
-- Só existem adapters para Claude Code e Codex. O `capabilities.json` de cada
-  um mapeia exatamente as três capacidades, e o `check_repository.py` rejeita
-  chaves extras.
-- Herdr 0.9.0, instalado na máquina do owner e conferido em 2026-10-16:
-  `worktree create` aceita `--branch`, `--base` e `--trust-repository`;
-  `agent start --kind` aceita `claude`, `codex`, `copilot`, `agy`, `opencode` e
-  outros, num pane já aberto; `agent prompt` envia o pedido; `agent wait`
-  reconhece `idle`, `working`, `blocked`, `done` e `unknown`;
-  `api snapshot` expõe o estado vivo da sessão.
-- Referências inspecionadas em 2026-10-16:
-  - firstmate em `5f2b81bca96abc6a7702a2187232ca1c0c767493`: um agent distro
-    que despacha tarefas em worktrees e abas de tmux ou herdr. Dele vêm as
-    regras de roteamento em linguagem natural escolhidas com julgamento
-    (`docs/configuration.md`, "Crew dispatch profiles"), a recusa de lançar
-    sem harness resolvido, a decisão registrada na intake e não relida, o
-    estado reconciliado do disco depois de restart, a proibição de rebaixar
-    modelo sem permissão explícita e o princípio "scripts own the mechanics,
-    agents own the judgment" (`VISION.md`).
-  - eve em `5666d2f0d8b78690d01a40ce93cac5e472799901`: dependências de
-    terceiros embrulhadas em superfícies próprias (`AGENTS.md`, princípio 5),
-    CLIs prontos para agentes, com saída de máquina e erros que dizem o que
-    fazer, e o gate de autoria de testes do `test-audit`.
-- O AIKM rejeitou geradores de terceiros no caminho central para manter os
-  formatos sob controle do owner ([Frame](https://github.com/faelplg/aikm/blob/main/docs/project/FRAME.md)).
+- The [Constitution](../../constitution/CONSTITUTION.md) requires a
+  tool-independent core (Article XIV), one canonical body (Article XI),
+  autonomy proportional to reversibility (Article IV), human agency
+  (Article XIII), default deny for egress (Article XII) and simplicity
+  (Article XVII). Model and tool names do not belong in the core (section 7).
+- The thesis declares that Radiant is not an agent framework
+  ([section 30](../project-generation-system.md#30-what-radiant-is-not)), and
+  the README declares that there are no engines.
+- According to the [delegation skill](../../skills/radiant-delegation/SKILL.md)
+  0.1.1, a whole contract is the package of a single `radiant-dev`. Delegated
+  roles do not delegate (rule 7), and parallelism requires disjoint write
+  paths.
+- Adapters exist only for Claude Code and Codex. Each one's
+  `capabilities.json` maps exactly the three capabilities, and
+  `check_repository.py` rejects extra keys.
+- Herdr 0.9.0, installed on the owner's machine and checked on 2026-10-16:
+  `worktree create` accepts `--branch`, `--base` and `--trust-repository`;
+  `agent start --kind` accepts `claude`, `codex`, `copilot`, `agy`, `opencode`
+  and others, in an already open pane; `agent prompt` sends the request;
+  `agent wait` recognizes `idle`, `working`, `blocked`, `done` and `unknown`;
+  `api snapshot` exposes the live state of the session.
+- References inspected on 2026-10-16:
+  - firstmate at `5f2b81bca96abc6a7702a2187232ca1c0c767493`: an agent distro
+    that dispatches tasks into worktrees and tmux or herdr tabs. From it come
+    natural-language routing rules chosen with judgment
+    (`docs/configuration.md`, "Crew dispatch profiles"), the refusal to launch
+    without a resolved harness, the decision recorded at intake and not
+    reread, state reconciled from disk after a restart, the ban on downgrading
+    a model without explicit permission and the principle "scripts own the
+    mechanics, agents own the judgment" (`VISION.md`).
+  - eve at `5666d2f0d8b78690d01a40ce93cac5e472799901`: third-party
+    dependencies wrapped in surfaces of its own (`AGENTS.md`, principle 5),
+    agent-ready CLIs with machine output and errors that say what to do, and
+    the test authorship gate of `test-audit`.
+- AIKM rejected third-party generators on the central path to keep formats
+  under the owner's control
+  ([Frame](https://github.com/faelplg/aikm/blob/main/docs/project/FRAME.md)).
 
-## Decisões
+## Decisions
 
-| Decisão | Escolha |
+| Decision | Choice |
 | --- | --- |
-| Identidade | O Radiant define como fluxos agênticos são divididos, roteados e aceitos; a execução continua nos harnesses |
-| Quem executa a mecânica | Produto separado, o Demerzel, consumidor do Radiant pelo mesmo pin de qualquer projeto |
-| Unidade de despacho | Unidade declarada dentro do Task Contract, menor que o contrato |
-| O que a unidade declara sobre onde rodar | Papel, capacidade e requisitos; nunca harness ou modelo |
-| Onde ficam as regras de roteamento | Nível do usuário, geradas pelo dotfiles; o Radiant define o formato |
-| Quem escolhe a regra | O orquestrador, com julgamento; o Demerzel valida e executa |
-| Primeiro backend | Herdr, atrás de uma interface própria do Demerzel |
-| Stack do Demerzel | Bun e TypeScript |
-| Formato das unidades | Bloco YAML cercado `radiant-units` no contrato |
-| Retorno da unidade | Arquivo em path fixo e ignorado pelo Git dentro do worktree |
-| Registro de despachos | Diretório de estado do usuário, por projeto |
-| Constitution | Sem alteração |
+| Identity | Radiant defines how agentic flows are split, routed and accepted; execution stays in the harnesses |
+| Who runs the mechanics | A separate product, Demerzel, a Radiant consumer through the same pin as any project |
+| Dispatch unit | A unit declared inside the Task Contract, smaller than the contract |
+| What the unit declares about where to run | Role, capability and requirements; never harness or model |
+| Where the routing rules live | User level, generated by dotfiles; Radiant defines the format |
+| Who chooses the rule | The orchestrator, with judgment; Demerzel validates and executes |
+| First backend | Herdr, behind an interface of Demerzel's own |
+| Demerzel stack | Bun and TypeScript |
+| Unit format | A fenced YAML block `radiant-units` in the contract |
+| Unit return | A file at a fixed path, ignored by Git, inside the worktree |
+| Dispatch log | The user's state directory, per project |
+| Constitution | No change |
 
-Alternativas descartadas:
+Discarded alternatives:
 
-- Radiant como runtime de agentes: contradiz o Artigo XIV e cria outro produto.
-- Camada de operação dentro do repositório Radiant: põe código no Core e em
-  todo consumidor, inclusive nos que não despacham.
-- Adotar o firstmate como camada de execução: põe um projeto de terceiro no
-  caminho central, com modelo de autoridade e vocabulário próprios que
-  competem com a Constitution.
-- Contrato inteiro como unidade de despacho: força contratos minúsculos ou
-  deixa a divisão sem registro.
-- Subtarefa como artefato separado do contrato: cria uma segunda fronteira
-  para manter coerente.
-- Harness e modelo nomeados no contrato: exige emenda constitucional e
-  envelhece o contrato quando um modelo sai de linha.
-- Regras de roteamento no Core ou no projeto: o Core passaria a conhecer
-  harnesses, e o projeto repetiria fatos da máquina do usuário.
-- Tabela Markdown para as unidades: leitura por máquina ambígua.
-- Retorno lido da saída do terminal: frágil diante de redesenho de tela e
-  truncamento.
+- Radiant as an agent runtime: contradicts Article XIV and creates another
+  product.
+- An operation layer inside the Radiant repository: puts code in the Core and
+  in every consumer, including those that do not dispatch.
+- Adopting firstmate as the execution layer: puts a third-party project on the
+  central path, with its own authority model and vocabulary that compete with
+  the Constitution.
+- The whole contract as the dispatch unit: forces tiny contracts or leaves the
+  split unrecorded.
+- A subtask as an artifact separate from the contract: creates a second
+  boundary to keep coherent.
+- Harness and model named in the contract: requires a constitutional amendment
+  and ages the contract when a model is discontinued.
+- Routing rules in the Core or in the project: the Core would come to know
+  harnesses, and the project would repeat facts about the user's machine.
+- A Markdown table for the units: ambiguous machine reading.
+- Return read from the terminal output: fragile against screen redraws and
+  truncation.
 
-## 1. Fronteiras
+## 1. Boundaries
 
-| Peça | Pergunta que responde | Contém | Não contém |
+| Piece | Question it answers | Contains | Does not contain |
 | --- | --- | --- | --- |
-| Radiant | Como o trabalho é dividido, roteado e aceito? | Template de contrato com divisão, vocabulário de requisitos, formato das regras de roteamento, skill de delegação | Código de despacho, nomes de harness no Core, estado de execução |
-| Projeto consumidor | O que fazer neste incremento? | Contratos com unidades, `ACTIVE.md`, evidência | Regras de roteamento, estado do Demerzel |
-| Usuário | Com quais harnesses e preferências eu trabalho? | Regras de roteamento, bootstrap do Radiant, configuração do Demerzel | Corpos do Radiant |
-| Demerzel | Como cada unidade vira uma sessão rodando, e em que estado ela está? | Leitura do contrato, roteamento, backend, registro de despachos, supervisão | Divisão do trabalho, aceite, merge, escopo |
-| Herdr | Onde a sessão roda? | Abas, panes, worktrees, estado do agente | Conhecimento de Radiant |
-| Harness | Quem executa a unidade? | Sessão com papel e unidade recebidos | Delegação adicional (regra 7) |
-| AIKM | Que skills, contexto e MCP o projeto tem? | Arquivos nativos por harness | Despacho ou estado de execução |
+| Radiant | How is the work split, routed and accepted? | Contract template with the split, requirements vocabulary, routing rules format, delegation skill | Dispatch code, harness names in the Core, execution state |
+| Consumer project | What to do in this increment? | Contracts with units, `ACTIVE.md`, evidence | Routing rules, Demerzel state |
+| User | Which harnesses and preferences do I work with? | Routing rules, Radiant bootstrap, Demerzel configuration | Radiant bodies |
+| Demerzel | How does each unit become a running session, and what state is it in? | Contract reading, routing, backend, dispatch log, supervision | Work split, acceptance, merge, scope |
+| Herdr | Where does the session run? | Tabs, panes, worktrees, agent state | Knowledge of Radiant |
+| Harness | Who executes the unit? | Session with the role and unit received | Further delegation (rule 7) |
+| AIKM | Which skills, context and MCP does the project have? | Native files per harness | Dispatch or execution state |
 
-1. O orquestrador continua sendo a sessão principal com o humano. O Demerzel é
-   uma ferramenta que ele chama no lugar da ferramenta nativa de subagente, e
-   que o humano também pode chamar.
-2. O Demerzel lê o contrato e nunca o altera. Grava apenas seu registro de
-   despachos. O retorno continua sendo o Completion report, e o aceite
-   continua com o orquestrador e o verificador.
-3. Merge, push, descarte de worktree e mudança de escopo permanecem com o
-   humano (Artigos IV e XIII).
-4. O Demerzel consome o Radiant por `radiant_revision` e `check_project.py`.
-   Pin divergente impede o despacho.
+1. The orchestrator remains the main session with the human. Demerzel is a
+   tool it calls instead of the native subagent tool, and which the human may
+   also call.
+2. Demerzel reads the contract and never changes it. It writes only its
+   dispatch log. The return is still the Completion report, and acceptance
+   stays with the orchestrator and the verifier.
+3. Merge, push, discarding a worktree and scope changes remain with the human
+   (Articles IV and XIII).
+4. Demerzel consumes Radiant through `radiant_revision` and
+   `check_project.py`. A divergent pin prevents dispatch.
 
-## 2. Mudanças no Radiant
+## 2. Changes in Radiant
 
-### Divisão de execução no contrato
+### Execution split in the contract
 
-O [template](../../templates/task-contract.md) ganha uma seção opcional depois
-de "Allowed scope". Sem ela, o contrato é uma unidade só, como hoje.
+The [template](../../templates/task-contract.md) gets an optional section
+after "Allowed scope". Without it, the contract is a single unit, as today.
 
 ```yaml radiant-units
 units:
   - id: TC-0025.1
     role: radiant-dev
     requires: []
-    objective: Buscar fontes externas por rev para o cache.
+    objective: Fetch external sources by rev for the cache.
     writes: [src/sources/, tests/sources/]
     depends_on: []
-    done_when: Os testes de tests/sources passam e o cache recusa digest divergente.
+    done_when: The tests in tests/sources pass and the cache refuses a mismatched digest.
   - id: TC-0025.2
     role: radiant-dev
     capability: deep
-    capability_reason: A recusa de digest exige julgamento de segurança.
+    capability_reason: Refusing a digest requires security judgment.
     requires: []
-    objective: Integrar a verificação de digest ao sync.
+    objective: Wire digest verification into sync.
     writes: [src/sync/]
     depends_on: [TC-0025.1]
-    done_when: bun run check passa e o sync recusa conteúdo sem digest correspondente.
+    done_when: bun run check passes and sync refuses content without a matching digest.
 ```
 
-Regras:
+Rules:
 
-- `id` é estável e nunca renumerado. `role` vem de
-  [agents.json](../../skills/radiant-delegation/agents.json). `capability`
-  ausente usa o padrão do papel; presente, exige `capability_reason`.
-- `writes` é subconjunto dos paths graváveis do contrato. Unidades sem
-  dependência entre si não se sobrepõem.
-- A soma das unidades não ultrapassa objetivo, outputs e fronteira do
-  contrato.
-- Mudar a divisão depois do início segue a
-  [integridade de contratos](../../contracts/README.md): amendment quando a
-  fronteira não muda, HOLD quando muda.
+- `id` is stable and never renumbered. `role` comes from
+  [agents.json](../../skills/radiant-delegation/agents.json). A missing
+  `capability` uses the role's default; when present, it requires
+  `capability_reason`.
+- `writes` is a subset of the contract's writable paths. Units with no
+  dependency between them do not overlap.
+- The sum of the units does not exceed the contract's goal, outputs and
+  boundary.
+- Changing the split after the start follows
+  [contract integrity](../../contracts/README.md): an amendment when the
+  boundary does not change, HOLD when it does.
 
-### Vocabulário de requisitos
+### Requirements vocabulary
 
-Arquivo legível por máquina em `skills/radiant-delegation/`, ao lado de
-`agents.json`. Começa com `browser`, `ios-simulator` e `computer-use` e cresce
-por Learn Back. Só entram propriedades estáticas do harness. Crítica por modelo
-de outro fornecedor depende de quem foi o autor, então fica no `when` de uma
-regra até existir evidência para um requisito próprio.
+A machine-readable file in `skills/radiant-delegation/`, next to
+`agents.json`. It starts with `browser`, `ios-simulator` and `computer-use`
+and grows through Learn Back. Only static properties of the harness go in.
+Critique by another vendor's model depends on who the author was, so it stays
+in a rule's `when` until there is evidence for a requirement of its own.
 
-### O que cada adapter oferece
+### What each adapter offers
 
-Cada adapter ganha `provides.json`, com os requisitos que seu harness atende
-quando lançado num terminal por um backend, não no app desktop. Cada item
-precisa de evidência de smoke registrada. O `capabilities.json` mantém o
-schema atual. Só se roteia para harnesses que têm
-adapter Radiant, porque sem adapter não há mapeamento de capacidade para
-modelo nem bootstrap do Radiant naquela sessão.
+Each adapter gets a `provides.json`, with the requirements its harness meets
+when launched in a terminal by a backend, not in the desktop app. Each item
+needs recorded smoke evidence. `capabilities.json` keeps the current schema.
+Routing only goes to harnesses that have a Radiant adapter, because without an
+adapter there is no capability-to-model mapping and no Radiant bootstrap in
+that session.
 
-### Formato das regras de roteamento
+### Routing rules format
 
-O Radiant define o formato e um exemplo. A instância fica em
-`$XDG_CONFIG_HOME/radiant/routing.json`, gerada pelo dotfiles.
+Radiant defines the format and an example. The instance lives in
+`$XDG_CONFIG_HOME/radiant/routing.json`, generated by dotfiles.
 
 ```json
 {
@@ -196,13 +201,13 @@ O Radiant define o formato e um exemplo. A instância fica em
   "rules": [
     {
       "id": "ui-browser",
-      "when": "Unidades de interface que precisam abrir e inspecionar páginas",
+      "when": "Interface units that need to open and inspect pages",
       "use": [{ "harness": "claude-code" }, { "harness": "codex" }],
-      "why": "Preferência do owner para inspeção visual"
+      "why": "Owner preference for visual inspection"
     },
     {
       "id": "independent-critique",
-      "when": "Crítica de um Build feito por modelo de outro fornecedor",
+      "when": "Critique of a Build made by another vendor's model",
       "use": [{ "harness": "codex", "capability": "deep" }],
       "approval": "human"
     }
@@ -211,168 +216,170 @@ O Radiant define o formato e um exemplo. A instância fica em
 }
 ```
 
-- `harness` é o nome do diretório do adapter.
-- `use` é uma lista em ordem de preferência. Cada candidato pode trazer
-  `capability`, nunca abaixo da pedida pela unidade, e `effort`. Um `effort`
-  que o harness não aceita é registrado e omitido do lançamento.
-- `approval: human` impede despacho sem confirmação explícita do humano.
+- `harness` is the name of the adapter's directory.
+- `use` is a list in order of preference. Each candidate may carry
+  `capability`, never below the one the unit asks for, and `effort`. An
+  `effort` the harness does not accept is recorded and left out of the launch.
+- `approval: human` prevents dispatch without explicit confirmation from the
+  human.
 
-### Skill de delegação
+### Delegation skill
 
-Ganha a seção "Despacho por backend", alternativa ao subagente nativo. O
-pacote é o caminho do contrato mais o ID da unidade, como ponteiro. A linha de
-proveniência registra também harness e identificador do despacho. As regras 1
-a 7 não mudam.
+Gets the "Backend dispatch" section, an alternative to the native subagent.
+The package is the contract path plus the unit ID, as a pointer. The
+provenance line also records the harness and the dispatch identifier. Rules 1
+to 7 do not change.
 
-### Registros
+### Records
 
-- `docs/integration.md` ganha "Fronteira Demerzel", no molde da
-  "Fronteira AIKM".
-- A seção 30 da tese ganha nota de estado, sem reescrever o registro 0.2.
-- As páginas vivas de mapa, glossário e casos de uso são atualizadas.
+- `docs/integration.md` gets "Demerzel boundary", modeled on "AIKM boundary".
+- Section 30 of the thesis gets a state note, without rewriting the 0.2
+  record.
+- The living map, glossary and use case pages are updated.
 
 ## 3. Demerzel
 
-Bun e TypeScript. A interface principal é um CLI não interativo, com saída
-`--json`, códigos `0` (ok), `1` (achados ou estado pendente) e `2` (recusa sem
-efeito), e erros que dizem o que fazer em seguida.
+Bun and TypeScript. The main interface is a non-interactive CLI, with
+`--json` output, codes `0` (ok), `1` (findings or pending state) and `2`
+(refusal without effect), and errors that say what to do next.
 
-| Componente | Responsabilidade |
+| Component | Responsibility |
 | --- | --- |
-| Leitor de contrato | Acha o projeto pelo `.radiant.json`, lê o contrato e extrai `radiant-units` |
-| Gate de pin | Executa o `check_project.py` do Radiant e recusa em divergência |
-| Roteador | Aplica a regra escolhida: descarta candidatos sem adapter ou sem os requisitos da unidade, pega o primeiro viável e resolve o modelo pelo `capabilities.json` |
-| Montador do pedido | Prompt curto com ponteiros: papel, raiz absoluta e revisão do Radiant, contrato, ID da unidade e path do retorno |
-| Backend | Interface com criar worktree, abrir aba, iniciar agente, enviar pedido, ler estado e encerrar; herdr é a primeira implementação e traduz o nome do adapter no `--kind` |
-| Registro de despachos | Estado em `$XDG_STATE_HOME/demerzel/`, por projeto: unidade, harness, modelo, esforço, IDs no herdr, worktree, branch, base, revisão do Radiant, estado e horários |
+| Contract reader | Finds the project through `.radiant.json`, reads the contract and extracts `radiant-units` |
+| Pin gate | Runs Radiant's `check_project.py` and refuses on divergence |
+| Router | Applies the chosen rule: discards candidates without an adapter or without the unit's requirements, takes the first viable one and resolves the model through `capabilities.json` |
+| Request builder | A short prompt with pointers: role, absolute root and revision of Radiant, contract, unit ID and return path |
+| Backend | Interface for creating a worktree, opening a tab, starting an agent, sending the request, reading state and closing; herdr is the first implementation and translates the adapter name into `--kind` |
+| Dispatch log | State in `$XDG_STATE_HOME/demerzel/`, per project: unit, harness, model, effort, herdr IDs, worktree, branch, base, Radiant revision, state and times |
 
-Fluxo de `demerzel dispatch TC-0025.1 --rule <id>`:
+Flow of `demerzel dispatch TC-0025.1 --rule <id>`:
 
-1. Resolve o projeto e passa pelo gate de pin.
-2. Lê a unidade, confere dependências concluídas e ausência de sobreposição
-   com unidades em andamento.
-3. Roteia e grava a decisão no registro antes de lançar. A decisão não é
-   relida depois. O prefixo `radiant/` é o padrão e pode mudar na
-   configuração do Demerzel; a base é a branch atual do orquestrador, salvo
-   `--base`.
-4. No herdr: cria o worktree com branch `radiant/TC-0025.1` sobre a base,
-   abre a aba, inicia o agente e envia o pedido.
-5. `demerzel status` combina registro e estado do herdr. `demerzel wait` volta
-   quando a unidade termina ou trava.
-6. `demerzel collect` lê o retorno em `.radiant/reports/TC-0025.1.md` no
-   worktree e o entrega ao orquestrador, que faz readback e aceite.
+1. Resolves the project and goes through the pin gate.
+2. Reads the unit, checks that dependencies are done and that there is no
+   overlap with units in progress.
+3. Routes and writes the decision to the log before launching. The decision is
+   not reread afterwards. The `radiant/` prefix is the default and can change
+   in Demerzel's configuration; the base is the orchestrator's current branch,
+   unless `--base` is given.
+4. In herdr: creates the worktree with branch `radiant/TC-0025.1` on the
+   base, opens the tab, starts the agent and sends the request.
+5. `demerzel status` combines the log and herdr's state. `demerzel wait`
+   returns when the unit finishes or gets stuck.
+6. `demerzel collect` reads the return at `.radiant/reports/TC-0025.1.md` in
+   the worktree and hands it to the orchestrator, which does readback and
+   acceptance.
 
-## 4. Erros, HOLD e segurança
+## 4. Errors, HOLD and safety
 
-Todas as verificações rodam antes do primeiro efeito. Recusas saem com `2`,
-sem criar nada. O Demerzel recusa quando:
+All checks run before the first effect. Refusals exit with `2`, without
+creating anything. Demerzel refuses when:
 
-- o pin diverge;
-- a unidade não existe ou o bloco `radiant-units` é inválido;
-- uma dependência não terminou;
-- os paths graváveis se sobrepõem a uma unidade em andamento;
-- nenhum candidato da regra é viável;
-- o harness não tem adapter Radiant;
-- o herdr não está rodando ou está abaixo da versão mínima;
-- o branch ou o path do worktree já existe;
-- `.radiant/reports/` não é ignorado pelo Git no consumidor;
-- a regra exige `approval: human` e a chamada não traz a confirmação.
+- the pin diverges;
+- the unit does not exist or the `radiant-units` block is invalid;
+- a dependency has not finished;
+- the writable paths overlap a unit in progress;
+- no candidate of the rule is viable;
+- the harness has no Radiant adapter;
+- herdr is not running or is below the minimum version;
+- the worktree's branch or path already exists;
+- `.radiant/reports/` is not ignored by Git in the consumer;
+- the rule requires `approval: human` and the call does not carry the
+  confirmation.
 
-Demais regras:
+Other rules:
 
-- Falha depois do primeiro efeito marca `launch-failed` e lista o que foi
-  criado. Worktree e branch nunca são apagados sem flag explícita de descarte
-  dada pelo humano.
-- Em `blocked`, o Demerzel reporta ao orquestrador, que leva ao humano. Nunca
-  responde prompts de permissão. Só envia o pedido inicial e seguimentos que o
-  orquestrador pedir, todos registrados.
-- Se só houver candidato com capacidade menor que a pedida, a unidade fica em
-  HOLD. Não há rebaixamento silencioso.
-- O Demerzel nunca faz merge, push, abertura de PR, remoção de branch ou
-  mudança de escopo, nem passa secrets no pedido. O pedido leva só paths, e o
-  conteúdo do contrato não sai da máquina (Artigo XII). Corrigido pela
-  seção 3 do [ADR-0003](ADR-0003-demerzel-independent-core.md): o harness
-  lançado envia o contrato ao seu provedor.
-- `--trust-repository` só é usado quando o usuário liga a opção na
-  configuração do Demerzel. Sem isso, um prompt de confiança aparece como
-  `blocked`.
-- Ao iniciar, o registro é reconciliado com `herdr api snapshot`. Aba sumida
-  vira `lost` e não é relançada sozinha.
-- Um lock por projeto serializa despachos.
+- A failure after the first effect marks `launch-failed` and lists what was
+  created. Worktree and branch are never deleted without an explicit discard
+  flag given by the human.
+- On `blocked`, Demerzel reports to the orchestrator, which takes it to the
+  human. It never answers permission prompts. It only sends the initial
+  request and follow-ups the orchestrator asks for, all recorded.
+- If only a candidate with a capability lower than requested is available, the
+  unit stays in HOLD. There is no silent downgrade.
+- Demerzel never merges, pushes, opens a PR, removes a branch or changes
+  scope, and does not pass secrets in the request. The request carries only
+  paths, and the contract's content does not leave the machine (Article XII).
+  Corrected by section 3 of [ADR-0003](ADR-0003-demerzel-independent-core.md):
+  the launched harness sends the contract to its provider.
+- `--trust-repository` is only used when the user turns the option on in
+  Demerzel's configuration. Without it, a trust prompt shows up as `blocked`.
+- On start, the log is reconciled with `herdr api snapshot`. A tab that
+  disappeared becomes `lost` and is not relaunched on its own.
+- One lock per project serializes dispatches.
 
-## 5. Verificação e primeiro incremento
+## 5. Verification and first increment
 
-### Ordem de entrega
+### Delivery order
 
-1. PR no Radiant com as mudanças da seção 2, extensões do
-   `check_repository.py` (cada `provides` usa o vocabulário; o exemplo de
-   regras e o bloco de exemplo do template passam no schema), testes pelos
-   comandos reais e este ADR. Merge, e o ADR passa a `accepted`.
-2. Repositório do Demerzel criado pelo owner, com `.radiant.json` no commit de
-   merge, `AGENTS.md` do template, Frame, Spec e Plan.
-3. Primeiro contrato do Demerzel: `dispatch`, `status`, `wait`, `collect` e
-   `close`, com registro, gate de pin, recusas da seção 4 e backend herdr para
-   Claude Code e Codex. A interface de observação é um incremento posterior.
+1. PR in Radiant with the changes in section 2, extensions to
+   `check_repository.py` (each `provides` uses the vocabulary; the rules
+   example and the template's example block pass the schema), tests through
+   the real commands and this ADR. Merge, and the ADR becomes `accepted`.
+2. Demerzel repository created by the owner, with `.radiant.json` at the merge
+   commit, `AGENTS.md` from the template, Frame, Spec and Plan.
+3. Demerzel's first contract: `dispatch`, `status`, `wait`, `collect` and
+   `close`, with the log, the pin gate, the refusals in section 4 and the
+   herdr backend for Claude Code and Codex. The observation interface is a
+   later increment.
 
-### Menor experimento
+### Smallest experiment
 
-Um contrato real com duas unidades independentes num consumidor real, uma
-roteada para Claude Code e outra para Codex, ambas em abas do herdr, com
-`collect` devolvendo os dois Completion reports e o orquestrador fazendo o
-aceite. Evidência: registro de despachos, snapshot do herdr, os relatórios e os
-diffs.
+A real contract with two independent units in a real consumer, one routed to
+Claude Code and the other to Codex, both in herdr tabs, with `collect`
+returning both Completion reports and the orchestrator doing the acceptance.
+Evidence: dispatch log, herdr snapshot, the reports and the diffs.
 
-A hipótese é refutada quando:
+The hypothesis is refuted when:
 
-- despachar custa mais tempo ou atenção do owner do que montar à mão;
-- a maioria dos contratos precisa de amendment na divisão;
-- o lançamento trava com frequência em prompts de confiança ou autenticação;
-- o orquestrador ainda precisa colar contexto no pedido.
+- dispatching costs the owner more time or attention than setting things up
+  by hand;
+- most contracts need an amendment to the split;
+- launching often gets stuck on trust or authentication prompts;
+- the orchestrator still has to paste context into the request.
 
-### Testes do Demerzel
+### Demerzel tests
 
-Cada teste nomeia o comportamento que protege e a regressão que o faria
-falhar, conforme o gate do `test-audit` do eve.
+Each test names the behavior it protects and the regression that would make
+it fail, following eve's `test-audit` gate.
 
-- Unidade: leitor de contrato, roteador, montador do pedido e transições do
-  registro.
-- Integração: fluxo completo com backend falso em memória, incluindo cada
-  recusa sem efeito.
-- Cenário local: backend herdr contra o herdr real numa sessão isolada.
-- Smoke com harness real: Claude Code e Codex, registrado na verificação do
-  contrato.
+- Unit: contract reader, router, request builder and log transitions.
+- Integration: full flow with an in-memory fake backend, including each
+  refusal without effect.
+- Local scenario: herdr backend against the real herdr in an isolated session.
+- Smoke with a real harness: Claude Code and Codex, recorded in the contract's
+  verification.
 
-## Fora de escopo
+## Out of scope
 
-- Interface de observação e gestão, que terá desenho próprio.
-- Adapters Radiant para outros harnesses.
-- Backends além do herdr.
-- Execução em nuvem ou em host remoto.
-- Escolha automática de regra sem o orquestrador.
-- Alterações na Constitution.
+- Observation and management interface, which will have its own design.
+- Radiant adapters for other harnesses.
+- Backends other than herdr.
+- Execution in the cloud or on a remote host.
+- Automatic rule choice without the orchestrator.
+- Changes to the Constitution.
 
-## Arquivos previstos no Radiant
+## Planned files in Radiant
 
-| Ação | Path |
+| Action | Path |
 | --- | --- |
-| Alterar | `templates/task-contract.md` (seção de divisão) |
-| Criar | `skills/radiant-delegation/requirements.json` |
-| Criar | `adapters/claude-code/provides.json`, `adapters/codex/provides.json` |
-| Criar | `docs/routing.md` e `docs/routing.example.json` |
-| Alterar | `skills/radiant-delegation/SKILL.md` (despacho por backend, proveniência) |
-| Alterar | `docs/integration.md`, `docs/project-generation-system.md` (nota na seção 30), `docs/capabilities.md`, `README.md` |
-| Alterar | `validators/check_repository.py`, `tests/test_repository.py` |
+| Change | `templates/task-contract.md` (split section) |
+| Create | `skills/radiant-delegation/requirements.json` |
+| Create | `adapters/claude-code/provides.json`, `adapters/codex/provides.json` |
+| Create | `docs/routing.md` and `docs/routing.example.json` |
+| Change | `skills/radiant-delegation/SKILL.md` (backend dispatch, provenance) |
+| Change | `docs/integration.md`, `docs/project-generation-system.md` (note in section 30), `docs/capabilities.md`, `README.md` |
+| Change | `validators/check_repository.py`, `tests/test_repository.py` |
 
-## Emendas
+## Amendments
 
-- 2026-10-16: a pedido do owner, o validator do Radiant lê o bloco
-  `radiant-units` com `validators/radiant_yaml.py`, um leitor de YAML restrito
-  só com biblioteca padrão. O subconjunto está em
-  [unidades de execução](../../contracts/README.md#unidades-de-execução); todo
-  bloco aceito é YAML válido com o mesmo valor. Arquivos acrescentados à tabela
-  acima: `validators/radiant_yaml.py`, `validators/dispatch_formats.py`,
+- 2026-10-16: at the owner's request, Radiant's validator reads the
+  `radiant-units` block with `validators/radiant_yaml.py`, a restricted YAML
+  reader using only the standard library. The subset is in
+  [execution units](../../contracts/README.md#execution-units); every accepted
+  block is valid YAML with the same value. Files added to the table above:
+  `validators/radiant_yaml.py`, `validators/dispatch_formats.py`,
   `validators/README.md`, `contracts/README.md`, `docs/verification.md`,
-  `tests/test_radiant_yaml.py` e `tests/test_dispatch_formats.py`.
-- 2026-10-17: o [ADR-0003](ADR-0003-demerzel-independent-core.md) substitui
-  a linha Demerzel da seção 1, confina a dependência do Radiant numa
-  integração dentro do Demerzel e corrige a frase de egress da seção 4.
+  `tests/test_radiant_yaml.py` and `tests/test_dispatch_formats.py`.
+- 2026-10-17: [ADR-0003](ADR-0003-demerzel-independent-core.md) supersedes
+  the Demerzel row of section 1, confines the dependency on Radiant to an
+  integration inside Demerzel and corrects the egress sentence in section 4.

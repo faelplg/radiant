@@ -25,7 +25,7 @@ class ProvidesTests(unittest.TestCase):
 
     def test_repeated_requirement_fails(self):
         errors = validate_provides({"provides": ["browser", "browser"]}, {"browser"})
-        self.assertTrue(any("repetido" in error for error in errors), errors)
+        self.assertTrue(any("repeated" in error for error in errors), errors)
 
     def test_wrong_shape_fails(self):
         errors = validate_provides({"outros": []}, {"browser"})
@@ -34,14 +34,14 @@ class ProvidesTests(unittest.TestCase):
 
 VALID = {"units": [
     {"id": "TC-0025.1", "role": "radiant-dev", "requires": [],
-     "objective": "Buscar fontes externas por rev para o cache.",
+     "objective": "Fetch external sources by rev for the cache.",
      "writes": ["src/sources/", "tests/sources/"], "depends_on": [],
-     "done_when": "Os testes de tests/sources passam e o cache recusa digest divergente."},
+     "done_when": "The tests in tests/sources pass and the cache refuses a mismatched digest."},
     {"id": "TC-0025.2", "role": "radiant-dev", "capability": "deep",
-     "capability_reason": "A recusa de digest exige julgamento de segurança.",
-     "requires": [], "objective": "Integrar a verificação de digest ao sync.",
+     "capability_reason": "Refusing a digest requires security judgment.",
+     "requires": [], "objective": "Wire digest verification into sync.",
      "writes": ["src/sync/"], "depends_on": ["TC-0025.1"],
-     "done_when": "bun run check passa e o sync recusa conteúdo sem digest correspondente."},
+     "done_when": "bun run check passes and sync refuses content without a matching digest."},
 ]}
 AGENTS = {"radiant-dev": "standard", "radiant-verifier": "deep"}
 
@@ -65,7 +65,7 @@ class UnitsTests(unittest.TestCase):
         self.assertEqual(self.errors(VALID), [])
 
     def test_overlap_between_independent_units_fails(self):
-        self.assertError(variant(depends_on=[], writes=["src/sources"]), "sobrep")
+        self.assertError(variant(depends_on=[], writes=["src/sources"]), "overlap")
 
     def test_overlap_check_uses_segments(self):
         data = copy.deepcopy(VALID)
@@ -76,7 +76,7 @@ class UnitsTests(unittest.TestCase):
     def test_dependency_cycle_fails(self):
         data = copy.deepcopy(VALID)
         data["units"][0]["depends_on"] = ["TC-0025.2"]
-        self.assertError(data, "ciclo")
+        self.assertError(data, "cycle")
 
     def test_capability_requires_reason(self):
         data = variant()
@@ -91,7 +91,7 @@ class UnitsTests(unittest.TestCase):
                 self.assertError(variant(**changes), fragment)
 
     def test_ids_must_share_prefix(self):
-        self.assertError(variant(id="TC-0026.2", depends_on=["TC-0025.1"]), "prefixo")
+        self.assertError(variant(id="TC-0026.2", depends_on=["TC-0025.1"]), "prefix")
 
     def test_escaping_write_path_fails(self):
         for path in ("../x", "/x"):
@@ -111,7 +111,7 @@ class UnitsTests(unittest.TestCase):
 
     def test_two_blocks_are_refused(self):
         block = "```yaml radiant-units\nunits: []\n```\n"
-        with self.assertRaisesRegex(ValueError, "mais de um bloco"):
+        with self.assertRaisesRegex(ValueError, "more than one radiant-units block"):
             extract_units_block(block + block)
 
     def test_block_body_is_extracted(self):
@@ -122,10 +122,10 @@ class UnitsTests(unittest.TestCase):
 ROUTING = {
     "schema": 1,
     "rules": [
-        {"id": "ui-browser", "when": "Unidades de interface que precisam abrir e inspecionar páginas",
+        {"id": "ui-browser", "when": "Interface units that need to open and inspect pages",
          "use": [{"harness": "claude-code"}, {"harness": "codex"}],
-         "why": "Preferência do owner para inspeção visual"},
-        {"id": "independent-critique", "when": "Crítica de um Build feito por modelo de outro fornecedor",
+         "why": "Owner preference for visual inspection"},
+        {"id": "independent-critique", "when": "Critique of a Build made by another vendor's model",
          "use": [{"harness": "codex", "capability": "deep"}], "approval": "human"},
     ],
     "default": [{"harness": "claude-code"}],
@@ -154,7 +154,7 @@ class RoutingTests(unittest.TestCase):
     def test_repeated_rule_id_fails(self):
         data = copy.deepcopy(ROUTING)
         data["rules"][1]["id"] = "ui-browser"
-        self.assertError(data, "repetido")
+        self.assertError(data, "repeated")
 
     def test_non_string_values_are_reported_not_raised(self):
         for path, value in ((("rules", 0, "use", 0, "harness"), ["codex"]),

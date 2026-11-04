@@ -1,82 +1,81 @@
-# Papéis, capacidades e delegação: plano de implementação
+# Roles, capabilities and delegation: implementation plan
 
-> **Para agentes executores:** use superpowers:subagent-driven-development
-> (recomendado) ou superpowers:executing-plans para executar este plano tarefa
-> por tarefa. Os passos usam checkbox (`- [ ]`) para acompanhamento.
+> **For executing agents:** use superpowers:subagent-driven-development
+> (recommended) or superpowers:executing-plans to run this plan task by task.
+> The steps use checkboxes (`- [ ]`) for tracking.
 
-**Objetivo:** implementar no Radiant o ADR-0001: papéis e capacidades
-agnósticos no core, skill de delegação, skill de manutenção, adapter Claude
-Code e adapter Codex delegando a partir do mesmo core.
+**Goal:** implement ADR-0001 in Radiant: agnostic roles and capabilities in
+the core, a delegation skill, a maintenance skill, a Claude Code adapter and a
+Codex adapter delegating from the same core.
 
-**Arquitetura:** o core ganha dois corpos procedurais
-(`skills/radiant-delegation/`, `skills/radiant-maintenance/`) e um registro
-legível por máquina dos perfis delegáveis (`agents.json`). Cada adapter
-declara `capabilities.json` (capacidade → ID completo de modelo) e templates;
-um gerador único renderiza bootstrap global e subagentes por adapter. Os
-validators garantem que core e adapters não divergem.
+**Architecture:** the core gets two procedural bodies
+(`skills/radiant-delegation/`, `skills/radiant-maintenance/`) and a
+machine-readable registry of the delegable profiles (`agents.json`). Each
+adapter declares `capabilities.json` (capability → full model ID) and
+templates; a single generator renders the global bootstrap and subagents per
+adapter. The validators ensure core and adapters do not diverge.
 
-**Stack:** Python 3.9+ somente com biblioteca padrão, Git, Markdown, JSON e
+**Stack:** Python 3.9+ with the standard library only, Git, Markdown, JSON and
 TOML.
 
 **Spec:** [ADR-0001](../adrs/ADR-0001-delegation-roles.md)
 
-**Fora deste plano:** piloto no AIKM (TC-0019 e TC-0020), instalação dos
-subagentes nos diretórios globais do usuário, push e PR. Cada um é uma decisão
-separada do owner.
+**Outside this plan:** the AIKM pilot (TC-0019 and TC-0020), installing the
+subagents in the user's global directories, push and PR. Each one is a
+separate owner decision.
 
-## Restrições globais
+## Global constraints
 
-- Python 3.9+, sem pacotes externos; testes com `unittest` e comandos reais em
-  diretórios temporários, como em `tests/test_integration.py`.
-- Textos novos em português, hífen simples, sem travessão e sem divisores
-  horizontais.
-- Capacidades exatamente `deep`, `standard`, `light`. Campo do contrato:
-  `Capability`. `Risk tier` não muda.
-- IDs completos de modelo, nunca aliases. Claude Code: `deep` →
-  `claude-opus-5-5`, `standard` → `claude-sonnet-5-5`, `light` →
-  `claude-haiku-5-5`. Codex: `deep` → `gpt-6-astra`, `standard` →
-  `gpt-6.1-sol`, `light` → `gpt-6-luna`.
-- Perfis delegáveis e capacidade padrão: `radiant-research` (`light`),
+- Python 3.9+, no external packages; tests with `unittest` and real commands
+  in temporary directories, as in `tests/test_integration.py`.
+- New text in Portuguese, plain hyphen, no em dash and no horizontal
+  dividers.
+- Capabilities exactly `deep`, `standard`, `light`. Contract field:
+  `Capability`. `Risk tier` does not change.
+- Full model IDs, never aliases. Claude Code: `deep` → `claude-opus-5-5`,
+  `standard` → `claude-sonnet-5-5`, `light` → `claude-haiku-5-5`. Codex:
+  `deep` → `gpt-6-astra`, `standard` → `gpt-6.1-sol`, `light` → `gpt-6-luna`.
+- Delegable profiles and default capability: `radiant-research` (`light`),
   `radiant-grill` (`deep`), `radiant-design` (`standard`), `radiant-dev`
   (`standard`), `radiant-verifier` (`deep`), `radiant-maintenance`
   (`standard`).
-- Arquivos gerados nunca sobrescrevem nem seguem symlinks; uma recusa não
-  escreve nenhum arquivo.
-- Não editar `docs/repository-report.md` nem corpos em `migration/aikm/`.
-- Commits em Conventional Commits, sem coautoria de agente.
-- Após cada tarefa: `python3 validators/check_repository.py`,
-  `python3 -m unittest discover -s tests -v` e `git diff --check` passam.
+- Generated files never overwrite or follow symlinks; a refusal writes no
+  file.
+- Do not edit `docs/repository-report.md` or the bodies in `migration/aikm/`.
+- Commits in Conventional Commits, without agent co-authorship.
+- After each task: `python3 validators/check_repository.py`,
+  `python3 -m unittest discover -s tests -v` and `git diff --check` pass.
 
-## Foco de revisão
+## Review focus
 
-1. Raiz do Radiant com espaço e `ç` dentro de TOML e frontmatter YAML: o
-   escape precisa produzir arquivos que o harness consegue ler. Teste na
-   Tarefa 3 (`tomllib` quando disponível).
-2. Um único subagente já existente no destino: nenhum dos seis pode ser
-   escrito. Teste na Tarefa 3.
-3. `maintenance` apontando para um arquivo ou para symlink que escapa do
-   projeto: `HOLD`, mesmo com a regra de aceitar diretório ausente. Teste na
-   Tarefa 1.
-4. Adapter novo sem `capabilities.json` completo: o validator precisa falhar
-   antes de alguém gerar agentes sem modelo. Teste na Tarefa 2.
-5. Consumidor antigo sem o campo `maintenance`: continua passando no gate.
-   Teste na Tarefa 1.
+1. A Radiant root with a space and `ç` inside TOML and YAML frontmatter: the
+   escaping must produce files the harness can read. Test in Task 3
+   (`tomllib` when available).
+2. A single subagent already present at the destination: none of the six may
+   be written. Test in Task 3.
+3. `maintenance` pointing to a file or to a symlink that escapes the project:
+   `HOLD`, even with the rule that accepts a missing directory. Test in
+   Task 1.
+4. A new adapter without a complete `capabilities.json`: the validator must
+   fail before anyone generates agents without a model. Test in Task 2.
+5. An older consumer without the `maintenance` field: still passes the gate.
+   Test in Task 1.
 
-## Tarefa 1: campo opcional `maintenance` no mapa do consumidor
+## Task 1: optional `maintenance` field in the consumer map
 
-**Arquivos:**
-- Alterar: `validators/check_project.py`
-- Alterar: `templates/radiant-project.json`
-- Alterar: `docs/integration.md` (seção "Mapa do projeto")
-- Teste: `tests/test_integration.py`
+**Files:**
+- Change: `validators/check_project.py`
+- Change: `templates/radiant-project.json`
+- Change: `docs/integration.md` ("Project map" section)
+- Test: `tests/test_integration.py`
 
 **Interfaces:**
-- Produz: `.radiant.json` aceita `maintenance` ausente, `null` ou path
-  relativo de diretório, que pode não existir.
+- Produces: `.radiant.json` accepts `maintenance` missing, `null` or a
+  relative directory path, which may not exist.
 
-- [ ] **Passo 1: escrever os testes que falham**
+- [ ] **Step 1: write the failing tests**
 
-Em `IntegrationTests`:
+In `IntegrationTests`:
 
 ```python
 def test_maintenance_is_optional_and_may_not_exist_yet(self):
@@ -103,68 +102,68 @@ def test_maintenance_rejects_escapes_and_files(self):
             self.assert_hold()
 ```
 
-- [ ] **Passo 2: rodar e ver falhar**
+- [ ] **Step 2: run and watch it fail**
 
 Run: `python3 -m unittest tests.test_integration -v`
-Expected: FAIL nos dois testes novos (campo desconhecido gera `HOLD`).
+Expected: FAIL in the two new tests (unknown field produces `HOLD`).
 
-- [ ] **Passo 3: implementar em `validators/check_project.py`**
+- [ ] **Step 3: implement in `validators/check_project.py`**
 
-`OPTIONAL = ("maintenance",)`. A checagem de campos passa a exigir
-`FIELDS <= set(config) <= FIELDS | set(OPTIONAL)`. Para `maintenance`
-presente e não nulo: mesma validação de string, absoluto, `..` e contenção
-das demais; rejeitar `.` (o projeto inteiro); se o destino existir, precisa
-ser diretório; se não existir, aceitar. Adicionar `"maintenance": null` ao
-final de `templates/radiant-project.json`.
+`OPTIONAL = ("maintenance",)`. The field check now requires
+`FIELDS <= set(config) <= FIELDS | set(OPTIONAL)`. For `maintenance` present
+and not null: the same string, absolute, `..` and containment validation as
+the others; reject `.` (the whole project); if the destination exists, it
+must be a directory; if it does not exist, accept it. Add
+`"maintenance": null` at the end of `templates/radiant-project.json`.
 
-- [ ] **Passo 4: documentar em `docs/integration.md`**
+- [ ] **Step 4: document in `docs/integration.md`**
 
-Na lista do schema, um item: `maintenance`: diretório relativo ignorado pelo
-Git ou `null`; opcional; pode não existir, sendo criado pela skill de
-manutenção. Citar `skills/radiant-maintenance/SKILL.md` em código; o link
-entra na Tarefa 5, quando o arquivo existir. Ajustar a
-frase "Todos os campos estão presentes" para excetuar `maintenance`.
+In the schema list, one item: `maintenance`: a relative directory ignored by
+Git or `null`; optional; may not exist, being created by the maintenance
+skill. Cite `skills/radiant-maintenance/SKILL.md` in code; the link comes in
+Task 5, when the file exists. Adjust the sentence "All fields are present" to
+except `maintenance`.
 
-- [ ] **Passo 5: rodar os checks globais e ver passar**
+- [ ] **Step 5: run the global checks and watch them pass**
 
-- [ ] **Passo 6: commit**
+- [ ] **Step 6: commit**
 
 ```bash
 git add validators/check_project.py templates/radiant-project.json docs/integration.md tests/test_integration.py
 git commit -m "feat(integration): accept optional maintenance directory in project map"
 ```
 
-## Tarefa 2: core de delegação e checagem de adapters
+## Task 2: delegation core and adapter check
 
-**Arquivos:**
-- Criar: `skills/radiant-delegation/SKILL.md`
-- Criar: `skills/radiant-delegation/agents.json`
-- Criar: `adapters/codex/capabilities.json`
-- Criar: `adapters/claude-code/capabilities.json`
-- Alterar: `validators/check_repository.py`
-- Teste: `tests/test_repository.py` (novo)
+**Files:**
+- Create: `skills/radiant-delegation/SKILL.md`
+- Create: `skills/radiant-delegation/agents.json`
+- Create: `adapters/codex/capabilities.json`
+- Create: `adapters/claude-code/capabilities.json`
+- Change: `validators/check_repository.py`
+- Test: `tests/test_repository.py` (new)
 
 **Interfaces:**
-- Produz `agents.json`:
+- Produces `agents.json`:
   `{"capabilities": ["deep", "standard", "light"], "agents": [{"name": str, "role": str, "capability": str, "description": str}]}`,
-  com os seis perfis das restrições globais. `role` é o anchor da seção do
-  papel no `SKILL.md`, no formato calculado por `anchors()` do validator
-  (`ideação`, `design`, `dev`, `verificador`, `manutenção`;
-  `radiant-research` e `radiant-grill` usam `ideação`).
-- Produz `adapters/<adapter>/capabilities.json`:
-  `{"deep": str, "standard": str, "light": str}` com os IDs das restrições
-  globais.
-- Produz `check_repository.check_delegation(errors: list) -> None`, chamada
-  por `check()`.
+  with the six profiles from the global constraints. `role` is the anchor of
+  the role's section in `SKILL.md`, in the format computed by the validator's
+  `anchors()` (`ideation`, `design`, `dev`, `verifier`, `maintenance`;
+  `radiant-research` and `radiant-grill` use `ideation`).
+- Produces `adapters/<adapter>/capabilities.json`:
+  `{"deep": str, "standard": str, "light": str}` with the IDs from the global
+  constraints.
+- Produces `check_repository.check_delegation(errors: list) -> None`, called
+  by `check()`.
 
-- [ ] **Passo 1: escrever os testes que falham**
+- [ ] **Step 1: write the failing tests**
 
-`tests/test_repository.py`, classe `RepositoryCheckTests`: `setUp` copia o
-repositório inteiro para um diretório temporário com
+`tests/test_repository.py`, class `RepositoryCheckTests`: `setUp` copies the
+whole repository to a temporary directory with
 `shutil.copytree(SOURCE, dest, ignore=shutil.ignore_patterns(".git", ".local", "__pycache__"))`
-e define `check(self)` rodando `validators/check_repository.py` da cópia com
-o helper `run` de `tests/test_integration.py` (copiar o helper; os testes não
-importam um ao outro).
+and defines `check(self)` running the copy's `validators/check_repository.py`
+with the `run` helper from `tests/test_integration.py` (copy the helper; the
+tests do not import each other).
 
 ```python
 def test_current_tree_passes(self):
@@ -183,7 +182,7 @@ def test_adapter_without_capabilities_file_fails(self):
     self.assertEqual(self.check().returncode, 1)
 
 def test_agent_with_unknown_role_or_capability_fails(self):
-    for field, value in (("role", "inexistente"), ("capability", "turbo")):
+    for field, value in (("role", "missing"), ("capability", "turbo")):
         with self.subTest(field=field):
             path = self.root / "skills/radiant-delegation/agents.json"
             original = path.read_text()
@@ -193,81 +192,83 @@ def test_agent_with_unknown_role_or_capability_fails(self):
             path.write_text(original)
 ```
 
-- [ ] **Passo 2: rodar e ver falhar**
+- [ ] **Step 2: run and watch it fail**
 
 Run: `python3 -m unittest tests.test_repository -v`
-Expected: FAIL (arquivos e checagem ainda não existem).
+Expected: FAIL (files and check do not exist yet).
 
-- [ ] **Passo 3: escrever `skills/radiant-delegation/SKILL.md`**
+- [ ] **Step 3: write `skills/radiant-delegation/SKILL.md`**
 
-Frontmatter: `name: radiant-delegation`, `description` (quando usar:
-orquestrar papéis, delegar trabalho delimitado, escolher capacidade),
-`metadata.version: "0.1.0"`. Seções, nesta ordem, com o conteúdo das seções 1
-e 2 do ADR, sem copiar o ADR inteiro e sem citar modelos: `## Capacidades`,
-`## Papéis` com `### Orquestrador`, `### Ideação`, `### Design`, `### Dev`,
-`### Verificador`, `### Manutenção`, `## Regras` (as sete regras),
-`## Pacote de delegação`, `## Retorno`, `## Paralelismo`, `## Proveniência`.
-A seção de cada papel diz o que lê, o que produz, a capacidade padrão, o que
-não pode decidir e como retorna. Linkar a Constitution, o template de Task
-Contract e `agents.json`. A seção `### Manutenção` aponta para
-`skills/radiant-maintenance/SKILL.md` em código (link entra na Tarefa 5).
+Frontmatter: `name: radiant-delegation`, `description` (when to use:
+orchestrate roles, delegate bounded work, choose a capability),
+`metadata.version: "0.1.0"`. Sections, in this order, with the content of
+sections 1 and 2 of the ADR, without copying the whole ADR and without citing
+models: `## Capabilities`, `## Roles` with `### Orchestrator`,
+`### Ideation`, `### Design`, `### Dev`, `### Verifier`, `### Maintenance`,
+`## Rules` (the seven rules), `## Delegation package`, `## Return`,
+`## Parallelism`, `## Provenance`. Each role's section says what it reads,
+what it produces, the default capability, what it cannot decide and how it
+returns. Link the Constitution, the Task Contract template and `agents.json`.
+The `### Maintenance` section points to `skills/radiant-maintenance/SKILL.md`
+in code (the link comes in Task 5).
 
-- [ ] **Passo 4: criar `agents.json` e os dois `capabilities.json`**
+- [ ] **Step 4: create `agents.json` and the two `capabilities.json`**
 
-Descrições curtas em português, uma frase cada, dizendo quando o orquestrador
-usa o perfil.
+Short descriptions, one sentence each, saying when the orchestrator uses the
+profile.
 
-- [ ] **Passo 5: implementar `check_delegation` em `validators/check_repository.py`**
+- [ ] **Step 5: implement `check_delegation` in `validators/check_repository.py`**
 
-Erros, cada um nomeando o arquivo: `capabilities` diferente de
-`["deep", "standard", "light"]`; nome de agente repetido ou sem prefixo
-`radiant-`; `capability` fora da lista; `role` ausente de
-`anchors(SKILL.md)`; diretório em `adapters/` sem `capabilities.json`, com
-chaves diferentes das capacidades ou com valor que não seja string não vazia.
+Errors, each naming the file: `capabilities` different from
+`["deep", "standard", "light"]`; a repeated agent name or one without the
+`radiant-` prefix; a `capability` outside the list; a `role` missing from
+`anchors(SKILL.md)`; a directory in `adapters/` without `capabilities.json`,
+with keys different from the capabilities or with a value that is not a
+non-empty string.
 
-- [ ] **Passo 6: rodar os checks globais e ver passar**
+- [ ] **Step 6: run the global checks and watch them pass**
 
-- [ ] **Passo 7: commit**
+- [ ] **Step 7: commit**
 
 ```bash
 git add skills/radiant-delegation adapters/codex/capabilities.json adapters/claude-code/capabilities.json validators/check_repository.py tests/test_repository.py
 git commit -m "feat(delegation): add roles, capabilities and adapter consistency check"
 ```
 
-## Tarefa 3: gerador único de bootstrap e subagentes
+## Task 3: single bootstrap and subagent generator
 
-**Arquivos:**
-- Mover: `adapters/codex/render_bootstrap.py` → `adapters/render_bootstrap.py`
-- Criar: `adapters/claude-code/global.CLAUDE.template.md`
-- Criar: `adapters/claude-code/agent.template.md`
-- Criar: `adapters/codex/agent.template.toml`
-- Alterar: `adapters/codex/README.md` (comandos)
-- Teste: `tests/test_integration.py`
+**Files:**
+- Move: `adapters/codex/render_bootstrap.py` → `adapters/render_bootstrap.py`
+- Create: `adapters/claude-code/global.CLAUDE.template.md`
+- Create: `adapters/claude-code/agent.template.md`
+- Create: `adapters/codex/agent.template.toml`
+- Change: `adapters/codex/README.md` (commands)
+- Test: `tests/test_integration.py`
 
 **Interfaces:**
-- Consome: `agents.json` e `capabilities.json` da Tarefa 2.
-- Produz CLI:
+- Consumes: `agents.json` and `capabilities.json` from Task 2.
+- Produces a CLI:
   `python3 adapters/render_bootstrap.py --adapter {codex,claude-code} [--output FILE | --agents-dir DIR]`.
-  `--adapter` é obrigatório. Sem `--output` nem `--agents-dir`, imprime o
-  bloco global. `--agents-dir` escreve `<name>.md` (Claude Code) ou
-  `<name>.toml` (Codex) para os seis perfis.
-- Produz funções: `render_global(root: Path, adapter: str) -> str`,
-  `render_agents(root: Path, adapter: str) -> dict[str, str]` (nome do
-  arquivo → conteúdo), `write_exclusive(files: dict[Path, str]) -> None`
-  (verifica todos os destinos antes de escrever qualquer um).
-- Placeholders dos templates, todos substituídos por `json.dumps(...,
+  `--adapter` is required. Without `--output` or `--agents-dir`, it prints the
+  global block. `--agents-dir` writes `<name>.md` (Claude Code) or
+  `<name>.toml` (Codex) for the six profiles.
+- Produces functions: `render_global(root: Path, adapter: str) -> str`,
+  `render_agents(root: Path, adapter: str) -> dict[str, str]` (file name →
+  content), `write_exclusive(files: dict[Path, str]) -> None` (checks every
+  destination before writing any of them).
+- Template placeholders, all replaced with `json.dumps(...,
   ensure_ascii=False)`: `{{RADIANT_ROOT_JSON}}`, `{{NAME_JSON}}`,
-  `{{DESCRIPTION_JSON}}`, `{{MODEL_JSON}}`, `{{INSTRUCTIONS_JSON}}`; e
-  `{{INSTRUCTIONS}}`, o mesmo texto sem escape, para o corpo Markdown. As
-  instruções do agente são montadas pelo gerador: papel, path absoluto de
-  `skills/radiant-delegation/SKILL.md`, anchor do papel, a ordem "leia a
-  seção do seu papel e o pacote recebido; não delegue; retorne no formato da
-  seção Retorno".
+  `{{DESCRIPTION_JSON}}`, `{{MODEL_JSON}}`, `{{INSTRUCTIONS_JSON}}`; and
+  `{{INSTRUCTIONS}}`, the same text without escaping, for the Markdown body.
+  The agent's instructions are assembled by the generator: role, absolute
+  path of `skills/radiant-delegation/SKILL.md`, the role's anchor, the order
+  "read your role's section and the package you received; do not delegate;
+  return in the format of the Return section".
 
-- [ ] **Passo 1: escrever os testes que falham**
+- [ ] **Step 1: write the failing tests**
 
-Trocar o helper `render` para `adapters/render_bootstrap.py` e adicionar
-`--adapter codex` no teste existente de saída global. Testes novos:
+Switch the `render` helper to `adapters/render_bootstrap.py` and add
+`--adapter codex` to the existing global output test. New tests:
 
 ```python
 def test_adapter_is_required(self):
@@ -302,7 +303,7 @@ def test_agents_render_one_file_per_profile(self):
                     self.assertTrue(text.startswith("---\n"))
                     self.assertIn("disallowedTools: Agent", text)
 
-@unittest.skipUnless(tomllib, "tomllib requer Python 3.11+")
+@unittest.skipUnless(tomllib, "tomllib requires Python 3.11+")
 def test_codex_agents_are_valid_toml(self):
     target = self.project / "agents"
     self.render("--adapter", "codex", "--agents-dir", str(target))
@@ -323,171 +324,176 @@ def test_agents_refuse_any_existing_or_symlinked_target(self):
     self.assertFalse((self.project / "elsewhere.md").exists())
 ```
 
-No topo do arquivo: `try: import tomllib` / `except ImportError: tomllib = None`.
+At the top of the file: `try: import tomllib` / `except ImportError: tomllib = None`.
 
-- [ ] **Passo 2: rodar e ver falhar**
+- [ ] **Step 2: run and watch it fail**
 
 Run: `python3 -m unittest tests.test_integration -v`
-Expected: FAIL (script ainda no path antigo e sem `--adapter`).
+Expected: FAIL (script still at the old path and without `--adapter`).
 
-- [ ] **Passo 3: mover e generalizar o gerador**
+- [ ] **Step 3: move and generalize the generator**
 
 `git mv adapters/codex/render_bootstrap.py adapters/render_bootstrap.py`;
-`root = Path(__file__).resolve().parents[1]`. Tabela interna por adapter:
-template global, template de agente e extensão. `--output` e `--agents-dir`
-mutuamente exclusivos. Recusa com mensagem em português e saída 1, no mesmo
-estilo da atual.
+`root = Path(__file__).resolve().parents[1]`. An internal table per adapter:
+global template, agent template and extension. `--output` and `--agents-dir`
+mutually exclusive. Refusal with a message in Portuguese and exit 1, in the
+same style as the current one.
 
-- [ ] **Passo 4: criar os templates**
+- [ ] **Step 4: create the templates**
 
-`global.CLAUDE.template.md`: mesmo formato do bloco Codex, apontando para
-`adapters/claude-code/README.md` e `docs/capabilities.md`.
+`global.CLAUDE.template.md`: same format as the Codex block, pointing to
+`adapters/claude-code/README.md` and `docs/capabilities.md`.
 `agent.template.md`: frontmatter `name`, `description`, `model`,
-`disallowedTools: Agent`, corpo `{{INSTRUCTIONS}}`.
-`agent.template.toml`: as quatro chaves, valores via placeholders `_JSON`.
+`disallowedTools: Agent`, body `{{INSTRUCTIONS}}`.
+`agent.template.toml`: the four keys, values through the `_JSON`
+placeholders.
 
-- [ ] **Passo 5: atualizar comandos em `adapters/codex/README.md`**
+- [ ] **Step 5: update commands in `adapters/codex/README.md`**
 
-`python3 adapters/render_bootstrap.py --adapter codex` e a variante com
+`python3 adapters/render_bootstrap.py --adapter codex` and the variant with
 `--output .local/codex-global.md`.
 
-- [ ] **Passo 6: rodar os checks globais e ver passar**
+- [ ] **Step 6: run the global checks and watch them pass**
 
-- [ ] **Passo 7: commit**
+- [ ] **Step 7: commit**
 
 ```bash
 git add adapters tests/test_integration.py
 git commit -m "feat(adapters): render bootstrap and subagents for codex and claude code"
 ```
 
-## Tarefa 4: documentação dos adapters e mapa neutro do consumidor
+## Task 4: adapter documentation and neutral consumer map
 
-**Arquivos:**
-- Criar: `adapters/claude-code/README.md`
-- Alterar: `adapters/codex/README.md`
-- Mover: `adapters/codex/project.AGENTS.template.md` → `templates/project-agents.md`
-- Criar: `CLAUDE.md` (raiz)
-- Alterar: `templates/README.md`, `migration/README.md` (link do template, linha 28), `AGENTS.md`, `README.md`, `docs/capabilities.md`, `docs/integration.md`
+**Files:**
+- Create: `adapters/claude-code/README.md`
+- Change: `adapters/codex/README.md`
+- Move: `adapters/codex/project.AGENTS.template.md` → `templates/project-agents.md`
+- Create: `CLAUDE.md` (root)
+- Change: `templates/README.md`, `migration/README.md` (template link, line 28), `AGENTS.md`, `README.md`, `docs/capabilities.md`, `docs/integration.md`
 
 **Interfaces:**
-- Consome: CLI da Tarefa 3, `capabilities.json` da Tarefa 2.
-- Produz: `templates/project-agents.md` neutro de harness; `CLAUDE.md` com
-  exatamente uma linha `@AGENTS.md`.
+- Consumes: the CLI from Task 3, `capabilities.json` from Task 2.
+- Produces: a harness-neutral `templates/project-agents.md`; `CLAUDE.md` with
+  exactly one line, `@AGENTS.md`.
 
-- [ ] **Passo 1: escrever `adapters/claude-code/README.md`**
+- [ ] **Step 1: write `adapters/claude-code/README.md`**
 
-Mesma estrutura do README Codex (Entrada do agente, Configurar o usuário,
-Configurar o consumidor) mais: Capacidades (link para `capabilities.json`, sem
-repetir IDs), Subagentes (gerar com `--agents-dir` para o diretório de
-agentes do usuário; regenerar após mudar IDs; override pelo parâmetro `model`
-da invocação; `disallowedTools: Agent`), Manutenção local (tarefa agendada na
-máquina; nuvem fora de escopo), Procedimentos externos opcionais (tabela papel
-→ skill sugerida, com a regra de saída nos paths do `.radiant.json`),
-desfazer (remover bloco e os seis arquivos `radiant-*`).
+Same structure as the Codex README (Agent entry, Set up the user, Set up the
+consumer) plus: Capabilities (link to `capabilities.json`, without repeating
+IDs), Subagents (generate with `--agents-dir` into the user's agents
+directory; regenerate after changing IDs; override through the invocation's
+`model` parameter; `disallowedTools: Agent`), Local maintenance (a scheduled
+task on the machine; cloud out of scope), Optional external procedures (a
+role → suggested skill table, with the rule that output goes to the paths in
+`.radiant.json`), undo (remove the block and the six `radiant-*` files).
 
-- [ ] **Passo 2: atualizar `adapters/codex/README.md`**
+- [ ] **Step 2: update `adapters/codex/README.md`**
 
-Seções Capacidades e Subagentes análogas; registrar que o `model` do arquivo
-prevalece, logo override roda na sessão do orquestrador; regra 7 nas
-instruções do agente. Trocar o link do template de consumidor para
+Analogous Capabilities and Subagents sections; record that the file's `model`
+wins, so an override runs in the orchestrator's session; rule 7 in the
+agent's instructions. Change the consumer template link to
 `../../templates/project-agents.md`.
 
-- [ ] **Passo 3: mover e neutralizar o template de consumidor**
+- [ ] **Step 3: move and neutralize the consumer template**
 
 `git mv adapters/codex/project.AGENTS.template.md templates/project-agents.md`.
-Trocar "leia `adapters/codex/README.md`" por "leia o README do adapter do
-harness em uso em `adapters/<harness>/`". Acrescentar: consumidores em Claude
-Code criam `CLAUDE.md` com a linha `@AGENTS.md`.
+Replace "read `adapters/codex/README.md`" with "read the README of the
+adapter for the harness in use in `adapters/<harness>/`". Add: consumers on
+Claude Code create `CLAUDE.md` with the line `@AGENTS.md`.
 
-- [ ] **Passo 4: `CLAUDE.md`, índices e mapas**
+- [ ] **Step 4: `CLAUDE.md`, indexes and maps**
 
-`CLAUDE.md` na raiz com `@AGENTS.md`. `AGENTS.md`: citar os dois adapters e a
-skill de delegação. `README.md`: linhas para `skills/radiant-delegation`,
-`adapters/claude-code/` e `docs/adrs/`. `docs/capabilities.md`: linhas
-"Orquestrar papéis e delegar" e "Configurar harness". `docs/integration.md`:
-"adapter Codex" vira "adapters" onde a frase for genérica. `templates/README.md`
-e `migration/README.md`: novo path do template.
+`CLAUDE.md` at the root with `@AGENTS.md`. `AGENTS.md`: cite both adapters
+and the delegation skill. `README.md`: rows for `skills/radiant-delegation`,
+`adapters/claude-code/` and `docs/adrs/`. `docs/capabilities.md`: rows
+"Orchestrate roles and delegate" and "Set up the harness".
+`docs/integration.md`: "Codex adapter" becomes "adapters" where the sentence
+is generic. `templates/README.md` and `migration/README.md`: the template's
+new path.
 
-- [ ] **Passo 5: rodar os checks globais e ver passar**
+- [ ] **Step 5: run the global checks and watch them pass**
 
-Expected adicional: `check_repository.py` sem link quebrado após o move.
+Additional expectation: `check_repository.py` with no broken link after the
+move.
 
-- [ ] **Passo 6: commit**
+- [ ] **Step 6: commit**
 
 ```bash
 git add -A adapters templates CLAUDE.md AGENTS.md README.md docs migration/README.md
 git commit -m "docs(adapters): add claude code adapter and harness-neutral consumer map"
 ```
 
-## Tarefa 5: manutenção, contrato e ponteiros do ciclo
+## Task 5: maintenance, contract and cycle pointers
 
-**Arquivos:**
-- Criar: `skills/radiant-maintenance/SKILL.md`
-- Criar: `templates/maintenance-report.md`
-- Alterar: `templates/task-contract.md`, `skills/radiant-cycle/SKILL.md`,
+**Files:**
+- Create: `skills/radiant-maintenance/SKILL.md`
+- Create: `templates/maintenance-report.md`
+- Change: `templates/task-contract.md`, `skills/radiant-cycle/SKILL.md`,
   `skills/radiant-delegation/SKILL.md`, `docs/integration.md`,
   `docs/learn-back.md`, `docs/verification.md`, `templates/README.md`,
   `docs/capabilities.md`
 
 **Interfaces:**
-- Consome: campo `maintenance` (Tarefa 1), seção `### Manutenção` (Tarefa 2).
-- Produz: campo `Capability` no Task Contract; formato do relatório.
+- Consumes: the `maintenance` field (Task 1), the `### Maintenance` section
+  (Task 2).
+- Produces: the `Capability` field in the Task Contract; the report format.
 
-- [ ] **Passo 1: escrever `skills/radiant-maintenance/SKILL.md`**
+- [ ] **Step 1: write `skills/radiant-maintenance/SKILL.md`**
 
-Frontmatter como na Tarefa 2. Conteúdo da seção 3 do ADR: entrada (ler
-`.radiant.json`, workflow e seção de Manutenção; sem `maintenance`, `HOLD`),
-fontes, política declarada (comandos seguros, egress autorizado, omissões
-registradas), priorização por risco, valor e reversibilidade, comparação com o
-relatório anterior, até três rascunhos embutidos, fronteira (única escrita: o
-relatório; criar o diretório se ausente; sem branch, PR, issue ou commit),
-capacidades (`light` coleta, `standard` priorização e orquestrador), "nada
-material" como resultado válido. Linkar a skill de delegação e o template.
+Frontmatter as in Task 2. Content of section 3 of the ADR: entry (read
+`.radiant.json`, the workflow and its Maintenance section; without
+`maintenance`, `HOLD`), sources, declared policy (safe commands, authorized
+egress, recorded omissions), prioritization by risk, value and
+reversibility, comparison with the previous report, up to three embedded
+drafts, boundary (only write: the report; create the directory if missing; no
+branch, PR, issue or commit), capabilities (`light` collection, `standard`
+prioritization and orchestrator), "nothing material" as a valid result. Link
+the delegation skill and the template.
 
-- [ ] **Passo 2: escrever `templates/maintenance-report.md`**
+- [ ] **Step 2: write `templates/maintenance-report.md`**
 
-Metadados (data, revisão do Radiant, commit do consumidor, capacidade e
-modelo efetivos), Fontes (consultada, pulada por política, falhou),
-Candidatos (tabela: ID local, categoria, evidência, risco, valor,
-reversibilidade, estado novo/recorrente/resolvido), Rascunhos (até três:
-objetivo, outputs, verificação), Omissões e limitações.
+Metadata (date, Radiant revision, consumer commit, effective capability and
+model), Sources (consulted, skipped by policy, failed), Candidates (table:
+local ID, category, evidence, risk, value, reversibility, state
+new/recurring/resolved), Drafts (up to three: goal, outputs, verification),
+Omissions and limitations.
 
-- [ ] **Passo 3: campo `Capability` no Task Contract**
+- [ ] **Step 3: `Capability` field in the Task Contract**
 
-Em `templates/task-contract.md`, após `Risk tier`:
-`**Capability:** \`default | deep | standard | light\` - justificativa em uma linha quando diferente de default`.
-Na seção 16, sem mudança de formato: uma nota de que ele é o retorno do Build
-pela skill de delegação.
+In `templates/task-contract.md`, after `Risk tier`:
+`**Capability:** \`default | deep | standard | light\` - one-line justification when different from default`.
+In section 16, without a format change: a note that it is the Build's return
+according to the delegation skill.
 
-- [ ] **Passo 4: ponteiros**
+- [ ] **Step 4: pointers**
 
-`radiant-cycle`: na entrada, "para coordenar papéis e delegar, leia
-radiant-delegation"; em Verificar, ponteiro para a regra de aceite;
-incrementar `metadata.version` para `0.1.3`. `radiant-delegation`: trocar o
-path em código pelo link para a skill de manutenção. `docs/integration.md`:
-trocar o path em código pelo link. `docs/learn-back.md`: linhas para
-`skills/radiant-delegation/`, `skills/radiant-maintenance/` e
-`adapters/claude-code/`. `docs/verification.md`: simulação D (sessão nova no
-Claude Code encontra bootstrap, adapter, pin, Constitution e skill de
-delegação) e linha "Agnosticismo de harness" na tabela. `templates/README.md`
-e `docs/capabilities.md`: entrada do relatório de manutenção.
+`radiant-cycle`: at the entry, "to coordinate roles and delegate, read
+radiant-delegation"; in Verify, a pointer to the acceptance rule; bump
+`metadata.version` to `0.1.3`. `radiant-delegation`: replace the path in code
+with the link to the maintenance skill. `docs/integration.md`: replace the
+path in code with the link. `docs/learn-back.md`: rows for
+`skills/radiant-delegation/`, `skills/radiant-maintenance/` and
+`adapters/claude-code/`. `docs/verification.md`: simulation D (a new Claude
+Code session finds the bootstrap, adapter, pin, Constitution and delegation
+skill) and a "Harness agnosticism" row in the table. `templates/README.md`
+and `docs/capabilities.md`: an entry for the maintenance report.
 
-- [ ] **Passo 5: rodar os checks globais e ver passar**
+- [ ] **Step 5: run the global checks and watch them pass**
 
-- [ ] **Passo 6: commit**
+- [ ] **Step 6: commit**
 
 ```bash
 git add skills templates docs
 git commit -m "feat(maintenance): add propose-only maintenance skill and report template"
 ```
 
-## Tarefa 6: verificação final da entrega
+## Task 6: final verification of the delivery
 
-**Arquivos:**
-- Alterar: `docs/adrs/ADR-0001-delegation-roles.md` somente se a verificação
-  revelar divergência material com a implementação.
+**Files:**
+- Change: `docs/adrs/ADR-0001-delegation-roles.md` only if verification
+  reveals a material divergence from the implementation.
 
-- [ ] **Passo 1: checks completos**
+- [ ] **Step 1: full checks**
 
 ```bash
 python3 validators/check_repository.py
@@ -495,28 +501,29 @@ python3 -m unittest discover -s tests -v
 git diff --check origin/main...HEAD
 ```
 
-Expected: PASS e todos os testes OK; nenhum aviso de espaço.
+Expected: PASS and all tests OK; no whitespace warning.
 
-- [ ] **Passo 2: readback dos artefatos gerados**
+- [ ] **Step 2: readback of the generated artifacts**
 
-Gerar os dois conjuntos de agentes e os dois blocos globais em um diretório do
-scratchpad e reler cada arquivo: modelo correto por capacidade, path do
-checkout real, instruções sem regras copiadas. Não instalar em diretórios
-globais.
+Generate both agent sets and both global blocks in a scratchpad directory and
+reread each file: the right model per capability, the path of the real
+checkout, instructions without copied rules. Do not install into global
+directories.
 
-- [ ] **Passo 3: simulações A a D de `docs/verification.md`**
+- [ ] **Step 3: simulations A to D from `docs/verification.md`**
 
-Percorrer cada simulação a partir da raiz e registrar no resumo da entrega os
-paths efetivamente alcançados.
+Walk each simulation from the root and record in the delivery summary the
+paths actually reached.
 
-- [ ] **Passo 4: cobertura do ADR**
+- [ ] **Step 4: ADR coverage**
 
-Conferir a tabela "Arquivos previstos" do ADR contra `git diff --stat
-origin/main...HEAD`. Item faltante: voltar à tarefa dona. Item a mais:
-justificar ou remover.
+Check the ADR's "Planned files" table against `git diff --stat
+origin/main...HEAD`. A missing item: go back to the owning task. An extra
+item: justify or remove it.
 
-- [ ] **Passo 5: relatar**
+- [ ] **Step 5: report**
 
-Estado `DONE`, `HOLD` ou `FAIL`, comandos e resultados, limitações (testes não
-provam obediência de modelo; sessão real fica para o piloto) e próximos passos
-que dependem do owner: push, PR, instalação dos subagentes e TC-0019 no AIKM.
+State `DONE`, `HOLD` or `FAIL`, commands and results, limitations (tests do
+not prove model obedience; the real session is left for the pilot) and next
+steps that depend on the owner: push, PR, installing the subagents and
+TC-0019 in AIKM.

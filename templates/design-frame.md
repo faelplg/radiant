@@ -2,50 +2,50 @@
 
 ## Experience Intent
 
-- Objetivo da experiência:
-- Problema que ela resolve:
-- Percepção desejada:
-- Relação que queremos construir com o usuário:
+- Goal of the experience:
+- Problem it solves:
+- Desired perception:
+- Relationship we want to build with the user:
 
-## Participantes e contexto
+## Participants and context
 
-- Usuário principal:
-- Contexto de uso:
-- Ambiente de uso:
-- Motivação ou necessidade principal:
-- Restrições de contexto:
+- Primary user:
+- Context of use:
+- Environment of use:
+- Main motivation or need:
+- Context constraints:
 
-## Jornadas críticas
+## Critical journeys
 
-- Jornada principal:
-- Estados críticos:
-- Pontos de fricção esperados:
-- O que deve ser simples e direto:
+- Main journey:
+- Critical states:
+- Expected friction points:
+- What must be simple and direct:
 
-## Estrutura da experiência
+## Structure of the experience
 
-- Arquitetura de informação principal:
-- Hierarquia de conteúdo:
-- Fluxos principais:
-- Decisões que devem permanecer estáveis:
-- O que ainda não será desenhado:
+- Main information architecture:
+- Content hierarchy:
+- Main flows:
+- Decisions that must stay stable:
+- What will not be designed yet:
 
-## Princípios e restrições
+## Principles and constraints
 
-- Princípios organizacionais relevantes:
-- Regras de acessibilidade:
-- Restrições técnicas ou de produto:
-- Indicadores de qualidade de experiência:
-- Comportamentos a evitar:
+- Relevant organizational principles:
+- Accessibility rules:
+- Technical or product constraints:
+- Experience quality indicators:
+- Behaviors to avoid:
 
-## Riscos e evidence needs
+## Risks and evidence needs
 
-- Riscos principais de confusão:
-- Hipóteses críticas:
-- Evidência mínima necessária para validar a experiência:
-- Critérios de revisão e validação:
+- Main risks of confusion:
+- Critical assumptions:
+- Minimum evidence needed to validate the experience:
+- Review and validation criteria:
 
 ## Non-goals
 
-- O que fica fora do escopo do design neste momento:
-- O que será revisado em ciclos posteriores:
+- What is out of design scope for now:
+- What will be revisited in later cycles:

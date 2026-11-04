@@ -211,7 +211,7 @@ class IntegrationTests(unittest.TestCase):
                         self.assertTrue(text.startswith("---\n"))
                         self.assertIn("disallowedTools: Agent", text)
 
-    @unittest.skipUnless(tomllib, "tomllib requer Python 3.11+")
+    @unittest.skipUnless(tomllib, "tomllib requires Python 3.11+")
     def test_codex_agents_are_valid_toml(self):
         target = self.project / "agents"
         self.assertEqual(self.render("--adapter", "codex", "--agents-dir", str(target)).returncode, 0)

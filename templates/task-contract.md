@@ -1,40 +1,40 @@
-# Radiant — Task Contract Template
+# Radiant - Task Contract Template
 
-**Versão:** 0.2  
-**Status:** Template operacional  
+**Version:** 0.2\
+**Status:** Operational template\
 **Base:** Radiant Project Generation System v0.2 + Radiant Engineering Baseline v0.1
 
-> Use este template para trabalho de implementação agêntica relevante.  
-> Remova seções que forem claramente `N/A`.  
-> O contrato deve permanecer bounded.
+> Use this template for relevant agentic implementation work.\
+> Remove sections that are clearly `N/A`.\
+> The contract must stay bounded.
 
 ---
 
-# Radiant Task Contract — [Project] — [Iteration / Task]
+# Radiant Task Contract - [Project] - [Iteration / Task]
 
-**Contract ID:** `[id]`  
-**Project:** `[project]`  
-**Iteration:** `[iteration]`  
-**Status:** `READY | HOLD | IN_PROGRESS | VERIFY | DONE | FAIL`  
-**Owner:** `[human/agent]`  
-**Risk tier:** `0 | 1 | 2 | 3`  
-**Capability:** `default | deep | standard | light` - justificativa em uma linha quando diferente de default\
-**Engineering Baseline:** `Radiant Engineering Baseline v0.1`  
+**Contract ID:** `[id]`\
+**Project:** `[project]`\
+**Iteration:** `[iteration]`\
+**Status:** `READY | HOLD | IN_PROGRESS | VERIFY | DONE | FAIL`\
+**Owner:** `[human/agent]`\
+**Risk tier:** `0 | 1 | 2 | 3`\
+**Capability:** `default | deep | standard | light` - one-line justification when different from default\
+**Engineering Baseline:** `Radiant Engineering Baseline v0.1`\
 **Engineering Profile:** `[project profile/version | none]`
 
 ---
 
 ## 1. Objective
 
-Descreva uma única mudança observável.
+Describe a single observable change.
 
-> **[O que deve passar a ser verdadeiro quando esta tarefa terminar?]**
+> **[What should become true when this task ends?]**
 
 ---
 
 ## 2. Why this task exists
 
-Referencie a intenção superior sem reescrever o projeto.
+Reference the higher intent without rewriting the project.
 
 **Source plan/spec:**
 
@@ -48,13 +48,13 @@ Referencie a intenção superior sem reescrever o projeto.
 
 ## 3. Inputs
 
-O agente pode assumir como input:
+The agent may assume as input:
 
 - `[file / spec / decision]`
 - `[existing code / command]`
 - `[other required context]`
 
-Não inferir inputs ausentes que mudariam materialmente a solução.
+Do not infer missing inputs that would materially change the solution.
 
 ---
 
@@ -83,57 +83,57 @@ Não inferir inputs ausentes que mudariam materialmente a solução.
 
 ### Execution units
 
-Opcional. Sem esta subseção, o contrato é uma unidade só. Use-a para dividir o
-Build em unidades delegáveis, cada uma com papel, capacidade e requisitos, que
-um operador de despacho ou o orquestrador consegue configurar sem reinterpretar
-o contrato. As regras e o YAML aceito estão em
-[unidades de execução](../contracts/README.md#unidades-de-execução).
+Optional. Without this subsection, the contract is a single unit. Use it to
+split the Build into delegable units, each with role, capability and
+requirements, that a dispatch operator or the orchestrator can configure
+without reinterpreting the contract. The rules and the accepted YAML are in
+[execution units](../contracts/README.md#execution-units).
 
 ```yaml radiant-units
 units:
   - id: TC-0025.1
     role: radiant-dev
     requires: []
-    objective: Buscar fontes externas por rev para o cache.
+    objective: Fetch external sources by rev for the cache.
     writes: [src/sources/, tests/sources/]
     depends_on: []
-    done_when: Os testes de tests/sources passam e o cache recusa digest divergente.
+    done_when: The tests in tests/sources pass and the cache refuses a mismatched digest.
   - id: TC-0025.2
     role: radiant-dev
     capability: deep
-    capability_reason: A recusa de digest exige julgamento de segurança.
+    capability_reason: Refusing a digest requires security judgment.
     requires: []
-    objective: Integrar a verificação de digest ao sync.
+    objective: Wire digest verification into sync.
     writes: [src/sync/]
     depends_on: [TC-0025.1]
-    done_when: bun run check passa e o sync recusa conteúdo sem digest correspondente.
+    done_when: bun run check passes and sync refuses content without a matching digest.
 ```
 
 ---
 
 ## 5. Required outputs
 
-Ao final, devem existir exatamente os outputs necessários:
+At the end, exactly the necessary outputs must exist:
 
 1. `[output]`
 2. `[output]`
 3. `[tests / docs / ADR only if applicable]`
 
-Não criar artefatos adicionais sem necessidade observada.
+Do not create additional artifacts without an observed need.
 
 ---
 
 ## 6. Non-goals
 
-Esta tarefa **não** deve:
+This task must **not**:
 
 - `[non-goal]`
 - `[non-goal]`
 - `[non-goal]`
 
-Encontrar uma melhoria fora deste escopo não autoriza implementá-la.
+Finding an improvement outside this scope does not authorize implementing it.
 
-Registre-a como observação ou Learn Back candidate.
+Record it as an observation or a Learn Back candidate.
 
 ---
 
@@ -147,22 +147,22 @@ Registre-a como observação ou Learn Back candidate.
 
 # 8. Engineering Check
 
-Aplicar somente o que é relevante para esta tarefa.
+Apply only what is relevant to this task.
 
-| Baseline                       | Status           | Aplicação nesta tarefa | Evidência         |
-| ------------------------------ | ---------------- | ---------------------- | ----------------- |
-| EB-01 Complexidade deliberada  | `REQUIRED / N/A` | `[constraint]`         | `[how checked]`   |
-| EB-02 Correção e contratos     | `REQUIRED / N/A` | `[invariant/error]`    | `[test/readback]` |
-| EB-03 Verificação e testes     | `REQUIRED / N/A` | `[test strategy]`      | `[command]`       |
-| EB-04 Segurança e privacidade  | `REQUIRED / N/A` | `[security boundary]`  | `[test/review]`   |
-| EB-05 Manutenibilidade         | `REQUIRED / N/A` | `[specific concern]`   | `[review]`        |
-| EB-06 Dependências             | `REQUIRED / N/A` | `[dependency rule]`    | `[lock/ADR]`      |
-| EB-07 Diagnóstico              | `REQUIRED / N/A` | `[error behavior]`     | `[test/readback]` |
-| EB-08 Experiência e eficiência | `REQUIRED / N/A` | `[UX/perf]`            | `[demo/test]`     |
+| Baseline                          | Status           | Application in this task | Evidence          |
+| --------------------------------- | ---------------- | ------------------------ | ----------------- |
+| EB-01 Deliberate complexity       | `REQUIRED / N/A` | `[constraint]`           | `[how checked]`   |
+| EB-02 Correctness and contracts   | `REQUIRED / N/A` | `[invariant/error]`      | `[test/readback]` |
+| EB-03 Verification and tests      | `REQUIRED / N/A` | `[test strategy]`        | `[command]`       |
+| EB-04 Security and privacy        | `REQUIRED / N/A` | `[security boundary]`    | `[test/review]`   |
+| EB-05 Maintainability             | `REQUIRED / N/A` | `[specific concern]`     | `[review]`        |
+| EB-06 Dependencies                | `REQUIRED / N/A` | `[dependency rule]`      | `[lock/ADR]`      |
+| EB-07 Diagnosis                   | `REQUIRED / N/A` | `[error behavior]`       | `[test/readback]` |
+| EB-08 Experience and efficiency   | `REQUIRED / N/A` | `[UX/perf]`              | `[demo/test]`     |
 
 ### N/A justification
 
-Registre somente itens marcados `N/A` cuja ausência não seja óbvia:
+Record only items marked `N/A` whose absence is not obvious:
 
 - `[EB-xx: reason]`
 
@@ -170,13 +170,13 @@ Registre somente itens marcados `N/A` cuja ausência não seja óbvia:
 
 # 9. Project-specific constraints
 
-Extraídas do Engineering Profile ou Spec:
+Taken from the Engineering Profile or Spec:
 
 - `[constraint]`
 - `[constraint]`
 - `[constraint]`
 
-Não duplicar todo o Profile.
+Do not duplicate the whole Profile.
 
 ---
 
@@ -186,21 +186,21 @@ Não duplicar todo o Profile.
 
 `NO | YES, only if condition below is met`
 
-Se uma nova dependência for proposta, registrar:
+If a new dependency is proposed, record:
 
-- problema concreto;
-- alternativa sem dependência;
-- custo operacional;
-- risco de filesystem/rede/execução;
-- decisão final.
+- the concrete problem;
+- the alternative without the dependency;
+- the operational cost;
+- filesystem/network/execution risk;
+- the final decision.
 
-Se a dependência alterar arquitetura ou distribuição, criar ADR.
+If the dependency changes architecture or distribution, create an ADR.
 
 ---
 
 # 11. Verification plan
 
-A verificação deve ser definida antes do Build.
+Verification must be defined before the Build.
 
 ## Automated
 
@@ -211,7 +211,7 @@ A verificação deve ser definida antes do Build.
 [command: build]
 ```
 
-Remover comandos não aplicáveis.
+Remove commands that do not apply.
 
 ## Focused verification
 
@@ -219,122 +219,122 @@ Remover comandos não aplicáveis.
 - `[security case]`
 - `[error case]`
 
-Cada teste de regressão é mostrado falhando com a regressão que nomeia, por
-mutação, inclusive em fórmulas e seleção de contexto, não só em caminhos de
-erro. Um dublê de teste usado como evidência tem conferida, por teste próprio,
-a propriedade de que essa evidência depende, como persistência ou
-concorrência.
+Each regression test is shown failing against the regression it names, by
+mutation, including in formulas and context selection, not only in error
+paths. A test double used as evidence has the property that evidence depends
+on, such as persistence or concurrency, checked by a test of its own.
 
-Com estado persistente, trate em separado escrita atômica, exclusão mútua e
-recuperação após interrupção. Prove escrita e recuperação por interrupção
-determinística em pontos fixos, como limite de tamanho de arquivo ou `SIGKILL`
-depois de cada gravação; uma corrida entre processos pode não expor escrita
-parcial.
+With persistent state, treat atomic writes, mutual exclusion and recovery
+after interruption separately. Prove writing and recovery through
+deterministic interruption at fixed points, such as a file size limit or
+`SIGKILL` after each write; a race between processes may not expose a partial
+write.
 
 ## Readback
 
-Após a execução:
+After execution:
 
-- reabrir arquivos gerados/modificados relevantes;
-- verificar que o output persistido é o esperado;
-- confirmar que nenhum path fora do escopo foi alterado, contra o commit de
-  entrada do Build fixado neste contrato, incluindo mudanças commitadas,
-  staged, unstaged e não rastreadas (`git status --porcelain`).
+- reopen the relevant generated/changed files;
+- verify that the persisted output is the expected one;
+- confirm that no path outside the scope was changed, against the Build's
+  entry commit fixed in this contract, including committed, staged, unstaged
+  and untracked changes (`git status --porcelain`).
 
 ## Independent critique
 
 `REQUIRED | OPTIONAL | N/A`
 
-Quando required:
+When required:
 
 - `[second agent / human / verification skill]`
-- quem lança e coleta a crítica: `[orchestrator / human]`, nunca o Build;
-- pré-requisitos externos: `[harness authenticated / service running]`.
+- who launches and collects the critique: `[orchestrator / human]`, never the Build;
+- external prerequisites: `[harness authenticated / service running]`.
 
 ---
 
 # 12. Acceptance criteria
 
-A tarefa só pode ser declarada `DONE` quando:
+The task can only be declared `DONE` when:
 
 - [ ] `[observable criterion]`
 - [ ] `[observable criterion]`
-- [ ] todos os checks aplicáveis da seção 11 passam;
-- [ ] não houve mudança fora do Allowed scope;
-- [ ] limitações relevantes estão registradas;
-- [ ] a evidência final foi lida, não apenas presumida pelo exit code.
+- [ ] all applicable checks in section 11 pass;
+- [ ] there was no change outside the Allowed scope;
+- [ ] relevant limitations are recorded;
+- [ ] the final evidence was read, not just presumed from the exit code.
 
-Cada critério nomeia seu referente:
+Each criterion names its referent:
 
-- distinga comportamento ou texto do próprio projeto do que é gerado por
-  dependência;
-- em critério sobre artefato existente (formatação, lint, links), meça contra a
-  linha de base quando o arquivo já não atende à regra, por exemplo "nenhuma
-  divergência nova nas linhas alteradas";
-- confira contra o texto da norma todo nome de norma externa (RFC, ISO) usado
-  em critério; se o projeto diverge dela, nomeie um perfil próprio;
-- antes da ativação, confirme que a evidência pedida é observável no ambiente
-  real, por exemplo se o harness exibe o que o critério exige; sem essa
-  certeza, faça uma sondagem ou escreva o critério com a evidência disponível e
-  a limitação explícita.
+- distinguish the project's own behavior or text from what a dependency
+  generates;
+- in a criterion about an existing artifact (formatting, lint, links), measure
+  against the baseline when the file already fails the rule, for example "no
+  new divergence in the changed lines";
+- check every external standard name (RFC, ISO) used in a criterion against
+  the standard's text; if the project diverges from it, name a profile of its
+  own;
+- before activation, confirm that the requested evidence is observable in the
+  real environment, for example whether the harness shows what the criterion
+  requires; without that certainty, run a probe or write the criterion with
+  the available evidence and the limitation made explicit.
 
 ---
 
 # 13. HOLD conditions
 
-Interromper e solicitar decisão quando:
+Stop and ask for a decision when:
 
-- o comportamento exigido contradiz Spec/Constitution;
-- uma ação destrutiva não prevista se torna necessária;
-- um secret real é necessário e não existe mecanismo autorizado;
-- uma nova dependência estrutural é necessária;
-- o agente precisaria escrever fora dos paths autorizados;
-- a tarefa exigiria egress não autorizado;
-- a solução mínima deixou de caber no contrato;
-- um requisito crítico é ambíguo e diferentes interpretações mudariam a arquitetura.
+- the required behavior contradicts the Spec/Constitution;
+- an unplanned destructive action becomes necessary;
+- a real secret is needed and there is no authorized mechanism;
+- a new structural dependency is needed;
+- the agent would need to write outside the authorized paths;
+- the task would require unauthorized egress;
+- the minimal solution no longer fits the contract;
+- a critical requirement is ambiguous and different interpretations would change the architecture.
 
-`HOLD` é resultado válido.
+`HOLD` is a valid result.
 
 ---
 
 # 14. FAIL conditions
 
-Marcar `FAIL` quando:
+Mark `FAIL` when:
 
-- acceptance criteria não podem ser satisfeitos;
-- verificação demonstra regressão material;
-- segurança não pode ser preservada;
-- a implementação produz estado inconsistente;
-- um blocker externo torna o objetivo impossível dentro deste contrato.
+- acceptance criteria cannot be met;
+- verification shows a material regression;
+- security cannot be preserved;
+- the implementation produces inconsistent state;
+- an external blocker makes the goal impossible within this contract.
 
-Não mascarar `FAIL` como `DONE WITH NOTES`.
+Do not disguise `FAIL` as `DONE WITH NOTES`.
 
 ---
 
 # 15. Change budget
 
-O agente pode:
+The agent may:
 
-- refatorar localmente código diretamente necessário;
-- remover código tornado obsoleto pela própria mudança;
-- atualizar testes e documentação diretamente afetados.
+- locally refactor code that is directly needed;
+- remove code made obsolete by the change itself;
+- update directly affected tests and documentation.
 
-O agente não pode, sem HOLD:
+The agent may not, without HOLD:
 
-- redesenhar arquitetura ampla;
-- mudar stack;
-- trocar biblioteca estrutural;
-- mover grandes áreas do projeto;
-- resolver dívida técnica adjacente;
-- adicionar features não solicitadas.
+- redesign broad architecture;
+- change the stack;
+- swap a structural library;
+- move large areas of the project;
+- resolve adjacent technical debt;
+- add features that were not requested.
 
 ---
 
 # 16. Completion report
 
-Ao finalizar, responder de forma curta com o formato abaixo. Na
-[delegação](../skills/radiant-delegation/SKILL.md), este relatório é o retorno
-do Build ao orquestrador.
+When finished, answer briefly in the format below. In
+[delegation](../skills/radiant-delegation/SKILL.md), this report is the Build's
+return to the orchestrator.
 
 ### Status
 
@@ -342,7 +342,7 @@ do Build ao orquestrador.
 
 ### Changed
 
-- `[path]: [what changed]`, com referências de linha citadas junto ao commit
+- `[path]: [what changed]`, with line references cited alongside the commit
 
 ### Verification evidence
 
@@ -366,4 +366,4 @@ do Build ao orquestrador.
 
 # 17. Completion rule
 
-> **Não declarar DONE porque o código parece correto. Declarar DONE apenas quando os critérios observáveis, a engenharia aplicável e a evidência de verificação convergirem.**
+> **Do not declare DONE because the code looks right. Declare DONE only when the observable criteria, the applicable engineering and the verification evidence converge.**

@@ -1,84 +1,86 @@
-# Convenção de Task Contracts
+# Task Contract convention
 
-Esta é a convenção compartilhada. Instâncias, ativação e evidência pertencem ao
-projeto consumidor. Origem: convenção testada no primeiro projeto, identificada
-no [inventário](../docs/migration-plan.md). A cópia que ficou sob custódia foi
-retirada e só existe no histórico Git.
+This is the shared convention. Instances, activation and evidence belong to
+the consumer project. Origin: a convention tested in the first project,
+identified in the [inventory](../docs/migration-plan.md). The copy that was in
+custody was removed and exists only in Git history.
 
-## Identidade e localização
+## Identity and location
 
-Use IDs sequenciais estáveis por projeto, como `TC-0001`, e filenames
-`TC-0001-short-slug.md`. O ID não depende do número da iteração. Não incluir
-versão ou status no filename nem mover contratos entre pastas de status.
-Uma iteração pode exigir mais de um contrato.
+Use stable sequential IDs per project, such as `TC-0001`, and filenames like
+`TC-0001-short-slug.md`. The ID does not depend on the iteration number. Do
+not include version or status in the filename or move contracts between
+status folders. One iteration may require more than one contract.
 
-Registre a revisão do documento e o status nos metadados. Estados de lifecycle
-recomendados: `ready`, `active`, `done`, `held`, `failed`, `superseded`.
-Eles não substituem os estados de conclusão da
+Record the document revision and status in the metadata. Recommended
+lifecycle states: `ready`, `active`, `done`, `held`, `failed`, `superseded`.
+They do not replace the completion states of the
 [Constitution](../constitution/CONSTITUTION.md).
 
-## Ativação
+## Activation
 
-O `ACTIVE.md` local aponta para o contrato que governa o trabalho ou declara
-explicitamente `none`. Leia esse ponteiro; não selecione pelo timestamp ou
-filename. Proposta pronta não autoriza execução. Registre autorização já
-concedida e atualize o ponteiro, sem exigir a mesma autorização novamente.
+The local `ACTIVE.md` points to the contract that governs the work or
+explicitly declares `none`. Read that pointer; do not select by timestamp or
+filename. A ready proposal does not authorize execution. Record authorization
+already granted and update the pointer, without requiring the same
+authorization again.
 
-## Integridade
+## Integrity
 
-Antes de executar, uma proposta pode ser refinada. Depois de começar, não
-reescreva silenciosamente objetivo, limites, outputs ou critérios. Esclarecimentos
-não materiais ficam em amendment explícito. Mudanças materiais exigem HOLD e
-contrato novo ou superseding; registre `supersedes`/`supersededBy` quando útil.
+Before execution, a proposal may be refined. Once it has started, do not
+silently rewrite its goal, limits, outputs or criteria. Non-material
+clarifications go into an explicit amendment. Material changes require HOLD
+and a new or superseding contract; record `supersedes`/`supersededBy` when
+useful.
 
-O [template](../templates/task-contract.md) captura a delegação. Use a
-[política de revisão](../docs/integration.md) para fixar qual Radiant a orienta.
-Registre o procedimento realmente aplicado na evidência, com versão e
-commit/digest. Atualizações compartilhadas não reescrevem execução passada.
+The [template](../templates/task-contract.md) captures the delegation. Use the
+[revision policy](../docs/integration.md) to pin which Radiant guides it.
+Record the procedure actually applied in the evidence, with version and
+commit/digest. Shared updates do not rewrite past execution.
 
-Relatórios de verificação e aprendizado apontam para ID/path do contrato, sem
-copiar seu corpo. Feche o contrato e atualize `ACTIVE.md` quando a conclusão
-estiver sustentada. Não crie contratos retroativos para fabricar conformidade.
+Verification and learning reports point to the contract's ID/path, without
+copying its body. Close the contract and update `ACTIVE.md` when the
+completion is supported. Do not create retroactive contracts to fabricate
+compliance.
 
-## Unidades de execução
+## Execution units
 
-Um contrato pode dividir o trabalho em unidades, num bloco ` ```yaml radiant-units `
-do [template](../templates/task-contract.md). O bloco usa YAML restrito, lido
-por `validators/radiant_yaml.py` sem dependências. Todo bloco válido nesse
-subconjunto é YAML válido com o mesmo valor, então leitores com parser
-completo, como um operador de despacho, leem o mesmo conteúdo.
+A contract may split the work into units, in a ` ```yaml radiant-units ` block
+of the [template](../templates/task-contract.md). The block uses restricted
+YAML, read by `validators/radiant_yaml.py` without dependencies. Every block
+valid in this subset is valid YAML with the same value, so readers with a full
+parser, such as a dispatch operator, read the same content.
 
-Aceito: mapeamentos e sequências em bloco, inclusive `- chave: valor` com
-continuação alinhada à chave; listas de escalares entre colchetes, sem
-aninhamento; valores entre aspas duplas (escapes `\"`, `\\` e `\n`) ou
-simples (`''` como aspa); `true`, `false`, `null` e inteiros; comentários `#`
-em linha própria ou depois de valor entre aspas ou lista; indentação só com
-espaços.
+Accepted: block mappings and sequences, including `- key: value` with
+continuation aligned to the key; bracketed lists of scalars, without nesting;
+double-quoted values (escapes `\"`, `\\` and `\n`) or single-quoted ones
+(`''` as a quote); `true`, `false`, `null` and integers; `#` comments on
+their own line or after a quoted value or list; indentation with spaces only.
 
-Um valor sem aspas começa com letra, `_`, `/` ou `.` seguido de letra, e não
-pode ser lido por YAML como outro tipo. Use aspas quando o texto começar com
-dígito, crase ou outro símbolo, for uma palavra como `yes`, `on` ou `True`, ou
-tiver `: `, ` #`, tab ou caractere de controle. Dentro de colchetes, use aspas
-também para `,`, `[`, `]`, `{` e `}`.
+An unquoted value starts with a letter, `_`, `/` or `.` followed by a letter,
+and cannot be read by YAML as another type. Use quotes when the text starts
+with a digit, backtick or another symbol, is a word like `yes`, `on` or
+`True`, or contains `: `, ` #`, a tab or a control character. Inside brackets,
+also quote `,`, `[`, `]`, `{` and `}`.
 
-Recusado, com o número da linha: tudo o que a regra acima exige entre aspas,
-tab na indentação, chave repetida ou que YAML lê como booleano ou nulo,
-âncoras (`&`, `*`), tags (`!`), blocos `|` e `>`, mapeamentos entre chaves,
-marcadores de documento, comentário depois de valor sem aspas e valor sem
-aspas em várias linhas.
+Refused, with the line number: everything the rule above requires to be
+quoted, tabs in indentation, a repeated key or one YAML reads as a boolean or
+null, anchors (`&`, `*`), tags (`!`), `|` and `>` blocks, braced mappings,
+document markers, a comment after an unquoted value and an unquoted value
+spanning several lines.
 
-Regras do bloco:
+Block rules:
 
-- `id` segue `TC-0000.N`, com o mesmo prefixo em todas as unidades, e nunca é
-  renumerado. `role` é um perfil de
+- `id` follows `TC-0000.N`, with the same prefix in every unit, and is never
+  renumbered. `role` is a profile from
   [agents.json](../skills/radiant-delegation/agents.json).
-- `capability` ausente usa o padrão do perfil; presente, exige
-  `capability_reason`. `requires` usa os termos de
+- A missing `capability` uses the profile's default; when present, it requires
+  `capability_reason`. `requires` uses the terms from
   [requirements.json](../skills/radiant-delegation/requirements.json).
-- `writes` é subconjunto dos paths graváveis do contrato, sem `..` nem path
-  absoluto, e normalizado: sem `.`, `./` ou `//`. Unidades sem dependência entre
-  si não se sobrepõem.
-- `depends_on` cita só unidades do mesmo contrato, sem ciclo.
-- A soma das unidades não ultrapassa objetivo, outputs e fronteira do
-  contrato. Mudar a divisão depois do início é amendment quando a fronteira não
-  muda e exige `HOLD` quando muda.
+- `writes` is a subset of the contract's writable paths, without `..` or an
+  absolute path, and normalized: no `.`, `./` or `//`. Units with no
+  dependency between them do not overlap.
+- `depends_on` cites only units of the same contract, without cycles.
+- The sum of the units does not exceed the contract's goal, outputs and
+  boundary. Changing the split after the start is an amendment when the
+  boundary does not change and requires `HOLD` when it does.

@@ -1,183 +1,183 @@
 # Radiant Design Layer v0.1
 
-## Papel
+## Role
 
-A camada de design do Radiant define como a intenção de um projeto se converte em uma experiência coerente, compreensível e verificável antes de ela se tornar implementação final.
+Radiant's design layer defines how a project's intent turns into a coherent, understandable and verifiable experience before it becomes the final implementation.
 
-A Design Layer não substitui a tese do Radiant nem cria um processo paralelo. Ela organiza a parte da incerteza que fala sobre estrutura da experiência e sobre como o sistema transmite significado, comportamento e responsabilidade a quem o usa.
+The Design Layer does not replace Radiant's thesis or create a parallel process. It organizes the part of uncertainty that concerns the structure of the experience and how the system conveys meaning, behavior and responsibility to whoever uses it.
 
-Seu papel é responder:
+Its role is to answer:
 
-> Como a intenção se torna uma experiência legível, coerente e verificável sem perder a hipótese do projeto?
+> How does intent become a legible, coherent and verifiable experience without losing the project's hypothesis?
 
-## Sistema e experiência
+## System and experience
 
-A camada de design reconhece duas trilhas conceitualmente distintas:
+The design layer recognizes two conceptually distinct tracks:
 
 ### System Design
 
-Relaciona-se com a estrutura interna do sistema:
+Concerns the internal structure of the system:
 
-- arquitetura;
-- domínio e regras;
-- componentes e interfaces;
-- dados e contratos;
-- integrações;
+- architecture;
+- domain and rules;
+- components and interfaces;
+- data and contracts;
+- integrations;
 - trade-offs;
-- restrições de implementação;
-- ADRs e decisões técnicas.
+- implementation constraints;
+- ADRs and technical decisions.
 
 ### Experience Design
 
-Relaciona-se com a forma como pessoas percebem, entendem e usam o sistema:
+Concerns how people perceive, understand and use the system:
 
-- intenção da experiência;
-- arquitetura de informação;
-- jornadas e fluxos;
-- estados e interações;
-- acessibilidade;
-- feedback e clareza;
-- expressão visual;
-- cooperação entre comportamento e linguagem;
-- consistência sem homogeneização artificial.
+- experience intent;
+- information architecture;
+- journeys and flows;
+- states and interactions;
+- accessibility;
+- feedback and clarity;
+- visual expression;
+- cooperation between behavior and language;
+- consistency without artificial homogenization.
 
-Essas trilhas se influenciam, mas não são sinônimos. A estrutura do sistema não decide toda a experiência e a experiência não substitui a arquitetura.
+These tracks influence each other, but they are not synonyms. The system's structure does not decide the whole experience and the experience does not replace the architecture.
 
-## Quando o design é necessário
+## When design is needed
 
-O design deve ser aplicado com proporcionalidade ao risco, à reversibilidade e à relevância da experiência.
+Design must be applied in proportion to risk, reversibility and the relevance of the experience.
 
-### Projetos sem experiência relevante
+### Projects without a relevant experience
 
-Podem usar apenas System Design, com foco em domínio, fluxo de dados, arquitetura e critérios de entrega.
+May use only System Design, focused on domain, data flow, architecture and delivery criteria.
 
-### Pequenos projetos e mudanças reversíveis
+### Small projects and reversible changes
 
-Podem usar apenas Design Frame e critérios no Contract, sem um Design Spec detalhado.
+May use only a Design Frame and criteria in the Contract, without a detailed Design Spec.
 
-### Produtos públicos, fluxos críticos ou experiências complexas
+### Public products, critical flows or complex experiences
 
-Podem exigir:
+May require:
 
 - Design Frame;
 - Design Spec;
-- revisão de acessibilidade;
-- prototipagem ou readback de fluxo;
-- validação com usuários ou com critérios de uso real.
+- accessibility review;
+- prototyping or flow readback;
+- validation with users or with real-use criteria.
 
-A exigência procedural deve crescer com a relevância do produto e o custo do erro.
+The procedural requirement must grow with the product's relevance and the cost of error.
 
-## Relação com o ciclo Radiant
+## Relation to the Radiant cycle
 
-A Design Layer se encaixa no ciclo macro do Radiant:
+The Design Layer fits into Radiant's macro cycle:
 
 > Frame → Challenge → Spec → Design → Plan → Contract → Build → Verify → Learn Back
 
-A diferença é que a etapa Design passa a ser explicitamente compreendida como duas trilhas complementares:
+The difference is that the Design stage is now explicitly understood as two complementary tracks:
 
-- System Design: estrutura e viabilidade do sistema;
-- Experience Design: comportamento, legibilidade e resultado percebido.
+- System Design: structure and feasibility of the system;
+- Experience Design: behavior, legibility and perceived outcome.
 
-A Design Layer não substitui a Spec. Ela torna a intenção da experiência operacionalmente legível antes da implementação.
+The Design Layer does not replace the Spec. It makes the intent of the experience operationally legible before implementation.
 
-## Artefatos da camada
+## Artifacts of the layer
 
 ### Design Frame
 
-Usado para enquadrar a experiência antes de detalhar a solução. Deve responder:
+Used to frame the experience before detailing the solution. It must answer:
 
-- o que a experiência precisa permitir;
-- quem a usa e em qual contexto;
-- qual percepção ou relação desejamos produzir;
-- quais jornadas e estados são críticos;
-- quais restrições existem;
-- onde há maior risco de fricção ou confusão;
-- quais decisões devem permanecer simples;
-- o que ainda não será desenhado.
+- what the experience needs to allow;
+- who uses it and in which context;
+- which perception or relationship we want to produce;
+- which journeys and states are critical;
+- which constraints exist;
+- where the greatest risk of friction or confusion is;
+- which decisions must stay simple;
+- what will not be designed yet.
 
-O Design Frame não é um mockup nem uma lista de telas. É um contrato mínimo de intenção experiencial.
+The Design Frame is not a mockup or a list of screens. It is a minimum contract of experiential intent.
 
 ### Design Spec
 
-Usado quando a experiência exige maior precisão. Pode descrever:
+Used when the experience requires more precision. It may describe:
 
-- arquitetura de informação;
-- navegação e fluxos;
-- estados e transições;
-- feedback e erros;
-- regras de interação;
-- padrões de responsividade;
-- acessibilidade;
+- information architecture;
+- navigation and flows;
+- states and transitions;
+- feedback and errors;
+- interaction rules;
+- responsiveness patterns;
+- accessibility;
 - visual direction;
-- indicadores de coerência com o produto;
-- critérios de aceitação de experiência.
+- indicators of coherence with the product;
+- experience acceptance criteria.
 
-O Design Spec deve ser implementável e verificável, não uma coleção de screenshots sem semântica.
+The Design Spec must be implementable and verifiable, not a collection of screenshots without semantics.
 
-## Princípios de design
+## Design principles
 
-A Design Layer opera com princípios que reduzem incerteza antes da implementação:
+The Design Layer operates with principles that reduce uncertainty before implementation:
 
-- intenção antes da interface;
-- estrutura antes de estilo;
-- experiência antes de componentes;
-- interação como comportamento do sistema;
-- acessibilidade como restrição de projeto;
-- estados como parte do design;
-- consistência sem homogeneização artificial;
-- implementação deve preservar intenção;
-- design proporcional ao risco.
+- intent before interface;
+- structure before style;
+- experience before components;
+- interaction as system behavior;
+- accessibility as a design constraint;
+- states as part of the design;
+- consistency without artificial homogenization;
+- implementation must preserve intent;
+- design proportional to risk.
 
-Esses princípios podem ser herdados por projetos ou organizações sem serem duplicados em cada instância. O Radiant preserva a regra de que há um corpo canônico e os demais ambientes recebem ponteiros.
+These principles can be inherited by projects or organizations without being duplicated in each instance. Radiant keeps the rule that there is one canonical body and the other environments receive pointers.
 
-## Prototipação e revisão
+## Prototyping and review
 
-A Design Layer aceita prototipação quando ela reduz incerteza. Porém ela não exige protótipo em todo projeto. A prototipagem serve para validar:
+The Design Layer accepts prototyping when it reduces uncertainty. But it does not require a prototype in every project. Prototyping serves to validate:
 
-- intenção da jornada;
-- clareza de fluxo;
-- estados críticos;
-- percepção da hierarquia;
-- rótulos, feedback e ações.
+- the intent of the journey;
+- clarity of flow;
+- critical states;
+- perception of hierarchy;
+- labels, feedback and actions.
 
-A revisão de design deve observar o sistema como experiência real, e não apenas como conjunto de componentes ou layout. Ela avalia:
+Design review must observe the system as a real experience, and not just as a set of components or a layout. It evaluates:
 
-- intenção;
-- clareza de estrutura;
-- coerência de interação;
-- acessibilidade;
-- consistência;
-- implementação e preservação da intenção original;
-- complexidade desnecessária.
+- intent;
+- clarity of structure;
+- coherence of interaction;
+- accessibility;
+- consistency;
+- implementation and preservation of the original intent;
+- unnecessary complexity.
 
-## Verificação e Learn Back
+## Verification and Learn Back
 
-A verificação de design deve incluir evidência relevante:
+Design verification must include relevant evidence:
 
-- contraste e legibilidade;
-- clareza de fluxo;
-- acessibilidade;
-- estados e erros;
-- coerência com a Spec;
-- preservação da intenção frente à implementação.
+- contrast and legibility;
+- clarity of flow;
+- accessibility;
+- states and errors;
+- coherence with the Spec;
+- preservation of intent against the implementation.
 
-Se a experiência falhar, o problema deve retornar à camada responsável:
+If the experience fails, the problem must go back to the responsible layer:
 
-- problema de intenção → Frame ou Design Frame;
-- problema de estrutura → Design Frame ou Design Spec;
-- problema de fluxo → Design Spec;
-- problema de padrão → princípio organizacional ou design system;
-- problema de implementação → Build e Verification;
-- problema recorrente em acessibilidade ou clareza → Design Principle, Verification Rule ou processo.
+- intent problem → Frame or Design Frame;
+- structure problem → Design Frame or Design Spec;
+- flow problem → Design Spec;
+- pattern problem → organizational principle or design system;
+- implementation problem → Build and Verification;
+- recurring accessibility or clarity problem → Design Principle, Verification Rule or process.
 
-Esse mapeamento preserva a regra central do Radiant: aprendizado relevante deve corrigir a camada responsável.
+This mapping preserves Radiant's central rule: relevant learning must fix the responsible layer.
 
-## Ferramentas
+## Tools
 
-A Design Layer é tool-agnostic. Ela não exige Figma, Penpot, Storybook, prototipação com IA ou um framework específico. Ferramentas podem ser escolhidas como procedimento do projeto, mas não definem a identidade do processo.
+The Design Layer is tool-agnostic. It does not require Figma, Penpot, Storybook, AI prototyping or a specific framework. Tools may be chosen as a project procedure, but they do not define the identity of the process.
 
-## Limites
+## Limits
 
-A Design Layer não transforma o Radiant em uma metodologia de UX isolada. Ela continua sendo parte do sistema de geração de projetos, ao lado de Frame, Spec, Contract, Verify e Learn Back.
+The Design Layer does not turn Radiant into an isolated UX methodology. It remains part of the project generation system, alongside Frame, Spec, Contract, Verify and Learn Back.
 
-Ela também não exige uma camada de documentação visual pesada para todo projeto. O rigor segue risco, reversibilidade e impacto.
+It also does not require a heavy layer of visual documentation for every project. Rigor follows risk, reversibility and impact.

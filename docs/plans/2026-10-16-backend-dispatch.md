@@ -1,96 +1,96 @@
-# Despacho por backend: plano de implementação
+# Backend dispatch: implementation plan
 
-> **Para agentes executores:** use superpowers:subagent-driven-development
-> (recomendado) ou superpowers:executing-plans para executar este plano tarefa
-> por tarefa. Os passos usam checkbox (`- [ ]`) para acompanhamento.
+> **For executing agents:** use superpowers:subagent-driven-development
+> (recommended) or superpowers:executing-plans to run this plan task by task.
+> The steps use checkboxes (`- [ ]`) for tracking.
 
-**Objetivo:** implementar no Radiant a parte do ADR-0002 que é processo:
-divisão de execução no contrato, vocabulário de requisitos, `provides` dos
-adapters, formato das regras de roteamento, despacho por backend na skill de
-delegação e os registros de fronteira, com validators que leem YAML restrito.
+**Goal:** implement in Radiant the part of ADR-0002 that is process: the
+execution split in the contract, the requirements vocabulary, the adapters'
+`provides`, the routing rules format, backend dispatch in the delegation skill
+and the boundary records, with validators that read restricted YAML.
 
-**Arquitetura:** dois módulos novos em `validators/`, só com biblioteca
-padrão: `radiant_yaml.py` lê um subconjunto estrito de YAML, e
-`dispatch_formats.py` valida unidades, `provides` e regras de roteamento.
-`check_repository.py` os usa para conferir o vocabulário, os adapters, o
-exemplo do template e o exemplo de roteamento. O resto é texto e dados.
+**Architecture:** two new modules in `validators/`, standard library only:
+`radiant_yaml.py` reads a strict subset of YAML, and `dispatch_formats.py`
+validates units, `provides` and routing rules. `check_repository.py` uses them
+to check the vocabulary, the adapters, the template's example and the routing
+example. The rest is text and data.
 
-**Stack:** Python 3.9+ somente com biblioteca padrão, Git, Markdown, JSON e o
-YAML restrito definido na Tarefa 1.
+**Stack:** Python 3.9+ with the standard library only, Git, Markdown, JSON and
+the restricted YAML defined in Task 1.
 
 **Spec:** [ADR-0002](../adrs/ADR-0002-backend-dispatch-demerzel.md)
 
-**Fora deste plano:** repositório, Frame, Spec, Plan e código do Demerzel
-(ganham plano no próprio repositório, depois do merge); push e PR; a tabela
-"Onde cada informação fica" já presente em `docs/integration.md`, que vai em
-commit e PR próprios antes da Tarefa 1.
+**Outside this plan:** Demerzel's repository, Frame, Spec, Plan and code (they
+get a plan in their own repository, after the merge); push and PR; the "Where
+each piece of information lives" table already present in
+`docs/integration.md`, which goes in its own commit and PR before Task 1.
 
-## Restrições globais
+## Global constraints
 
-- Python 3.9+, sem pacotes externos. Nada de `match`, nem tipos com `|`; use
-  `typing.Optional` e `typing.List` quando anotar.
-- Textos novos em português, hífen simples, sem travessão e sem divisores
-  horizontais.
-- Capacidades exatamente `deep`, `standard`, `light`, lidas de `CAPABILITIES`
-  em `check_repository.py`.
-- Vocabulário inicial exatamente `browser`, `ios-simulator`, `computer-use`.
-- `provides.json` dos dois adapters começa com lista vazia: cada item só entra
-  com evidência de smoke em terminal (ADR-0002, seção 2).
-- Bloco de unidades: cerca ` ```yaml radiant-units `, no máximo um por arquivo.
-- ID de unidade: `^TC-\d{4}\.[1-9]\d*$`, todas com o mesmo prefixo `TC-xxxx`.
-- Regras de roteamento: `schema` igual a `1`; ID de regra
-  `^[a-z0-9]+(-[a-z0-9]+)*$`; `approval` só aceita `"human"`; `harness` é nome
-  de diretório em `adapters/`.
-- Local da instância de roteamento: `$XDG_CONFIG_HOME/radiant/routing.json`,
-  ou `~/.config/radiant/routing.json` sem a variável.
-- Não renumerar seções do template de contrato: a skill de delegação cita a
-  seção 16.
-- Commits em Conventional Commits, sem coautoria de agente.
-- Após cada tarefa: `python3 validators/check_repository.py`,
-  `python3 -m unittest discover -s tests -v` e `git diff --check` passam.
+- Python 3.9+, no external packages. No `match`, and no types with `|`; use
+  `typing.Optional` and `typing.List` when annotating.
+- New text in Portuguese, plain hyphen, no em dash and no horizontal
+  dividers.
+- Capabilities exactly `deep`, `standard`, `light`, read from `CAPABILITIES`
+  in `check_repository.py`.
+- Initial vocabulary exactly `browser`, `ios-simulator`, `computer-use`.
+- Both adapters' `provides.json` start with an empty list: each item only
+  comes in with smoke evidence in a terminal (ADR-0002, section 2).
+- Units block: fence ` ```yaml radiant-units `, at most one per file.
+- Unit ID: `^TC-\d{4}\.[1-9]\d*$`, all with the same `TC-xxxx` prefix.
+- Routing rules: `schema` equal to `1`; rule ID `^[a-z0-9]+(-[a-z0-9]+)*$`;
+  `approval` only accepts `"human"`; `harness` is the name of a directory in
+  `adapters/`.
+- Location of the routing instance: `$XDG_CONFIG_HOME/radiant/routing.json`,
+  or `~/.config/radiant/routing.json` without the variable.
+- Do not renumber the contract template's sections: the delegation skill cites
+  section 16.
+- Commits in Conventional Commits, without agent co-authorship.
+- After each task: `python3 validators/check_repository.py`,
+  `python3 -m unittest discover -s tests -v` and `git diff --check` pass.
 
-## Foco de revisão
+## Review focus
 
-1. Escalar simples com `: ` ou ` #` no meio, como
-   `done_when: passa: ok`: erro pedindo aspas, nunca truncamento silencioso.
-   Teste na Tarefa 1.
-2. Chave repetida num mapeamento: erro com a linha, em vez de ficar com o
-   último valor como faz YAML comum. Teste na Tarefa 1.
-3. Sobreposição de `writes` entre unidades independentes com grafias
-   diferentes: `src/sync` e `src/sync/` se sobrepõem; `src/sync/` e
-   `src/sync2/` não. Teste na Tarefa 3.
-4. Ciclo em `depends_on` (`.1` → `.2` → `.1`): erro, nunca laço infinito.
-   Teste na Tarefa 3.
-5. Dois blocos `radiant-units` no mesmo arquivo: erro, nunca o primeiro em
-   silêncio. Teste na Tarefa 3.
+1. A plain scalar with `: ` or ` #` in the middle, such as
+   `done_when: passa: ok`: an error asking for quotes, never silent
+   truncation. Test in Task 1.
+2. A repeated key in a mapping: an error with the line, instead of keeping the
+   last value as ordinary YAML does. Test in Task 1.
+3. `writes` overlap between independent units with different spellings:
+   `src/sync` and `src/sync/` overlap; `src/sync/` and `src/sync2/` do not.
+   Test in Task 3.
+4. A cycle in `depends_on` (`.1` → `.2` → `.1`): an error, never an infinite
+   loop. Test in Task 3.
+5. Two `radiant-units` blocks in the same file: an error, never the first one
+   silently. Test in Task 3.
 
-### Tarefa 1: leitor de YAML restrito
+### Task 1: restricted YAML reader
 
 **Files:**
 - Create: `validators/radiant_yaml.py`
 - Create: `tests/test_radiant_yaml.py`
-- Modify: `contracts/README.md` (seção nova "Unidades de execução" com a
-  definição do subconjunto)
+- Modify: `contracts/README.md` (new "Execution units" section with the
+  definition of the subset)
 
 **Interfaces:**
-- Produces: `radiant_yaml.load(text: str) -> object`, que devolve `dict`,
-  `list`, `str`, `int`, `bool` ou `None`; e `radiant_yaml.YamlError(ValueError)`,
-  cuja mensagem começa com `linha <n>: `.
+- Produces: `radiant_yaml.load(text: str) -> object`, which returns a `dict`,
+  `list`, `str`, `int`, `bool` or `None`; and `radiant_yaml.YamlError(ValueError)`,
+  whose message starts with `linha <n>: `.
 
-O subconjunto aceita: mapeamentos em bloco com chaves
-`[A-Za-z_][A-Za-z0-9_-]*`; sequências em bloco (`- item`), inclusive
-`- chave: valor` com continuação alinhada à chave; listas em fluxo de escalares
-(`[a, b]`, `[]`) sem aninhamento; escalares simples, com aspas duplas (escapes
-`\"`, `\\`, `\n`) ou simples (`''` como aspa); `true`, `false`, `null` e
-inteiros tipados; comentários `#` no início da linha ou depois de espaço fora
-de aspas; indentação só com espaços. Recusa: tab na indentação, chave
-repetida, `&`, `*`, `!`, `|`, `>`, `{`, `---`, escalar simples com `: ` ou
-terminado em `:`, e escalar simples em várias linhas.
+The subset accepts: block mappings with keys `[A-Za-z_][A-Za-z0-9_-]*`; block
+sequences (`- item`), including `- key: value` with continuation aligned to
+the key; flow lists of scalars (`[a, b]`, `[]`) without nesting; plain
+scalars, double-quoted (escapes `\"`, `\\`, `\n`) or single-quoted (`''` as a
+quote); typed `true`, `false`, `null` and integers; `#` comments at the start
+of a line or after a space outside quotes; indentation with spaces only. It
+refuses: tabs in indentation, repeated keys, `&`, `*`, `!`, `|`, `>`, `{`,
+`---`, a plain scalar with `: ` or ending in `:`, and a plain scalar spanning
+several lines.
 
-- [ ] **Passo 1: escrever os testes que falham**
+- [ ] **Step 1: write the failing tests**
 
-Em `tests/test_radiant_yaml.py`, importar o módulo inserindo
-`SOURCE / "validators"` em `sys.path`, com uma classe `RadiantYamlTests`:
+In `tests/test_radiant_yaml.py`, import the module by inserting
+`SOURCE / "validators"` into `sys.path`, with a `RadiantYamlTests` class:
 
 ```python
 def test_units_example_round_trip(self):
@@ -103,7 +103,7 @@ def test_scalars_are_typed(self):
                      {"a": True, "b": None, "c": 3, "d": "3", "e": "x # y"})
 
 def test_comments_are_ignored(self):
-    self.assertEqual(load("# topo\na: b  # fim\n"), {"a": "b"})
+    self.assertEqual(load("# top\na: b  # end\n"), {"a": "b"})
 
 def test_plain_scalar_with_colon_is_refused(self):
     with self.assertRaisesRegex(YamlError, r"^linha 1: .*aspas"):
@@ -123,66 +123,67 @@ def test_unsupported_features_are_refused(self):
             load(text)
 ```
 
-- [ ] **Passo 2: confirmar que falham**
+- [ ] **Step 2: confirm they fail**
 
 Run: `python3 -m unittest tests.test_radiant_yaml -v`
-Expected: ERROR com `ModuleNotFoundError: No module named 'radiant_yaml'`.
+Expected: ERROR with `ModuleNotFoundError: No module named 'radiant_yaml'`.
 
-- [ ] **Passo 3: implementar `load` em `validators/radiant_yaml.py`**
+- [ ] **Step 3: implement `load` in `validators/radiant_yaml.py`**
 
-Parser recursivo por indentação sobre a lista de linhas sem comentário. Cada
-nível conhece sua coluna e devolve `(valor, próxima linha)`. Remova comentários
-com um varredor que respeita aspas antes de qualquer outra regra.
+A recursive parser by indentation over the list of lines without comments.
+Each level knows its column and returns `(value, next line)`. Remove comments
+with a scanner that respects quotes before any other rule.
 
-- [ ] **Passo 4: confirmar que passam**
+- [ ] **Step 4: confirm they pass**
 
 Run: `python3 -m unittest tests.test_radiant_yaml -v`
-Expected: 7 testes OK.
+Expected: 7 tests OK.
 
-- [ ] **Passo 5: documentar o subconjunto**
+- [ ] **Step 5: document the subset**
 
-Em `contracts/README.md`, seção "Unidades de execução" com um parágrafo: o
-bloco `radiant-units` usa YAML restrito, lido por
-`validators/radiant_yaml.py`; listar o que é aceito e o que é recusado, como
-acima. Todo arquivo válido nesse subconjunto é YAML válido, então leitores com
-parser completo, como o Demerzel, leem o mesmo valor.
+In `contracts/README.md`, an "Execution units" section with one paragraph:
+the `radiant-units` block uses restricted YAML, read by
+`validators/radiant_yaml.py`; list what is accepted and what is refused, as
+above. Every file valid in this subset is valid YAML, so readers with a full
+parser, such as Demerzel, read the same value.
 
-- [ ] **Passo 6: commit**
+- [ ] **Step 6: commit**
 
 ```bash
 git add validators/radiant_yaml.py tests/test_radiant_yaml.py contracts/README.md
 git commit -m "feat(validators): read a strict YAML subset with the standard library"
 ```
 
-### Tarefa 2: vocabulário de requisitos e `provides` dos adapters
+### Task 2: requirements vocabulary and the adapters' `provides`
 
 **Files:**
 - Create: `validators/dispatch_formats.py`
 - Create: `skills/radiant-delegation/requirements.json`
 - Create: `adapters/claude-code/provides.json`, `adapters/codex/provides.json`
 - Create: `tests/test_dispatch_formats.py`
-- Modify: `validators/check_repository.py` (função `check_dispatch(errors)`,
-  chamada em `check()` logo após `check_delegation`)
+- Modify: `validators/check_repository.py` (function `check_dispatch(errors)`,
+  called in `check()` right after `check_delegation`)
 - Modify: `tests/test_repository.py`
 
 **Interfaces:**
-- Produces: `dispatch_formats.load_requirements(path: Path) -> Set[str]`, que
-  lê `{"requirements": {"<termo>": "<descrição>"}}` e levanta `ValueError` em
-  formato inválido; `dispatch_formats.validate_provides(data: object,
-  requirements: Set[str]) -> List[str]`, que aceita só
-  `{"provides": [<termo>, ...]}` sem repetição e devolve as mensagens de erro.
-- Produces: `check_dispatch(errors: list) -> None` em `check_repository.py`,
-  que as Tarefas 3 e 4 estendem.
+- Produces: `dispatch_formats.load_requirements(path: Path) -> Set[str]`,
+  which reads `{"requirements": {"<term>": "<description>"}}` and raises
+  `ValueError` on an invalid format; `dispatch_formats.validate_provides(data:
+  object, requirements: Set[str]) -> List[str]`, which only accepts
+  `{"provides": [<term>, ...]}` without repetition and returns the error
+  messages.
+- Produces: `check_dispatch(errors: list) -> None` in `check_repository.py`,
+  which Tasks 3 and 4 extend.
 
-- [ ] **Passo 1: escrever os testes que falham**
+- [ ] **Step 1: write the failing tests**
 
-Em `tests/test_dispatch_formats.py`, classe `ProvidesTests`:
+In `tests/test_dispatch_formats.py`, class `ProvidesTests`:
 `validate_provides({"provides": ["browser"]}, {"browser"}) == []`;
-`{"provides": ["turbo"]}` produz uma mensagem contendo `'turbo'`;
-`{"provides": ["browser", "browser"]}` produz uma contendo `repetido`;
-`{"outros": []}` produz uma contendo `provides`.
+`{"provides": ["turbo"]}` produces a message containing `'turbo'`;
+`{"provides": ["browser", "browser"]}` produces one containing `repetido`;
+`{"outros": []}` produces one containing `provides`.
 
-Em `tests/test_repository.py`, na classe `RepositoryCheckTests`:
+In `tests/test_repository.py`, in the `RepositoryCheckTests` class:
 
 ```python
 def test_provides_with_unknown_requirement_fails(self):
@@ -199,101 +200,104 @@ def test_adapter_without_provides_fails(self):
     self.assertIn("adapters/claude-code", result.stderr)
 ```
 
-- [ ] **Passo 2: confirmar que falham**
+- [ ] **Step 2: confirm they fail**
 
 Run: `python3 -m unittest tests.test_dispatch_formats tests.test_repository -v`
-Expected: ERROR de import em `test_dispatch_formats` e FAIL nos dois testes
-novos de repositório.
+Expected: an import ERROR in `test_dispatch_formats` and FAIL in the two new
+repository tests.
 
-- [ ] **Passo 3: criar os dados**
+- [ ] **Step 3: create the data**
 
-`requirements.json` com os três termos e uma descrição de uma linha cada.
-`browser`: precisa navegar e inspecionar páginas. `ios-simulator`: precisa
-rodar e dirigir o iOS Simulator. `computer-use`: precisa controlar apps do
-desktop. Os dois `provides.json` com `{"provides": []}`.
+`requirements.json` with the three terms and a one-line description each.
+`browser`: needs to browse and inspect pages. `ios-simulator`: needs to run
+and drive the iOS Simulator. `computer-use`: needs to control desktop apps.
+Both `provides.json` with `{"provides": []}`.
 
-- [ ] **Passo 4: implementar as funções e `check_dispatch`**
+- [ ] **Step 4: implement the functions and `check_dispatch`**
 
-`check_dispatch` lê o vocabulário e, para cada diretório em `adapters/`, exige
-`provides.json` válido, com o path relativo no começo de cada erro, como
-`check_delegation` faz.
+`check_dispatch` reads the vocabulary and, for each directory in `adapters/`,
+requires a valid `provides.json`, with the relative path at the start of each
+error, as `check_delegation` does.
 
-- [ ] **Passo 5: confirmar que passam**
+- [ ] **Step 5: confirm they pass**
 
 Run: `python3 -m unittest discover -s tests -v && python3 validators/check_repository.py`
-Expected: todos OK; validator em `PASS`.
+Expected: all OK; validator at `PASS`.
 
-- [ ] **Passo 6: commit**
+- [ ] **Step 6: commit**
 
 ```bash
 git add validators/ skills/radiant-delegation/requirements.json adapters/*/provides.json tests/
 git commit -m "feat(delegation): declare requirements and what each adapter provides"
 ```
 
-### Tarefa 3: unidades de execução no template de contrato
+### Task 3: execution units in the contract template
 
 **Files:**
 - Modify: `validators/dispatch_formats.py`, `validators/check_repository.py`
-- Modify: `templates/task-contract.md` (subseção `### Execution units` no fim
-  da seção 4, sem renumerar)
-- Modify: `contracts/README.md` (regras de integridade da divisão)
+- Modify: `templates/task-contract.md` (a `### Execution units` subsection at
+  the end of section 4, without renumbering)
+- Modify: `contracts/README.md` (integrity rules for the split)
 - Modify: `tests/test_dispatch_formats.py`, `tests/test_repository.py`
 
 **Interfaces:**
-- Consumes: `radiant_yaml.load`, `YamlError` (Tarefa 1); `load_requirements`,
-  `check_dispatch` (Tarefa 2).
+- Consumes: `radiant_yaml.load`, `YamlError` (Task 1); `load_requirements`,
+  `check_dispatch` (Task 2).
 - Produces: `dispatch_formats.extract_units_block(markdown: str) ->
-  Optional[str]`, que devolve o corpo do único bloco ` ```yaml radiant-units `,
-  `None` sem bloco, e levanta `ValueError` com `mais de um bloco` quando há
-  dois; `dispatch_formats.validate_units(data: object, agents: Dict[str, str],
-  requirements: Set[str]) -> List[str]`, em que `agents` mapeia nome do perfil
-  para capacidade padrão, lido de `agents.json`.
+  Optional[str]`, which returns the body of the single
+  ` ```yaml radiant-units ` block, `None` without a block, and raises
+  `ValueError` with `mais de um bloco` when there are two;
+  `dispatch_formats.validate_units(data: object, agents: Dict[str, str],
+  requirements: Set[str]) -> List[str]`, where `agents` maps profile name to
+  default capability, read from `agents.json`.
 
-Regras de `validate_units`, que é o schema normativo do ADR:
-- topo `{"units": [...]}` não vazio, sem outras chaves;
-- chaves de unidade: `id`, `role`, `capability`, `capability_reason`,
-  `requires`, `objective`, `writes`, `depends_on`, `done_when`; obrigatórias
-  `id`, `role`, `objective`, `writes`, `done_when`; chave desconhecida é erro;
-- `id` no padrão das restrições globais, único, mesmo prefixo para todas;
-- `role` é nome de perfil em `agents`;
-- `capability`, quando presente, está em `CAPABILITIES` e exige
-  `capability_reason` não vazio; `capability_reason` sem `capability` é erro;
-- `requires` é lista de termos do vocabulário;
-- `writes` é lista não vazia de paths relativos POSIX, sem `..` e sem `/`
-  inicial;
-- `depends_on` só cita IDs existentes, nunca o próprio, e o grafo não tem
-  ciclo;
-- duas unidades sem caminho de dependência entre si não podem ter `writes`
-  sobrepostos. Normalize retirando a barra final e compare por segmento: um
-  path se sobrepõe a outro quando é igual a ele ou é seu prefixo seguido de `/`;
-- `objective` e `done_when` são strings não vazias.
+Rules of `validate_units`, which is the normative schema of the ADR:
+- a non-empty top level `{"units": [...]}`, without other keys;
+- unit keys: `id`, `role`, `capability`, `capability_reason`, `requires`,
+  `objective`, `writes`, `depends_on`, `done_when`; required `id`, `role`,
+  `objective`, `writes`, `done_when`; an unknown key is an error;
+- `id` follows the pattern in the global constraints, unique, the same prefix
+  for all;
+- `role` is a profile name in `agents`;
+- `capability`, when present, is in `CAPABILITIES` and requires a non-empty
+  `capability_reason`; `capability_reason` without `capability` is an error;
+- `requires` is a list of vocabulary terms;
+- `writes` is a non-empty list of relative POSIX paths, without `..` and
+  without a leading `/`;
+- `depends_on` only cites existing IDs, never its own, and the graph has no
+  cycle;
+- two units without a dependency path between them cannot have overlapping
+  `writes`. Normalize by removing the trailing slash and compare by segment: a
+  path overlaps another when it is equal to it or is its prefix followed by
+  `/`;
+- `objective` and `done_when` are non-empty strings.
 
-- [ ] **Passo 1: escrever os testes que falham**
+- [ ] **Step 1: write the failing tests**
 
-Em `tests/test_dispatch_formats.py`, classe `UnitsTests`, com um fixture
-`VALID` que reproduz o exemplo de duas unidades da seção 2 do ADR-0002 e
+In `tests/test_dispatch_formats.py`, class `UnitsTests`, with a `VALID`
+fixture that reproduces the two-unit example from section 2 of ADR-0002 and
 `AGENTS = {"radiant-dev": "standard", "radiant-verifier": "deep"}`:
 
 - `test_valid_units_pass`: `validate_units(VALID, AGENTS, {"browser"}) == []`.
-- `test_overlap_between_independent_units_fails`: `.2` sem `depends_on` e com
-  `writes: [src/sources]` gera erro contendo `sobrep`.
-- `test_overlap_check_uses_segments`: `src/sync/` e `src/sync2/` em unidades
-  independentes não geram erro.
-- `test_dependency_cycle_fails`: `.1` depende de `.2` e `.2` de `.1`; erro
-  contendo `ciclo`, e a chamada termina.
-- `test_capability_requires_reason`: `capability: deep` sem
-  `capability_reason` gera erro contendo `capability_reason`.
+- `test_overlap_between_independent_units_fails`: `.2` without `depends_on`
+  and with `writes: [src/sources]` produces an error containing `sobrep`.
+- `test_overlap_check_uses_segments`: `src/sync/` and `src/sync2/` in
+  independent units produce no error.
+- `test_dependency_cycle_fails`: `.1` depends on `.2` and `.2` on `.1`; an
+  error containing `ciclo`, and the call terminates.
+- `test_capability_requires_reason`: `capability: deep` without
+  `capability_reason` produces an error containing `capability_reason`.
 - `test_unknown_role_requirement_and_key_fail`: `role: radiant-x`,
-  `requires: [turbo]` e uma chave `harness` geram, cada um, um erro que cita o
-  valor ou a chave.
-- `test_ids_must_share_prefix`: `TC-0025.1` com `TC-0026.2` gera erro contendo
-  `prefixo`.
-- `test_escaping_write_path_fails`: `writes: [../x]` e `writes: [/x]` geram
-  erro.
-- `test_two_blocks_are_refused`: `extract_units_block` com dois blocos levanta
-  `ValueError` contendo `mais de um bloco`.
+  `requires: [turbo]` and a `harness` key each produce an error that cites
+  the value or the key.
+- `test_ids_must_share_prefix`: `TC-0025.1` with `TC-0026.2` produces an error
+  containing `prefixo`.
+- `test_escaping_write_path_fails`: `writes: [../x]` and `writes: [/x]`
+  produce an error.
+- `test_two_blocks_are_refused`: `extract_units_block` with two blocks raises
+  `ValueError` containing `mais de um bloco`.
 
-Em `tests/test_repository.py`:
+In `tests/test_repository.py`:
 
 ```python
 def test_template_units_example_must_validate(self):
@@ -305,46 +309,48 @@ def test_template_units_example_must_validate(self):
     self.assertIn("templates/task-contract.md", result.stderr)
 ```
 
-- [ ] **Passo 2: confirmar que falham**
+- [ ] **Step 2: confirm they fail**
 
 Run: `python3 -m unittest tests.test_dispatch_formats tests.test_repository -v`
-Expected: FAIL ou ERROR nos testes novos.
+Expected: FAIL or ERROR in the new tests.
 
-- [ ] **Passo 3: implementar `extract_units_block` e `validate_units`**
+- [ ] **Step 3: implement `extract_units_block` and `validate_units`**
 
-Para o ciclo e a alcançabilidade, calcule o fecho transitivo de `depends_on`
-por busca em profundidade com marcação de visita; o mesmo fecho decide quais
-pares são independentes.
+For the cycle and reachability, compute the transitive closure of
+`depends_on` by depth-first search with visit marking; the same closure
+decides which pairs are independent.
 
-- [ ] **Passo 4: escrever a subseção no template**
+- [ ] **Step 4: write the subsection in the template**
 
-`### Execution units` no fim da seção 4: um parágrafo dizendo que a subseção é
-opcional e que, sem ela, o contrato é uma unidade só; o exemplo de duas
-unidades do ADR-0002 dentro da cerca `yaml radiant-units`; ponteiro para
-`contracts/README.md#unidades-de-execução`. Em `contracts/README.md`, na mesma
-seção da Tarefa 1, as regras de integridade: `id` estável e nunca renumerado;
-a soma das unidades não ultrapassa o contrato; mudar a divisão depois do
-início é amendment quando a fronteira não muda e HOLD quando muda.
+`### Execution units` at the end of section 4: one paragraph saying the
+subsection is optional and that, without it, the contract is a single unit;
+the two-unit example from ADR-0002 inside the `yaml radiant-units` fence; a
+pointer to `contracts/README.md#execution-units`. In
+`contracts/README.md`, in the same section as Task 1, the integrity rules:
+`id` stable and never renumbered; the sum of the units does not exceed the
+contract; changing the split after the start is an amendment when the
+boundary does not change and HOLD when it does.
 
-- [ ] **Passo 5: ligar ao validator**
+- [ ] **Step 5: wire it into the validator**
 
-`check_dispatch` extrai o bloco de `templates/task-contract.md`, lê com
-`radiant_yaml.load` e valida com os perfis de `agents.json`. `YamlError` e
-`ValueError` viram erro com o path do template no começo.
+`check_dispatch` extracts the block from `templates/task-contract.md`, reads
+it with `radiant_yaml.load` and validates it with the profiles in
+`agents.json`. `YamlError` and `ValueError` become an error with the
+template's path at the start.
 
-- [ ] **Passo 6: confirmar que passam**
+- [ ] **Step 6: confirm they pass**
 
 Run: `python3 -m unittest discover -s tests -v && python3 validators/check_repository.py`
-Expected: todos OK; validator em `PASS`.
+Expected: all OK; validator at `PASS`.
 
-- [ ] **Passo 7: commit**
+- [ ] **Step 7: commit**
 
 ```bash
 git add validators/ templates/task-contract.md contracts/README.md tests/
 git commit -m "feat(contracts): split a task contract into execution units"
 ```
 
-### Tarefa 4: formato das regras de roteamento
+### Task 4: routing rules format
 
 **Files:**
 - Create: `docs/routing.md`, `docs/routing.example.json`
@@ -352,150 +358,153 @@ git commit -m "feat(contracts): split a task contract into execution units"
 - Modify: `tests/test_dispatch_formats.py`, `tests/test_repository.py`
 
 **Interfaces:**
-- Consumes: `check_dispatch` (Tarefa 2).
+- Consumes: `check_dispatch` (Task 2).
 - Produces: `dispatch_formats.validate_routing(data: object, adapters:
   Set[str]) -> List[str]`.
 
-Regras: topo com `schema`, `rules` e `default`, sem outras chaves; `schema`
-igual a `1`; `rules` é lista, possivelmente vazia; regra com `id`, `when` e
-`use` obrigatórios e `approval`, `why` opcionais; `id` no padrão e único;
-`when` e `why` strings não vazias; `use` e `default` listas não vazias de
-candidatos; candidato com `harness` obrigatório em `adapters`, `capability`
-opcional em `CAPABILITIES` e `effort` opcional como string não vazia.
+Rules: a top level with `schema`, `rules` and `default`, without other keys;
+`schema` equal to `1`; `rules` is a list, possibly empty; a rule with `id`,
+`when` and `use` required and `approval`, `why` optional; `id` follows the
+pattern and is unique; `when` and `why` are non-empty strings; `use` and
+`default` are non-empty lists of candidates; a candidate with `harness`
+required in `adapters`, `capability` optional in `CAPABILITIES` and `effort`
+optional as a non-empty string.
 
-- [ ] **Passo 1: escrever os testes que falham**
+- [ ] **Step 1: write the failing tests**
 
-Classe `RoutingTests`: o exemplo do ADR-0002 passa com
-`{"claude-code", "codex"}`; `harness: copilot` gera erro contendo
-`'copilot'`; `approval: "auto"` gera erro contendo `approval`; dois `id`
-iguais geram erro contendo `repetido`; `schema: 2` gera erro contendo
-`schema`. Em `test_repository.py`,
-`test_routing_example_with_unknown_harness_fails` troca o primeiro
-`"claude-code"` de `docs/routing.example.json` por `"copilot"` e espera
-código 1 com `docs/routing.example.json` no stderr.
+Class `RoutingTests`: the ADR-0002 example passes with
+`{"claude-code", "codex"}`; `harness: copilot` produces an error containing
+`'copilot'`; `approval: "auto"` produces an error containing `approval`; two
+equal `id`s produce an error containing `repetido`; `schema: 2` produces an
+error containing `schema`. In `test_repository.py`,
+`test_routing_example_with_unknown_harness_fails` replaces the first
+`"claude-code"` of `docs/routing.example.json` with `"copilot"` and expects
+exit code 1 with `docs/routing.example.json` in stderr.
 
-- [ ] **Passo 2: confirmar que falham**
+- [ ] **Step 2: confirm they fail**
 
 Run: `python3 -m unittest tests.test_dispatch_formats tests.test_repository -v`
-Expected: FAIL ou ERROR nos testes novos.
+Expected: FAIL or ERROR in the new tests.
 
-- [ ] **Passo 3: implementar `validate_routing` e ligar em `check_dispatch`**
+- [ ] **Step 3: implement `validate_routing` and wire it into `check_dispatch`**
 
-`adapters` são os nomes dos diretórios em `adapters/`.
+`adapters` are the names of the directories in `adapters/`.
 
-- [ ] **Passo 4: escrever `docs/routing.md` e o exemplo**
+- [ ] **Step 4: write `docs/routing.md` and the example**
 
-`docs/routing.example.json` é o exemplo da seção 2 do ADR-0002. `docs/routing.md`
-explica: a instância é do usuário, no local das restrições globais, gerada pelo
-dotfiles e fora de qualquer projeto; o orquestrador escolhe a regra com
-julgamento, e o operador só filtra candidatos sem adapter ou sem os
-requisitos da unidade (`provides.json`) e pega o primeiro viável; um candidato
-nunca usa capacidade abaixo da unidade; `effort` não aceito pelo harness é
-registrado e omitido do lançamento; `approval: human` exige confirmação
-explícita; cada campo, com o schema da Tarefa 4.
+`docs/routing.example.json` is the example from section 2 of ADR-0002.
+`docs/routing.md` explains: the instance belongs to the user, at the location
+in the global constraints, generated by dotfiles and outside any project; the
+orchestrator chooses the rule with judgment, and the operator only filters
+out candidates without an adapter or without the unit's requirements
+(`provides.json`) and takes the first viable one; a candidate never uses a
+capability below the unit's; an `effort` the harness does not accept is
+recorded and left out of the launch; `approval: human` requires explicit
+confirmation; each field, with the schema from Task 4.
 
-- [ ] **Passo 5: confirmar que passam**
+- [ ] **Step 5: confirm they pass**
 
 Run: `python3 -m unittest discover -s tests -v && python3 validators/check_repository.py`
-Expected: todos OK; validator em `PASS`.
+Expected: all OK; validator at `PASS`.
 
-- [ ] **Passo 6: commit**
+- [ ] **Step 6: commit**
 
 ```bash
 git add docs/routing.md docs/routing.example.json validators/ tests/
 git commit -m "feat(routing): define user-level routing rules and validate the example"
 ```
 
-### Tarefa 5: despacho por backend na skill de delegação
+### Task 5: backend dispatch in the delegation skill
 
 **Files:**
 - Modify: `skills/radiant-delegation/SKILL.md`
 
-- [ ] **Passo 1: escrever a seção "Despacho por backend"**
+- [ ] **Step 1: write the "Backend dispatch" section**
 
-Depois de "Paralelismo": despachar por um operador externo é alternativa ao
-subagente nativo; o pacote é o caminho do contrato mais o ID da unidade, como
-ponteiro, mais revisão e raiz absoluta do Radiant; o orquestrador escolhe a
-regra de roteamento, com link para `../../docs/routing.md`, e o operador resolve harness e
-modelo; requisitos vêm de `requirements.json`, e o que cada harness oferece,
-de `adapters/<harness>/provides.json`; o retorno de Build continua sendo o
-Completion report, gravado em `.radiant/reports/<id>.md` no worktree, path que
-o consumidor ignora no Git; as regras 1 a 7 não mudam.
+After "Parallelism": dispatching through an external operator is an
+alternative to the native subagent; the package is the contract path plus the
+unit ID, as a pointer, plus the Radiant revision and absolute root; the
+orchestrator chooses the routing rule, with a link to `../../docs/routing.md`,
+and the operator resolves harness and model; requirements come from
+`requirements.json`, and what each harness offers, from
+`adapters/<harness>/provides.json`; the Build return is still the Completion
+report, written to `.radiant/reports/<id>.md` in the worktree, a path the
+consumer ignores in Git; rules 1 to 7 do not change.
 
-- [ ] **Passo 2: atualizar a proveniência e a versão**
+- [ ] **Step 2: update the provenance and the version**
 
-Em "Proveniência", a linha por rodada passa a incluir harness e identificador
-do despacho quando houver despacho por backend. `metadata.version` vai de
-`0.1.1` para `0.2.0`.
+In "Provenance", the line per round now includes the harness and the dispatch
+identifier when there is backend dispatch. `metadata.version` goes from
+`0.1.1` to `0.2.0`.
 
-- [ ] **Passo 3: verificar**
+- [ ] **Step 3: verify**
 
 Run: `python3 validators/check_repository.py && python3 -m unittest discover -s tests -v`
-Expected: `PASS` e todos OK; a seção nova não muda os anchors dos papéis
-conferidos por `check_delegation`.
+Expected: `PASS` and all OK; the new section does not change the role
+anchors checked by `check_delegation`.
 
-- [ ] **Passo 4: commit**
+- [ ] **Step 4: commit**
 
 ```bash
 git add skills/radiant-delegation/SKILL.md
 git commit -m "feat(delegation): dispatch execution units through a backend operator"
 ```
 
-### Tarefa 6: registros de fronteira e estado do ADR
+### Task 6: boundary records and the ADR's state
 
 **Files:**
-- Modify: `docs/integration.md` (seção "Fronteira Demerzel" depois de
-  "Fronteira AIKM")
-- Modify: `docs/project-generation-system.md` (nota de estado no topo da
-  seção 30)
+- Modify: `docs/integration.md` ("Demerzel boundary" section after "AIKM
+  boundary")
+- Modify: `docs/project-generation-system.md` (state note at the top of
+  section 30)
 - Modify: `docs/capabilities.md`, `README.md`, `docs/verification.md`
 - Modify: `docs/adrs/ADR-0002-backend-dispatch-demerzel.md`
 
-- [ ] **Passo 1: escrever os registros**
+- [ ] **Step 1: write the records**
 
-- "Fronteira Demerzel": o Demerzel é um consumidor do Radiant que despacha
-  unidades por backend; lê contratos e regras do usuário e grava só seu
-  registro de despachos; não altera contratos nem faz merge, push ou mudança
-  de escopo; o consumidor que despacha ignora `.radiant/reports/` no Git; o
-  Radiant funciona sem ele.
-- Nota na seção 30, datada de 2026-10-16, no formato da nota da seção 20: o
-  Radiant define como fluxos agênticos são divididos, roteados e aceitos; a
-  execução e a observação ficam com harnesses e com um operador externo; o
-  texto abaixo permanece como registro da tese 0.2.
-- `docs/capabilities.md`: linha "Despachar unidades por backend" apontando
-  para a skill de delegação e para `docs/routing.md`.
-- `README.md`: linha de `docs/routing.md` na tabela "Encontrar o que precisa".
-- `docs/verification.md`: o validator também confere vocabulário, `provides`,
-  o exemplo de unidades do template e o exemplo de roteamento, e lê YAML
-  restrito sem dependências.
-- ADR-0002: emenda de 2026-10-16 registrando que o validator lê o subconjunto
-  YAML com `validators/radiant_yaml.py`, a pedido do owner, e que a tabela de
-  arquivos previstos inclui `validators/radiant_yaml.py`,
-  `validators/dispatch_formats.py`, `contracts/README.md` e os testes novos.
+- "Demerzel boundary": Demerzel is a Radiant consumer that dispatches units
+  through a backend; it reads contracts and the user's rules and writes only
+  its dispatch log; it does not change contracts or merge, push or change
+  scope; the dispatching consumer ignores `.radiant/reports/` in Git; Radiant
+  works without it.
+- A note in section 30, dated 2026-10-16, in the format of the note in
+  section 20: Radiant defines how agentic flows are split, routed and
+  accepted; execution and observation stay with the harnesses and an external
+  operator; the text below remains as a record of thesis 0.2.
+- `docs/capabilities.md`: a "Dispatch units through a backend" row pointing
+  to the delegation skill and to `docs/routing.md`.
+- `README.md`: a row for `docs/routing.md` in the "Find what you need" table.
+- `docs/verification.md`: the validator also checks the vocabulary,
+  `provides`, the template's units example and the routing example, and reads
+  restricted YAML without dependencies.
+- ADR-0002: an amendment dated 2026-10-16 recording that the validator reads
+  the YAML subset with `validators/radiant_yaml.py`, at the owner's request,
+  and that the planned files table includes `validators/radiant_yaml.py`,
+  `validators/dispatch_formats.py`, `contracts/README.md` and the new tests.
 
-- [ ] **Passo 2: verificar**
+- [ ] **Step 2: verify**
 
 Run: `python3 validators/check_repository.py && python3 -m unittest discover -s tests -v && git diff --check`
-Expected: `PASS`, todos OK e nenhum aviso de whitespace.
+Expected: `PASS`, all OK and no whitespace warning.
 
-- [ ] **Passo 3: commit**
+- [ ] **Step 3: commit**
 
 ```bash
 git add docs/ README.md
 git commit -m "docs: record the Demerzel boundary and backend dispatch"
 ```
 
-### Tarefa 7: páginas vivas
+### Task 7: living pages
 
-Executar depois do merge, em `faelplg/design-systems`, pasta
-`radiant-design-system/docs/`, conforme o `AGENTS.md` do Radiant.
+Run after the merge, in `faelplg/design-systems`, in the
+`radiant-design-system/docs/` folder, according to Radiant's `AGENTS.md`.
 
-- [ ] **Passo 1:** atualizar mapa, glossário e casos de uso com unidades de
-  execução, requisitos, `provides`, roteamento, despacho por backend e o
-  Demerzel como consumidor.
-- [ ] **Passo 2:** rodar `build.py --check` e `build.py --artifact <dir>` sem
-  erro.
-- [ ] **Passo 3:** commit e PR naquele repositório, com aprovação do owner, e
-  republicação das três páginas nos URLs atuais.
-- [ ] **Passo 4:** no Radiant, o ADR-0002 passa a `accepted` com a referência
-  do PR e do commit de merge, como o ADR-0001.
+- [ ] **Step 1:** update the map, glossary and use cases with execution units,
+  requirements, `provides`, routing, backend dispatch and Demerzel as a
+  consumer.
+- [ ] **Step 2:** run `build.py --check` and `build.py --artifact <dir>`
+  without error.
+- [ ] **Step 3:** commit and PR in that repository, with the owner's approval,
+  and republish the three pages at their current URLs.
+- [ ] **Step 4:** in Radiant, ADR-0002 becomes `accepted` with the reference
+  to the PR and the merge commit, as with ADR-0001.
