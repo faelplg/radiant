@@ -1,44 +1,44 @@
-# Relatório de manutenção - [projeto] - [AAAA-MM-DD]
+# Maintenance report - [project] - [YYYY-MM-DD]
 
-Formulário da [skill de manutenção](../skills/radiant-maintenance/SKILL.md).
-O relatório preenchido fica no diretório `maintenance` do consumidor, ignorado
-pelo Git.
+Form for the [maintenance skill](../skills/radiant-maintenance/SKILL.md).
+The filled report lives in the consumer's `maintenance` directory, ignored by
+Git.
 
-## Execução
+## Run
 
-- Revisão do Radiant: `[commit completo]`
-- Commit do consumidor: `[commit]`
-- Relatório anterior: `[path | nenhum]`
-- Modo: `[manual | agendada, com o mecanismo]`
-- Sessão principal: `[capacidade pedida, ID do modelo efetivo, desvio | sem desvio]`
-- Delegações, uma por rodada: `[perfil, capacidade, ID do modelo, estado, métrica de uso do adapter | ausente]`
+- Radiant revision: `[full commit]`
+- Consumer commit: `[commit]`
+- Previous report: `[path | none]`
+- Mode: `[manual | scheduled, with the mechanism]`
+- Main session: `[requested capability, effective model ID, deviation | no deviation]`
+- Delegations, one per round: `[profile, capability, model ID, state, adapter usage metric | absent]`
 
-## Fontes
+## Sources
 
-| Fonte | Situação | Detalhe |
+| Source | Status | Detail |
 | --- | --- | --- |
-| `[fonte]` | `consultada / pulada por política / falhou` | `[comando, motivo ou erro]` |
+| `[source]` | `consulted / skipped by policy / failed` | `[command, reason or error]` |
 
-## Candidatos
+## Candidates
 
-| ID | Categoria | Evidência | Risco | Valor | Reversibilidade | Situação |
+| ID | Category | Evidence | Risk | Value | Reversibility | Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| `M-1` | `[ciclo / gate / drift / dependência / forge / pin]` | `[saída, path:linha]` | `[baixo/médio/alto]` | `[baixo/médio/alto]` | `[alta/média/baixa]` | `novo / recorrente / resolvido` |
+| `M-1` | `[cycle / gate / drift / dependency / forge / pin]` | `[output, path:line]` | `[low/medium/high]` | `[low/medium/high]` | `[high/medium/low]` | `new / recurring / resolved` |
 
-## Rascunhos de contrato
+## Contract drafts
 
-Até três candidatos do topo. Não são contratos e não possuem ID.
+Up to three candidates at the top. They are not contracts and have no ID.
 
-### `[M-1]` - [título]
+### `[M-1]` - [title]
 
-- Objetivo: `[mudança observável]`
-- Outputs: `[arquivos ou comportamento]`
-- Verificação: `[comando ou critério]`
+- Goal: `[observable change]`
+- Outputs: `[files or behavior]`
+- Verification: `[command or criterion]`
 
-## Omissões e limitações
+## Omissions and limitations
 
-- `[o que não foi observado e por quê]`
+- `[what was not observed and why]`
 
-## Estado
+## State
 
-`DONE | HOLD | FAIL` - `[conclusão em uma frase, incluindo "nada material" quando for o caso]`
+`DONE | HOLD | FAIL` - `[one-sentence conclusion, including "nothing material" when that is the case]`

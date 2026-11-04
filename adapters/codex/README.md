@@ -1,139 +1,143 @@
-# Adapter Codex
+# Codex adapter
 
-Este é o mapa do harness, não o sistema. Os três níveis e a política de revisão
-pertencem à [integração](../../docs/integration.md).
+This is the harness map, not the system. The three levels and the revision
+policy belong to [integration](../../docs/integration.md).
 
-## Entrada do agente
+## Agent entry
 
-1. Resolva a raiz indicada pelo bootstrap global e a raiz do consumidor.
-2. Leia `.radiant.json` local e execute
+1. Resolve the root given by the global bootstrap and the consumer root.
+2. Read the local `.radiant.json` and run
    `python3 <radiant-root>/validators/check_project.py <project-root>`.
-   Siga o resultado antes de carregar instruções compartilhadas.
-3. Com o gate satisfeito, leia a
-   [Constitution](../../constitution/CONSTITUTION.md) dessa revisão, o
-   [Engineering Baseline](../../engineering/engineering-baseline.md), o
-   [índice de capabilities](../../docs/capabilities.md) e a skill aplicável.
-4. Leia os paths do mapa do consumidor conforme a tarefa; comandos são locais
-   ao consumidor. O [Learn Back](../../docs/learn-back.md) aponta para os owners.
+   Follow the result before loading shared instructions.
+3. With the gate satisfied, read that revision's
+   [Constitution](../../constitution/CONSTITUTION.md), the
+   [Engineering Baseline](../../engineering/engineering-baseline.md), the
+   [capability index](../../docs/capabilities.md) and the applicable skill.
+4. Read the paths in the consumer's map as the task requires; commands are
+   local to the consumer. [Learn Back](../../docs/learn-back.md) points to the
+   owners.
 
-No próprio Radiant, use seu [AGENTS.md](../../AGENTS.md). Um pedido explícito de
-primeiro bootstrap permite preparar o mapa do novo projeto, sem inventar um
-pin ou iniciar uma implementação sem inputs. Conhecer a localização de uma
-skill não significa que ela foi lida: carregue seu arquivo quando aplicável.
-Não é necessária instalação em catálogo nativo para usar a skill por leitura.
+In Radiant itself, use its [AGENTS.md](../../AGENTS.md). An explicit request
+for a first bootstrap allows preparing the new project's map, without
+inventing a pin or starting an implementation without inputs. Knowing where a
+skill is does not mean it was read: load its file when applicable. No install
+in a native catalog is needed to use the skill by reading it.
 
-## Configurar o usuário
+## Set up the user
 
-Requisitos: Python 3.9+, Git e checkout acessível ao harness. Na raiz do Radiant:
+Requirements: Python 3.9+, Git and a checkout the harness can reach. At the
+Radiant root:
 
 ```sh
 python3 adapters/render_bootstrap.py
 ```
 
-O comando imprime o [bloco global](../global.template.md) com o path absoluto
-deste checkout. O bloco é o mesmo para todos os harnesses e indica o adapter de
-cada um, então serve também quando Codex e outro harness leem o mesmo arquivo
-de instruções. Para criar um arquivo local inspecionável, ignorado no Git:
+The command prints the [global block](../global.template.md) with the absolute
+path of this checkout. The block is the same for every harness and names each
+one's adapter, so it also works when Codex and another harness read the same
+instructions file. To create an inspectable local file, ignored by Git:
 
 ```sh
 python3 adapters/render_bootstrap.py --output .local/global.md
 ```
 
-O gerador recusa sobrescrever arquivos e symlinks. Para regenerar, use outro
-destino ou a saída padrão. Ele não instala regras, altera preferências nem
-substitui o `AGENTS.md` do usuário.
+The generator refuses to overwrite files and symlinks. To regenerate, use
+another destination or standard output. It does not install rules, change
+preferences or replace the user's `AGENTS.md`.
 
-Inclua apenas o bloco gerado, uma única vez, na fonte das instruções globais
-do perfil usado.
-No Codex, o local padrão é `~/.codex/AGENTS.md`; com `CODEX_HOME`, use o diretório
-desse perfil. Um `AGENTS.override.md` não vazio tem prioridade. São mecanismos
-do harness, não mecanismos de descoberta adicionais do Radiant.
-Esses comportamentos seguem a
-[documentação oficial de AGENTS.md](https://learn.chatgpt.com/docs/agent-configuration/agents-md),
-consultada em 2026-09-15.
+Include only the generated block, once, in the source of the global
+instructions of the profile in use.
+In Codex, the default location is `~/.codex/AGENTS.md`; with `CODEX_HOME`, use
+that profile's directory. A non-empty `AGENTS.override.md` takes priority.
+These are harness mechanisms, not additional Radiant discovery mechanisms.
+This behavior follows the
+[official AGENTS.md documentation](https://learn.chatgpt.com/docs/agent-configuration/agents-md),
+consulted on 2026-09-15.
 
-Preserve preferências existentes. Se o arquivo for gerado por Nix/dotfiles,
-altere sua fonte e regenere pelo mecanismo proprietário. A configuração local
-inspecionada nesta migração é desse tipo; a instalação externa não foi executada.
+Keep existing preferences. If the file is generated by Nix/dotfiles, change
+its source and regenerate through the owning mechanism. The local
+configuration inspected in this migration is of that kind; the external
+installation was not run.
 
-Abra uma sessão nova no consumidor e peça que identifique pointer, commit
-validado, Constitution e mapa local. Confirme o carregamento das fontes; o
-texto em Markdown é instrução para leitura, não import automático de arquivos.
-Não alegar validação de sessão nova com base só no gerador.
+Open a new session in the consumer and ask it to identify the pointer, the
+validated commit, the Constitution and the local map. Confirm the sources were
+loaded; Markdown text is an instruction to read, not an automatic file import.
+Do not claim a new session was validated based on the generator alone.
 
-Para desfazer, remova somente o bloco delimitado `radiant:begin/end` da fonte
-das instruções globais e regenere quando aplicável. Não apague preferências
-restantes. Para relocação, regenere o bloco com o novo checkout. Nenhum arquivo
-do Core precisa mudar.
+To undo, remove only the delimited `radiant:begin/end` block from the source
+of the global instructions and regenerate when applicable. Do not delete the
+remaining preferences. To relocate, regenerate the block with the new
+checkout. No Core file needs to change.
 
-## Capacidades
+## Capabilities
 
-O mapeamento capacidade → ID completo de modelo está em
-[capabilities.json](capabilities.json), única fonte deste adapter. Trocar de
-modelo é editar esse arquivo, verificar e regenerar os subagentes.
+The capability → full model ID mapping is in
+[capabilities.json](capabilities.json), this adapter's only source. Changing
+models means editing that file, verifying and regenerating the subagents.
 
-## Subagentes
+## Subagents
 
-Os perfis de [agents.json](../../skills/radiant-delegation/agents.json) viram
-agentes customizados do Codex:
+The profiles in [agents.json](../../skills/radiant-delegation/agents.json)
+become Codex custom agents:
 
 ```sh
 python3 adapters/render_bootstrap.py --adapter codex --agents-dir ~/.codex/agents
 ```
 
-Cada TOML contém `name`, `description`, `model`, `developer_instructions` e,
-nos perfis de leitura, `sandbox_mode`. O campo `developer_instructions` traz
-apenas o ponteiro para a seção do papel na
-[skill de delegação](../../skills/radiant-delegation/SKILL.md). O gerador
-recusa a execução inteira se qualquer `radiant-*.toml` já existir.
+Each TOML holds `name`, `description`, `model`, `developer_instructions` and,
+for read profiles, `sandbox_mode`. The `developer_instructions` field carries
+only the pointer to the role's section in the
+[delegation skill](../../skills/radiant-delegation/SKILL.md). The generator
+refuses the whole run if any `radiant-*.toml` already exists.
 
-- O `model` declarado no arquivo prevalece sobre o modelo pedido na criação do
-  subagente. Um override de capacidade pelo contrato, portanto, roda na sessão
-  do orquestrador, conforme a regra 5 da skill.
-- A sessão principal deve rodar no modelo de `deep`. O modelo padrão do
-  `config.toml` vale para qualquer sessão; abra a do orquestrador com
-  `codex -m <ID de deep>` ou troque com `/model`.
-- O Codex não documenta bloqueio de delegação por agente; a regra de que
-  papéis delegados não delegam está nas instruções do agente.
-- Perfis com `access: read` recebem `sandbox_mode = "read-only"`. Perfis
-  `write` herdam o sandbox da sessão; as fronteiras do contrato valem pela
-  seção "Acesso e fronteiras" da skill de delegação.
+- The `model` declared in the file wins over the model requested when the
+  subagent is created. A capability override through the contract therefore
+  runs in the orchestrator's session, according to rule 5 of the skill.
+- The main session should run on the `deep` model. The default model in
+  `config.toml` applies to any session; open the orchestrator's session with
+  `codex -m <deep ID>` or switch with `/model`.
+- Codex does not document per-agent blocking of delegation; the rule that
+  delegated roles do not delegate is in the agent's instructions.
+- Profiles with `access: read` get `sandbox_mode = "read-only"`. `write`
+  profiles inherit the session's sandbox; the contract's boundaries hold
+  through the "Access and boundaries" section of the delegation skill.
 
-Comportamentos conforme a
-[documentação oficial de subagentes](https://learn.chatgpt.com/docs/agent-configuration/subagents),
-consultada em 2026-10-09. Para desfazer, remova os seis arquivos
-`radiant-*.toml` de `~/.codex/agents/`.
+Behavior according to the
+[official subagent documentation](https://learn.chatgpt.com/docs/agent-configuration/subagents),
+consulted on 2026-10-09. To undo, remove the six `radiant-*.toml` files from
+`~/.codex/agents/`.
 
-## Medição de uso
+## Usage measurement
 
-As ferramentas de delegação do Codex não devolvem contadores ao orquestrador.
-A métrica deste adapter vem do rollout local de cada thread, em
-`$CODEX_HOME/sessions/AAAA/MM/DD/rollout-*-<thread>.jsonl` (`~/.codex` por
-padrão). Por rodada delegada, registre:
+Codex delegation tools return no counters to the orchestrator. This adapter's
+metric comes from each thread's local rollout, in
+`$CODEX_HOME/sessions/YYYY/MM/DD/rollout-*-<thread>.jsonl` (`~/.codex` by
+default). For each delegated round, record:
 
-- contexto: `last_token_usage.total_tokens` do último evento `token_count` da
-  rodada;
-- volume da rodada: `total_token_usage.total_tokens` do mesmo evento, menos o
-  valor do último `token_count` da rodada anterior na mesma thread. O total é
-  cumulativo na thread e inclui entrada em cache; numa thread nova, o valor
-  absoluto já é o da rodada;
-- duração: `duration_ms` do evento `task_complete` da rodada.
+- context: `last_token_usage.total_tokens` of the round's last `token_count`
+  event;
+- round volume: `total_token_usage.total_tokens` of the same event, minus the
+  value of the last `token_count` of the previous round in the same thread.
+  The total is cumulative in the thread and includes cached input; in a new
+  thread, the absolute value is already the round's;
+- duration: `duration_ms` of the round's `task_complete` event.
 
-O mesmo arquivo confirma o modelo efetivo em `turn_context.model` das turns da
-rodada. Uma thread delegada começa com turns copiadas do orquestrador, com o
-modelo dele e sem `token_count`; as turns do subagente vêm depois do evento
-`thread_settings_applied`, que traz o modelo do perfil. A sessão principal tem
-os mesmos números no próprio rollout. Nenhum deles é custo
-cobrado, e eles não são diretamente comparáveis aos de outro harness. O
-formato é do runtime, não da documentação oficial, e foi conferido em
-2026-10-10 e 2026-10-13 com o Codex CLI 0.162.1; se ele mudar, registre a métrica como
-ausente, com o motivo.
+The same file confirms the effective model in `turn_context.model` of the
+round's turns. A delegated thread starts with turns copied from the
+orchestrator, with its model and without `token_count`; the subagent's turns
+come after the `thread_settings_applied` event, which carries the profile's
+model. The main session has the same numbers in its own rollout. None of them
+is billed cost, and they are not directly comparable to another harness's. The
+format belongs to the runtime, not to the official documentation, and was
+checked on 2026-10-10 and 2026-10-13 with Codex CLI 0.162.1; if it changes,
+record the metric as absent, with the reason.
 
-## Configurar o consumidor
+## Set up the consumer
 
-Use o [mapa neutro](../../templates/project-agents.md) como `AGENTS.md` e
-[radiant-project.json](../../templates/radiant-project.json) como `.radiant.json`.
-Preencha o commit e os paths conforme a [convenção](../../docs/integration.md),
-incluindo `engineering_profile` quando o projeto possuir um Profile.
-Um `AGENTS.md` já existente recebe só os ponteiros necessários, não substituição
-integral. Constituição, templates compartilhados e skills permanecem no Radiant.
+Use the [neutral map](../../templates/project-agents.md) as `AGENTS.md` and
+[radiant-project.json](../../templates/radiant-project.json) as `.radiant.json`.
+Fill in the commit and the paths according to the
+[convention](../../docs/integration.md), including `engineering_profile` when
+the project has a Profile. An existing `AGENTS.md` gets only the pointers it
+needs, not a full replacement. Constitution, shared templates and skills stay
+in Radiant.

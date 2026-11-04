@@ -1,67 +1,69 @@
 # Radiant
 
-Radiant organiza a transformação de intenção em sistemas verificáveis e faz o
-aprendizado corrigir o processo usado nos ciclos seguintes. Reduz contexto
-perdido, escopo implícito e regras duplicadas entre agentes.
+Radiant organizes the transformation of intent into verifiable systems and
+makes learning correct the process used in the following cycles. It reduces
+lost context, implicit scope and rules duplicated across agents.
 
-É um sistema operacional de desenvolvimento, não um produto consumidor,
-framework de agentes ou base de conhecimento. Funciona sem AIKM.
+It is a development operating system, not a consumer product, agent framework
+or knowledge base. It works without AIKM.
 
-O [ciclo e a tese](docs/project-generation-system.md) explicam o sistema.
-A [Constitution](constitution/CONSTITUTION.md) é sua única fonte normativa
-constitucional. A tese 0.2 é uma definição conceitual; sua seção de estado atual
-registra o momento em que foi escrita, não o status desta reorganização.
+The [cycle and thesis](docs/project-generation-system.md) explain the system.
+The [Constitution](constitution/CONSTITUTION.md) is its only constitutional
+normative source. Thesis 0.2 is a conceptual definition; its current state
+section records the moment it was written, not the status of this
+reorganization.
 
-## Encontrar o que precisa
+## Find what you need
 
-| Local                                                                      | Responsabilidade                                         |
+| Location                                                                   | Responsibility                                           |
 | -------------------------------------------------------------------------- | -------------------------------------------------------- |
-| [AGENTS.md](AGENTS.md)                                                     | Mapa para trabalhar no próprio Radiant                   |
-| [constitution/CONSTITUTION.md](constitution/CONSTITUTION.md)               | Invariantes e precedência                                |
-| [engineering/engineering-baseline.md](engineering/engineering-baseline.md) | Baseline de engenharia proporcional                      |
-| [docs/capabilities.md](docs/capabilities.md)                               | Índice das capacidades disponíveis                       |
-| [docs/design-layer.md](docs/design-layer.md)                               | Camada canônica de design do Radiant                     |
-| [skills/radiant-cycle/SKILL.md](skills/radiant-cycle/SKILL.md)             | Procedimento reutilizável do ciclo                       |
-| [skills/radiant-delegation/SKILL.md](skills/radiant-delegation/SKILL.md)   | Papéis, capacidades e delegação                          |
-| [skills/radiant-maintenance/SKILL.md](skills/radiant-maintenance/SKILL.md) | Triagem de manutenção que só propõe                      |
-| [templates/](templates/README.md)                                          | Formulários de Frame, Contract, Design e mapa do projeto |
-| [contracts/README.md](contracts/README.md)                                 | Convenção compartilhada de contratos                     |
-| [adapters/codex/](adapters/codex/README.md)                                | Bootstrap e subagentes do Codex                          |
-| [adapters/claude-code/](adapters/claude-code/README.md)                    | Bootstrap e subagentes do Claude Code                    |
-| [validators/](validators/README.md)                                        | Checks locais de integridade e revisão                   |
-| [docs/contributing.md](docs/contributing.md)                               | Evolução e versionamento                                 |
-| [docs/verification.md](docs/verification.md)                               | Verificar mudanças neste sistema                         |
-| [docs/learn-back.md](docs/learn-back.md)                                   | Encaminhar aprendizado ao owner correto                  |
-| [docs/routing.md](docs/routing.md)                                         | Regras de roteamento de unidades para harnesses          |
-| [docs/adrs/](docs/adrs/ADR-0001-delegation-roles.md)                       | Decisões estruturais do próprio Radiant                  |
+| [AGENTS.md](AGENTS.md)                                                     | Map for working on Radiant itself                        |
+| [constitution/CONSTITUTION.md](constitution/CONSTITUTION.md)               | Invariants and precedence                                |
+| [engineering/engineering-baseline.md](engineering/engineering-baseline.md) | Proportional engineering baseline                        |
+| [docs/capabilities.md](docs/capabilities.md)                               | Index of available capabilities                          |
+| [docs/design-layer.md](docs/design-layer.md)                               | Radiant's canonical design layer                         |
+| [skills/radiant-cycle/SKILL.md](skills/radiant-cycle/SKILL.md)             | Reusable cycle procedure                                 |
+| [skills/radiant-delegation/SKILL.md](skills/radiant-delegation/SKILL.md)   | Roles, capabilities and delegation                       |
+| [skills/radiant-maintenance/SKILL.md](skills/radiant-maintenance/SKILL.md) | Maintenance triage that only proposes                    |
+| [templates/](templates/README.md)                                          | Forms for Frame, Contract, Design and the project map    |
+| [contracts/README.md](contracts/README.md)                                 | Shared contract convention                               |
+| [adapters/codex/](adapters/codex/README.md)                                | Codex bootstrap and subagents                            |
+| [adapters/claude-code/](adapters/claude-code/README.md)                    | Claude Code bootstrap and subagents                      |
+| [validators/](validators/README.md)                                        | Local integrity and review checks                        |
+| [docs/contributing.md](docs/contributing.md)                               | Evolution and versioning                                 |
+| [docs/verification.md](docs/verification.md)                               | Verifying changes to this system                         |
+| [docs/learn-back.md](docs/learn-back.md)                                   | Routing learning to the right owner                      |
+| [docs/routing.md](docs/routing.md)                                         | Rules for routing units to harnesses                     |
+| [docs/adrs/](docs/adrs/ADR-0001-delegation-roles.md)                       | Structural decisions of Radiant itself                   |
 
-## Usar em outro projeto
+## Use it in another project
 
-1. Escolha um commit do Radiant e um checkout limpo dessa revisão.
-2. Gere o bloco global conforme o adapter do seu harness:
-   [Codex](adapters/codex/README.md) ou [Claude Code](adapters/claude-code/README.md).
-3. No consumidor, siga [Adotar num projeto](docs/integration.md#adotar-num-projeto):
-   declare a revisão e os paths locais e acrescente a seção do Radiant ao `AGENTS.md`.
-4. Crie Frame, Spec, Plan, Engineering Profile e Contracts no consumidor,
-   proporcionalmente à tarefa. O Profile é recomendado quando houver stack,
-   segurança, integração ou risco específico; o Baseline permanece no Radiant.
-   Leia skills e templates diretamente no Radiant.
+1. Choose a Radiant commit and a clean checkout of that revision.
+2. Generate the global block according to your harness's adapter:
+   [Codex](adapters/codex/README.md) or [Claude Code](adapters/claude-code/README.md).
+3. In the consumer, follow [Adopt in a project](docs/integration.md#adopt-in-a-project):
+   declare the revision and the local paths and add the Radiant section to
+   `AGENTS.md`.
+4. Create Frame, Spec, Plan, Engineering Profile and Contracts in the
+   consumer, in proportion to the task. The Profile is recommended when there
+   is a specific stack, security, integration or risk; the Baseline stays in
+   Radiant. Read skills and templates directly in Radiant.
 
-A configuração global contém somente um path e uma entrada do adapter. Pode
-ser reconstruída; não contém Constitution, skills ou estado de projetos.
-Uma nova revisão do Radiant não atualiza consumidores automaticamente.
+The global configuration holds only a path and an adapter entry. It can be
+rebuilt; it holds no Constitution, skills or project state. A new Radiant
+revision does not update consumers automatically.
 
-## Evoluir
+## Evolve
 
-Modifique o owner canônico, execute os [checks](docs/verification.md) e registre
-motivação e evidência em Git. Um finding de projeto pode melhorar um template,
-skill, validator ou adapter pelo [Learn Back](docs/learn-back.md). Só invariantes
-transversais justificam propostas constitucionais.
+Change the canonical owner, run the [checks](docs/verification.md) and record
+motivation and evidence in Git. A project finding can improve a template,
+skill, validator or adapter through [Learn Back](docs/learn-back.md). Only
+cross-cutting invariants justify constitutional proposals.
 
-Há uma skill de ciclo real, formulários de artefatos, uma camada de design e um mapa de integração.
-Não há engines, package manager ou dependência de ferramenta específica; cada
-adapter traduz o mesmo Core para um harness.
-O procedimento de workflow vive na skill; nenhum diretório vazio o duplica.
+There is a real cycle skill, artifact forms, a design layer and an integration
+map. There are no engines, package manager or dependency on a specific tool;
+each adapter translates the same Core for one harness. The workflow procedure
+lives in the skill; no empty directory duplicates it.
 
-Veja o [relatório da reorganização](docs/repository-report.md) para inventário,
-moves, decisões, simulações, evidências e limites desta entrega.
+See the [reorganization report](docs/repository-report.md) for the inventory,
+moves, decisions, simulations, evidence and limits of this delivery.

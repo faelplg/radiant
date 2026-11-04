@@ -1,401 +1,401 @@
-# Radiant — Engineering Baseline
+# Radiant - Engineering Baseline
 
-**Versão:** 0.1  
-**Status:** Baseline operacional inicial  
-**Natureza:** Padrão de engenharia do Radiant  
-**Aplicação:** Projetos construídos pelo Radiant  
-**Princípio:** Engenharia proporcional ao risco, impacto e reversibilidade
-
----
-
-## 1. Objetivo
-
-O **Radiant Engineering Baseline** define o conjunto mínimo de expectativas de engenharia que deve orientar implementação e verificação dos projetos conduzidos pelo Radiant.
-
-Ele existe para evitar que agentes precisem inferir, a cada iteração, o que significa “boa engenharia”.
-
-O Baseline não é:
-
-- um style guide universal;
-- uma lista fixa de tecnologias;
-- uma exigência de arquitetura complexa;
-- uma coleção de dogmas como “usar SOLID em todo lugar”;
-- um substituto para julgamento técnico.
-
-Ele define **resultados esperados e limites mínimos**.
-
-A forma de atendê-los depende do projeto.
-
-> **O Baseline estabelece o mínimo. O Engineering Profile contextualiza. O Task Contract aplica. O Verify produz evidência.**
+**Version:** 0.1\
+**Status:** Initial operational baseline\
+**Nature:** Radiant's engineering standard\
+**Application:** Projects built with Radiant\
+**Principle:** Engineering proportional to risk, impact and reversibility
 
 ---
 
-## 2. Regra de proporcionalidade
+## 1. Goal
 
-Nem toda regra precisa da mesma profundidade em toda tarefa.
+The **Radiant Engineering Baseline** defines the minimum set of engineering expectations that should guide implementation and verification of projects carried out with Radiant.
 
-A aplicação deve considerar:
+It exists so agents do not have to infer, on every iteration, what "good engineering" means.
 
-- impacto da mudança;
-- custo de reversão;
-- exposição externa;
-- manipulação de dados;
-- superfície de segurança;
-- durabilidade do código;
-- criticidade operacional;
-- quantidade de usuários ou sistemas afetados.
+The Baseline is not:
 
-Cada item do Baseline pode ser marcado em um Task Contract como:
+- a universal style guide;
+- a fixed list of technologies;
+- a requirement for complex architecture;
+- a collection of dogmas such as "use SOLID everywhere";
+- a substitute for technical judgment.
+
+It defines **expected outcomes and minimum limits**.
+
+How to meet them depends on the project.
+
+> **The Baseline sets the minimum. The Engineering Profile puts it in context. The Task Contract applies it. Verify produces evidence.**
+
+---
+
+## 2. Proportionality rule
+
+Not every rule needs the same depth in every task.
+
+Application should consider:
+
+- impact of the change;
+- cost of reversal;
+- external exposure;
+- data handling;
+- security surface;
+- durability of the code;
+- operational criticality;
+- number of users or systems affected.
+
+Each Baseline item may be marked in a Task Contract as:
 
 - `REQUIRED`;
 - `APPLICABLE`;
-- `N/A`, com justificativa curta.
+- `N/A`, with a short justification.
 
-`N/A` não significa que a regra foi esquecida.
+`N/A` does not mean the rule was forgotten.
 
-Significa que sua não aplicação foi deliberada.
-
----
-
-# 3. EB-01 — Complexidade deliberada
-
-## Regra
-
-> **Implementar a menor solução que satisfaça os contratos atuais sem antecipar arquitetura que ainda não possui evidência de necessidade.**
-
-### Esperado
-
-- evitar abstrações especulativas;
-- evitar infraestrutura sem consumidor atual;
-- evitar generalização baseada em um único caso;
-- manter limites de módulo compreensíveis;
-- preferir decisões reversíveis enquanto a incerteza for alta;
-- tornar aumento de complexidade uma decisão explícita.
-
-### Sinais de violação
-
-- framework introduzido apenas porque “pode ser útil depois”;
-- camada intermediária sem comportamento próprio;
-- abstração que torna o fluxo mais difícil de compreender;
-- banco, fila, cache, serviço ou integração adicionados antes de existir uma limitação observada;
-- duplicação de arquitetura para suportar cenários não previstos no escopo atual.
-
-### Evidência possível
-
-- diff pequeno e localizado;
-- ADR quando uma decisão estrutural relevante for necessária;
-- justificativa explícita de nova dependência ou infraestrutura;
-- remoção de código ou abstração quando ela não se provou necessária.
+It means not applying it was deliberate.
 
 ---
 
-# 4. EB-02 — Correção e contratos explícitos
+# 3. EB-01 - Deliberate complexity
 
-## Regra
+## Rule
 
-> **Comportamentos importantes devem possuir contratos observáveis e falhar de forma compreensível quando invariantes forem violadas.**
+> **Implement the smallest solution that satisfies the current contracts without anticipating architecture that has no evidence of need yet.**
 
-### Esperado
+### Expected
 
-- invariantes relevantes representadas em código, schema ou testes;
-- validação nas fronteiras do sistema;
-- estados inválidos rejeitados cedo quando razoável;
-- erros não tratados não devem ser usados como fluxo normal;
-- operações destrutivas ou mutáveis devem possuir semântica clara;
-- idempotência deve ser buscada quando a operação puder ser repetida com segurança.
+- avoid speculative abstractions;
+- avoid infrastructure without a current consumer;
+- avoid generalizing from a single case;
+- keep module boundaries understandable;
+- prefer reversible decisions while uncertainty is high;
+- make any increase in complexity an explicit decision.
 
-### Sinais de violação
+### Signs of violation
 
-- comportamento depende de estado implícito não documentado;
-- entrada inválida é silenciosamente aceita;
-- erro é engolido sem evidência;
-- uma operação parcialmente concluída deixa estado ambíguo;
-- contrato descrito na spec diverge do comportamento real sem atualização da documentação.
+- a framework introduced only because "it may be useful later";
+- an intermediate layer with no behavior of its own;
+- an abstraction that makes the flow harder to understand;
+- a database, queue, cache, service or integration added before an observed limitation exists;
+- duplicated architecture to support scenarios outside the current scope.
 
-### Evidência possível
+### Possible evidence
+
+- a small, localized diff;
+- an ADR when a relevant structural decision is needed;
+- explicit justification of a new dependency or infrastructure;
+- removal of code or abstraction when it did not prove necessary.
+
+---
+
+# 4. EB-02 - Correctness and explicit contracts
+
+## Rule
+
+> **Important behaviors must have observable contracts and fail in an understandable way when invariants are violated.**
+
+### Expected
+
+- relevant invariants represented in code, schema or tests;
+- validation at system boundaries;
+- invalid states rejected early when reasonable;
+- unhandled errors must not be used as normal flow;
+- destructive or mutating operations must have clear semantics;
+- idempotency should be sought when the operation can be safely repeated.
+
+### Signs of violation
+
+- behavior depends on undocumented implicit state;
+- invalid input is silently accepted;
+- an error is swallowed without evidence;
+- a partially completed operation leaves ambiguous state;
+- the contract described in the spec diverges from real behavior without a documentation update.
+
+### Possible evidence
 
 - schema validation;
-- testes de invariantes;
-- casos de erro;
+- invariant tests;
+- error cases;
 - readback;
-- atualização de Spec ou ADR quando o contrato muda.
+- an update to the Spec or ADR when the contract changes.
 
 ---
 
-# 5. EB-03 — Verificação e testes orientados por risco
+# 5. EB-03 - Risk-driven verification and tests
 
-## Regra
+## Rule
 
-> **Toda mudança deve possuir uma forma proporcional de demonstrar que o comportamento esperado funciona e que regressões relevantes foram evitadas.**
+> **Every change must have a proportional way to show that the expected behavior works and that relevant regressions were avoided.**
 
-### Esperado
+### Expected
 
-- testar comportamento, não implementação acidental;
-- corrigir bugs com teste de regressão quando razoável;
-- utilizar teste unitário, integração, contrato ou ponta a ponta conforme a fronteira que precisa ser provada;
-- não depender exclusivamente do agente que implementou para declarar conclusão;
-- executar readback quando arquivos ou artefatos são gerados;
-- manter a suíte rápida o suficiente para ser usada continuamente.
+- test behavior, not accidental implementation;
+- fix bugs with a regression test when reasonable;
+- use unit, integration, contract or end-to-end tests according to the boundary that needs to be proven;
+- do not rely only on the implementing agent to declare completion;
+- run readback when files or artifacts are generated;
+- keep the suite fast enough to be used continuously.
 
-### Não é exigido
+### Not required
 
-- 100% de cobertura;
-- E2E para toda feature;
-- snapshots extensos;
-- mocks que reproduzem internamente toda dependência.
+- 100% coverage;
+- E2E for every feature;
+- extensive snapshots;
+- mocks that internally reproduce every dependency.
 
-### Evidência mínima
+### Minimum evidence
 
-O Task Contract deve declarar:
+The Task Contract must declare:
 
-1. o que precisa ser provado;
-2. como será provado;
-3. qual comando ou procedimento produz a evidência.
+1. what needs to be proven;
+2. how it will be proven;
+3. which command or procedure produces the evidence.
 
 ---
 
-# 6. EB-04 — Segurança, privacidade e controle de dados
+# 6. EB-04 - Security, privacy and data control
 
-## Regra
+## Rule
 
-> **A solução deve operar com o menor acesso necessário e tratar secrets, dados privados e egress como fronteiras explícitas.**
+> **The solution must operate with the least access needed and treat secrets, private data and egress as explicit boundaries.**
 
-### Esperado
+### Expected
 
-- secrets fora do código e de artefatos comuns;
-- validação de input em fronteiras relevantes;
-- princípio de menor privilégio;
-- default deny quando uma permissão sensível for ambígua;
-- distinção entre leitura local e autorização de egress;
-- paths, comandos e operações destrutivas tratados como superfícies de segurança;
-- dados sensíveis não devem aparecer em logs, mensagens de erro ou fixtures reais;
-- dependências que executam código ou acessam rede devem receber escrutínio proporcional.
+- secrets kept out of code and common artifacts;
+- input validation at relevant boundaries;
+- principle of least privilege;
+- default deny when a sensitive permission is ambiguous;
+- distinction between local reading and egress authorization;
+- paths, commands and destructive operations treated as security surfaces;
+- sensitive data must not appear in logs, error messages or real fixtures;
+- dependencies that execute code or access the network should receive proportional scrutiny.
 
-### Elevação de rigor
+### Raising rigor
 
-Mudanças que afetem:
+Changes that affect:
 
-- autenticação;
-- autorização;
+- authentication;
+- authorization;
 - egress;
 - secrets;
-- produção;
-- dados pessoais;
-- execução remota;
-- acesso ao filesystem fora da raiz autorizada;
+- production;
+- personal data;
+- remote execution;
+- filesystem access outside the authorized root;
 
-devem receber verificação específica de segurança.
-
----
-
-# 7. EB-05 — Manutenibilidade e legibilidade
-
-## Regra
-
-> **O próximo humano ou agente deve conseguir compreender a intenção do código sem reconstruir desnecessariamente o raciocínio que o criou.**
-
-### Esperado
-
-- nomes descritivos;
-- módulos coesos;
-- interfaces pequenas;
-- fluxo de controle compreensível;
-- comentários explicando decisões não óbvias, não recontando o código;
-- remoção de código morto;
-- duplicação tolerada quando abstrair cedo seria pior;
-- abstração quando repetição real já revela um conceito estável;
-- convenções do ecossistema adotadas por padrão.
-
-### Sobre princípios conhecidos
-
-SOLID, Clean Code, Clean Architecture, DRY, KISS e padrões de projeto são referências úteis.
-
-Nenhum deles deve ser aplicado mecanicamente.
-
-A decisão correta é a que melhora clareza, correção, capacidade de mudança e verificabilidade no contexto real.
+must receive specific security verification.
 
 ---
 
-# 8. EB-06 — Dependências e cadeia de suprimentos
+# 7. EB-05 - Maintainability and readability
 
-## Regra
+## Rule
 
-> **Toda dependência aumenta capacidade e também superfície de manutenção, segurança e compatibilidade.**
+> **The next human or agent should be able to understand the intent of the code without needlessly rebuilding the reasoning that created it.**
 
-### Esperado
+### Expected
 
-- introduzir dependência apenas quando seu valor superar claramente o custo de possuir a dependência;
-- utilizar lockfile ou mecanismo equivalente quando o ecossistema oferecer;
-- evitar dependências abandonadas ou desnecessariamente privilegiadas;
-- preferir bibliotecas pequenas e maduras para problemas pequenos;
-- registrar dependências estruturalmente importantes em ADR ou documentação equivalente;
-- atualizar dependências de forma deliberada e verificável;
-- não copiar código de procedência desconhecida para o projeto.
+- descriptive names;
+- cohesive modules;
+- small interfaces;
+- understandable control flow;
+- comments that explain non-obvious decisions, not retell the code;
+- removal of dead code;
+- duplication tolerated when abstracting early would be worse;
+- abstraction when real repetition already reveals a stable concept;
+- ecosystem conventions adopted by default.
 
-### Antes de uma nova dependência relevante
+### About well-known principles
 
-Perguntar:
+SOLID, Clean Code, Clean Architecture, DRY, KISS and design patterns are useful references.
 
-1. o runtime ou biblioteca padrão já resolve?
-2. qual problema concreto ela elimina?
-3. qual é o custo de removê-la depois?
-4. ela executa código, acessa filesystem ou rede?
-5. existe alternativa menor?
+None of them should be applied mechanically.
+
+The right decision is the one that improves clarity, correctness, ability to change and verifiability in the real context.
 
 ---
 
-# 9. EB-07 — Operabilidade, diagnóstico e observabilidade
+# 8. EB-06 - Dependencies and supply chain
 
-## Regra
+## Rule
 
-> **Quando algo falhar, o sistema deve fornecer informação suficiente para localizar o problema sem exigir adivinhação.**
+> **Every dependency adds capability and also surface for maintenance, security and compatibility.**
 
-### Esperado
+### Expected
 
-- erros acionáveis;
-- exit codes consistentes quando houver CLI;
-- logs apenas quando ajudam a operar ou diagnosticar;
-- nenhuma telemetria obrigatória sem decisão explícita;
-- nenhuma informação sensível em logs;
-- correlação entre erro, operação e recurso afetado quando relevante;
-- métricas, tracing e dashboards somente quando o tipo de sistema justificar.
+- introduce a dependency only when its value clearly exceeds the cost of owning it;
+- use a lockfile or equivalent mechanism when the ecosystem offers one;
+- avoid abandoned or needlessly privileged dependencies;
+- prefer small, mature libraries for small problems;
+- record structurally important dependencies in an ADR or equivalent documentation;
+- update dependencies deliberately and verifiably;
+- do not copy code of unknown provenance into the project.
 
-### Proporcionalidade
+### Before a new relevant dependency
 
-Uma CLI local pode precisar apenas de:
+Ask:
 
-- mensagens de erro claras;
+1. does the runtime or standard library already solve it?
+2. which concrete problem does it remove?
+3. what is the cost of removing it later?
+4. does it execute code, access the filesystem or the network?
+5. is there a smaller alternative?
+
+---
+
+# 9. EB-07 - Operability, diagnosis and observability
+
+## Rule
+
+> **When something fails, the system must provide enough information to locate the problem without guesswork.**
+
+### Expected
+
+- actionable errors;
+- consistent exit codes when there is a CLI;
+- logs only when they help operate or diagnose;
+- no mandatory telemetry without an explicit decision;
+- no sensitive information in logs;
+- correlation between error, operation and affected resource when relevant;
+- metrics, tracing and dashboards only when the kind of system justifies them.
+
+### Proportionality
+
+A local CLI may only need:
+
+- clear error messages;
 - paths;
 - IDs;
-- regra violada;
-- ação sugerida.
+- the violated rule;
+- a suggested action.
 
-Um serviço distribuído pode exigir observabilidade substancialmente maior.
+A distributed service may require substantially more observability.
 
 ---
 
-# 10. EB-08 — Qualidade de experiência e eficiência
+# 10. EB-08 - Experience quality and efficiency
 
-## Regra
+## Rule
 
-> **O sistema deve respeitar o tempo, a capacidade e as limitações de quem o utiliza.**
+> **The system must respect the time, capacity and limitations of whoever uses it.**
 
-### Para interfaces humanas
+### For human interfaces
 
-Considerar, quando aplicável:
+Consider, when applicable:
 
-- clareza;
+- clarity;
 - feedback;
-- prevenção e recuperação de erro;
-- acessibilidade;
-- teclado e leitores de tela;
-- estados de loading e falha;
-- linguagem compreensível.
+- error prevention and recovery;
+- accessibility;
+- keyboard and screen readers;
+- loading and failure states;
+- understandable language.
 
-### Para CLI e APIs
+### For CLIs and APIs
 
-Considerar:
+Consider:
 
-- `--help` útil;
-- comandos previsíveis;
-- output scriptable quando necessário;
-- mensagens estáveis o suficiente para automação quando declaradas como interface;
-- exit codes adequados;
-- operações seguras por padrão.
+- a useful `--help`;
+- predictable commands;
+- scriptable output when needed;
+- messages stable enough for automation when declared as an interface;
+- suitable exit codes;
+- operations safe by default.
 
-### Para performance e recursos
+### For performance and resources
 
-- não otimizar sem evidência;
-- evitar algoritmos obviamente inadequados ao volume esperado;
-- medir antes de introduzir infraestrutura de performance;
-- evitar trabalho, rede, armazenamento ou processamento que não gere valor observável.
-
----
-
-# 11. Engineering Profile por projeto
-
-Cada projeto pode possuir um **Engineering Profile** que contextualiza este Baseline.
-
-O Profile pode definir:
-
-- risco padrão do projeto;
-- stack e convenções;
-- qualidade mínima por tipo de mudança;
-- estratégia de testes;
-- política de dependências;
-- fronteiras de segurança;
-- requisitos específicos de UX;
-- requisitos de performance;
-- requisitos de compatibilidade;
-- comandos de verificação.
-
-O Profile não deve duplicar o Baseline.
-
-Ele registra apenas aquilo que é específico daquele projeto.
+- do not optimize without evidence;
+- avoid algorithms that are obviously unsuited to the expected volume;
+- measure before introducing performance infrastructure;
+- avoid work, network, storage or processing that does not produce observable value.
 
 ---
 
-# 12. Integração com Task Contracts
+# 11. Engineering Profile per project
 
-Todo Task Contract de implementação deve referenciar:
+Each project may have an **Engineering Profile** that puts this Baseline in context.
 
-- esta versão do Engineering Baseline;
-- o Engineering Profile do projeto, quando existir.
+The Profile may define:
 
-O contrato não precisa copiar as regras.
+- the project's default risk;
+- stack and conventions;
+- minimum quality per kind of change;
+- test strategy;
+- dependency policy;
+- security boundaries;
+- specific UX requirements;
+- performance requirements;
+- compatibility requirements;
+- verification commands.
 
-Ele deve declarar apenas:
+The Profile should not duplicate the Baseline.
 
-- quais regras são especialmente relevantes;
-- quais possuem adaptação específica;
-- quais são `N/A`;
-- qual evidência será produzida.
+It records only what is specific to that project.
 
 ---
 
-# 13. Integração com Verify
+# 12. Integration with Task Contracts
 
-Verify deve avaliar duas coisas separadamente:
+Every implementation Task Contract should reference:
+
+- this version of the Engineering Baseline;
+- the project's Engineering Profile, when there is one.
+
+The contract does not need to copy the rules.
+
+It should only declare:
+
+- which rules are especially relevant;
+- which have a specific adaptation;
+- which are `N/A`;
+- which evidence will be produced.
+
+---
+
+# 13. Integration with Verify
+
+Verify should evaluate two things separately:
 
 ### Product correctness
 
-> O comportamento solicitado foi entregue?
+> Was the requested behavior delivered?
 
 ### Engineering integrity
 
-> A implementação respeitou as restrições de engenharia aplicáveis?
+> Did the implementation respect the applicable engineering constraints?
 
-Uma feature pode funcionar e ainda falhar no segundo critério.
+A feature may work and still fail the second criterion.
 
-Da mesma forma, uma implementação tecnicamente elegante que não cumpre a hipótese ou acceptance criteria também falha.
+Likewise, a technically elegant implementation that does not meet the hypothesis or acceptance criteria also fails.
 
 ---
 
 # 14. Learn Back
 
-Quando uma falha de engenharia for observada, o Learn Back deve identificar o nível correto.
+When an engineering failure is observed, Learn Back should identify the right level.
 
-Exemplos:
+Examples:
 
-- regra ausente para todos os projetos → atualizar Engineering Baseline;
-- regra específica do AIKM → atualizar AIKM Engineering Profile;
-- instrução insuficiente em uma única iteração → atualizar Task Contract;
-- verificação que não detectou regressão → atualizar procedimento de Verify;
-- falha recorrente de implementação → criar ou atualizar skill/validator.
+- rule missing for every project → update the Engineering Baseline;
+- rule specific to AIKM → update the AIKM Engineering Profile;
+- insufficient instruction in a single iteration → update the Task Contract;
+- verification that did not catch a regression → update the Verify procedure;
+- recurring implementation failure → create or update a skill/validator.
 
-O Baseline não deve crescer a cada erro isolado.
+The Baseline should not grow with every isolated error.
 
-Uma regra só deve entrar aqui quando for:
+A rule should only enter here when it is:
 
-- recorrente;
-- aplicável a múltiplos projetos;
-- verificável;
-- mais barata do que o retrabalho que evita.
+- recurring;
+- applicable to multiple projects;
+- verifiable;
+- cheaper than the rework it avoids.
 
 ---
 
-# 15. Regra final
+# 15. Final rule
 
-> **Radiant não deve substituir engenharia por geração. Deve transformar engenharia em uma restrição explícita, proporcional e verificável do processo de geração.**
+> **Radiant should not replace engineering with generation. It should turn engineering into an explicit, proportional and verifiable constraint of the generation process.**
 
-O objetivo deste Baseline é permitir que agentes tenham autonomia para implementar sem receber liberdade para redefinir silenciosamente o padrão de qualidade.
+The goal of this Baseline is to let agents have autonomy to implement without getting freedom to silently redefine the quality standard.

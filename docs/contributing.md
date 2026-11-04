@@ -1,40 +1,45 @@
-# Evolução e versionamento
+# Evolution and versioning
 
-Mudanças seguem a [Constitution](../constitution/CONSTITUTION.md) e o
-[ciclo operacional](../skills/radiant-cycle/SKILL.md). Preserve uma relação
-revisável entre intenção, diff, evidência e, quando houver, finding de origem.
+Changes follow the [Constitution](../constitution/CONSTITUTION.md) and the
+[operational cycle](../skills/radiant-cycle/SKILL.md). Keep a reviewable
+relation between intent, diff, evidence and, when there is one, the
+originating finding.
 
-Antes de criar um corpo novo, consulte o [índice](capabilities.md). Corrija o
-owner mais específico. Um adapter só recebe tradução para seu harness; regras
-compartilhadas ficam no Core. Não duplicar procedures em documentação global.
+Before creating a new body, check the [index](capabilities.md). Fix the most
+specific owner. An adapter only receives translation for its harness; shared
+rules stay in the Core. Do not duplicate procedures in global documentation.
 
-Use alterações pequenas o suficiente para distinguir moves, ajustes editoriais
-e mudanças de comportamento. Verifique os [critérios do repository](verification.md).
-Mensagens de commit seguem Conventional Commits, sem coautoria automática de
-agente. Registre motivação e referência de Learn Back no corpo quando relevante.
+Use changes small enough to tell apart moves, editorial adjustments and
+behavior changes. Check the [repository criteria](verification.md). Commit
+messages follow Conventional Commits, without automatic agent co-authorship.
+Record motivation and the Learn Back reference in the body when relevant.
 
-## Identidade inicial
+Documentation, metadata, code comments and command output are written in
+English.
 
-O estado do Radiant é identificado por commit Git completo. Não existe release
-formal ou contrato de compatibilidade de API que justifique SemVer do sistema
-nesta etapa. Não adicionar `VERSION` apenas para repetir a tese.
+## Initial identity
 
-A tese mantém sua versão 0.2. A Constitution mantém sua versão 0.1 e a política
-da seção 9, aplicável àquele documento. Skills podem ter versão editorial própria;
-ela é metadado auxiliar, não substitui a revisão do conjunto.
+Radiant's state is identified by a full Git commit. There is no formal release
+or API compatibility contract that would justify SemVer for the system at this
+stage. Do not add `VERSION` just to repeat the thesis.
 
-Tags e releases poderão nomear commits revisados quando houver consumidores e
-critérios claros. Por enquanto, Git fornece autoria, estado anterior, diff e
-motivação. Não editar CHANGELOG.md manualmente; geração futura pode usar esse
-histórico. Não há automação de releases ou publicação nesta tarefa.
+The thesis keeps its version 0.2. The Constitution follows the policy in its
+section 9, which applies to that document; version 0.1.1 is the English
+translation of 0.1. Skills may have their own editorial version; it is
+auxiliary metadata and does not replace the revision of the whole set.
 
-Consumidores adotam mudanças pela [política de pin](integration.md). Um commit
-no Radiant não muda silenciosamente um projeto antigo. Não reescrever contratos
-ou relatórios históricos para afirmar que usaram uma revisão nova.
+Tags and releases may name reviewed commits when there are consumers and clear
+criteria. For now, Git provides authorship, previous state, diff and
+motivation. Do not edit CHANGELOG.md manually; future generation may use that
+history. There is no release or publication automation in this task.
 
-## Learn Back como mudança
+Consumers adopt changes through the [pin policy](integration.md). A commit in
+Radiant does not silently change an older project. Do not rewrite historical
+contracts or reports to claim they used a new revision.
 
-Use o [roteamento](learn-back.md) para justificar mudanças compartilhadas.
-Compare a verificação anterior com a posterior. Constituições evoluem pelo
-processo constitucional existente; não promover automaticamente uma preferência
-ou um erro local para princípio universal.
+## Learn Back as change
+
+Use the [routing](learn-back.md) to justify shared changes. Compare the
+verification before and after. Constitutions evolve through the existing
+constitutional process; do not automatically promote a local preference or
+error to a universal principle.

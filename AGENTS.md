@@ -1,51 +1,53 @@
-# Trabalhar no Radiant
+# Working on Radiant
 
-Este arquivo é o mapa do próprio repositório. Comece pela
-[Constitution](constitution/CONSTITUTION.md) e pela
-[definição do sistema](docs/project-generation-system.md). O índice de
-[capabilities](docs/capabilities.md) aponta para os corpos reutilizáveis.
+This file is the map of the repository itself. Start with the
+[Constitution](constitution/CONSTITUTION.md) and the
+[system definition](docs/project-generation-system.md). The
+[capability index](docs/capabilities.md) points to the reusable bodies.
 
-Em planejamento, execução ou revisão relevante, leia a
-[skill radiant-cycle](skills/radiant-cycle/SKILL.md) e aplique o modo pertinente
-à autorização atual. O pedido que governa esta reorganização e seu escopo estão
-registrados no [plano de migração](docs/migration-plan.md).
+For relevant planning, execution or review, read the
+[radiant-cycle skill](skills/radiant-cycle/SKILL.md) and apply the mode that
+fits the current authorization. The request that governs this reorganization
+and its scope are recorded in the [migration plan](docs/migration-plan.md).
 
-Para mudanças no sistema, siga [contribuição e versionamento](docs/contributing.md),
-[verificação](docs/verification.md) e [Learn Back](docs/learn-back.md).
-Comandos locais: `python3 validators/check_repository.py` e
-`python3 -m unittest discover -s tests -v`. Use Python 3.9+ e Git.
+For changes to the system, follow [contributing and versioning](docs/contributing.md),
+[verification](docs/verification.md) and [Learn Back](docs/learn-back.md).
+Local commands: `python3 validators/check_repository.py` and
+`python3 -m unittest discover -s tests -v`. Use Python 3.9+ and Git.
 
-Integração com consumidores está em [integração](docs/integration.md) e nos
-adapters [Codex](adapters/codex/README.md) e
-[Claude Code](adapters/claude-code/README.md). O Core compartilhado não depende
-de adapter. Para coordenar papéis e delegar, leia a
-[skill radiant-delegation](skills/radiant-delegation/SKILL.md); decisões
-estruturais do Radiant ficam em [docs/adrs/](docs/adrs/ADR-0001-delegation-roles.md). Trabalhando neste repositório, a árvore local é o alvo de edição;
-o pin de um consumidor não impede desenvolver uma nova revisão do Radiant.
+Integration with consumers is in [integration](docs/integration.md) and in the
+[Codex](adapters/codex/README.md) and [Claude Code](adapters/claude-code/README.md)
+adapters. The shared Core does not depend on an adapter. To coordinate roles
+and delegate, read the [radiant-delegation skill](skills/radiant-delegation/SKILL.md);
+Radiant's structural decisions live in [docs/adrs/](docs/adrs/ADR-0001-delegation-roles.md).
+When working in this repository, the local tree is the editing target; a
+consumer's pin does not prevent developing a new Radiant revision.
 
-Para contexto rápido, três páginas privadas no claude.ai resumem o sistema: o
-[mapa](https://claude.ai/artifact/7QZWWNTBv5NSxrePFBiaWg) em arc42 e C4, o
-[glossário](https://claude.ai/artifact/7aaAD9YCE2nkVTkm4EDa3L) e os
-[casos de uso](https://claude.ai/artifact/PEKb9oaxypnxxsQ1FTtoAQ). São visões
-derivadas: o texto deste repositório vence quando divergem. Ao mudar a
-Constitution, a tese, uma skill, um adapter, um template ou um ADR, atualize a
-página afetada; as páginas são geradas e versionadas em
-`faelplg/design-systems`, na pasta `radiant-design-system/docs/`.
-Proponha evoluções citando sua base: documento canônico, código, evidência ou
-método nomeado.
+For quick context, three private pages on claude.ai summarize the system: the
+[map](https://claude.ai/artifact/7QZWWNTBv5NSxrePFBiaWg) in arc42 and C4, the
+[glossary](https://claude.ai/artifact/7aaAD9YCE2nkVTkm4EDa3L) and the
+[use cases](https://claude.ai/artifact/PEKb9oaxypnxxsQ1FTtoAQ). They are
+derived views: the text in this repository wins when they diverge. When you
+change the Constitution, the thesis, a skill, an adapter, a template or an
+ADR, update the affected page; the pages are generated and versioned in
+`faelplg/design-systems`, in the `radiant-design-system/docs/` folder.
+Propose evolutions citing their basis: a canonical document, code, evidence or
+a named method.
 
-Os documentos AIKM que ficaram sob custódia aqui pertencem ao repositório AIKM;
-o encerramento está no [plano de migração](docs/migration-plan.md#encerramento-da-custódia).
-Não aplicar comandos AIKM como gates do Radiant.
+The AIKM documents that were in custody here belong to the AIKM repository;
+the closing is in the [migration plan](docs/migration-plan.md#end-of-custody).
+Do not apply AIKM commands as Radiant gates.
 
-Uma revisão de pendências feita aqui cobre só o Radiant. De AIKM, Demerzel e
-outros consumidores entra apenas a interface com o Radiant, vista deste lado:
-pin, `validators/check_dispatch.py` e adapters. Pendência de um consumidor é
-tratada numa sessão aberta no repositório dele, que segue o `AGENTS.md` de lá;
-aqui fica só um ponteiro por repositório. O que volta ao Radiant chega como
-[Learn Back](docs/learn-back.md), não como o trabalho do consumidor.
+A review of open items done here covers only Radiant. From AIKM, Demerzel and
+other consumers, only the interface with Radiant comes in, seen from this
+side: pin, `validators/check_dispatch.py` and adapters. A consumer's open item
+is handled in a session opened in its repository, which follows the
+`AGENTS.md` there; only one pointer per repository stays here. What comes back
+to Radiant arrives as [Learn Back](docs/learn-back.md), not as the consumer's
+work.
 
-Preserve corpos históricos, evite reformatação em massa e não edite arquivos
-gerados ou CHANGELOG.md manualmente. Novos textos usam hífen simples e não
-adicionam divisores horizontais. Não implementar a futura Design Layer nesta
-reorganização.
+Write in English. Preserve historical bodies: a faithful translation keeps
+their content and decisions, but do not rewrite them. Avoid mass reformatting
+and do not edit generated files or CHANGELOG.md manually. New text uses a
+plain hyphen and adds no horizontal dividers. Do not implement the future
+Design Layer in this reorganization.

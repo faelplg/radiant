@@ -1,7 +1,7 @@
 <!-- radiant:begin -->
-Radiant está disponível no checkout local: {{RADIANT_ROOT_JSON}}.
-Quando o projeto declarar `.radiant.json` ou o usuário solicitar Radiant,
-leia o README do adapter do harness em uso, relativo a esse checkout
+Radiant is available in the local checkout: {{RADIANT_ROOT_JSON}}.
+When the project declares `.radiant.json` or the user asks for Radiant,
+read the README of the adapter for the harness in use, relative to that checkout
 (Codex: `adapters/codex/README.md`; Claude Code: `adapters/claude-code/README.md`),
-e o `AGENTS.md` local. O índice de capabilities está em `docs/capabilities.md`.
+and the local `AGENTS.md`. The capability index is in `docs/capabilities.md`.
 <!-- radiant:end -->

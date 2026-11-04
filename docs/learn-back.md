@@ -1,35 +1,35 @@
-# Learn Back para o Radiant
+# Learn Back for Radiant
 
-O Artigo XV e a seção 8 da [Constitution](../constitution/CONSTITUTION.md)
-governam aprendizado e promoção constitucional. O procedimento está na
-[skill de ciclo](../skills/radiant-cycle/SKILL.md). Este mapa identifica os
-destinos reais do repositório.
+Article XV and section 8 of the [Constitution](../constitution/CONSTITUTION.md)
+govern learning and constitutional promotion. The procedure is in the
+[cycle skill](../skills/radiant-cycle/SKILL.md). This map identifies the real
+destinations in the repository.
 
-| Finding sustentado | Primeiro destino a avaliar |
+| Supported finding | First destination to assess |
 | --- | --- |
-| Intenção ou requisito específico mal compreendido | Frame/Spec/contexto do consumidor |
-| Ambiguidade reutilizável no enquadramento | `templates/project-frame.md` |
-| Delegação ambígua | `templates/task-contract.md` ou `contracts/README.md` |
-| Passo recorrente inadequado | `skills/radiant-cycle/SKILL.md` |
-| Verificação estrutural insuficiente | `validators/` ou `docs/verification.md` |
-| Harness não encontra o corpo correto | `adapters/<harness>/` |
-| Papel, capacidade ou handoff inadequado | `skills/radiant-delegation/` |
-| Modelo inadequado para uma capacidade | `adapters/<harness>/capabilities.json` |
-| Triagem de manutenção ruidosa ou cega | `skills/radiant-maintenance/` ou workflow do consumidor |
-| Revisão aplicada não identificável | `docs/integration.md` e seu validador |
-| Invariante transversal demonstrado | Candidato a amendment constitucional |
+| Misunderstood intent or specific requirement | The consumer's Frame/Spec/context |
+| Reusable ambiguity in framing | `templates/project-frame.md` |
+| Ambiguous delegation | `templates/task-contract.md` or `contracts/README.md` |
+| Inadequate recurring step | `skills/radiant-cycle/SKILL.md` |
+| Insufficient structural verification | `validators/` or `docs/verification.md` |
+| Harness does not find the right body | `adapters/<harness>/` |
+| Inadequate role, capability or handoff | `skills/radiant-delegation/` |
+| Inadequate model for a capability | `adapters/<harness>/capabilities.json` |
+| Noisy or blind maintenance triage | `skills/radiant-maintenance/` or the consumer's workflow |
+| Applied revision cannot be identified | `docs/integration.md` and its validator |
+| Demonstrated cross-cutting invariant | Candidate for a constitutional amendment |
 
-O projeto de origem guarda evidência e diagnóstico. Para propor mudança no
-Radiant, registrar no diff/commit ou em registro seletivo: origem autorizada,
-commit do Radiant usado, finding, evidência, alcance reutilizável, `fixTarget`,
-mudança e verificação. Não trazer dados privados desnecessários para o Core.
+The originating project keeps evidence and diagnosis. To propose a change in
+Radiant, record in the diff/commit or in a selective record: authorized
+origin, Radiant commit used, finding, evidence, reusable reach, `fixTarget`,
+change and verification. Do not bring unnecessary private data into the Core.
 
-Um problema específico continua no consumidor. Quando a causa afeta vários
-projetos ou é estrutural, a proposta pode alterar o owner compartilhado, com
-justificativa e verificação. Recorrência ajuda a fundamentar a promoção; um
-finding isolado não vira regra universal automaticamente.
+A specific problem stays in the consumer. When the cause affects several
+projects or is structural, the proposal may change the shared owner, with
+justification and verification. Recurrence helps ground the promotion; an
+isolated finding does not automatically become a universal rule.
 
-Uma correção verificada não demonstra reutilização posterior. O projeto só
-consome a revisão corrigida após adoção explícita do pin. Quando ela for usada,
-registre a evidência de aplicação no consumidor e referencie a mudança Radiant.
-Esse vínculo fica no Git e nos artefatos do consumidor.
+A verified fix does not demonstrate later reuse. The project only consumes the
+fixed revision after explicitly adopting the pin. When it is used, record the
+evidence of application in the consumer and reference the Radiant change. That
+link lives in Git and in the consumer's artifacts.

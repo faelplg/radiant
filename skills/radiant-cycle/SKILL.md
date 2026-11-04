@@ -1,124 +1,129 @@
 ---
 name: radiant-cycle
 description:
-  Conduzir planejamento, execução ou verificação de um ciclo de desenvolvimento
-  sob Radiant, ligando intenção, contrato, evidência e aprendizado. Usar ao
-  iniciar ou retomar uma entrega Radiant; uma consulta pontual não exige
-  executar o ciclo inteiro.
+  Run planning, execution or verification of a development cycle under
+  Radiant, linking intent, contract, evidence and learning. Use when starting
+  or resuming a Radiant delivery; a one-off question does not require running
+  the whole cycle.
 metadata:
-  version: "0.1.4"
+  version: "0.1.5"
 ---
 
-# Ciclo operacional Radiant
+# Radiant operational cycle
 
-Esta skill contém o procedimento reutilizável. A
-[Constitution](../../constitution/CONSTITUTION.md) define as regras superiores. Os artefatos
-do projeto definem o produto e a delegação; a skill não os substitui. Comandos,
-paths, contrato ativo e estado de implementação vêm do mapa operacional do
-projeto consumidor.
+This skill holds the reusable procedure. The
+[Constitution](../../constitution/CONSTITUTION.md) defines the higher rules. The
+project's artifacts define the product and the delegation; the skill does not
+replace them. Commands, paths, the active contract and implementation state
+come from the consumer project's operational map.
 
-## Entrada e retomada
+## Entry and resumption
 
-1. Identifique a solicitação atual: analisar/planejar, alterar documentação,
-   implementar ou verificar. Preserve decisões já autorizadas na sessão.
-2. Leia o mapa do projeto e os inputs necessários. Confira o contrato pelo
-   ponteiro ativo, o estado real dos arquivos e evidências anteriores; não
-   deduza execução ou conclusão apenas de metadados ou da existência de um
-   plano.
-3. Escolha o modo abaixo. Uma solicitação de análise não autoriza mudanças;
-   documentação explicitamente solicitada pode ser revisada sem inventar um
-   contrato de implementação. Código exige a delegação aplicável do projeto.
-4. Informe de forma curta: objetivo, modo, contrato ou autorização documental,
-   versão desta skill, evidência esperada e próxima ação. Reutilize contexto já
-   carregado; não recomece etapas concluídas sem nova razão.
-5. Para coordenar papéis ou delegar trabalho a subagentes, leia a
-   [skill radiant-delegation](../radiant-delegation/SKILL.md). Para triagem
-   contínua de um consumidor, use a
-   [skill radiant-maintenance](../radiant-maintenance/SKILL.md).
+1. Identify the current request: analyze/plan, change documentation,
+   implement or verify. Preserve decisions already authorized in the session.
+2. Read the project map and the inputs you need. Check the contract through
+   the active pointer, the real state of the files and earlier evidence; do
+   not infer execution or completion only from metadata or from the existence
+   of a plan.
+3. Choose the mode below. A request for analysis does not authorize changes;
+   explicitly requested documentation may be revised without inventing an
+   implementation contract. Code requires the project's applicable delegation.
+4. Report briefly: goal, mode, contract or documentation authorization,
+   version of this skill, expected evidence and next action. Reuse context
+   already loaded; do not restart completed steps without a new reason.
+5. To coordinate roles or delegate work to subagents, read the
+   [radiant-delegation skill](../radiant-delegation/SKILL.md). For continuous
+   triage of a consumer, use the
+   [radiant-maintenance skill](../radiant-maintenance/SKILL.md).
 
-## Planejar e enquadrar
+## Plan and frame
 
-- Relacione a necessidade real ao Frame e procure conhecimento/procedimentos
-  existentes antes de produzir outro corpo. Separe processo compartilhado de
-  contexto específico do produto e configuração de ferramenta.
-- Faça o Challenge na própria decisão: qual hipótese este incremento testa, qual
-  evidência motivou seu escopo e qual alternativa mais simples o atende?
-  Registre a resposta no artefato responsável quando material; não crie um
-  documento por etapa apenas para preencher um fluxo.
-- Compare Spec, Plan e realidade. Encaminhe divergências à camada responsável,
-  respeitando a autorização atual. Quando a Spec depende de uma ferramenta
-  externa, confira por sondagem o efeito de cada comando e flag usados, não só
-  a existência deles na ajuda.
-- Defina o percurso observável de uso e a evidência que distingue implementação
-  técnica e sucesso operacional de utilidade do produto. Num experimento, cada
-  condição de refutação termina sustentada, refutada ou inconclusiva.
-- Dê a cada verificação da Spec um incremento dono no Plan, inclusive a cada
-  parte de uma verificação dividida entre incrementos.
-- Prepare ou refine o contrato antes de sua execução, com inputs, outputs,
-  paths, non-goals e verificações executáveis. Use a convenção do projeto para
-  identidade e ativação. Não reformule um contrato já executado para acomodar um
-  resultado diferente.
-- Saída: proposta concreta ou artefatos autorizados atualizados, pendências
-  materiais e próximo passo. Planejar uma entrega não a aprova para execução.
+- Relate the real need to the Frame and look for existing knowledge and
+  procedures before producing another body. Separate shared process from
+  product-specific context and tool configuration.
+- Do the Challenge on the decision itself: which hypothesis does this
+  increment test, which evidence motivated its scope and which simpler
+  alternative meets it? Record the answer in the responsible artifact when
+  material; do not create a document per stage just to fill a flow.
+- Compare Spec, Plan and reality. Route divergences to the responsible layer,
+  respecting the current authorization. When the Spec depends on an external
+  tool, probe the effect of each command and flag it uses, not just their
+  presence in the help text.
+- Define the observable usage path and the evidence that distinguishes
+  technical implementation and operational success from product usefulness.
+  In an experiment, each refutation condition ends supported, refuted or
+  inconclusive.
+- Give each Spec verification an owning increment in the Plan, including each
+  part of a verification split across increments.
+- Prepare or refine the contract before its execution, with inputs, outputs,
+  paths, non-goals and executable verifications. Use the project's convention
+  for identity and activation. Do not rewrite an already executed contract to
+  fit a different result.
+- Output: a concrete proposal or updated authorized artifacts, material open
+  items and the next step. Planning a delivery does not approve it for
+  execution.
 
-## Executar uma entrega
+## Execute a delivery
 
-- Confirme que o contrato ativo cobre a tarefa e que a autorização já existente
-  permite o próximo passo. Não peça de novo uma decisão já concedida. Um
-  contrato proposto diferente do ativo não é selecionado por conveniência.
-- Comece pelo percurso que o usuário observará. Em correções de bugs, reproduza
-  a falha nesse percurso antes de editar. Em uma capacidade nova, registre o
-  comportamento ausente sem tratar a ausência como bug.
-- Implemente dentro da fronteira delegada e preserve trabalho existente. Use
-  procedimentos especializados quando a tarefa efetivamente precisar deles; esta
-  skill não substitui conhecimentos de domínio, design ou segurança.
-- Verifique a menor parcela relevante ao longo do trabalho. Se aparecer uma
-  divergência material ou necessidade fora da delegação, preserve a evidência e
-  aplique o estado constitucional adequado; não alargue o contrato sozinho.
-- Saída: alteração inspecionável e evidências prontas para o modo seguinte.
-  Código produzido ainda não é uma conclusão de verificação.
+- Confirm that the active contract covers the task and that the existing
+  authorization allows the next step. Do not ask again for a decision already
+  granted. A proposed contract different from the active one is not selected
+  for convenience.
+- Start with the path the user will observe. For bug fixes, reproduce the
+  failure on that path before editing. For a new capability, record the
+  missing behavior without treating the absence as a bug.
+- Implement within the delegated boundary and preserve existing work. Use
+  specialized procedures when the task actually needs them; this skill does
+  not replace domain, design or security knowledge.
+- Verify the smallest relevant part as you work. If a material divergence or
+  a need outside the delegation shows up, preserve the evidence and apply the
+  appropriate constitutional state; do not widen the contract on your own.
+- Output: an inspectable change and evidence ready for the next mode. Code
+  produced is not yet a verification conclusion.
 
-## Verificar e aprender
+## Verify and learn
 
-- Releia critérios e outputs a partir do contrato e da Spec. Inspecione o diff e
-  o resultado como consumidor; confronte a afirmação de conclusão com esses
-  inputs, não apenas com o relato de quem implementou.
-- Quando uma revisão posterior encontrar lacuna em um aceite anterior, preserve
-  o contrato e a evidência histórica. Registre o que a nova evidência limita,
-  qual correção cabe ao ciclo atual e qual critério ainda precisa de prova;
-  não transforme o `DONE` da revisão em novo aceite da entrega examinada.
-- Execute o percurso real aplicável e os gates do projeto. Para documentação,
-  confira referências, coerência das instruções e consequências de segui-las em
-  cenários reais. Registre comandos e resultados efetivos, incluindo bloqueios;
-  não transforme um teste planejado em evidência obtida.
-- Escolha independência proporcional ao risco: verificadores determinísticos,
-  inspeção do consumidor, outra execução ou revisão humana. Só use delegação
-  quando disponível e autorizada. Diga qual método foi usado e suas limitações;
-  uma releitura própria não equivale a uma revisão independente. Com papéis
-  delegados, siga a regra de aceite da
-  [skill de delegação](../radiant-delegation/SKILL.md#regras).
-- Relacione achado material, evidência, diagnóstico e menor `fixTarget`. Corrija
-  dentro da autorização vigente; caso contrário registre a pendência. Distingua
-  correção feita, correção verificada e reutilização posterior demonstrada.
-  Nenhuma delas implica automaticamente as demais.
-- Encerre em `DONE`, `HOLD` ou `FAIL` conforme a Constitution. Registre no local
-  permitido pelo contrato os dados de execução abaixo; para uma consulta
-  simples, uma resposta curta basta. Não crie um registro permanente para cada
-  interação.
+- Reread criteria and outputs from the contract and the Spec. Inspect the diff
+  and the result as a consumer; check the completion claim against these
+  inputs, not just against the implementer's account.
+- When a later review finds a gap in an earlier acceptance, preserve the
+  contract and the historical evidence. Record what the new evidence limits,
+  which fix belongs to the current cycle and which criterion still needs
+  proof; do not turn the review's `DONE` into a new acceptance of the
+  examined delivery.
+- Run the applicable real path and the project's gates. For documentation,
+  check references, coherence of the instructions and the consequences of
+  following them in real scenarios. Record the commands and results actually
+  obtained, including blockers; do not turn a planned test into evidence
+  obtained.
+- Choose independence proportional to risk: deterministic verifiers, consumer
+  inspection, another run or human review. Only use delegation when it is
+  available and authorized. Say which method was used and its limitations; a
+  self-reread is not an independent review. With delegated roles, follow the
+  acceptance rule of the [delegation skill](../radiant-delegation/SKILL.md#rules).
+- Relate each material finding, evidence, diagnosis and smallest `fixTarget`.
+  Fix within the current authorization; otherwise record the open item.
+  Distinguish a fix made, a fix verified and later reuse demonstrated. None of
+  them automatically implies the others.
+- End in `DONE`, `HOLD` or `FAIL` according to the Constitution. Record the
+  execution data below where the contract allows; for a simple question, a
+  short answer is enough. Do not create a permanent record for every
+  interaction.
 
-## Evidência mínima de um ciclo relevante
+## Minimum evidence of a relevant cycle
 
-O relatório autorizado, existente ou novo, deve permitir recuperar:
+The authorized report, existing or new, should make it possible to recover:
 
-- objetivo, contrato e versão, ou solicitação documental que autorizou o ciclo;
-- path e versão da skill utilizada, mais revisão Git ou digest do corpo exato
-  quando ele ainda não estiver commitado;
-- resultado, comandos/checks e limitações de verificação;
-- achados materiais, `fixTarget` e referência da correção quando houver;
-- estado final e próximo passo, distinguindo produto, processo e reutilização.
+- goal, contract and version, or the documentation request that authorized
+  the cycle;
+- path and version of the skill used, plus the Git revision or a digest of the
+  exact body when it is not committed yet;
+- result, commands/checks and verification limitations;
+- material findings, `fixTarget` and a reference to the fix when there is one;
+- final state and next step, distinguishing product, process and reuse.
 
-Não duplique a skill nos relatórios ou em memórias de ferramentas. Ao reutilizar
-em outro produto, aponte para este corpo canônico e forneça o mapa/contexto
-desse produto. Mudanças compartilhadas não reescrevem contratos ou evidências
-anteriores; registre a versão realmente usada e avalie a aplicabilidade da
-revisão seguinte.
+Do not duplicate the skill in reports or in tool memories. When reusing it in
+another product, point to this canonical body and provide that product's
+map/context. Shared changes do not rewrite earlier contracts or evidence;
+record the version actually used and assess whether the next revision
+applies.

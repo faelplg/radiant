@@ -1,466 +1,466 @@
 ---
-versão: 0.2
-status: Tese operacional revisada
-natureza: Sistema interno de geração, desenvolvimento, verificação e aprendizado de projetos
-contexto: fael.tech / Longward
+version: 0.2
+status: Revised operational thesis
+nature: Internal system for generating, developing, verifying and learning from projects
+context: fael.tech / Longward
 codename: Radiant
 ---
 
-# Radiant — Project Generation System
+# Radiant - Project Generation System
 
-## 1. Definição
+## 1. Definition
 
-**Radiant é o sistema de geração e desenvolvimento de projetos utilizado para transformar intenção em sistemas reais, verificáveis e capazes de aumentar a capacidade dos ciclos seguintes.**
+**Radiant is the project generation and development system used to turn intent into real, verifiable systems that increase the capability of the cycles that follow.**
 
-Radiant não é um produto final.
+Radiant is not a final product.
 
-Radiant não é um único agente.
+Radiant is not a single agent.
 
-Radiant não é apenas uma metodologia de documentação.
+Radiant is not just a documentation methodology.
 
-Radiant é uma camada operacional que organiza como uma intenção é:
+Radiant is an operational layer that organizes how an intent is:
 
-- questionada;
-- enquadrada;
-- especificada;
-- planejada;
-- delegada;
-- construída;
-- verificada;
-- transformada em aprendizado;
-- reincorporada ao próprio sistema.
+- questioned;
+- framed;
+- specified;
+- planned;
+- delegated;
+- built;
+- verified;
+- turned into learning;
+- folded back into the system itself.
 
-Sua pergunta principal é:
+Its main question is:
 
-> **Como transformamos uma intenção em um sistema real sem perder clareza, contexto, evidência e aprendizado no caminho?**
+> **How do we turn an intent into a real system without losing clarity, context, evidence and learning along the way?**
 
 ---
 
-## 2. Papel no ecossistema
+## 2. Role in the ecosystem
 
-Radiant possui uma função distinta de fael.tech, Longward e Foundation.
+Radiant has a role distinct from fael.tech, Longward and Foundation.
 
 ### fael.tech
 
-Pergunta:
+Question:
 
-> **O que vale a pena explorar, construir ou aprender?**
+> **What is worth exploring, building or learning?**
 
-É o laboratório pessoal onde ideias podem nascer, ser investigadas e transformadas em experimentos.
+It is the personal lab where ideas can be born, investigated and turned into experiments.
 
 ### Longward
 
-Pergunta:
+Question:
 
-> **O que merece se tornar uma infraestrutura de continuidade coletiva?**
+> **What deserves to become infrastructure for collective continuity?**
 
-É a organização institucional orientada por Collective Continuity.
+It is the institutional organization guided by Collective Continuity.
 
 ### Foundation
 
-Pergunta:
+Question:
 
-> **A Longward deveria existir para construir algo como isso?**
+> **Should Longward exist to build something like this?**
 
-É o sistema de validação institucional da Longward.
+It is Longward's institutional validation system.
 
 ### Radiant
 
-Pergunta:
+Question:
 
-> **Como levamos esta intenção até uma implementação verificável e fazemos o sistema aprender com o resultado?**
+> **How do we take this intent to a verifiable implementation and make the system learn from the result?**
 
-Radiant não decide o destino institucional de uma ideia.
+Radiant does not decide the institutional destiny of an idea.
 
-Ele recebe uma intenção suficientemente clara e conduz sua materialização.
-
----
-
-## 3. O problema que Radiant resolve
-
-A capacidade de produzir software com inteligência artificial cresce rapidamente.
-
-Isso reduz o custo de:
-
-- escrever código;
-- gerar documentos;
-- pesquisar alternativas;
-- criar testes;
-- produzir protótipos;
-- executar tarefas repetitivas;
-- coordenar múltiplos agentes.
-
-Ao mesmo tempo, cria novos riscos:
-
-- construir antes de entender;
-- aceitar a primeira solução plausível;
-- transformar prompts temporários em processo permanente;
-- gerar código sem uma hipótese clara;
-- produzir documentação desconectada da implementação;
-- perder contexto entre agentes, ferramentas e sessões;
-- repetir decisões já tomadas;
-- validar o próprio trabalho sem crítica independente;
-- registrar aprendizados sem corrigir o sistema que falhou;
-- confundir memória com conhecimento;
-- confundir execução com evidência;
-- duplicar regras em diferentes agentes;
-- depender excessivamente de um único modelo, IDE ou fornecedor.
-
-Radiant parte de uma hipótese diferente:
-
-> **A principal vantagem de um sistema agêntico de desenvolvimento não é gerar mais código. É reduzir incerteza de forma disciplinada e aumentar capacidade entre ciclos.**
+It receives a sufficiently clear intent and carries out its materialization.
 
 ---
 
-## 4. Tese central
+## 3. The problem Radiant solves
 
-A tese do Radiant é:
+The ability to produce software with artificial intelligence is growing quickly.
 
-> **Projetos melhores emergem quando intenção, especificação, execução, verificação e Learn Back fazem parte de um mesmo sistema contínuo.**
+This lowers the cost of:
 
-Radiant não busca automatizar tudo.
+- writing code;
+- generating documents;
+- researching alternatives;
+- creating tests;
+- producing prototypes;
+- running repetitive tasks;
+- coordinating multiple agents.
 
-Busca organizar conscientemente:
+At the same time, it creates new risks:
 
-- o que precisa ser entendido;
-- o que precisa ser questionado;
-- o que precisa ser especificado;
-- o que pode ser delegado;
-- o que precisa ser verificado;
-- qual evidência sustenta uma conclusão;
-- onde um erro precisa ser corrigido;
-- o que deve permanecer disponível para o próximo projeto.
+- building before understanding;
+- accepting the first plausible solution;
+- turning temporary prompts into permanent process;
+- generating code without a clear hypothesis;
+- producing documentation disconnected from the implementation;
+- losing context between agents, tools and sessions;
+- repeating decisions already made;
+- validating one's own work without independent critique;
+- recording lessons without fixing the system that failed;
+- confusing memory with knowledge;
+- confusing execution with evidence;
+- duplicating rules across different agents;
+- depending too much on a single model, IDE or vendor.
 
-O resultado esperado de um ciclo não é apenas software.
+Radiant starts from a different hypothesis:
 
-É:
-
-> **sistema entregue + evidência + aprendizado incorporado + capacidade acumulada.**
-
----
-
-## 5. Intenção antes de geração
-
-Radiant não começa por código.
-
-Começa por intenção.
-
-Antes de construir, o sistema precisa conseguir responder:
-
-- O que estamos tentando mudar?
-- Para quem?
-- Qual problema ou oportunidade existe?
-- Qual é a hipótese central?
-- Qual é o menor fenômeno que precisamos provar?
-- O que não precisamos construir ainda?
-- O que faria esta hipótese estar errada?
-
-Uma ideia mal enquadrada continua sendo mal enquadrada mesmo quando implementada rapidamente.
-
-Por isso:
-
-> **velocidade de geração não substitui clareza de intenção.**
+> **The main advantage of an agentic development system is not generating more code. It is reducing uncertainty in a disciplined way and increasing capability between cycles.**
 
 ---
 
-## 6. O ciclo Radiant
+## 4. Central thesis
 
-O ciclo operacional inicial do Radiant é:
+Radiant's thesis is:
+
+> **Better projects emerge when intent, specification, execution, verification and Learn Back are part of one continuous system.**
+
+Radiant does not try to automate everything.
+
+It tries to consciously organize:
+
+- what needs to be understood;
+- what needs to be questioned;
+- what needs to be specified;
+- what can be delegated;
+- what needs to be verified;
+- which evidence supports a conclusion;
+- where an error needs to be fixed;
+- what should remain available for the next project.
+
+The expected result of a cycle is not just software.
+
+It is:
+
+> **delivered system + evidence + incorporated learning + accumulated capability.**
+
+---
+
+## 5. Intent before generation
+
+Radiant does not start with code.
+
+It starts with intent.
+
+Before building, the system needs to be able to answer:
+
+- What are we trying to change?
+- For whom?
+- What problem or opportunity exists?
+- What is the central hypothesis?
+- What is the smallest phenomenon we need to prove?
+- What do we not need to build yet?
+- What would make this hypothesis wrong?
+
+A poorly framed idea is still poorly framed even when implemented quickly.
+
+Therefore:
+
+> **generation speed does not replace clarity of intent.**
+
+---
+
+## 6. The Radiant cycle
+
+Radiant's initial operational cycle is:
 
 > **Frame → Challenge → Spec → Design → Plan → Contract → Build → Verify → Learn Back**
 
-Cada estágio reduz um tipo diferente de incerteza.
+Each stage reduces a different kind of uncertainty.
 
 ---
 
 ### 6.1. Frame
 
-Transforma uma intenção ampla em um contrato inicial de entendimento.
+Turns a broad intent into an initial contract of understanding.
 
-Artefato principal:
+Main artifact:
 
 **Radiant Project Frame**
 
-Deve registrar:
+It should record:
 
-- intenção;
-- problema;
-- transformação desejada;
-- participante ou usuário;
-- hipótese central;
-- restrições;
-- hipóteses críticas;
-- menor experimento relevante;
-- evidência mínima de sucesso;
-- não objetivos;
-- questões em aberto.
+- intent;
+- problem;
+- desired transformation;
+- participant or user;
+- central hypothesis;
+- constraints;
+- critical assumptions;
+- smallest relevant experiment;
+- minimum evidence of success;
+- non-goals;
+- open questions.
 
 ---
 
 ### 6.2. Challenge
 
-Questiona premissas antes que elas se transformem em arquitetura.
+Questions assumptions before they turn into architecture.
 
-Perguntas típicas:
+Typical questions:
 
-- Precisamos mesmo de um produto?
-- Precisamos mesmo desta interface?
-- Existe uma solução menor?
-- Estamos resolvendo o problema ou implementando a primeira forma imaginada?
-- Qual premissa pode invalidar boa parte do projeto?
-- O que estamos adicionando apenas porque a tecnologia permite?
+- Do we really need a product?
+- Do we really need this interface?
+- Is there a smaller solution?
+- Are we solving the problem or implementing the first shape we imagined?
+- Which assumption could invalidate a large part of the project?
+- What are we adding only because the technology allows it?
 
-Radiant pode implementar esta função através de uma skill ou agente chamado provisoriamente de **Grill**.
+Radiant may implement this function through a skill or agent provisionally called **Grill**.
 
-Seu objetivo não é bloquear.
+Its goal is not to block.
 
-É impedir que velocidade seja confundida com convicção.
+It is to keep speed from being mistaken for conviction.
 
 ---
 
 ### 6.3. Spec
 
-Descreve o comportamento esperado antes de decidir todos os detalhes de implementação.
+Describes the expected behavior before deciding every implementation detail.
 
-Pode produzir:
+It may produce:
 
 - Implementation Spec;
 - Domain Spec;
 - Workspace Spec;
 - Interface Contract;
-- invariantes;
-- estados;
-- eventos;
+- invariants;
+- states;
+- events;
 - acceptance criteria;
-- requisitos não funcionais;
-- limites de segurança.
+- non-functional requirements;
+- safety limits.
 
-A especificação funciona como contrato intermediário entre intenção e código.
+The specification works as an intermediate contract between intent and code.
 
 ---
 
 ### 6.4. Design
 
-Define como o sistema será estruturado e como a experiência será percebida, compreendida e usada.
+Defines how the system will be structured and how the experience will be perceived, understood and used.
 
-Radiant reconhece duas trilhas conceitualmente distintas, que podem coexistir no mesmo projeto:
+Radiant recognizes two conceptually distinct tracks, which may coexist in the same project:
 
 #### 6.4.1. System Design
 
-Relaciona-se à estrutura interna do sistema:
+Concerns the internal structure of the system:
 
-- arquitetura;
-- modelo de domínio;
-- componentes;
-- contratos;
-- persistência;
-- integrações;
-- decisões técnicas;
+- architecture;
+- domain model;
+- components;
+- contracts;
+- persistence;
+- integrations;
+- technical decisions;
 - trade-offs;
 - ADRs.
 
 #### 6.4.2. Experience Design
 
-Relaciona-se à forma como pessoas percebem, entendem e usam o sistema:
+Concerns how people perceive, understand and use the system:
 
-- intenção da experiência;
-- arquitetura de informação;
-- jornadas e fluxos;
-- estados e interações;
-- responsividade;
-- acessibilidade;
-- expressão visual;
-- comportamento e feedback;
-- coerência entre intenção e implementação.
+- experience intent;
+- information architecture;
+- journeys and flows;
+- states and interactions;
+- responsiveness;
+- accessibility;
+- visual expression;
+- behavior and feedback;
+- coherence between intent and implementation.
 
-A Design Layer do Radiant formaliza essa separação sem criar um processo paralelo. A etapa Design deve preservar a diferença entre estrutura do sistema e experiência do usuário. O corpo canônico especializado está em [Radiant Design Layer](design-layer.md).
+Radiant's Design Layer formalizes this separation without creating a parallel process. The Design stage must preserve the difference between system structure and user experience. The specialized canonical body is in [Radiant Design Layer](design-layer.md).
 
-Radiant deve favorecer decisões reversíveis enquanto a incerteza for alta e manter a formalidade proporcional ao risco.
+Radiant should favor reversible decisions while uncertainty is high and keep formality proportional to risk.
 
 ---
 
 ### 6.5. Plan
 
-Transforma a spec em incrementos executáveis.
+Turns the spec into executable increments.
 
-Artefato principal:
+Main artifact:
 
 **Implementation Plan**
 
-Um bom plano não é uma lista extensa de tarefas.
+A good plan is not a long list of tasks.
 
-É uma sequência de incrementos capazes de:
+It is a sequence of increments able to:
 
-- reduzir risco;
-- produzir comportamento observável;
-- gerar evidência;
-- permitir interrupção antecipada quando a hipótese se mostra fraca.
+- reduce risk;
+- produce observable behavior;
+- generate evidence;
+- allow early stopping when the hypothesis turns out weak.
 
 ---
 
 ### 6.6. Contract
 
-Antes de delegar trabalho agêntico relevante, Radiant pode gerar um **Task Contract**.
+Before delegating relevant agentic work, Radiant may generate a **Task Contract**.
 
-O contrato existe para impedir que agentes interpretem livremente uma intenção ampla.
+The contract exists to keep agents from freely interpreting a broad intent.
 
-Um Task Contract deve declarar, proporcionalmente à tarefa:
+A Task Contract should declare, in proportion to the task:
 
-- identidade da tarefa;
-- objetivo;
+- task identity;
+- goal;
 - inputs;
-- outputs exatos;
-- caminhos canônicos;
+- exact outputs;
+- canonical paths;
 - owner;
-- restrições;
+- constraints;
 - non-goals;
-- critérios de conclusão;
-- método de verificação;
-- condições de HOLD ou FAIL;
-- limites de segurança;
-- blockers externos;
-- limite de execução quando aplicável.
+- completion criteria;
+- verification method;
+- HOLD or FAIL conditions;
+- safety limits;
+- external blockers;
+- execution limit when applicable.
 
-O contrato deve ser pequeno.
+The contract should be small.
 
-Sua função é tornar delegação verificável.
+Its job is to make delegation verifiable.
 
 ---
 
 ### 6.7. Build
 
-Executa os incrementos.
+Executes the increments.
 
-Agentes podem:
+Agents may:
 
-- implementar;
-- gerar testes;
-- refatorar;
-- pesquisar APIs;
-- atualizar documentação;
-- preparar migrações;
-- revisar alterações;
-- executar checklists.
+- implement;
+- generate tests;
+- refactor;
+- research APIs;
+- update documentation;
+- prepare migrations;
+- review changes;
+- run checklists.
 
-Construção nunca deve se desconectar de Frame, Spec e Contract.
+Building must never disconnect from Frame, Spec and Contract.
 
 ---
 
 ### 6.8. Verify
 
-Radiant trata verificação como etapa própria.
+Radiant treats verification as a stage of its own.
 
-Não como consequência automática do Build.
+Not as an automatic consequence of Build.
 
-Pode envolver:
+It may involve:
 
-- testes automatizados;
-- análise estática;
+- automated tests;
+- static analysis;
 - acceptance criteria;
-- revisão arquitetural;
-- execução manual;
-- segurança;
+- architectural review;
+- manual execution;
+- security;
 - performance;
-- acessibilidade;
-- readback de artefatos;
-- revisão por outro agente;
-- avaliação humana;
-- comparação entre intenção, spec e implementação.
+- accessibility;
+- readback of artifacts;
+- review by another agent;
+- human evaluation;
+- comparison between intent, spec and implementation.
 
-O princípio é:
+The principle is:
 
-> **quem cria não deve ser a única entidade responsável por declarar que está correto.**
+> **whoever creates should not be the only entity responsible for declaring it correct.**
 
 ---
 
 ### 6.9. Learn Back
 
-Radiant não deve apenas registrar aprendizado.
+Radiant should not only record lessons.
 
-Deve determinar:
+It should determine:
 
-> **qual parte do sistema precisa ser corrigida para que a próxima execução seja melhor?**
+> **which part of the system needs to be fixed so the next execution is better?**
 
-Exemplos:
+Examples:
 
-- problema de intenção → corrigir Frame;
-- premissa mal testada → corrigir Challenge;
-- ambiguidade → corrigir Spec;
-- decisão arquitetural ruim → corrigir Design ou ADR;
-- decomposição inadequada → corrigir Plan;
-- instrução insuficiente → corrigir Task Contract ou Skill;
-- falha recorrente de execução → corrigir Procedure;
-- verificação inadequada → corrigir Verification Rule;
-- conhecimento errado ou obsoleto → corrigir Knowledge;
-- contexto mal compreendido → corrigir Context;
-- regra necessária em toda execução → promover um ponteiro para Operational Memory.
+- intent problem → fix the Frame;
+- poorly tested assumption → fix the Challenge;
+- ambiguity → fix the Spec;
+- bad architectural decision → fix the Design or an ADR;
+- inadequate decomposition → fix the Plan;
+- insufficient instruction → fix the Task Contract or Skill;
+- recurring execution failure → fix the Procedure;
+- inadequate verification → fix the Verification Rule;
+- wrong or obsolete knowledge → fix Knowledge;
+- misunderstood context → fix Context;
+- rule needed in every execution → promote a pointer to Operational Memory.
 
-O ciclo só fecha quando o aprendizado altera o sistema responsável.
+The cycle only closes when the lesson changes the responsible system.
 
 ---
 
-## 7. Learn Back como princípio estrutural
+## 7. Learn Back as a structural principle
 
-Um sistema que apenas armazena retrospectivas não necessariamente aprende.
+A system that only stores retrospectives does not necessarily learn.
 
-Radiant considera aprendizado real quando uma observação produz uma mudança em uma camada responsável.
+Radiant considers learning real when an observation produces a change in a responsible layer.
 
-Fluxo:
+Flow:
 
 > **Outcome → Evidence → Diagnosis → Fix Target → Change → Reuse**
 
-Toda falha relevante deve conseguir responder:
+Every relevant failure should be able to answer:
 
-1. O que aconteceu?
-2. Qual evidência temos?
-3. Por que acreditamos que aconteceu?
-4. Qual camada poderia ter evitado isso?
-5. O que precisa mudar?
-6. Como verificaremos que a mudança funcionou?
+1. What happened?
+2. What evidence do we have?
+3. Why do we believe it happened?
+4. Which layer could have prevented it?
+5. What needs to change?
+6. How will we verify that the change worked?
 
-Essa lógica evita uma memória passiva de erros.
+This logic avoids a passive memory of errors.
 
 ---
 
 ## 8. Radiant Project Frame
 
-O **Radiant Project Frame** é o contrato inicial entre intenção e construção.
+The **Radiant Project Frame** is the initial contract between intent and building.
 
-Ele não é um PRD completo.
+It is not a full PRD.
 
-Sua função é impedir que um projeto comece diretamente por features.
+Its job is to keep a project from starting directly with features.
 
-Deve ser pequeno o suficiente para ser usado.
+It should be small enough to be used.
 
-E explícito o suficiente para permitir que outra pessoa ou agente compreenda:
+And explicit enough to let another person or agent understand:
 
-- por que o projeto existe;
-- o que precisa ser provado;
-- o que está deliberadamente fora.
+- why the project exists;
+- what needs to be proven;
+- what is deliberately left out.
 
 ---
 
 ## 9. Radiant Constitution
 
-A [Radiant Constitution](../constitution/CONSTITUTION.md) é a fonte normativa
-canônica dos princípios operacionais. Esta tese explica o sistema; não mantém
-uma segunda lista de regras. Consulte a Constitution para precedência, artigos,
-estados operacionais e alterações constitucionais.
+The [Radiant Constitution](../constitution/CONSTITUTION.md) is the canonical
+normative source of the operational principles. This thesis explains the
+system; it does not keep a second list of rules. See the Constitution for
+precedence, articles, operational states and constitutional amendments.
 
-### Engenharia como restrição explícita
+### Engineering as an explicit constraint
 
-Radiant não substitui práticas de engenharia pelo uso de agentes. Projetos
-podem adotar um [Radiant Engineering Baseline](../engineering/engineering-baseline.md)
-com expectativas mínimas e um Engineering Profile com adaptações específicas.
-O Baseline não impõe arquitetura ou stack universal; sua aplicação é
-proporcional ao risco, impacto e reversibilidade.
+Radiant does not replace engineering practices with the use of agents. Projects
+may adopt a [Radiant Engineering Baseline](../engineering/engineering-baseline.md)
+with minimum expectations and an Engineering Profile with specific adaptations.
+The Baseline does not impose a universal architecture or stack; it applies in
+proportion to risk, impact and reversibility.
 
-Task Contracts referenciam essas regras, Verify produz evidência de conformidade
-e Learn Back corrige a camada responsável quando a regra se mostra insuficiente.
+Task Contracts reference these rules, Verify produces evidence of conformance
+and Learn Back fixes the responsible layer when a rule proves insufficient.
 
-## 10. Core e adapters
+## 10. Core and adapters
 
-Radiant deve separar:
+Radiant should separate:
 
 ```text
 Radiant Core
@@ -476,62 +476,62 @@ Model / Tool
 
 ### Core
 
-Contém:
+Contains:
 
 - Constitution;
-- ciclo;
-- artefatos;
-- regras de verificação;
-- contratos;
+- cycle;
+- artifacts;
+- verification rules;
+- contracts;
 - Learn Back;
-- convenções de memória;
-- princípios de segurança.
+- memory conventions;
+- safety principles.
 
 ### Adapters
 
-Conectam Radiant a ambientes como:
+Connect Radiant to environments such as:
 
 - Codex;
 - Claude Code;
 - IDE agents;
 - CLI agents;
-- runtimes locais;
-- futuros harnesses.
+- local runtimes;
+- future harnesses.
 
-Adapters não devem duplicar regras do core.
+Adapters should not duplicate core rules.
 
-Devem apontar para elas.
+They should point to them.
 
 ---
 
 ## 11. One body, everywhere else pointers
 
-Radiant adota a regra:
+Radiant adopts the rule:
 
-> **um conteúdo canônico; nos demais sistemas, apenas referências quando possível.**
+> **one canonical body; in other systems, only references when possible.**
 
-Exemplo:
+Example:
 
-- uma skill compartilhada vive no repositório canônico;
-- o Codex recebe um ponteiro;
-- Claude Code recebe um ponteiro;
-- uma memória nativa pode conter apenas a localização e instrução de uso;
-- o AIKM preserva origem, versão, uso e aprendizado.
+- a shared skill lives in the canonical repository;
+- Codex receives a pointer;
+- Claude Code receives a pointer;
+- a native memory may hold only the location and usage instruction;
+- AIKM preserves origin, version, usage and learning.
 
-Isso reduz:
+This reduces:
 
 - drift;
-- duplicação;
-- regras conflitantes;
-- manutenção repetida.
+- duplication;
+- conflicting rules;
+- repeated maintenance.
 
 ---
 
-## 12. Skills como unidades de capacidade
+## 12. Skills as units of capability
 
-Uma **skill** encapsula uma competência reutilizável.
+A **skill** encapsulates a reusable competence.
 
-Exemplos:
+Examples:
 
 - `grill-project-hypothesis`
 - `write-implementation-spec`
@@ -543,299 +543,299 @@ Exemplos:
 - `extract-project-learning`
 - `route-learn-back`
 
-Uma skill ideal define:
+An ideal skill defines:
 
-- objetivo;
-- entradas;
-- contexto necessário;
-- processo;
-- restrições;
-- formato de saída;
-- critérios de qualidade;
-- método de verificação;
-- falhas conhecidas;
-- Learn Back target quando relevante.
+- goal;
+- inputs;
+- required context;
+- process;
+- constraints;
+- output format;
+- quality criteria;
+- verification method;
+- known failures;
+- Learn Back target when relevant.
 
-Skills transformam experiência operacional em infraestrutura.
+Skills turn operational experience into infrastructure.
 
 ---
 
-## 13. Grill como mecanismo de pressão
+## 13. Grill as a pressure mechanism
 
-Radiant deve possuir uma capacidade explícita de crítica adversarial.
+Radiant should have an explicit capability for adversarial critique.
 
-**Grill** desafia:
+**Grill** challenges:
 
-- premissas;
-- necessidade da solução;
-- escopo;
-- complexidade;
-- arquitetura;
-- dependências;
-- métricas;
-- evidência;
-- irreversibilidade.
+- assumptions;
+- the need for the solution;
+- scope;
+- complexity;
+- architecture;
+- dependencies;
+- metrics;
+- evidence;
+- irreversibility.
 
-Grill deve acontecer antes de decisões caras.
+Grill should happen before expensive decisions.
 
-Também pode ser reaplicado quando o projeto começa a acumular complexidade não prevista.
+It can also be reapplied when the project starts accumulating unplanned complexity.
 
 ---
 
 ## 14. Spec-Driven Development
 
-Radiant incorpora Spec-Driven Development como mecanismo, não como identidade completa.
+Radiant incorporates Spec-Driven Development as a mechanism, not as its whole identity.
 
-Fluxo:
+Flow:
 
 > **Intent → Spec → Contract → Implementation → Verification → Learn Back**
 
-A spec não é documentação congelada.
+The spec is not frozen documentation.
 
-Quando a realidade contradiz a especificação, Radiant deve registrar:
+When reality contradicts the specification, Radiant should record:
 
-- o que mudou;
-- por que mudou;
-- qual evidência justificou a mudança;
-- se Frame, Spec ou Design precisam ser atualizados.
+- what changed;
+- why it changed;
+- which evidence justified the change;
+- whether the Frame, Spec or Design need to be updated.
 
-O objetivo é impedir que implementação e intenção se afastem silenciosamente.
-
----
-
-## 15. Criação e crítica separadas
-
-Sempre que possível, Radiant separa funções de geração e avaliação.
-
-Exemplos:
-
-- um agente implementa e outro revisa;
-- um agente escreve a spec e outro busca ambiguidades;
-- um agente propõe arquitetura e outro procura riscos;
-- um agente produz uma resposta e outro verifica evidência;
-- um agente gera testes e outro verifica se os testes cobrem os critérios;
-- um agente sintetiza aprendizado e outro identifica a camada correta de Learn Back.
-
-Isso reduz auto-confirmação.
+The goal is to keep implementation and intent from drifting apart silently.
 
 ---
 
-## 16. Verificação proporcional ao risco
+## 15. Separate creation and critique
 
-Nem toda tarefa precisa do mesmo rigor.
+Whenever possible, Radiant separates generation and evaluation roles.
 
-Radiant deve selecionar a profundidade de verificação com base em:
+Examples:
 
-- durabilidade;
-- reversibilidade;
-- exposição externa;
-- impacto;
-- segurança;
-- importância factual.
+- one agent implements and another reviews;
+- one agent writes the spec and another looks for ambiguities;
+- one agent proposes an architecture and another looks for risks;
+- one agent produces an answer and another checks evidence;
+- one agent generates tests and another checks whether the tests cover the criteria;
+- one agent synthesizes a lesson and another identifies the right Learn Back layer.
 
-Um modelo inicial pode utilizar quatro níveis:
+This reduces self-confirmation.
 
-### Tier 0 — Quick
+---
 
-Tarefa descartável e de baixo risco.
+## 16. Verification proportional to risk
 
-Verificar apenas o necessário para não reportar algo materialmente incorreto.
+Not every task needs the same rigor.
 
-### Tier 1 — Durable
+Radiant should choose the depth of verification based on:
 
-Artefato que será reutilizado.
+- durability;
+- reversibility;
+- external exposure;
+- impact;
+- safety;
+- factual importance.
 
-Verificar:
+An initial model may use four tiers:
 
-- aderência ao pedido;
-- estrutura;
-- integridade;
-- proveniência;
-- legibilidade;
+### Tier 0 - Quick
+
+Disposable, low-risk task.
+
+Verify only what is needed to avoid reporting something materially wrong.
+
+### Tier 1 - Durable
+
+Artifact that will be reused.
+
+Verify:
+
+- adherence to the request;
+- structure;
+- integrity;
+- provenance;
+- readability;
 - discoverability.
 
-### Tier 2 — Deep
+### Tier 2 - Deep
 
-Arquitetura, pesquisa, proposta, spec importante ou publicação.
+Architecture, research, proposal, important spec or publication.
 
-Adicionar:
+Add:
 
-- critérios específicos;
-- análise de riscos;
-- claims críticos;
-- segunda leitura.
+- specific criteria;
+- risk analysis;
+- critical claims;
+- a second reading.
 
-### Tier 3 — High Impact
+### Tier 3 - High Impact
 
-Segurança, produção, dados sensíveis, decisões irreversíveis ou outputs públicos de alta consequência.
+Security, production, sensitive data, irreversible decisions or high-consequence public outputs.
 
-Adicionar:
+Add:
 
-- evidência explícita;
-- revisão independente;
-- gates de aprovação;
-- plano de rollback quando aplicável.
+- explicit evidence;
+- independent review;
+- approval gates;
+- a rollback plan when applicable.
 
-O rigor deve acompanhar o risco, não o tamanho do texto.
+Rigor should follow risk, not the length of the text.
 
 ---
 
-## 17. Evidência
+## 17. Evidence
 
-Radiant deve distinguir:
+Radiant should distinguish:
 
-- algo recuperado;
-- algo efetivamente inspecionado;
-- algo que sustenta uma conclusão;
-- algo em conflito;
-- algo desatualizado.
+- something retrieved;
+- something actually inspected;
+- something that supports a conclusion;
+- something in conflict;
+- something outdated.
 
-Especialmente em pesquisa e decisão técnica:
+Especially in research and technical decisions:
 
-> **retrieval não equivale a verificação.**
+> **retrieval is not verification.**
 
-Uma fonte encontrada não sustenta automaticamente uma decisão.
+A source that was found does not automatically support a decision.
 
-Radiant pode futuramente estruturar evidence packets, porém essa capacidade deve nascer apenas quando o uso justificar.
+Radiant may later structure evidence packets, but that capability should only be born when usage justifies it.
 
 ---
 
 ## 18. Task Contracts
 
-Task Contracts são a unidade operacional entre planejamento e execução agêntica.
+Task Contracts are the operational unit between planning and agentic execution.
 
-Um contrato existe para responder:
+A contract exists to answer:
 
-> **O agente sabe exatamente o que deve produzir, onde, sob quais limites e como a conclusão será verificada?**
+> **Does the agent know exactly what it must produce, where, under which limits and how completion will be verified?**
 
-Um bom contrato deve evitar:
+A good contract should avoid:
 
-- escopo implícito;
-- outputs vagos;
-- “done” sem readback;
-- mudanças não autorizadas;
-- expansão silenciosa;
-- execução indefinida.
+- implicit scope;
+- vague outputs;
+- "done" without readback;
+- unauthorized changes;
+- silent expansion;
+- open-ended execution.
 
-Task Contracts não devem se transformar em um novo PRD.
+Task Contracts should not turn into a new PRD.
 
-Devem permanecer bounded.
+They should stay bounded.
 
-Além dos limites funcionais, um contrato pode declarar Baseline e Profile,
-Engineering Check, política de dependências, comandos de verificação e
-condições de HOLD específicas de engenharia. O contrato referencia esses
-documentos; não copia seus corpos.
+Beyond functional limits, a contract may declare Baseline and Profile,
+Engineering Check, dependency policy, verification commands and
+engineering-specific HOLD conditions. The contract references these
+documents; it does not copy their bodies.
 
 ---
 
-## 19. Memória operacional
+## 19. Operational memory
 
-Radiant precisa acumular:
+Radiant needs to accumulate:
 
-- decisões;
-- padrões;
-- falhas;
-- experiências;
-- soluções;
+- decisions;
+- patterns;
+- failures;
+- experiences;
+- solutions;
 - trade-offs;
-- componentes;
+- components;
 - skills;
 - contexts;
-- avaliações;
-- resultados de experimentos;
-- regras de prevenção.
+- evaluations;
+- experiment results;
+- prevention rules.
 
-Essa memória deve ser organizada de acordo com sua função.
+This memory should be organized by function.
 
-Nem tudo precisa ser carregado sempre.
+Not everything needs to be loaded all the time.
 
-Radiant deve distinguir ao menos conceitualmente:
+Radiant should distinguish, at least conceptually:
 
 ### Knowledge
 
-O que sabemos.
+What we know.
 
 ### Context
 
-O que é verdadeiro para um projeto, pessoa ou situação específica.
+What is true for a specific project, person or situation.
 
 ### Procedure
 
-Como executar algo repetidamente.
+How to do something repeatedly.
 
 ### Operational Memory
 
-Ponteiros curtos e estáveis que precisam ser conhecidos antes de agir.
+Short, stable pointers that need to be known before acting.
 
 ### Action / Execution Evidence
 
-O que aconteceu em uma execução relevante.
+What happened in a relevant execution.
 
 ### Evaluation
 
-Falhas, critérios e verificações.
+Failures, criteria and verifications.
 
-Essa separação evita transformar “memória” em um depósito indiferenciado.
+This separation keeps "memory" from becoming an undifferentiated dump.
 
 ---
 
-## 20. Relação com AIKM
+## 20. Relation to AIKM
 
-> **Nota de estado (2026-10-15):** as menções ao AIKM nas seções 11, 20, 21, 32, 33, 37 e 42 descrevem o AIKM v1, uma camada de preservação e recuperação de conhecimento. Desde a revisão 2 do Frame AIKM (2026-10-12), o AIKM gerencia skills, contexto e servidores MCP por projeto, e essa camada de conhecimento é non-goal. A fronteira vigente está em [integração](integration.md#fronteira-aikm); o texto abaixo permanece como registro da tese 0.2.
+> **State note (2026-10-15):** the mentions of AIKM in sections 11, 20, 21, 32, 33, 37 and 42 describe AIKM v1, a knowledge preservation and retrieval layer. Since revision 2 of the AIKM Frame (2026-10-12), AIKM manages skills, context and MCP servers per project, and that knowledge layer is a non-goal. The current boundary is in [integration](integration.md#aikm-boundary); the text below remains as a record of thesis 0.2.
 
-O **AI Knowledge Manager**, abreviado internamente como **AIKM**, é a infraestrutura candidata para preservar e recuperar o patrimônio operacional produzido pelo Radiant.
+The **AI Knowledge Manager**, internally abbreviated as **AIKM**, is the candidate infrastructure for preserving and retrieving the operational assets produced by Radiant.
 
-As funções permanecem distintas:
+The roles remain distinct:
 
 ### Radiant
 
-Orquestra como projetos são transformados de intenção em sistema.
+Orchestrates how projects are turned from intent into a system.
 
 ### AIKM
 
-Preserva e recupera o conhecimento operacional acumulado ao longo desses projetos.
+Preserves and retrieves the operational knowledge accumulated across those projects.
 
-A relação desejada é:
+The desired relation is:
 
-> **Radiant executa → produz evidência e aprendizado → AIKM preserva → Radiant recupera → próximo ciclo começa com mais capacidade.**
+> **Radiant executes → produces evidence and learning → AIKM preserves → Radiant retrieves → the next cycle starts with more capability.**
 
-Essa relação não deve criar duplicação.
+This relation should not create duplication.
 
-Radiant é processo.
+Radiant is process.
 
-AIKM é infraestrutura de conhecimento.
-
----
-
-## 21. Intake e classificação
-
-Radiant deve evitar exigir classificação perfeita no momento da captura.
-
-Uma arquitetura saudável permite:
-
-> **capturar primeiro → classificar depois → promover quando houver evidência suficiente.**
-
-Isso reduz atrito.
-
-Também permite distinguir:
-
-- material bruto;
-- conhecimento sintetizado;
-- contexto;
-- procedimento;
-- execução;
-- avaliação;
-- aprendizado promovido.
-
-O AIKM pode implementar essa função de intake e roteamento.
+AIKM is knowledge infrastructure.
 
 ---
 
-## 22. Conhecimento e lifecycle
+## 21. Intake and classification
 
-Conteúdo produzido por IA não deve se tornar canônico automaticamente.
+Radiant should avoid requiring perfect classification at capture time.
 
-Um lifecycle conceitual útil é:
+A healthy architecture allows:
+
+> **capture first → classify later → promote when there is enough evidence.**
+
+This reduces friction.
+
+It also allows distinguishing:
+
+- raw material;
+- synthesized knowledge;
+- context;
+- procedure;
+- execution;
+- evaluation;
+- promoted learning.
+
+AIKM may implement this intake and routing function.
+
+---
+
+## 22. Knowledge and lifecycle
+
+AI-produced content should not become canonical automatically.
+
+A useful conceptual lifecycle is:
 
 ```text
 candidate
@@ -847,99 +847,99 @@ superseded
 deprecated / archived
 ```
 
-O estado exato pode variar por tipo de artefato.
+The exact state may vary by artifact type.
 
-O princípio permanece:
+The principle remains:
 
-> **gerado não significa confiável; recuperado não significa verdadeiro; utilizado não significa canônico.**
+> **generated does not mean trustworthy; retrieved does not mean true; used does not mean canonical.**
 
 ---
 
-## 23. Segurança e egress
+## 23. Security and egress
 
-Radiant deve distinguir:
+Radiant should distinguish:
 
-- possibilidade de leitura local;
-- permissão de envio para uma ferramenta externa.
+- the ability to read locally;
+- permission to send to an external tool.
 
-Algo pode ser útil no contexto local e ainda assim não poder sair da máquina.
+Something may be useful in local context and still not be allowed to leave the machine.
 
-Portanto:
+Therefore:
 
-> **visibility não implica egress permission.**
+> **visibility does not imply egress permission.**
 
-Especial atenção para:
+Pay special attention to:
 
 - secrets;
-- código privado;
-- dados pessoais;
-- dados empresariais;
-- credenciais;
-- conversas privadas;
-- artefatos de clientes;
-- documentos internos.
+- private code;
+- personal data;
+- business data;
+- credentials;
+- private conversations;
+- client artifacts;
+- internal documents.
 
-Adapters e agentes precisam respeitar esta fronteira.
+Adapters and agents must respect this boundary.
 
 ---
 
-## 24. Artefatos do Radiant
+## 24. Radiant artifacts
 
-Radiant deve produzir apenas artefatos que tenham função operacional.
+Radiant should only produce artifacts that have an operational function.
 
 ### Radiant Project Frame
 
-Define intenção e experimento.
+Defines intent and experiment.
 
 ### Implementation Spec
 
-Define comportamento, regras e critérios.
+Defines behavior, rules and criteria.
 
 ### Domain / Technical Spec
 
-Aprofunda áreas que exigem precisão.
+Goes deeper into areas that require precision.
 
 ### Implementation Plan
 
-Organiza incrementos.
+Organizes increments.
 
 ### Task Contract
 
-Transforma um incremento em trabalho agêntico delimitado.
+Turns an increment into bounded agentic work.
 
 ### ADR
 
-Registra decisões estruturais.
+Records structural decisions.
 
 ### Verification Report
 
-Registra o que foi efetivamente verificado.
+Records what was actually verified.
 
 ### Learning Record
 
-Registra resultado, evidência, diagnóstico e Learn Back.
+Records outcome, evidence, diagnosis and Learn Back.
 
 ### Engineering Baseline
 
-Define o padrão mínimo de engenharia reutilizável entre projetos.
+Defines the minimum engineering standard reusable across projects.
 
 ### Engineering Profile
 
-Contextualiza o Baseline para um projeto sem duplicá-lo.
+Puts the Baseline in context for a project without duplicating it.
 
-Nem todo projeto precisa de todos os artefatos.
+Not every project needs every artifact.
 
-Formalidade é proporcional a risco e complexidade.
+Formality is proportional to risk and complexity.
 
 ---
 
-## 25. Artefatos como estado do sistema
+## 25. Artifacts as system state
 
-Os documentos não são apenas relatórios.
+The documents are not just reports.
 
-Eles são parte do estado operacional do projeto.
+They are part of the project's operational state.
 
-Fluxo:
+Flow:
 
 ```text
 Project Frame
@@ -961,199 +961,199 @@ Learn Back
 Knowledge / Skill / Context / Rule
 ```
 
-Cada estágio deve poder apontar para o anterior quando isso aumentar rastreabilidade.
+Each stage should be able to point to the previous one when that improves traceability.
 
 ---
 
 ## 26. Human-in-the-loop
 
-Radiant não pressupõe autonomia total.
+Radiant does not assume full autonomy.
 
-### Pode ser altamente automatizado
+### Can be highly automated
 
 - scaffolding;
-- geração de testes;
-- refatorações locais;
-- documentação derivada;
+- test generation;
+- local refactors;
+- derived documentation;
 - lint;
-- busca;
-- tarefas mecânicas;
-- execução de checklists;
-- validações estruturais.
+- search;
+- mechanical tasks;
+- running checklists;
+- structural validations.
 
-### Requer participação humana maior
+### Requires more human participation
 
-- intenção;
-- propósito;
-- priorização;
-- escolhas econômicas;
-- mudanças de escopo;
-- decisões éticas;
-- dados sensíveis;
-- produção;
-- trade-offs irreversíveis;
-- aprovação de conhecimento canônico.
+- intent;
+- purpose;
+- prioritization;
+- economic choices;
+- scope changes;
+- ethical decisions;
+- sensitive data;
+- production;
+- irreversible trade-offs;
+- approval of canonical knowledge.
 
-A função do sistema não é remover o humano.
+The system's job is not to remove the human.
 
-É ampliar sua capacidade sem eliminar responsabilidade.
+It is to expand their capability without eliminating responsibility.
 
 ---
 
-## 27. Model-agnostic e tool-agnostic
+## 27. Model-agnostic and tool-agnostic
 
-Radiant deve funcionar com diferentes:
+Radiant should work with different:
 
-- modelos;
+- models;
 - IDEs;
 - CLIs;
 - coding agents;
 - runtimes;
-- provedores;
-- sistemas de versionamento;
-- ferramentas de documentação.
+- providers;
+- version control systems;
+- documentation tools.
 
-O processo pertence ao Radiant.
+The process belongs to Radiant.
 
-A execução pertence ao runtime escolhido.
+The execution belongs to the chosen runtime.
 
 ---
 
-## 28. Segurança e limites de execução
+## 28. Security and execution limits
 
-Um sistema agêntico precisa operar dentro de fronteiras explícitas.
+An agentic system needs to operate within explicit boundaries.
 
-Radiant deve considerar:
+Radiant should consider:
 
-- permissões mínimas;
-- ambientes isolados;
-- secrets fora de prompts;
-- política de egress;
-- revisão de comandos destrutivos;
-- acesso restrito a produção;
-- limites de rede;
-- provenance de mudanças;
-- logs seletivos;
+- minimum permissions;
+- isolated environments;
+- secrets kept out of prompts;
+- egress policy;
+- review of destructive commands;
+- restricted access to production;
+- network limits;
+- provenance of changes;
+- selective logs;
 - approval gates;
-- rollback quando relevante.
+- rollback when relevant.
 
-Autonomia deve ser proporcional à reversibilidade.
+Autonomy should be proportional to reversibility.
 
 ---
 
-## 29. Métricas
+## 29. Metrics
 
-Radiant não deve ser avaliado apenas por velocidade.
+Radiant should not be evaluated by speed alone.
 
 ### Intention-to-Working-System
 
-Tempo entre intenção clara e primeiro sistema funcional.
+Time between a clear intent and the first working system.
 
 ### Spec Drift
 
-Diferença material entre intenção/spec e implementação.
+Material difference between intent/spec and implementation.
 
 ### Verification Escape Rate
 
-Problemas que deveriam ter sido detectados antes da conclusão.
+Problems that should have been caught before completion.
 
 ### Rework Rate
 
-Retrabalho causado por enquadramento ou especificação inadequados.
+Rework caused by inadequate framing or specification.
 
 ### Knowledge Reuse Rate
 
-Percentual de projetos que reutilizam conhecimento anterior.
+Percentage of projects that reuse earlier knowledge.
 
 ### Learn Back Rate
 
-Percentual de falhas relevantes que geram uma correção explícita na camada responsável.
+Percentage of relevant failures that produce an explicit fix in the responsible layer.
 
 ### Learning Yield
 
-Quantidade e qualidade de conhecimento reutilizável produzido por ciclo.
+Quantity and quality of reusable knowledge produced per cycle.
 
 ### Task Contract Compliance
 
-Percentual de execuções que permanecem dentro de outputs e limites acordados.
+Percentage of executions that stay within the agreed outputs and limits.
 
 ### Human Intervention Quality
 
-Pontos em que a participação humana altera materialmente a qualidade ou direção.
+Points where human participation materially changes quality or direction.
 
-A métrica principal continua sendo:
+The main metric remains:
 
-> **convergência entre intenção, sistema entregue, evidência e capacidade acumulada.**
-
----
-
-## 30. O que Radiant não é
-
-> **Nota de estado (2026-10-16):** o Radiant define como fluxos agênticos são divididos em unidades, roteados para harnesses e aceitos. A execução e a observação ficam com os harnesses e com um operador externo, o Demerzel, conforme o [ADR-0002](adrs/ADR-0002-backend-dispatch-demerzel.md), o [ADR-0003](adrs/ADR-0003-demerzel-independent-core.md) e a [integração](integration.md#fronteira-demerzel). O texto abaixo permanece como registro da tese 0.2.
-
-Radiant não é:
-
-- framework de agentes;
-- IDE;
-- coding agent;
-- coleção de prompts;
-- substituto para engenharia;
-- gerador automático de startups;
-- metodologia rígida;
-- sistema de documentação pesada;
-- desculpa para automatizar decisões humanas relevantes;
-- base de conhecimento isolada.
-
-Radiant é uma camada operacional sobre essas capacidades.
+> **convergence between intent, delivered system, evidence and accumulated capability.**
 
 ---
 
-## 31. Princípio de proporcionalidade
+## 30. What Radiant is not
 
-Projetos pequenos devem gerar pouca burocracia.
+> **State note (2026-10-16):** Radiant defines how agentic flows are split into units, routed to harnesses and accepted. Execution and observation belong to the harnesses and to an external operator, Demerzel, as set out in [ADR-0002](adrs/ADR-0002-backend-dispatch-demerzel.md), [ADR-0003](adrs/ADR-0003-demerzel-independent-core.md) and [integration](integration.md#demerzel-boundary). The text below remains as a record of thesis 0.2.
 
-Projetos maiores ou mais arriscados devem gerar mais estrutura.
+Radiant is not:
 
-### Pequeno experimento
+- an agent framework;
+- an IDE;
+- a coding agent;
+- a collection of prompts;
+- a substitute for engineering;
+- an automatic startup generator;
+- a rigid methodology;
+- a heavy documentation system;
+- an excuse to automate relevant human decisions;
+- an isolated knowledge base.
 
-Pode exigir:
+Radiant is an operational layer on top of these capabilities.
+
+---
+
+## 31. Principle of proportionality
+
+Small projects should generate little bureaucracy.
+
+Larger or riskier projects should generate more structure.
+
+### Small experiment
+
+May require:
 
 - Project Frame;
-- spec curta;
-- plan curto;
-- Task Contract opcional;
+- short spec;
+- short plan;
+- optional Task Contract;
 - build;
 - verify;
 - learning record.
 
-### Produto de maior risco
+### Higher-risk product
 
-Pode exigir:
+May require:
 
 - domain spec;
 - threat model;
 - ADRs;
 - task contracts;
 - security review;
-- observabilidade;
+- observability;
 - rollback strategy;
-- evidência mais rigorosa;
-- revisão humana adicional.
+- more rigorous evidence;
+- additional human review.
 
-Radiant aumenta rigor conforme aumenta o custo do erro.
+Radiant increases rigor as the cost of error increases.
 
-Para pequenos experimentos, o Baseline pode ser aplicado diretamente e o
-Profile pode ser omitido. Para produtos com múltiplas iterações, integrações,
-dados sensíveis ou risco operacional, o Profile e a evidência de engenharia
-passam a ser recomendados.
+For small experiments, the Baseline may be applied directly and the Profile
+may be omitted. For products with multiple iterations, integrations, sensitive
+data or operational risk, the Profile and engineering evidence become
+recommended.
 
 ---
 
-## 32. Primeira implementação do Radiant
+## 32. First implementation of Radiant
 
-A primeira implementação do Radiant não precisa ser uma plataforma.
+The first implementation of Radiant does not need to be a platform.
 
-Pode existir como um repositório com:
+It can exist as a repository with:
 
 ```text
 radiant/
@@ -1168,105 +1168,105 @@ radiant/
   knowledge/
 ```
 
-Componentes iniciais recomendados:
+Recommended initial components:
 
 1. Radiant Constitution;
-2. template de Project Frame;
-3. skill de Grill;
-4. skill de Implementation Spec;
-5. skill de Implementation Plan;
-6. template de Task Contract;
-7. skill de Verification;
-8. skill de Learn Back;
-9. adapters iniciais para harnesses usados;
-10. integração gradual com AIKM.
-11. Radiant Engineering Baseline e template de Profile.
+2. Project Frame template;
+3. Grill skill;
+4. Implementation Spec skill;
+5. Implementation Plan skill;
+6. Task Contract template;
+7. Verification skill;
+8. Learn Back skill;
+9. initial adapters for the harnesses in use;
+10. gradual integration with AIKM.
+11. Radiant Engineering Baseline and Profile template.
 
-A infraestrutura deve crescer a partir do uso real.
+The infrastructure should grow from real use.
 
 ---
 
-## 33. Primeiro teste: AI Knowledge Manager
+## 33. First test: AI Knowledge Manager
 
-O primeiro projeto conduzido pelo Radiant é o **AI Knowledge Manager — AIKM**, incubado pela fael.tech.
+The first project carried out by Radiant is the **AI Knowledge Manager - AIKM**, incubated by fael.tech.
 
-Esse teste é adequado porque:
+This test is suitable because:
 
-- resolve uma dor real;
-- possui escopo controlável;
-- tem reflexão conceitual prévia;
-- pode ser usado pelo próprio Radiant;
-- permite observar reutilização entre projetos;
-- permite testar core–adapter separation;
-- permite testar Learn Back.
+- it solves a real pain;
+- it has a controllable scope;
+- it has prior conceptual reflection;
+- it can be used by Radiant itself;
+- it allows observing reuse across projects;
+- it allows testing core-adapter separation;
+- it allows testing Learn Back.
 
-O ciclo inicial deve produzir:
+The initial cycle should produce:
 
 ### Project Frame
 
-Define intenção e hipótese.
+Defines intent and hypothesis.
 
 ### Implementation Spec
 
-Define o menor sistema necessário.
+Defines the smallest necessary system.
 
 ### Implementation Plan
 
-Divide em incrementos.
+Splits it into increments.
 
 ### Task Contracts
 
-Delimitam trabalho agêntico relevante.
+Bound relevant agentic work.
 
 ### Build
 
-Implementa.
+Implements.
 
 ### Verify
 
-Confirma comportamento e hipótese.
+Confirms behavior and hypothesis.
 
 ### Learn Back
 
-Atualiza AIKM e Radiant com o que foi descoberto.
+Updates AIKM and Radiant with what was discovered.
 
 ---
 
-## 34. Critério de sucesso do primeiro teste
+## 34. Success criterion of the first test
 
-Radiant não será considerado validado porque gerou código.
+Radiant will not be considered validated because it generated code.
 
-O primeiro teste será promissor quando observarmos:
+The first test will be promising when we observe:
 
-> Uma intenção é enquadrada.  
-> Premissas são questionadas.  
-> A spec orienta a implementação.  
-> O plano reduz o trabalho a incrementos.  
-> Agentes recebem contratos delimitados.  
-> A implementação é verificada por critérios externos à própria geração.  
-> O uso produz evidência real.  
-> Uma falha ou descoberta gera Learn Back.  
-> Conhecimento produzido é reutilizado em um ciclo posterior.
+> An intent is framed.\
+> Assumptions are questioned.\
+> The spec guides the implementation.\
+> The plan reduces the work to increments.\
+> Agents receive bounded contracts.\
+> The implementation is verified by criteria external to the generation itself.\
+> Use produces real evidence.\
+> A failure or discovery produces Learn Back.\
+> Knowledge produced is reused in a later cycle.
 
-O ponto decisivo é:
+The decisive point is:
 
-> **o segundo ciclo deve começar melhor por causa do primeiro.**
+> **the second cycle should start better because of the first.**
 
 ---
 
-## 35. Evolução do sistema
+## 35. System evolution
 
-Radiant deve evoluir através dos próprios projetos.
+Radiant should evolve through its own projects.
 
-Uma capacidade só entra no core quando:
+A capability only enters the core when:
 
-- aparece repetidamente;
-- possui valor em mais de um projeto;
-- pode ser abstraída sem apagar contexto;
-- possui método de verificação;
-- seu custo operacional é menor que o retrabalho que evita.
+- it shows up repeatedly;
+- it has value in more than one project;
+- it can be abstracted without erasing context;
+- it has a verification method;
+- its operational cost is lower than the rework it avoids.
 
-Isso pode produzir novas:
+This may produce new:
 
 - skills;
 - validators;
@@ -1274,23 +1274,23 @@ Isso pode produzir novas:
 - adapters;
 - contracts;
 - rubrics;
-- regras da Constitution.
+- Constitution rules.
 
-O sistema deve crescer de dentro para fora.
+The system should grow from the inside out.
 
 ---
 
-## 36. Relação com publicação
+## 36. Relation to publication
 
-Radiant é um projeto interno.
+Radiant is an internal project.
 
-Não precisa ser apresentado publicamente como produto.
+It does not need to be presented publicly as a product.
 
-Aprendizados reais podem gerar publicações pela fael.tech sobre:
+Real lessons may lead to publications by fael.tech about:
 
 - agentic development;
 - Spec-Driven Development;
-- core–adapter architectures;
+- core-adapter architectures;
 - human-in-the-loop;
 - verification;
 - task contracts;
@@ -1298,126 +1298,126 @@ Aprendizados reais podem gerar publicações pela fael.tech sobre:
 - operational memory;
 - AI-assisted engineering.
 
-A publicação deve nascer da evidência produzida pelo trabalho.
+Publication should come from the evidence produced by the work.
 
-Não de uma metodologia apresentada como universal antes de ser testada.
+Not from a methodology presented as universal before it is tested.
 
 ---
 
-## 37. Referências operacionais e limites de adoção
+## 37. Operational references and adoption limits
 
-Radiant pode aprender com sistemas externos de engenharia agêntica e gestão de conhecimento.
+Radiant can learn from external systems for agentic engineering and knowledge management.
 
-Um exemplo relevante é o projeto **DECK6/akm**, que demonstra práticas como:
+A relevant example is the **DECK6/akm** project, which demonstrates practices such as:
 
-- separação entre knowledge, context, procedure, action e evaluation;
-- core–adapter separation;
+- separation between knowledge, context, procedure, action and evaluation;
+- core-adapter separation;
 - Learn Back;
-- verificação proporcional ao risco;
+- verification proportional to risk;
 - task contracts;
-- conhecimento canônico separado de índices derivados;
-- ponteiros em vez de duplicação;
-- lifecycle explícito;
-- distinção entre disponibilidade local e egress.
+- canonical knowledge separate from derived indexes;
+- pointers instead of duplication;
+- explicit lifecycle;
+- distinction between local availability and egress.
 
-Radiant não deve copiar sua arquitetura integralmente.
+Radiant should not copy its architecture wholesale.
 
-O problema do Radiant é diferente:
+Radiant's problem is different:
 
-> **orquestrar a geração de projetos.**
+> **orchestrating project generation.**
 
-O problema do AIKM é:
+AIKM's problem is:
 
-> **preservar e recuperar conhecimento operacional.**
+> **preserving and retrieving operational knowledge.**
 
-Referências externas devem melhorar nossos princípios sem apagar a natureza específica dos nossos sistemas.
-
----
-
-## 38. Hipótese de longo prazo
-
-Se Radiant funcionar, cada novo projeto deve começar com mais capacidade do que o anterior.
-
-Não apenas porque os modelos melhoraram.
-
-E sim porque o sistema acumulou:
-
-- melhores perguntas;
-- melhores specs;
-- melhores contracts;
-- melhores procedures;
-- melhores critérios de verificação;
-- melhores padrões;
-- melhores contextos;
-- melhores mecanismos de recuperação;
-- conhecimento sobre falhas anteriores.
-
-Radiant passa a funcionar como uma infraestrutura de aprendizagem para construção de software e produtos.
+External references should improve our principles without erasing the specific nature of our systems.
 
 ---
 
-## 39. Missão operacional
+## 38. Long-term hypothesis
 
-> **Transformar intenção em sistemas verificáveis e transformar cada ciclo em capacidade para o próximo.**
+If Radiant works, each new project should start with more capability than the previous one.
 
----
+Not just because the models got better.
 
-## 40. Visão
+But because the system accumulated:
 
-Criar um ambiente em que humanos e agentes consigam desenvolver projetos sem depender de conversas descartáveis, contexto perdido ou geração improvisada.
+- better questions;
+- better specs;
+- better contracts;
+- better procedures;
+- better verification criteria;
+- better patterns;
+- better contexts;
+- better retrieval mechanisms;
+- knowledge about earlier failures.
 
-Um sistema em que:
-
-- intenção permanece visível;
-- agentes recebem fronteiras claras;
-- especificações orientam construção;
-- contratos tornam delegação verificável;
-- decisões preservam contexto;
-- resultados são avaliados proporcionalmente ao risco;
-- erros corrigem a camada responsável;
-- aprendizado é preservado;
-- novos projetos reutilizam capacidade anterior.
-
-Radiant não deve apenas ajudar a construir mais rápido.
-
-Deve ajudar a:
-
-> **construir com continuidade e aprender operacionalmente.**
+Radiant comes to work as learning infrastructure for building software and products.
 
 ---
 
-## 41. Questão fundamental
+## 39. Operational mission
 
-Toda evolução do Radiant deve responder:
-
-> **Esta capacidade reduz incerteza, melhora verificação, reduz duplicação ou transforma experiência em capacidade reutilizável?**
-
-Se não fizer nenhuma dessas coisas, provavelmente não pertence ao sistema.
+> **Turn intent into verifiable systems and turn each cycle into capability for the next one.**
 
 ---
 
-## 42. Estado atual
+## 40. Vision
 
-Radiant possui uma tese operacional revisada.
+Create an environment where humans and agents can develop projects without depending on disposable conversations, lost context or improvised generation.
 
-O primeiro experimento continua sendo o **AI Knowledge Manager — AIKM**.
+A system where:
 
-O próximo estágio é atualizar os documentos do AIKM para refletir:
+- intent stays visible;
+- agents receive clear boundaries;
+- specifications guide building;
+- contracts make delegation verifiable;
+- decisions preserve context;
+- results are evaluated in proportion to risk;
+- errors fix the responsible layer;
+- learning is preserved;
+- new projects reuse earlier capability.
 
-- intake e routing;
-- separação entre tipo e papel do conhecimento;
+Radiant should not only help build faster.
+
+It should help:
+
+> **build with continuity and learn operationally.**
+
+---
+
+## 41. Fundamental question
+
+Every evolution of Radiant should answer:
+
+> **Does this capability reduce uncertainty, improve verification, reduce duplication or turn experience into reusable capability?**
+
+If it does none of these things, it probably does not belong in the system.
+
+---
+
+## 42. Current state
+
+Radiant has a revised operational thesis.
+
+The first experiment is still the **AI Knowledge Manager - AIKM**.
+
+The next stage is to update the AIKM documents to reflect:
+
+- intake and routing;
+- separation between type and role of knowledge;
 - execution evidence;
 - Learn Back;
 - lifecycle;
-- core–adapter separation;
-- verificação;
-- segurança de egress;
-- simplificação do MVP quando possível.
+- core-adapter separation;
+- verification;
+- egress safety;
+- simplifying the MVP when possible.
 
-Depois disso:
+After that:
 
 > **Frame → Spec → Plan → Contract → Build → Verify → Learn Back**
 
-A tese agora pode ser resumida assim:
+The thesis can now be summarized like this:
 
-> **Radiant transforma intenção em construção, construção em evidência e evidência em capacidade acumulada.**
+> **Radiant turns intent into building, building into evidence and evidence into accumulated capability.**
