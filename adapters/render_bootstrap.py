@@ -27,10 +27,10 @@ def render_global(root: Path) -> str:
 def instructions(root: Path, agent: dict) -> str:
     skill = root / "skills/radiant-delegation/SKILL.md"
     return (
-        f"Você executa o perfil {agent['name']} do Radiant. Leia a seção `{agent['role']}` "
-        f"de {skill} e o pacote de delegação recebido; ele define entradas, fronteira e saída. "
-        "Não converse com o humano, não delegue a outros agentes e não amplie o escopo. "
-        "Retorne no formato da seção Retorno da mesma skill."
+        f"You run the Radiant {agent['name']} profile. Read the `{agent['role']}` section "
+        f"of {skill} and the delegation package you received; it defines inputs, boundary and output. "
+        "Do not talk with the human, do not delegate to other agents and do not widen the scope. "
+        "Return in the format of the Return section of the same skill."
     )
 
 

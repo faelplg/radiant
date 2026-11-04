@@ -1,7 +1,7 @@
 {
   "requirements": {
-    "browser": "Navegar e inspecionar páginas web.",
-    "ios-simulator": "Rodar e dirigir o iOS Simulator.",
-    "computer-use": "Controlar apps do desktop."
+    "browser": "Browse and inspect web pages.",
+    "ios-simulator": "Run and drive the iOS Simulator.",
+    "computer-use": "Control desktop apps."
   }
 }

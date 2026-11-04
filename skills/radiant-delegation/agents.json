@@ -11,45 +11,45 @@
   "agents": [
     {
       "name": "radiant-research",
-      "role": "ideação",
+      "role": "ideation",
       "capability": "light",
       "access": "read",
-      "description": "Pesquisa delimitada para Frame e Challenge: devolve fontes inspecionadas e o que cada uma sustenta."
+      "description": "Bounded research for Frame and Challenge: returns inspected sources and what each one supports."
     },
     {
       "name": "radiant-grill",
-      "role": "ideação",
+      "role": "ideation",
       "capability": "deep",
       "access": "read",
-      "description": "Crítica adversarial de um Frame, Spec ou decisão: devolve objeções com evidência, sem decidir escopo."
+      "description": "Adversarial critique of a Frame, Spec or decision: returns objections with evidence, without deciding scope."
     },
     {
       "name": "radiant-design",
       "role": "design",
       "capability": "standard",
       "access": "write",
-      "description": "Redige Design Spec ou Spec a partir de Frame e Design Frame aprovados."
+      "description": "Writes a Design Spec or Spec from an approved Frame and Design Frame."
     },
     {
       "name": "radiant-dev",
       "role": "dev",
       "capability": "standard",
       "access": "write",
-      "description": "Executa o Build de um Task Contract ativo e retorna seu Completion report."
+      "description": "Runs the Build of an active Task Contract and returns its Completion report."
     },
     {
       "name": "radiant-verifier",
-      "role": "verificador",
+      "role": "verifier",
       "capability": "deep",
       "access": "write",
-      "description": "Verifica outputs contra contrato, Spec e critérios, sem corrigir o que verifica."
+      "description": "Verifies outputs against contract, Spec and criteria, without fixing what it verifies."
     },
     {
       "name": "radiant-maintenance",
-      "role": "manutenção",
+      "role": "maintenance",
       "capability": "standard",
       "access": "write",
-      "description": "Triagem de manutenção de um consumidor: produz relatório com propostas, sem alterar o projeto."
+      "description": "Maintenance triage of a consumer: produces a report with proposals, without changing the project."
     }
   ]
 }
