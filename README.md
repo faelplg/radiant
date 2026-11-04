@@ -67,3 +67,7 @@ lives in the skill; no empty directory duplicates it.
 
 See the [reorganization report](docs/repository-report.md) for the inventory,
 moves, decisions, simulations, evidence and limits of this delivery.
+
+## License
+
+Radiant is released under the [MIT license](LICENSE).

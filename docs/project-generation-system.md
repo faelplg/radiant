@@ -1282,6 +1282,8 @@ The system must grow from the inside out.
 
 ## 36. Relation to publication
 
+> **State note (2026-11-04):** the Radiant repository is public since this date, under the MIT license. That makes the process and its records readable and reusable; it does not turn Radiant into a product. The text below remains as a record of thesis 0.2.
+
 Radiant is an internal project.
 
 It does not need to be presented publicly as a product.
