@@ -16,11 +16,11 @@ jobs:
   check:
     name: check
     runs-on: ubuntu-latest
+    container: python:3.9
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
-        with:
-          python-version: '3.9'
+      - name: Trust workspace
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
       - name: Validate repository
         run: python3 validators/check_repository.py
       - name: Run tests
