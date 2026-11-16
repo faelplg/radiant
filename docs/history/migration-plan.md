@@ -1,3 +1,5 @@
+Historical record of the September 2026 reorganization.
+
 # Inventory and migration plan
 
 Analysis done before the moves on 2026-09-15. The folder had no `.git`;
@@ -107,7 +109,7 @@ Git history.
 | 2. Resolve conflicts | There is no conflict to resolve: AIKM evolved its own documents, archived the v1 records in the `v1-final` tag and removed them from `docs/project/` |
 | 3. Adoption and pointers | `.radiant.json` with a reviewed pin, a neutral `AGENTS.md` with pointers to Radiant and no copy in `docs/radiant/` |
 | 4. Operational navigation | The AIKM map points to the Radiant Core, without reassigning versions in reports |
-| 5. Verified path | Pilot of [ADR-0001](adrs/ADR-0001-delegation-roles.md#pilot-result), stages 0 to 5 |
+| 5. Verified path | Pilot of [ADR-0001](../adrs/ADR-0001-delegation-roles.md#pilot-result), stages 0 to 5 |
 | 6. Removal | Removal of `migration/` and of the validator's custody checks |
 
 The local `.DS_Store` was never versioned. The AIKM bodies still belong to

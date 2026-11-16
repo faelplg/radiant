@@ -2,7 +2,7 @@
 
 This is the shared convention. Instances, activation and evidence belong to
 the consumer project. Origin: a convention tested in the first project,
-identified in the [inventory](../docs/migration-plan.md). The copy that was in
+identified in the [inventory](../docs/history/migration-plan.md). The copy that was in
 custody was removed and exists only in Git history.
 
 ## Identity and location

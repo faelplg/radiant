@@ -41,7 +41,7 @@ separate owner decision.
   (`standard`).
 - Generated files never overwrite or follow symlinks; a refusal writes no
   file.
-- Do not edit `docs/repository-report.md` or the bodies in `migration/aikm/`.
+- Do not edit `docs/history/repository-report.md` or the bodies in `migration/aikm/`.
 - Commits in Conventional Commits, without agent co-authorship.
 - After each task: `python3 validators/check_repository.py`,
   `python3 -m unittest discover -s tests -v` and `git diff --check` pass.

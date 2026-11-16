@@ -1,3 +1,5 @@
+Historical record of the September 2026 reorganization.
+
 # Canonical reorganization report
 
 State: **DONE** for organization, designed integration and local verification.
@@ -37,8 +39,9 @@ radiant/
     contributing.md
     verification.md
     learn-back.md
-    migration-plan.md
-    repository-report.md
+    history/
+      migration-plan.md
+      repository-report.md
   skills/radiant-cycle/SKILL.md
   templates/
     README.md
@@ -101,8 +104,8 @@ capabilities without changing owners.
 | `docs/contributing.md` | Evolution and Git identity |
 | `docs/verification.md` | Gates and structural criteria |
 | `docs/learn-back.md` | Real fix destinations |
-| `docs/migration-plan.md` | Inventory and decisions before the moves |
-| `docs/repository-report.md` | This report |
+| `docs/history/migration-plan.md` | Inventory and decisions before the moves |
+| `docs/history/repository-report.md` | This report |
 | `skills/radiant-cycle/SKILL.md` | Skill incorporated from the first experiment |
 | `templates/README.md` | Use and ownership of the forms |
 | `templates/project-frame.md` | Minimal intent form |
@@ -137,15 +140,15 @@ rewritten.
 
 ## Canonical sources
 
-- Thesis: [docs/project-generation-system.md](project-generation-system.md).
-- Constitution: [constitution/CONSTITUTION.md](../constitution/CONSTITUTION.md).
-- Cycle procedure/capability: [radiant-cycle](../skills/radiant-cycle/SKILL.md).
-- Templates: [templates/](../templates/README.md).
-- Contract system: [contracts/README.md](../contracts/README.md).
-- Shared integration: [integration.md](integration.md).
-- Harness: [adapters/codex/](../adapters/codex/README.md).
-- Verification and Learn Back: their [checks](verification.md) and
-  [destination map](learn-back.md), subordinate to the Constitution and the
+- Thesis: [docs/project-generation-system.md](../project-generation-system.md).
+- Constitution: [constitution/CONSTITUTION.md](../../constitution/CONSTITUTION.md).
+- Cycle procedure/capability: [radiant-cycle](../../skills/radiant-cycle/SKILL.md).
+- Templates: [templates/](../../templates/README.md).
+- Contract system: [contracts/README.md](../../contracts/README.md).
+- Shared integration: [integration.md](../integration.md).
+- Harness: [adapters/codex/](../../adapters/codex/README.md).
+- Verification and Learn Back: their [checks](../verification.md) and
+  [destination map](../learn-back.md), subordinate to the Constitution and the
   skill.
 
 ## Global configuration, project and AGENTS
@@ -159,7 +162,7 @@ The block lives in the effective global instructions of the Codex profile,
 through inclusion in the user's source configuration. The official
 documentation, consulted through the OpenAI Docs skill, determined how the
 profile and the override are handled; see the
-[adapter](../adapters/codex/README.md). The current configuration is managed
+[adapter](../../adapters/codex/README.md). The current configuration is managed
 by Nix: only `.local/codex-global.md` was generated, without changing its
 source or output.
 
@@ -184,7 +187,7 @@ thesis, Constitution and skill keep their own scopes.
 ## Review and simulations
 
 There was one review pass after the Build against the criteria of the request
-and of [Verification](verification.md). Evidence independent of the narrative
+and of [Verification](../verification.md). Evidence independent of the narrative
 includes Git, SHA-256 of the earlier inputs and the skill's pre-existing
 validator, plus running the scripts in subprocesses. There was no other
 agent/reviewer; the self architectural readback is not presented as an
