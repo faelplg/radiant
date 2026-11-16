@@ -253,6 +253,11 @@ Ask:
 ### Expected
 
 - actionable errors;
+- recovery advice and next steps in error messages, fixes and reports must
+  match the subprocess's actual environment, configuration, credential access
+  and working directory, rather than assume the user's normal environment;
+  verify the suggested action under those conditions and state any
+  unverified limitation;
 - consistent exit codes when there is a CLI;
 - logs only when they help operate or diagnose;
 - no mandatory telemetry without an explicit decision;
