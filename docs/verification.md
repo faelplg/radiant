@@ -18,7 +18,9 @@ git diff --cached --check
 The `check` job in `.github/workflows/check.yml` runs
 `python3 validators/check_repository.py`, `python3 -m unittest discover -s tests -v`
 and `git diff --check` on every pull request and push to `main`, in the official
-`python:3.9` container.
+`python:3.9` container. It fetches full history and checks whitespace between the
+pull request's base SHA or the push's previous SHA and the checked-out commit,
+skipping whitespace checks for new-branch pushes with an all-zero previous SHA.
 
 The first command checks local Markdown links and anchors, uniqueness of the
 Constitution, absence of personal paths in the documents and coherence between
