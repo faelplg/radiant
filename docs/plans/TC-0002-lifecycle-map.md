@@ -118,7 +118,8 @@ Record it as an observation or a Learn Back candidate.
 # 7. Functional requirements
 
 - [ ] Each table row has an artifact link or a note starting with `Out of scope:` and a reason.
-- [ ] Every artifact the map names exists at the linked path.
+- [ ] Every artifact the map names exists at the linked path, using the link targets listed in plan task 7.
+- [ ] The SDLC table references EB-04 and EB-06, and the stages of Maintenance, User validation and Outcome measurement follow plan task 7.
 - [ ] The Learning Record form follows Article XV's order and keeps its Incident section optional.
 - [ ] The Frame form's `Result` section ends each refutation condition supported, refuted or inconclusive, as the cycle skill does.
 
@@ -134,12 +135,6 @@ Record it as an observation or a Learn Back candidate.
 | EB-06 Dependencies                | `N/A`            | No code | |
 | EB-07 Diagnosis                   | `N/A`            | No code | |
 | EB-08 Experience and efficiency   | `APPLICABLE`     | The map reads in one pass from the README | Review |
-
-### Practices
-
-| Practice | Serves | Why it applies here | Evidence |
-| --- | --- | --- | --- |
-| `test-strategy` | EB-03 | Documentation-only change: the strategy is readback plus the link check | Section 11 |
 
 # 9. Project-specific constraints
 

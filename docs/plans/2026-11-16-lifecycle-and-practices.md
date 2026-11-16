@@ -56,9 +56,10 @@ can check, and #33 and #34 need stable ids to map stack rules and contract
 citations.
 
 What would refute it: Build cannot write a "Violation signals" section that is
-observable in a diff or repository for some practice. That card is then cut
-from the catalog and recorded as a Learn Back candidate instead of shipping a
-card that only restates the principle.
+observable in a diff or repository for some practice. Build then stops on HOLD
+before cutting any card listed in #32; the owner decides whether the card is
+cut and recorded as a Learn Back candidate, instead of shipping a card that
+only restates the principle.
 
 ## Decisions
 
@@ -106,6 +107,9 @@ uses a prefix only where the source groups the practices (`solid-`).
 1. Citation is opt-in. The Baseline table stays the only `REQUIRED`/`N/A`
    grid in section 8; a contract lists a practice only when its "Applies
    when" holds, and no validator requires a contract to cite any practice.
+   TC-0002 cites none: it is documentation-only, which `test-strategy` lists
+   under "Does not apply when", and EB-03 in the Baseline grid already covers
+   its readback and link check.
 2. Every card has a required "Does not apply when" section. For SOLID it
    names the common cases where the principle costs more than it returns,
    such as a single variant for open-closed or a single consumer for
@@ -163,10 +167,10 @@ records the entry commit in its first commit.
   bodies in `docs/history/`.
 - Do not renumber Task Contract template sections: the delegation skill cites
   section 16, and #34 will cite sections 8 and 12.
-- Validator messages in English, each starting with the repository-relative
-  path, as in `check_delegation`.
-- Validator functions return lists of messages and never raise on bad content,
-  as `dispatch_formats.py` does.
+- Validator messages in English. `practice_cards.py` returns path-free
+  messages and never raises on bad content, as `dispatch_formats.py` does;
+  `check_practices` in `check_repository.py` prefixes each one with the
+  repository-relative path, as `check_dispatch` does.
 - Commits in Conventional Commits, without agent co-authorship. PRs assigned
   to `faelplg`, labeled with the title's type, with `Closes #32` or
   `Closes #31`.
@@ -179,10 +183,12 @@ records the entry commit in its first commit.
    Task 1.
 2. A card whose `Id` differs from its file stem fails, even when both are
    valid slugs. Test in Task 1.
-3. The catalog index and the card files match in both directions. Test in
-   Task 3.
+3. The catalog index and the card files match in both directions, reading
+   only the link in each row's first cell, so the `Serves` links to the
+   Baseline never count as cards; a repeated row fails. Test in Task 4.
 4. Renaming a card without updating the Task Contract template's example row
-   fails. Test in Task 3.
+   fails, and a row whose id is written without backticks is read, not
+   skipped. Tests in Tasks 1 and 4.
 5. No validator requires a contract to cite a practice. Proportionality is
    lost the moment one does.
 6. Every lifecycle row points to an artifact or says why it is out of scope.
@@ -208,9 +214,15 @@ records the entry commit in its first commit.
   `validate_sections`, plus exactly one `# ` title, a `- Id:` line whose
   backticked value matches `PRACTICE_ID` and equals `stem`, and a `- Serves:`
   line with at least one `EB-NN`, all in `baseline`.
-- `practice_ids(markdown: str) -> List[str]`: the backticked ids in the first
-  cell of each row of the `### Practices` table of a Task Contract. #34 reuses
-  it for consumer contracts.
+- `practice_ids(markdown: str) -> List[str]`: the first cell of every data
+  row of the `### Practices` table of a Task Contract, with surrounding
+  backticks stripped when present. It does not filter: a cell that is not a
+  valid id comes back as written, and the caller reports it. #34 reuses it for
+  consumer contracts.
+- `index_ids(markdown: str) -> List[str]`: the stem of the `.md` link in the
+  first cell of every data row of the catalog index table, in order,
+  repetitions included. Links in other cells are ignored.
+- Messages are path-free; the caller adds the path.
 
 - [ ] **Step 1: write the failing tests**
 
@@ -221,7 +233,10 @@ named in the error; sections out of order; repeated section; unknown `##`
 section; empty section body; `## Fake` inside a fenced block is ignored; id
 differs from stem; id `SOLID_SRP` fails the pattern; `Serves` without an EB id
 and with `EB-09` both fail; `practice_ids` returns the ids of the example
-table and an empty list without the subsection.
+table, returns `solid-srp` for a row written without backticks, and returns an
+empty list without the subsection; `index_ids` ignores a Baseline link in the
+`Serves` column and keeps a repeated row twice. No unit test asserts a path
+prefix.
 
 - [ ] **Step 2: confirm they fail**
 
@@ -293,7 +308,10 @@ Martin, Agile Software Development, Principles, Patterns, and Practices
 
 `templates/practice-card.md`: the format above with placeholders and one line
 of guidance per section, including that signals must be observable and
-verification must name a method.
+verification must name a method. The `Serves` line is a non-link placeholder,
+`- Serves: <EB-NN, ...>`, because a link relative to `engineering/practices/`
+would be broken from `templates/` and the repository check validates every
+link outside fenced blocks.
 
 `templates/adr.md`: `# ADR-NNNN: <decision>`, the metadata list of the
 existing ADRs (date, state, owner, originating revision, implementation,
@@ -310,10 +328,24 @@ when".
 
 - [ ] **Step 3: write the cards**
 
-Each card cites only sources the Build actually read; a source it could not
-read is left out and recorded in the Completion report. For DORA, use the
-metric names of the current DORA source; when they differ from the issue's
-wording, the card uses the source's name and gives the issue's as an alias.
+The `Source` section gives author, title and year for each source. Printed
+books cannot be read over public HTTP, so the Build confirms their
+bibliographic data against a publisher, library or author record instead of
+reading the full text, and says so in the Completion report. Where the Build
+finds a public primary text that covers the same practice, such as one of
+Martin's principle articles or one of Fowler's bliki entries
+(`BoundedContext`, `UbiquitousLanguage`, `TestDrivenDevelopment`), the card
+links it as well. A source whose author, title and year cannot be confirmed is
+left out. For DORA, use the metric names of the current DORA source; when they
+differ from the issue's wording, the card uses the source's name and gives the
+issue's as an alias.
+
+The four structural cards keep separate seams, so a contract cites the one
+that matches the decision: `solid-dip` at a module or interface seam,
+`ports-and-adapters` at the driving and driven boundaries of the application,
+`clean-architecture` at the rule that source dependencies point inward toward
+the domain across concentric rings, and `lightweight-ddd` at language and
+model, not at layering.
 
 | Id | Practice | Serves | Applies when | Does not apply when | Source to check |
 | --- | --- | --- | --- | --- | --- |
@@ -321,10 +353,10 @@ wording, the card uses the source's name and gives the issue's as an alias.
 | `solid-ocp` | Open-closed | EB-05, EB-01 | A second real variant exists and the variation point is stable | Only one variant exists | Meyer 1988; Martin 2002 |
 | `solid-lsp` | Liskov substitution | EB-02 | Code substitutes implementations behind a shared type | No subtype or alternative implementation exists | Liskov and Wing, A behavioral notion of subtyping (1994) |
 | `solid-isp` | Interface segregation | EB-05 | An interface has several consumers using disjoint parts | The interface has one consumer | Martin 2002 |
-| `solid-dip` | Dependency inversion | EB-05, EB-03 | Policy code depends on a volatile detail (I/O, network, vendor SDK) that is replaced or faked in tests | The dependency is stable, such as the standard library, or has one implementation and no test seam is needed | Martin 2002; Martin 2017 |
-| `clean-architecture` | Clean Architecture and the dependency rule | EB-05, EB-01 | Durable system whose domain rules must outlive frameworks, storage or delivery | Small tool, script or prototype where layers would have no behavior of their own | Martin, The Clean Architecture (2012); Martin 2017 |
-| `ports-and-adapters` | Ports and adapters | EB-03, EB-05 | The application talks to external actors that are swapped or driven by tests | A single integration with no replacement or test need | Cockburn, Hexagonal architecture (2005) |
-| `lightweight-ddd` | Lightweight domain-driven design | EB-02, EB-05 | A domain with real rules and vocabulary that experts and code must share | CRUD or plumbing without domain rules | Evans 2003; Vernon, Domain-Driven Design Distilled (2016) |
+| `solid-dip` | Dependency inversion | EB-05, EB-03 | A module's policy imports a volatile concrete detail (I/O, network, vendor SDK) directly, and the module needs an interface it owns to replace or fake that detail | The dependency is stable, such as the standard library, or has one implementation and no test seam is needed | Martin 2002; Martin 2017 |
+| `clean-architecture` | Clean Architecture and the dependency rule | EB-05, EB-01 | Durable system whose domain rules must outlive frameworks, storage or delivery, so source dependencies are kept pointing inward across rings | Small tool, script or prototype where rings would have no behavior of their own | Martin, The Clean Architecture (2012); Martin 2017 |
+| `ports-and-adapters` | Ports and adapters | EB-03, EB-05 | The application is driven by more than one actor (UI, CLI, tests) or drives external systems (storage, network, harness) through ports it defines | A single driver and a single driven system with no replacement or test need | Cockburn, Hexagonal architecture (2005) |
+| `lightweight-ddd` | Lightweight domain-driven design | EB-02, EB-05 | A domain with real rules: a ubiquitous language shared by experts and code, bounded contexts where words change meaning, and value objects that hold invariants | CRUD or plumbing without domain rules; heavy tactical ceremony, such as aggregate and repository boilerplate around simple CRUD | Evans 2003; Vernon, Domain-Driven Design Distilled (2016) |
 | `test-strategy` | Test pyramid and test strategy | EB-03 | Any change with behavior to prove | Documentation-only changes, verified by readback | Cohn, Succeeding with Agile (2009); Vocke, The Practical Test Pyramid (2018) |
 | `tdd` | Test-driven development | EB-03 | Behavior with an expected result known before coding; a bug with a reproducible failure | A spike to be discarded; work whose expected result is not known yet | Beck, Test-Driven Development: By Example (2002) |
 | `adr` | Architecture decision records | EB-01, EB-06 | A structural decision that is costly to reverse or that a later reader would question | A local, reversible choice visible in the diff | Nygard, Documenting Architecture Decisions (2011) |
@@ -341,49 +373,7 @@ wording, the card uses the source's name and gives the issue's as an alias.
 Run the three checks. Commit:
 `docs(practices): add the practice catalog, card form and ADR form`
 
-### Task 3: wire the validator into the repository check
-
-**Files:**
-- Modify: `validators/check_repository.py`, `tests/test_repository.py`
-
-- [ ] **Step 1: write the failing repository tests**
-
-In `RepositoryCheckTests`, each on the copied tree and expecting exit 1 with
-the named path in stderr:
-
-- `test_practice_card_missing_section_fails`: remove `## Verification` from
-  `engineering/practices/tdd.md`.
-- `test_practice_card_not_indexed_fails`: copy a card to
-  `engineering/practices/new-practice.md` with its id changed to
-  `new-practice`; stderr names `engineering/practices/README.md`.
-- `test_indexed_practice_without_card_fails`: delete
-  `engineering/practices/adr.md`.
-- `test_practice_template_missing_section_fails`: remove `## Source` from
-  `templates/practice-card.md`.
-- `test_contract_template_cites_unknown_practice_fails`: replace the example
-  id in the `### Practices` table of `templates/task-contract.md` with
-  `no-such-practice`.
-
-- [ ] **Step 2: confirm they fail**
-
-Run: `python3 -m unittest tests.test_repository -v`
-Expected: the five new tests FAIL; the others pass.
-
-- [ ] **Step 3: implement `check_practices(errors)`**
-
-Called in `check()` after `check_dispatch`. It reads the Baseline ids, runs
-`validate_card` on every `engineering/practices/*.md` except `README.md`,
-compares the card files with the `.md` links in the index table, runs
-`validate_sections` on `templates/practice-card.md`, and checks that
-`practice_ids` of `templates/task-contract.md` is non-empty and names existing
-cards.
-
-- [ ] **Step 4: confirm they pass, prove by mutation and commit**
-
-Run all three checks; mutate `check_practices` once per new test as in
-Task 1. Commit: `feat(validators): check the practice catalog in the repository`
-
-### Task 4: cite practices from the Task Contract
+### Task 3: cite practices from the Task Contract
 
 **Files:**
 - Modify: `templates/task-contract.md`,
@@ -416,6 +406,54 @@ text and the Baseline version do not change.
 - [ ] **Step 3: verify and commit**
 
 Run the three checks. Commit: `docs(contracts): cite catalog practices in the engineering check`
+
+### Task 4: wire the validator into the repository check
+
+Runs after Task 3, so the `### Practices` example it requires already exists.
+
+**Files:**
+- Modify: `validators/check_repository.py`, `tests/test_repository.py`
+
+- [ ] **Step 1: write the failing repository tests**
+
+In `RepositoryCheckTests`, each on the copied tree and expecting exit 1 with
+the named path in stderr:
+
+- `test_practice_card_missing_section_fails`: remove `## Verification` from
+  `engineering/practices/tdd.md`.
+- `test_practice_card_not_indexed_fails`: copy a card to
+  `engineering/practices/new-practice.md` with its id changed to
+  `new-practice`; stderr names `engineering/practices/README.md`.
+- `test_indexed_practice_without_card_fails`: delete
+  `engineering/practices/adr.md`.
+- `test_repeated_index_row_fails`: duplicate the `tdd` row of the index
+  table; stderr names `engineering/practices/README.md`.
+- `test_practice_template_missing_section_fails`: remove `## Source` from
+  `templates/practice-card.md`.
+- `test_contract_template_cites_unknown_practice_fails`: replace the example
+  id in the `### Practices` table of `templates/task-contract.md` with
+  `no-such-practice`.
+
+- [ ] **Step 2: confirm they fail**
+
+Run: `python3 -m unittest tests.test_repository -v`
+Expected: the six new tests FAIL; the others pass.
+
+- [ ] **Step 3: implement `check_practices(errors)`**
+
+Called in `check()` after `check_dispatch`. It reads the Baseline ids, runs
+`validate_card` on every `engineering/practices/*.md` except `README.md`,
+compares the card stems with `index_ids` of the index (first-cell links only)
+and reports a repeated id, runs `validate_sections` on
+`templates/practice-card.md`, and checks that `practice_ids` of
+`templates/task-contract.md` is non-empty and that each id matches
+`PRACTICE_ID` and names an existing card. Each message from
+`practice_cards.py` gets the repository-relative path as prefix.
+
+- [ ] **Step 4: confirm they pass, prove by mutation and commit**
+
+Run all three checks; mutate `check_practices` once per new test as in
+Task 1. Commit: `feat(validators): check the practice catalog in the repository`
 
 ### Task 5: discoverability
 
@@ -485,14 +523,14 @@ SDLC:
 | --- | --- | --- | --- |
 | Planning | Frame, Plan | Project Frame, Implementation Plan | |
 | Requirements | Spec | Spec (thesis section 6.3) | The Spec form comes with #33 |
-| Design | Design | ADR form, Design Frame, Design Spec | System and experience tracks |
-| Implementation | Contract, Build | Task Contract, Engineering Baseline, practice catalog | |
-| Testing | Verify | Task Contract sections 11 and 16, `test-strategy` | |
+| Design | Design | ADR form, Design Frame, Design Spec, EB-04, EB-06 | System and experience tracks; security boundaries and structural dependencies are decided here and recorded in an ADR |
+| Implementation | Contract, Build | Task Contract (sections 4 and 10), Engineering Baseline, practice catalog | Section 4 bounds paths, external systems and network (EB-04); section 10 governs new dependencies (EB-06) |
+| Testing | Verify | Task Contract sections 11 and 16, `test-strategy`, EB-04 | Security verification when the change touches the surfaces EB-04 lists |
 | Release | Build, Verify | "Release and versioning" section, `semantic-versioning` | New section |
 | Deployment | Build, Verify | "Deploy" section, `ci-cd` | New section; the concrete checklist lives in the project's Profile |
 | Operations | Verify, Learn Back | EB-07, `dora-metrics` | Monitoring tooling is stack-specific and belongs to the Profile |
 | Incident and postmortem | Learn Back | Learning Record with its Incident section | New form. Out of scope: live incident response runbooks, which depend on the environment |
-| Maintenance | Learn Back | radiant-maintenance, maintenance report | |
+| Maintenance | Outside the cycle (feeds the Frame), Learn Back | radiant-maintenance, maintenance report | As the Maintenance role in radiant-delegation defines it |
 | Retirement | Plan, Contract | Plan, ADR form, Task Contract HOLD conditions | Irreversible, so Article III applies |
 
 PDLC:
@@ -502,11 +540,28 @@ PDLC:
 | Discovery | Frame | Project Frame, radiant-research | |
 | Definition | Frame, Challenge | Project Frame, radiant-grill | |
 | Solution design and prototyping | Design | Design Frame, Design Spec, design layer prototyping | |
-| User validation | Frame | Project Frame "Smallest experiment" and "Result" | New section |
+| User validation | Frame, Design, Verify | Project Frame "Smallest experiment" and "Result", design layer prototyping | New section; the experiment is framed in the Frame, run through prototyping or real use, and read in Verify |
 | Development | Spec to Verify | The SDLC table | |
 | Launch | None | None | Out of scope: go-to-market, pricing and communication are business functions, and Radiant is a development operating system; release mechanics are in the SDLC table |
-| Outcome measurement | Frame, Learn Back | Project Frame outcome metric and "Result" | New line in the form |
+| Outcome measurement | Frame, Verify, Learn Back | Project Frame outcome metric and "Result" | New line in the form; declared in the Frame, read in Verify, acted on in Learn Back |
 | Iterate or sunset | Learn Back, Frame | Learning Record, Frame revision, ADR form | Sunset is a human decision (Article XIII) |
+
+Link targets for artifacts that are not a whole file, relative to `docs/`:
+
+| Artifact | Target |
+| --- | --- |
+| Project Frame | `../templates/project-frame.md`, with `#intent-and-participant` for Discovery, `#hypothesis-and-challenge` for Definition and `#smallest-experiment` for validation and outcome |
+| Implementation Plan | `project-generation-system.md#65-plan` |
+| Spec | `project-generation-system.md#63-spec` |
+| radiant-research and radiant-grill | `../skills/radiant-delegation/SKILL.md#ideation` |
+| Maintenance role | `../skills/radiant-delegation/SKILL.md#maintenance` |
+| Design Frame, Design Spec, prototyping | `design-layer.md#design-frame`, `#design-spec`, `#prototyping-and-review` |
+| Task Contract sections | `../templates/task-contract.md#4-allowed-scope`, `#10-dependency-policy`, `#11-verification-plan`, `#13-hold-conditions`, `#16-completion-report` |
+| EB-04, EB-06, EB-07 | `../engineering/engineering-baseline.md#6-eb-04---security-privacy-and-data-control`, `#8-eb-06---dependencies-and-supply-chain`, `#9-eb-07---operability-diagnosis-and-observability` |
+| Radiant's own metrics | `project-generation-system.md#29-metrics` |
+
+Every anchor above exists at the plan's base commit; the repository check
+confirms them once the links are written.
 
 Then the two short sections. "Release and versioning": commits follow
 Conventional Commits; release notes are generated from history and

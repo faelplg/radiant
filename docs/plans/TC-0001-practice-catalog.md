@@ -84,12 +84,12 @@ contracts/
 
 ### Network
 
-`ALLOWED FOR: reading the public sources cited in the cards, to check names and titles. No repository content leaves the machine except the authorized push.`
+`ALLOWED FOR: confirming author, title and year of the sources cited in the cards against publisher, library or author records, and reading public primary texts where they exist. No repository content leaves the machine except the authorized push.`
 
 ## 5. Required outputs
 
 1. `validators/practice_cards.py` and `tests/test_practice_cards.py`.
-2. `check_practices(errors)` in `validators/check_repository.py`, with five
+2. `check_practices(errors)` in `validators/check_repository.py`, with six
    new tests in `tests/test_repository.py`.
 3. `templates/practice-card.md` and `templates/adr.md`, indexed in
    `templates/README.md`.
@@ -129,10 +129,10 @@ Record it as an observation or a Learn Back candidate.
 
 - [ ] Every card has, in order and once each, `Applies when`, `Does not apply when`, `Violation signals`, `Verification` and `Source`, each non-empty.
 - [ ] Every card's `Id` equals its file stem and matches `^[a-z0-9]+(-[a-z0-9]+)*$`; its `Serves` line names only existing EB ids.
-- [ ] The catalog index lists exactly the card files.
-- [ ] The contract template's `### Practices` example names only existing cards.
+- [ ] The catalog index lists exactly the card files, read from the first cell of each row, with no repeated row; `Serves` links are not read as cards.
+- [ ] The contract template's `### Practices` example names only existing cards; a row written without backticks is read and validated, not skipped.
 - [ ] A heading inside a fenced block does not count as a section.
-- [ ] Bad content produces messages that start with the repository-relative path; the validator never raises on content.
+- [ ] `practice_cards.py` returns path-free messages and never raises on content; `check_practices` prefixes each message with the repository-relative path. Unit tests do not assert path prefixes; repository tests assert the path in stderr.
 
 # 8. Engineering Check
 
@@ -185,12 +185,14 @@ git diff --cached --check
 
 - `python3 -m unittest tests.test_practice_cards -v` fails with
   `ModuleNotFoundError` before the module exists.
-- The five new repository tests fail before `check_practices` exists.
+- The six new repository tests fail before `check_practices` exists.
 - Each regression test is shown failing against the rule it names, by
   mutating `practice_cards.py` or `check_practices` after a commit, then
   restoring and rerunning the suite.
-- Each card's sources were read; any source not read is listed in the
-  Completion report and left out of the card.
+- Each source's author, title and year were confirmed against a publisher,
+  library or author record; public primary texts, where cited, were read. The
+  Completion report says which sources were confirmed only bibliographically,
+  and any source that could not be confirmed is left out of the card.
 
 ## Readback
 
@@ -229,8 +231,10 @@ Stop and ask for a decision when:
 
 - the owner has not answered the plan's open questions and a task depends on
   the answer;
-- a card cannot get an observable "Violation signals" section;
-- a source cannot be read and the card would rest on it alone;
+- a card cannot get an observable "Violation signals" section: stop before
+  cutting any card listed in #32;
+- no source of a card can be confirmed by author, title and year, so its
+  `Source` section would be empty;
 - the card format must change in a way that affects #33 or #34;
 - the agent would need to write outside the authorized paths;
 - the minimal solution no longer fits the contract.
