@@ -15,6 +15,10 @@ git diff --check
 git diff --cached --check
 ```
 
+The `check` job in `.github/workflows/check.yml` runs
+`python3 validators/check_repository.py`, `python3 -m unittest discover -s tests -v`
+and `git diff --check` on every pull request and push to `main`, using Python 3.9.
+
 The first command checks local Markdown links and anchors, uniqueness of the
 Constitution, absence of personal paths in the documents and coherence between
 `agents.json`, the sections of the delegation skill and each adapter's
