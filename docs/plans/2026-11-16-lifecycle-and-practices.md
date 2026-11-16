@@ -185,7 +185,9 @@ records the entry commit in its first commit.
    valid slugs. Test in Task 1.
 3. The catalog index and the card files match in both directions, reading
    only the link in each row's first cell, so the `Serves` links to the
-   Baseline never count as cards; a repeated row fails. Test in Task 4.
+   Baseline never count as cards; a repeated row fails, and a row whose first
+   cell is not a single sibling card link fails instead of being skipped.
+   Tests in Tasks 1 and 4.
 4. Renaming a card without updating the Task Contract template's example row
    fails, and a row whose id is written without backticks is read, not
    skipped. Tests in Tasks 1 and 4.
@@ -219,9 +221,13 @@ records the entry commit in its first commit.
   backticks stripped when present. It does not filter: a cell that is not a
   valid id comes back as written, and the caller reports it. #34 reuses it for
   consumer contracts.
-- `index_ids(markdown: str) -> List[str]`: the stem of the `.md` link in the
-  first cell of every data row of the catalog index table, in order,
-  repetitions included. Links in other cells are ignored.
+- `index_ids(markdown: str) -> Tuple[List[str], List[str]]`: validates the
+  first cell of every data row of the catalog index table and returns the ids
+  in order, repetitions included, plus one message per row whose first cell is
+  not exactly one Markdown link whose target is a sibling `.md` file with no
+  directory, scheme or fragment, whose stem matches `PRACTICE_ID`, and whose
+  text is that stem in backticks. The message names the row number and its
+  first cell. No row is skipped. Links in other cells are ignored.
 - Messages are path-free; the caller adds the path.
 
 - [ ] **Step 1: write the failing tests**
@@ -235,8 +241,10 @@ differs from stem; id `SOLID_SRP` fails the pattern; `Serves` without an EB id
 and with `EB-09` both fail; `practice_ids` returns the ids of the example
 table, returns `solid-srp` for a row written without backticks, and returns an
 empty list without the subsection; `index_ids` ignores a Baseline link in the
-`Serves` column and keeps a repeated row twice. No unit test asserts a path
-prefix.
+`Serves` column and keeps a repeated row twice; `index_ids` reports, without
+returning an id, a first cell that is plain text, a link to a non-Markdown or
+external target, a link with a directory or fragment, two links in one cell,
+and link text that differs from the stem. No unit test asserts a path prefix.
 
 - [ ] **Step 2: confirm they fail**
 
@@ -428,6 +436,9 @@ the named path in stderr:
   `engineering/practices/adr.md`.
 - `test_repeated_index_row_fails`: duplicate the `tdd` row of the index
   table; stderr names `engineering/practices/README.md`.
+- `test_malformed_index_row_fails`: replace the first cell of the `tdd` row
+  with plain text `tdd`, so the card file still exists and the row has no
+  link; stderr names `engineering/practices/README.md`.
 - `test_practice_template_missing_section_fails`: remove `## Source` from
   `templates/practice-card.md`.
 - `test_contract_template_cites_unknown_practice_fails`: replace the example
@@ -437,14 +448,14 @@ the named path in stderr:
 - [ ] **Step 2: confirm they fail**
 
 Run: `python3 -m unittest tests.test_repository -v`
-Expected: the six new tests FAIL; the others pass.
+Expected: the seven new tests FAIL; the others pass.
 
 - [ ] **Step 3: implement `check_practices(errors)`**
 
 Called in `check()` after `check_dispatch`. It reads the Baseline ids, runs
 `validate_card` on every `engineering/practices/*.md` except `README.md`,
-compares the card stems with `index_ids` of the index (first-cell links only)
-and reports a repeated id, runs `validate_sections` on
+reports every message from `index_ids` of the index, compares the card stems
+with the ids it returns and reports a repeated id, runs `validate_sections` on
 `templates/practice-card.md`, and checks that `practice_ids` of
 `templates/task-contract.md` is non-empty and that each id matches
 `PRACTICE_ID` and names an existing card. Each message from

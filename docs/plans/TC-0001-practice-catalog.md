@@ -89,7 +89,7 @@ contracts/
 ## 5. Required outputs
 
 1. `validators/practice_cards.py` and `tests/test_practice_cards.py`.
-2. `check_practices(errors)` in `validators/check_repository.py`, with six
+2. `check_practices(errors)` in `validators/check_repository.py`, with seven
    new tests in `tests/test_repository.py`.
 3. `templates/practice-card.md` and `templates/adr.md`, indexed in
    `templates/README.md`.
@@ -129,7 +129,7 @@ Record it as an observation or a Learn Back candidate.
 
 - [ ] Every card has, in order and once each, `Applies when`, `Does not apply when`, `Violation signals`, `Verification` and `Source`, each non-empty.
 - [ ] Every card's `Id` equals its file stem and matches `^[a-z0-9]+(-[a-z0-9]+)*$`; its `Serves` line names only existing EB ids.
-- [ ] The catalog index lists exactly the card files, read from the first cell of each row, with no repeated row; `Serves` links are not read as cards.
+- [ ] The catalog index lists exactly the card files, read from the first cell of each row, with no repeated row; `Serves` links are not read as cards; every row whose first cell is not a single sibling card link is reported, never skipped.
 - [ ] The contract template's `### Practices` example names only existing cards; a row written without backticks is read and validated, not skipped.
 - [ ] A heading inside a fenced block does not count as a section.
 - [ ] `practice_cards.py` returns path-free messages and never raises on content; `check_practices` prefixes each message with the repository-relative path. Unit tests do not assert path prefixes; repository tests assert the path in stderr.
@@ -185,7 +185,7 @@ git diff --cached --check
 
 - `python3 -m unittest tests.test_practice_cards -v` fails with
   `ModuleNotFoundError` before the module exists.
-- The six new repository tests fail before `check_practices` exists.
+- The seven new repository tests fail before `check_practices` exists.
 - Each regression test is shown failing against the rule it names, by
   mutating `practice_cards.py` or `check_practices` after a commit, then
   restoring and rerunning the suite.
