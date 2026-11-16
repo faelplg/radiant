@@ -220,7 +220,7 @@ copy does not transfer ownership or authorize egress from its destination.
 
 AIKM's project documents live in the AIKM repository. The custody that existed
 here was closed according to the
-[migration plan](migration-plan.md#end-of-custody).
+[migration plan](history/migration-plan.md#end-of-custody).
 
 ## Demerzel boundary
 

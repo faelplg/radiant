@@ -7,8 +7,7 @@ This file is the map of the repository itself. Start with the
 
 For relevant planning, execution or review, read the
 [radiant-cycle skill](skills/radiant-cycle/SKILL.md) and apply the mode that
-fits the current authorization. The request that governs this reorganization
-and its scope are recorded in the [migration plan](docs/migration-plan.md).
+fits the current authorization.
 
 For changes to the system, follow [contributing and versioning](docs/contributing.md),
 [verification](docs/verification.md) and [Learn Back](docs/learn-back.md).
@@ -23,19 +22,20 @@ Radiant's structural decisions live in [docs/adrs/](docs/adrs/ADR-0001-delegatio
 When working in this repository, the local tree is the editing target; a
 consumer's pin does not prevent developing a new Radiant revision.
 
-For quick context, three private pages on claude.ai summarize the system: the
+For quick context, three private, owner-only pages on claude.ai summarize the
+system: the
 [map](https://claude.ai/artifact/7QZWWNTBv5NSxrePFBiaWg) in arc42 and C4, the
 [glossary](https://claude.ai/artifact/7aaAD9YCE2nkVTkm4EDa3L) and the
 [use cases](https://claude.ai/artifact/PEKb9oaxypnxxsQ1FTtoAQ). They are
 derived views: the text in this repository wins when they diverge. When you
 change the Constitution, the thesis, a skill, an adapter, a template or an
-ADR, update the affected page; the pages are generated and versioned in
+ADR, update the affected page; their source is versioned in
 `faelplg/design-systems`, in the `radiant-design-system/docs/` folder.
 Propose evolutions citing their basis: a canonical document, code, evidence or
 a named method.
 
 The AIKM documents that were in custody here belong to the AIKM repository;
-the closing is in the [migration plan](docs/migration-plan.md#end-of-custody).
+the closing is in the [migration plan](docs/history/migration-plan.md#end-of-custody).
 Do not apply AIKM commands as Radiant gates.
 
 A review of open items done here covers only Radiant. From AIKM, Demerzel and
@@ -49,5 +49,4 @@ work.
 Write in English. Preserve historical bodies: a faithful translation keeps
 their content and decisions, but do not rewrite them. Avoid mass reformatting
 and do not edit generated files or CHANGELOG.md manually. New text uses a
-plain hyphen and adds no horizontal dividers. Do not implement the future
-Design Layer in this reorganization.
+plain hyphen and adds no horizontal dividers.
