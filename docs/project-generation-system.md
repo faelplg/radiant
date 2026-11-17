@@ -169,6 +169,8 @@ Radiant's initial operational cycle is:
 
 > **Frame → Challenge → Spec → Design → Plan → Contract → Build → Verify → Learn Back**
 
+The [lifecycle map](lifecycle.md) shows where SDLC and PDLC phases keep their evidence in this cycle.
+
 Each stage reduces a different kind of uncertainty.
 
 ---

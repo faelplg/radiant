@@ -5,6 +5,7 @@ This index does not implement behavior. Read only the applicable body.
 | Need                                     | Canonical body                                                                   | Local result in the consumer        |
 | ---------------------------------------- | -------------------------------------------------------------------------------- | ----------------------------------- |
 | Plan, execute, verify and learn          | [radiant-cycle](../skills/radiant-cycle/SKILL.md)                                | Bounded increment and evidence      |
+| Locate lifecycle evidence | [Lifecycle map](lifecycle.md) | SDLC and PDLC artifact coverage |
 | Orchestrate roles and delegate           | [radiant-delegation](../skills/radiant-delegation/SKILL.md)                      | Delegations with evidence and acceptance |
 | Triage maintenance of a consumer         | [radiant-maintenance](../skills/radiant-maintenance/SKILL.md), [report](../templates/maintenance-report.md) | Report with proposals               |
 | Set up the harness                       | [Codex](../adapters/codex/README.md), [Claude Code](../adapters/claude-code/README.md) | User bootstrap and subagents        |
