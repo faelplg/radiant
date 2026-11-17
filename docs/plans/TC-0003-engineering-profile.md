@@ -295,8 +295,8 @@ citations against the catalog and these ids; this contract does not.
 
 ### Build order
 
-Each task is one commit; after each, the three automated checks of section
-11 pass. A task links only to files that exist at its commit: a link from an
+Each task is one commit; after each, all the automated checks of section 11
+pass. A task links only to files that exist at its commit: a link from an
 earlier file to a later one, such as from `engineering/stacks/README.md` to
 the Profile form or the example, waits for task 5.
 
