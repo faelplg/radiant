@@ -3,7 +3,7 @@
 **Contract ID:** `TC-0003`\
 **Project:** `radiant`\
 **Iteration:** `Practices milestone, issue #33`\
-**Status:** `ACTIVE` - activated by Rafael on 2026-11-17\
+**Status:** `DONE` - accepted by Rafael on 2026-11-17 at 12:26 BRT\
 **Owner:** `Fael (human); Build by an authorized agent`\
 **Risk tier:** `2` - the pack declaration and the `check_project.py` change become part of the pin gate that every consumer, and Demerzel's dispatch, runs on its next pin bump\
 **Capability:** `default`\
@@ -465,7 +465,7 @@ The task can only be declared `DONE` when:
 - [x] `typescript-bun` covers layering and dependency rule, test layout and commands, lint and format, error handling, and CI and release, each section mapped to practice ids or Baseline rules (issue #33; the Python pack is deferred by owner decision 1);
 - [x] `engineering/stacks/README.md` says how a project selects and overrides a pack (issue #33);
 - [x] no consumer repository and no `.radiant.json` schema changed;
-- [ ] all applicable checks in section 11 pass; final critique provenance and acceptance are pending;
+- [x] all applicable checks in section 11 pass; independent critique round 2 returned `APPROVE`, and the owner accepted the result;
 - [x] there was no change outside the Allowed scope;
 - [x] relevant limitations are recorded;
 - [x] the final evidence was read, not just presumed from the exit code.
@@ -493,7 +493,9 @@ Mark `FAIL` when:
 - acceptance criteria cannot be met;
 - verification shows a material regression in the existing checks;
 - an existing Profile without a pack line would stop passing
-  `check_project.py`;
+  `check_project.py`; owner decision 4 narrows this condition to every
+  readable Profile without a pack line. Unreadable or undecodable Profiles
+  HOLD with an `engineering_profile` message;
 - an external blocker makes the goal impossible within this contract.
 
 Do not disguise `FAIL` as `DONE WITH NOTES`.
@@ -516,12 +518,10 @@ The agent may not, without HOLD:
 
 ### Status
 
-`HOLD` for final acceptance only. The five-step Build and its deterministic
-verification are complete. The contract remains `ACTIVE`: section 11's
-orchestrator reports round 1 as `APPROVE WITH CHANGES`, with no must-fix.
-Round 1 fixes are applied below. Final critique provenance and acceptance
-belong to the orchestrator. No implementation HOLD condition was encountered;
-do not mark this contract `DONE` before final acceptance.
+`DONE`. Rafael accepted TC-0003 on 2026-11-17 at 12:26 BRT after the
+independent critic's round 2 `APPROVE`, with no must-fix. The five-step Build,
+round 1 fixes, deterministic checks and independent critique are complete.
+Owner decision 4 confirms the unreadable or undecodable Profile policy.
 
 ### Changed
 
@@ -727,10 +727,6 @@ The CLI fixture proves compatibility of the PASS prefix and appended name.
 
 ### Remaining limitations
 
-- Final critique provenance and acceptance are pending the orchestrator.
-  Neither a push nor a PR nor a critique was launched by the Build.
-- Python 3.9 grammar was checked; the tests ran on Python 3.14.7,
-  not a separately installed Python 3.9 interpreter.
 - Consumer evidence establishes rules and command provenance at the cited
   commits, not adoption or end-to-end consumer execution against this Build.
 - Pack structure is checked only by the one-off script. Profile sections,
@@ -750,18 +746,20 @@ follow-up should preserve that distinction.
 
 Authorized by the owner after the independent critic returned
 `APPROVE WITH CHANGES`, with no must-fix. This round starts at
-`2a33a73d6b3c0f3621ba4723dfa384c242e9ddaa`. The contract header remains
-`ACTIVE`, and the critique provenance placeholder below is unchanged.
+`2a33a73d6b3c0f3621ba4723dfa384c242e9ddaa`. The contract remained
+`ACTIVE` during the fixes; acceptance and critique provenance are recorded
+below.
 
-- S1: chose the explicitly authorized HOLD option. `stack_pack` catches
+- S1: the critic offered both options; the Build picked HOLD, and the
+  owner confirmed it at acceptance in decision 4. `stack_pack` catches
   `UnicodeDecodeError` and `OSError` and reports
   `HOLD: engineering_profile: cannot read Profile: ...`. Section 5 needs the
   selection to be read; EB-07 needs an attributable diagnostic. Treating a
   failed read as no selection could silently skip a declared pack. This
   deliberately narrows section 14's original backward-compatibility promise
   for unreadable or undecodable Profiles, including those without a pack
-  line, under the owner's round 1 authorization. Readable Profiles without
-  a pack line still retain the original PASS output.
+  line, as confirmed by owner decision 4 at acceptance. Readable Profiles
+  without a pack line still retain the original PASS output.
 - S2: read with `utf-8-sig`, so a BOM cannot hide an unknown pack selection.
 - N1: the fenced-line test asserts the PASS prefix, full pin and pack name.
 - N2: integration documents that only fenced blocks are ignored; indented
@@ -825,14 +823,46 @@ Python 3.9 grammar parsing and added-text punctuation checks also pass.
 All round 1 changes stay within the Allowed scope. No consumer, dependency,
 schema, generated file or CHANGELOG changed. No push was performed.
 
+### Acceptance
+
+Rafael confirmed decision 4 and accepted the contract on 2026-11-17 at
+12:26 BRT. The critic's Python 3.9.6 integration run covers the previous
+integration-runtime limitation; the local full-suite evidence uses Python
+3.14.7. No claim is made that the entire suite ran on Python 3.9.6.
+
+Acceptance checks:
+
+```text
+python3 validators/check_repository.py
+PASS: 65 documents; 449 local links.
+python3 -m unittest discover -s tests
+Ran 126 tests
+OK
+git diff --check
+(empty output, exit 0)
+```
+
+Only this contract changed at acceptance. No push was performed.
+
 ### Provenance
 
 - Build: `radiant-dev`; capability `default` (standard); harness `codex`;
   configured adapter model `gpt-6.1-sol`; runtime full model identity and
-  usage metric are not exposed in this session; state: Build complete,
-  acceptance pending. No secondary agent was delegated.
-- Independent critique: `[orchestrator fills harness, full model ID, command,
-  round, result and available usage metric after the required critique]`.
+  usage metric are not exposed in this session; state: `DONE`, accepted by
+  the owner after independent critique. No secondary agent was delegated.
+- Independent critique round 1: `radiant-verifier` at `deep`; launched and
+  collected by the orchestrator; Antigravity CLI 1.5.10 running Claude Opus
+  5.5 high. Verdict: `APPROVE WITH CHANGES` (S1, S2, N1 to N7), fixed in
+  `79459f33a9d135f09090b6452350424a8aece8d3`. The exact launch command,
+  machine-readable full model ID and usage metric were not supplied in the
+  acceptance evidence.
+- Independent critique round 2: `radiant-verifier` at `deep`; launched and
+  collected by the orchestrator; Antigravity CLI 1.5.10 running Claude Opus
+  5.5 high. Verdict: `APPROVE`, no must-fix. The critic ran
+  `tests/test_integration.py` on Python 3.9.6 (`/usr/bin/python3`): 31 tests,
+  OK, 1 skipped. This result is supplied by the orchestrator, not a run by
+  the Build. The exact launch command, machine-readable full model ID and
+  usage metric were not supplied in the acceptance evidence.
 
 # 17. Completion rule
 
@@ -840,7 +870,8 @@ schema, generated file or CHANGELOG changed. No push was performed.
 
 ## Owner decisions (2026-11-17)
 
-The owner answered the three planning questions on 2026-11-17:
+The owner answered the three planning questions on 2026-11-17 and confirmed
+decision 4 at acceptance at 12:26 BRT:
 
 1. **Python pack.** Not in this contract. Only `typescript-bun` ships, for
    Demerzel and AIKM; a Python pack is a follow-up for when a Python project
@@ -849,3 +880,7 @@ The owner answered the three planning questions on 2026-11-17:
    file; `.radiant.json` and `templates/radiant-project.json` are unchanged.
 3. **Pack structure validator.** Not in this contract; the follow-up issue
    described in section 6 adds the `check_repository.py` rule.
+4. Unreadable or undecodable Profiles HOLD with an engineering_profile
+   message; this narrows section 14 FAIL condition 3, which still holds for
+   every readable Profile without a pack line. Decided by the owner on
+   2026-11-17.
