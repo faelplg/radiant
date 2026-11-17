@@ -22,12 +22,12 @@ only differences and project-specific constraints, based on consumer commit
 Run from the consumer root. Evidence: `AGENTS.md` lines 21-38 and
 `package.json` lines 14-19 at the commit above.
 
-| Command | Prerequisites and result |
-| --- | --- |
-| `DEMERZEL_RADIANT_ROOT=<clean-checkout-at-pin> bun run check` | Python 3.9+ and a clean Radiant checkout at the consumer's pin; typecheck, core isolation, herdr, CLI and Radiant tests. |
-| `bun run test:core` | Tests core with only Git and Bun on PATH, without Python. |
-| `bun run scenario:herdr` | Real herdr on an isolated server; outside the aggregate gate. |
-| `DEMERZEL_SMOKE_REPO=<disposable-repository> bun run smoke:herdr` | Orchestrator and owner present, real authenticated harnesses; uses model resources and stays outside the aggregate gate. |
+| Command | Working directory and prerequisites | Evidence produced |
+| --- | --- | --- |
+| `DEMERZEL_RADIANT_ROOT=<clean-checkout-at-pin> bun run check` | Consumer root; Python 3.9+ and a clean Radiant checkout at the consumer's pin. | Typecheck, core isolation, herdr, CLI and Radiant tests. |
+| `bun run test:core` | Consumer root; only Git and Bun on PATH, without Python. | Core isolation suite. |
+| `bun run scenario:herdr` | Consumer root; real herdr on an isolated server. | Real backend scenario, outside the aggregate gate. |
+| `DEMERZEL_SMOKE_REPO=<disposable-repository> bun run smoke:herdr` | Consumer root; orchestrator and owner present, real authenticated harnesses; uses model resources. | Real harness smoke, outside the aggregate gate. |
 
 ## Test strategy beyond the pack
 

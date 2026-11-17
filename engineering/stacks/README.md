@@ -29,7 +29,7 @@ Overrides are not machine-validated.
 
 | Pack id | Shared conventions |
 | --- | --- |
-| [typescript-bun](typescript-bun.md) | Strict TypeScript on Bun, tests, Biome and CI |
+| [`typescript-bun`](typescript-bun.md) | Strict TypeScript on Bun, tests, Biome and CI |
 
 Use the [Profile form](../../templates/engineering-profile.md) and the
 [Demerzel example](../../docs/engineering-profile.example.md). The

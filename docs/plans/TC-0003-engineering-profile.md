@@ -465,7 +465,7 @@ The task can only be declared `DONE` when:
 - [x] `typescript-bun` covers layering and dependency rule, test layout and commands, lint and format, error handling, and CI and release, each section mapped to practice ids or Baseline rules (issue #33; the Python pack is deferred by owner decision 1);
 - [x] `engineering/stacks/README.md` says how a project selects and overrides a pack (issue #33);
 - [x] no consumer repository and no `.radiant.json` schema changed;
-- [ ] all applicable checks in section 11 pass; independent critique is pending;
+- [ ] all applicable checks in section 11 pass; final critique provenance and acceptance are pending;
 - [x] there was no change outside the Allowed scope;
 - [x] relevant limitations are recorded;
 - [x] the final evidence was read, not just presumed from the exit code.
@@ -518,9 +518,10 @@ The agent may not, without HOLD:
 
 `HOLD` for final acceptance only. The five-step Build and its deterministic
 verification are complete. The contract remains `ACTIVE`: section 11's
-required independent critique belongs to the orchestrator and has not run.
-No implementation HOLD condition was encountered. Do not mark this contract
-`DONE` until that critique and orchestrator readback pass.
+orchestrator reports round 1 as `APPROVE WITH CHANGES`, with no must-fix.
+Round 1 fixes are applied below. Final critique provenance and acceptance
+belong to the orchestrator. No implementation HOLD condition was encountered;
+do not mark this contract `DONE` before final acceptance.
 
 ### Changed
 
@@ -655,10 +656,10 @@ for line in index.splitlines():
     if line.startswith('|') and not re.match(r'^\|\s*(?:Pack id|---)', line):
         cell = line.split('|')[1].strip()
         match = re.fullmatch(r'\[([^]]+)\]\(([^)]+)\.md\)', cell)
-        if not match or match[1] != match[2]:
+        if not match or match[1].strip("`") != match[2]:
             errors.append(f'invalid pack index row: {cell}')
         else:
-            rows.append(match[1])
+            rows.append(match[2])
 for ident in sorted(set(packs) - set(rows)):
     errors.append(f'{ident}: missing index row')
 for ident in rows:
@@ -683,7 +684,7 @@ section 3, not from consumer working trees:
 | --- | --- | --- |
 | `bun test` | Demerzel | `package.json:14` |
 | `bun run check` | Demerzel; AIKM | `.github/workflows/check.yml:48`; `.github/workflows/check.yml:17` |
-| `bun run typecheck` | Demerzel; AIKM | `package.json:17`; `package.json:14` |
+| `bun run typecheck` | Demerzel; AIKM | Demerzel `package.json:16` defines the script, invoked by the aggregate at line 17; AIKM `package.json:14` |
 | `bun run lint` | AIKM | `package.json:14` (script implementation at line 12) |
 | `bun install --frozen-lockfile` | Demerzel; AIKM | `.github/workflows/check.yml:33`; `.github/workflows/check.yml:16` |
 
@@ -726,7 +727,7 @@ The CLI fixture proves compatibility of the PASS prefix and appended name.
 
 ### Remaining limitations
 
-- Independent critique and final acceptance are pending the orchestrator.
+- Final critique provenance and acceptance are pending the orchestrator.
   Neither a push nor a PR nor a critique was launched by the Build.
 - Python 3.9 grammar was checked; the tests ran on Python 3.14.7,
   not a separately installed Python 3.9 interpreter.
@@ -744,6 +745,85 @@ The stack index is a completeness prerequisite for a pinned checkout. Its
 refusal test commits the missing-file fixture so that the existing dirty
 checkout gate cannot mask the intended diagnostic. The planned pack structure
 follow-up should preserve that distinction.
+
+### Fix round 1
+
+Authorized by the owner after the independent critic returned
+`APPROVE WITH CHANGES`, with no must-fix. This round starts at
+`2a33a73d6b3c0f3621ba4723dfa384c242e9ddaa`. The contract header remains
+`ACTIVE`, and the critique provenance placeholder below is unchanged.
+
+- S1: chose the explicitly authorized HOLD option. `stack_pack` catches
+  `UnicodeDecodeError` and `OSError` and reports
+  `HOLD: engineering_profile: cannot read Profile: ...`. Section 5 needs the
+  selection to be read; EB-07 needs an attributable diagnostic. Treating a
+  failed read as no selection could silently skip a declared pack. This
+  deliberately narrows section 14's original backward-compatibility promise
+  for unreadable or undecodable Profiles, including those without a pack
+  line, under the owner's round 1 authorization. Readable Profiles without
+  a pack line still retain the original PASS output.
+- S2: read with `utf-8-sig`, so a BOM cannot hide an unknown pack selection.
+- N1: the fenced-line test asserts the PASS prefix, full pin and pack name.
+- N2: integration documents that only fenced blocks are ignored; indented
+  code and HTML comments are still read.
+- N3: aligned the affected README and capability index table columns.
+- N4: the example Commands table now uses the form's three columns.
+- N5: added fixed-commit citations for Demerzel Spec section 5 and
+  `src/radiant/validators.ts:10`, and AIKM Spec section 7. Verified all three
+  with `git show` at the section 3 commits before citing them.
+- N6: the stack index uses the practice index's backticked id link style.
+  The outside-repository structure script and its body above now accept
+  that display style while matching the exact linked file stem.
+- N7: command provenance cites Demerzel `package.json:16`, verified with
+  `git show`, as the typecheck script definition.
+
+Test-first evidence, before changing the validator:
+
+```text
+python3 -m unittest discover -s tests -p test_integration.py
+Ran 31 tests
+FAILED (failures=3)
+```
+
+The three failures reproduced S1 and S2: the BOM selection passed, while the
+decode and OS read failures produced HOLD without `engineering_profile`.
+After implementation, all 31 integration tests passed. The OS error fixture
+injects a read failure at the CLI boundary after path validation; it does
+not rely on filesystem permission behavior or the test user's privileges.
+Full before/after logs are `/tmp/tc0003-round1-before.log` and
+`/tmp/tc0003-round1-after.log`, outside the repository.
+
+| Round 1 mutation | Test that failed with exit 1 |
+| --- | --- |
+| Read with `utf-8` instead of `utf-8-sig` | `test_profile_with_bom_rejects_unknown_pack` |
+| Reraise decode errors without Profile context | `test_undecodable_profile_names_engineering_profile` |
+| Reraise OS errors without Profile context | `test_unreadable_profile_names_engineering_profile` |
+
+After each mutation, restored the exact in-progress validator bytes, preserving
+this round's edits, and ran the full suite: 126 tests, OK, exit 0 before the
+next mutation. Mutation and restored-suite logs are retained under
+`/tmp/tc0003-round1-mutation-0.log` through `-2.log` and
+`/tmp/tc0003-round1-restored-0.log` through `-2.log`.
+
+Final round 1 gates:
+
+```text
+python3 validators/check_repository.py
+PASS: 65 documents; 449 local links.
+python3 -m unittest discover -s tests
+Ran 126 tests
+OK
+git diff --check
+(empty output, exit 0)
+git diff --cached --check
+(empty output, exit 0)
+python3 /tmp/tc0003-structure.py
+(empty output, exit 0)
+```
+
+Python 3.9 grammar parsing and added-text punctuation checks also pass.
+All round 1 changes stay within the Allowed scope. No consumer, dependency,
+schema, generated file or CHANGELOG changed. No push was performed.
 
 ### Provenance
 

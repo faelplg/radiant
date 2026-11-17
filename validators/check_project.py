@@ -34,7 +34,11 @@ def unique_object(pairs):
 def stack_pack(root, profile):
     declarations = []
     fence = None
-    for line in profile.read_text(encoding="utf-8").splitlines():
+    try:
+        text = profile.read_text(encoding="utf-8-sig")
+    except (UnicodeDecodeError, OSError) as error:
+        raise ValueError(f"engineering_profile: cannot read Profile: {error}") from error
+    for line in text.splitlines():
         marker = re.match(r"^ {0,3}(`{3,}|~{3,})(.*)$", line)
         if fence is not None:
             if (marker and marker[1][0] == fence[0] and len(marker[1]) >= len(fence)

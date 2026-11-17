@@ -60,6 +60,14 @@ never turn a failed operation into success. Keep project-specific exit codes,
 recovery protocols and public error shapes in the Spec, with executable
 boundary tests, rather than prescribing one consumer's protocol to all.
 
+Consumer examples are Demerzel's
+[Spec section 5](https://github.com/faelplg/demerzel/blob/8edd3b9d4028dc8fb8ad8a9e6ad9718e75bdaac0/docs/project/SPEC.md#5-recusas)
+and its integration's
+[`Failure` type at line 10](https://github.com/faelplg/demerzel/blob/8edd3b9d4028dc8fb8ad8a9e6ad9718e75bdaac0/src/radiant/validators.ts#L10),
+and AIKM's
+[Spec section 7](https://github.com/faelplg/aikm/blob/a2cfd1bf6f415521567d0e48d8eebcc79a3e611d/docs/project/SPEC.md#7-refusals),
+which distinguishes before-write refusals from failures after partial effects.
+
 ## CI and release
 
 - Serves: [ci-cd](../practices/ci-cd.md), [semantic-versioning](../practices/semantic-versioning.md)

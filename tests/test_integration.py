@@ -98,6 +98,44 @@ class IntegrationTests(unittest.TestCase):
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertEqual(result.stdout, expected)
 
+    def test_profile_with_bom_rejects_unknown_pack(self):
+        self.assert_profile_hold("\ufeff- Stack pack: `no-such-pack`\n")
+
+    def test_undecodable_profile_names_engineering_profile(self):
+        self.profile("# Existing Profile\n")
+        (self.project / "PROFILE.md").write_bytes(b"# Existing Profile\n\xff")
+        result = self.gate()
+        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+        self.assertIn("HOLD: engineering_profile:", result.stderr)
+        self.assertIn("cannot read Profile", result.stderr)
+        self.assertEqual(result.stdout, "")
+
+    def test_unreadable_profile_names_engineering_profile(self):
+        self.profile("- Stack pack: `typescript-bun`\n")
+        # Inject an OS read failure after path validation, even when running as root.
+        script = """
+from pathlib import Path
+import runpy
+import sys
+from unittest.mock import patch
+profile = Path(sys.argv[3]).resolve()
+read_text = Path.read_text
+def read(path, *args, **kwargs):
+    if path == profile:
+        raise OSError("fixture read denied")
+    return read_text(path, *args, **kwargs)
+sys.argv = sys.argv[1:3]
+with patch.object(Path, "read_text", read):
+    runpy.run_path(sys.argv[0], run_name="__main__")
+"""
+        result = run(sys.executable, "-c", script,
+                     str(self.root / "validators/check_project.py"), str(self.project),
+                     str(self.project / "PROFILE.md"), cwd=self.project)
+        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+        self.assertIn("HOLD: engineering_profile:", result.stderr)
+        self.assertIn("cannot read Profile: fixture read denied", result.stderr)
+        self.assertEqual(result.stdout, "")
+
     def test_profile_rejects_unknown_pack(self):
         self.assert_profile_hold("- Stack pack: `no-such-pack`\n")
 
@@ -128,6 +166,8 @@ class IntegrationTests(unittest.TestCase):
                              f"{marker}\n- Stack pack: `typescript-bun`\n")
                 result = self.gate()
                 self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertTrue(result.stdout.startswith(f"PASS: Radiant {self.revision};"))
+                self.assertIn("typescript-bun", result.stdout)
 
     def test_null_profile_does_not_read_unselected_profile(self):
         (self.project / "PROFILE.md").write_bytes(b"\xff- Stack pack: `no-such-pack`")

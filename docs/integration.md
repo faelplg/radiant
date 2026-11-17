@@ -67,7 +67,8 @@ name while keeping its `PASS: Radiant <commit>;` prefix. Malformed, repeated
 or unknown selections produce `HOLD` naming `engineering_profile` on stderr
 and exit 1. `README` is not a pack. A null Profile is not read, and the stack
 index is required for a complete Radiant checkout. The map schema is unchanged;
-no validator checks Profile sections or override rows.
+no validator checks Profile sections or override rows. Only fenced code blocks
+are ignored; indented code blocks and HTML comments are still read.
 
 The consumer's `AGENTS.md` points to that map and to the harness entry. The
 engineering Baseline lives in Radiant; the Profile, when there is one, lives in
