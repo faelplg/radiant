@@ -242,9 +242,10 @@ The agent may not, without HOLD:
 
 ### Status
 
-`VERIFY`. Build of tasks 6 to 8 is complete; final acceptance remains pending
-orchestrator-launched independent critique. No HOLD or FAIL condition arose.
-The owner explicitly requested this handoff status rather than `DONE`.
+`VERIFY`. Build of tasks 6 to 8 and the requested critique fixes are complete.
+The orchestrator supplied the independent critique recorded below; final
+acceptance remains with the owner. No HOLD or FAIL condition arose. The owner
+explicitly requested keeping this handoff status rather than `DONE`.
 
 ### Changed
 
@@ -259,7 +260,7 @@ The owner explicitly requested this handoff status rather than `DONE`.
 - Task 7: `docs/lifecycle.md:1`, 11 SDLC and 8 PDLC phases, release, deploy
   and three metric kinds. Commit `04f6859fcb58f68ba0d3b178755ed5bbe64d65b0`
   (`docs(lifecycle): map SDLC and PDLC phases to Radiant artifacts`).
-- Task 8: `docs/project-generation-system.md:173`, thesis pointer;
+- Task 8: `docs/project-generation-system.md:172`, thesis pointer;
   `skills/radiant-cycle/SKILL.md:9` and `:41`, version 0.1.6 and pointer;
   `README.md:28` and `docs/capabilities.md:8`, index rows.
   Commit `2edc6a124f5dfa4ebc96ea0a831ba2e16b717442`
@@ -357,6 +358,39 @@ python3 /tmp/tc-0002-links.py
 PASS: README -> map; 19 phase rows (11 SDLC, 8 PDLC); 53 local links and their anchors resolve.
 ```
 
+The link-check script body is recorded here for reproducibility. The
+critique follow-up adds external issue links, so the script now skips external
+URLs; local file and anchor checks are unchanged. The output above records the
+original Build; the follow-up output below records the corrected map.
+
+```sh
+python3 - <<'PY'
+from pathlib import Path
+import re
+import sys
+from urllib.parse import unquote, urlsplit
+sys.path.insert(0, str(Path('validators').resolve()))
+from check_repository import anchors
+
+path = Path('docs/lifecycle.md')
+text = path.read_text()
+count = 0
+for raw in re.findall(r'\[[^\]]+\]\(([^)]+)\)', text):
+    link = urlsplit(raw)
+    if link.scheme:
+        continue
+    target = (path.parent / unquote(link.path)).resolve() if link.path else path.resolve()
+    assert target.is_file(), raw
+    if link.fragment:
+        assert unquote(link.fragment) in anchors(target.read_text()), raw
+    count += 1
+rows = [row for row in text.splitlines() if row.startswith('|') and not row.startswith('| Phase') and not row.startswith('| ---')]
+assert len(rows) == 19
+assert '[docs/lifecycle.md](docs/lifecycle.md)' in Path('README.md').read_text()
+print(f'PASS: README -> map; 19 phase rows (11 SDLC, 8 PDLC); {count} local links and their anchors resolve.')
+PY
+```
+
 The second temporary script checked each map link with `Path.is_file()` and
 the repository validator's `anchors()` function, including same-document
 anchors, and checked the README entry. The repository validator independently
@@ -372,7 +406,8 @@ as inspected.
 - EB-01: one new form, two Frame additions and two short operational sections;
   no extra release/deploy/runbook artifacts or lifecycle validator.
 - EB-02/03: focused row and link checks, repository checks, full existing
-  suite and readback provide Build evidence. Independent critique is pending.
+  suite and readback provide Build evidence. Independent critique was supplied
+  after the original Build; see the follow-up below.
 - EB-05/08: pointers reuse canonical bodies and the README reaches the map
   directly. The Constitution, TC-0001 and all read-only paths are unchanged.
 - The first unstaged task 6 test run had 3 failures out of 110 because
@@ -382,13 +417,63 @@ as inspected.
 
 ### Remaining limitations
 
-- The orchestrator must launch and collect `radiant-verifier` against this
-  contract and issue #31's owner-supplied acceptance. Build did not run the
-  independent critique or declare final acceptance.
+- The independent critique was supplied by the orchestrator, as recorded
+  below. Build did not run that critique or declare final acceptance; Status
+  remains `VERIFY` at the owner's request.
 - Network denied: no live GitHub acceptance, assignment, labels or project
   status was inspected or changed. No push or PR was attempted.
-- The living-page update remains separate work in `faelplg/design-systems`,
+- The living-page update is tracked in
+  [faelplg/design-systems#85](https://github.com/faelplg/design-systems/issues/85),
   explicitly excluded here. No files there were accessed or changed.
+
+### Independent critique and fixes
+
+The orchestrator supplied an independent `radiant-verifier` critique
+(Claude Opus 5.5 high): all acceptance criteria met, no must-fix findings.
+This is the supplied review result, not a critique run by Build. The owner
+then authorized all three should-fix findings and the nits within Allowed
+scope, with Status kept at `VERIFY` and no push or PR.
+
+Commit `f64242d12fa8f43373b245d5a906872c5e2b7112`
+(`docs(lifecycle): address independent critique findings`) applies:
+
+- Should-fix 1: the Deploy section names the template's actual unplanned
+  destructive action HOLD condition, with an irreversible migration example.
+- Should-fix 2: the Learning Record header records origin, owner and consent
+  to share; Reuse records expected reach as well as later application evidence.
+- Map nits: link #33, Article III, Article XIII, Engineering Profile and
+  `workflow`; remove the empty release note and clarify that live incident
+  response runbooks are outside scope while the postmortem has an artifact.
+- Index nits: pad the lifecycle and TC-0001 rows in README and capabilities
+  to their existing table widths, allowing longer content to retain its text.
+
+This report's follow-up commit applies should-fix 3 by citing
+[faelplg/design-systems#85](https://github.com/faelplg/design-systems/issues/85),
+corrects the thesis pointer reference to line 172, and records the link-check
+script body above. It also records the supplied critique and these fixes.
+
+```text
+python3 validators/check_repository.py
+PASS: 59 documents; 378 local links.
+python3 -m unittest discover -s tests
+Ran 110 tests; OK.
+python3 /tmp/tc-0002-focused.py
+Exit 0, no output (zero uncovered phase rows).
+python3 /tmp/tc-0002-links.py
+PASS: README -> map; 19 phase rows (11 SDLC, 8 PDLC); 59 local links and their anchors resolve.
+git diff --check 87d92456f57131b2131fe084a521f7635d183276..HEAD
+Exit 0, no output.
+git diff --cached --check
+Exit 0, no output.
+git status --porcelain
+Exit 0, no output after the follow-up commits.
+```
+
+All follow-up changes are in five Allowed scope paths: `README.md`,
+`docs/capabilities.md`, `docs/lifecycle.md`, `templates/learning-record.md`
+and this contract. The full entry-to-HEAD scope remains the same ten allowed
+paths listed above. No Constitution or TC-0001 edits, network access, push,
+PR, independent critique execution or design-systems edits occurred.
 
 ### Learn Back candidate
 
