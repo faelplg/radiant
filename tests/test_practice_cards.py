@@ -128,6 +128,25 @@ class PracticeCardTests(unittest.TestCase):
         row = INDEX.splitlines()[-1]
         self.assertEqual(index_ids(INDEX + row + "\n"), (["solid-srp", "solid-srp"], []))
 
+    def test_tables_without_outer_pipes_are_read(self):
+        table = "Id | Serves\n--- | ---\n[`tdd`](tdd.md) | EB-03\n"
+        self.assertEqual(index_ids(table), (["tdd"], []))
+        self.assertEqual(practice_ids("### Practices\n\nPractice | Serves\n--- | ---\ntdd | EB-03\n"), ["tdd"])
+        ids, errors = index_ids(table.replace("[`tdd`](tdd.md)", "tdd"))
+        self.assertEqual(ids, [])
+        self.assertEqual(len(errors), 1)
+
+    def test_empty_first_cell_is_not_shifted(self):
+        table = "| Id | Other |\n| --- | --- |\n||[`tdd`](tdd.md)|\n"
+        ids, errors = index_ids(table)
+        self.assertEqual(ids, [])
+        self.assertEqual(len(errors), 1)
+
+    def test_index_row_numbers_survive_fences(self):
+        ids, errors = index_ids("```\nexample\n```\n" + INDEX.replace("[`solid-srp`](solid-srp.md)", "bad"))
+        self.assertEqual(ids, [])
+        self.assertIn("row 6:", errors[0])
+
     def test_index_rejects_malformed_first_cells(self):
         cells = ["", "solid-srp", "[`solid-srp`](solid-srp.txt)",
                  "[`solid-srp`](https://example.org/solid-srp.md)",

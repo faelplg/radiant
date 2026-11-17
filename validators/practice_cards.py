@@ -9,7 +9,8 @@ PRACTICE_ID = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 
 
 def _prose(text: str) -> str:
-    return re.sub(r"(?ms)^```[^\n]*\n.*?^```[^\n]*$", "", text)
+    return re.sub(r"(?ms)^```[^\n]*\n.*?^```[^\n]*$",
+                  lambda match: "\n" * match.group().count("\n"), text)
 
 
 def baseline_ids(text: str) -> Set[str]:
@@ -65,11 +66,14 @@ def _table_rows(markdown: str):
         if re.fullmatch(r"\s*\|?\s*:?-+:?\s*(?:\|\s*:?-+:?\s*)+\|?\s*", line):
             in_table = True
             continue
-        if not line.strip().startswith("|"):
+        if not line.strip() or re.match(r"^#{1,6} ", line):
             in_table = False
             continue
         if in_table:
-            yield number, line.strip().strip("|").split("|", 1)[0].strip()
+            row = line.strip()
+            if row.startswith("|"):
+                row = row[1:]
+            yield number, row.split("|", 1)[0].strip()
 
 
 def practice_ids(markdown: str) -> List[str]:
