@@ -3,7 +3,7 @@
 **Contract ID:** `TC-0002`\
 **Project:** `radiant`\
 **Iteration:** `Practices milestone, issue #31`\
-**Status:** `VERIFY`\
+**Status:** `DONE`\
 **Owner:** `Fael (human); Build by an authorized agent`\
 **Risk tier:** `1` - durable documentation and forms, reversible, no code\
 **Capability:** `default`\
@@ -195,14 +195,14 @@ After execution:
 
 The task can only be declared `DONE` when:
 
-- [ ] every SDLC and PDLC phase in the map points to an artifact or is marked out of scope with a reason (issue #31);
-- [ ] release notes and versioning, deploy checklist, incident and postmortem, user validation and outcome metric each have the artifact the plan assigns (issue #31);
-- [ ] the map is linked from the thesis section 6 and the cycle skill (issue #31; owner decision on 2026-11-16: the Constitution is unchanged);
-- [ ] repository validators pass (issue #31);
-- [ ] all applicable checks in section 11 pass;
-- [ ] there was no change outside the Allowed scope;
-- [ ] relevant limitations are recorded;
-- [ ] the final evidence was read, not just presumed from the exit code.
+- [x] every SDLC and PDLC phase in the map points to an artifact or is marked out of scope with a reason (issue #31);
+- [x] release notes and versioning, deploy checklist, incident and postmortem, user validation and outcome metric each have the artifact the plan assigns (issue #31);
+- [x] the map is linked from the thesis section 6 and the cycle skill (issue #31; owner decision on 2026-11-16: the Constitution is unchanged);
+- [x] repository validators pass (issue #31);
+- [x] all applicable checks in section 11 pass;
+- [x] there was no change outside the Allowed scope;
+- [x] relevant limitations are recorded;
+- [x] the final evidence was read, not just presumed from the exit code.
 
 # 13. HOLD conditions
 
@@ -242,10 +242,12 @@ The agent may not, without HOLD:
 
 ### Status
 
-`VERIFY`. Build of tasks 6 to 8 and the requested critique fixes are complete.
-The orchestrator supplied the independent critique recorded below; final
-acceptance remains with the owner. No HOLD or FAIL condition arose. The owner
-explicitly requested keeping this handoff status rather than `DONE`.
+`DONE`. Closed under issue #46 after PR #45 merged as
+`408970d557de2cee69446e5fc561d44588fa9984`. The independent critique
+(Claude Opus 5.5 high, acting as radiant-verifier) found no must-fix issues;
+the requested fixes were applied as recorded below. The Copilot review fix
+scoped DORA recovery input to failed deployments. The section 16 evidence
+supports all section 12 acceptance criteria. No HOLD or FAIL condition arose.
 
 ### Changed
 
@@ -419,7 +421,7 @@ as inspected.
 
 - The independent critique was supplied by the orchestrator, as recorded
   below. Build did not run that critique or declare final acceptance; Status
-  remains `VERIFY` at the owner's request.
+  remained `VERIFY` at the owner's request until the closure above.
 - Network denied: no live GitHub acceptance, assignment, labels or project
   status was inspected or changed. No push or PR was attempted.
 - The living-page update is tracked in
