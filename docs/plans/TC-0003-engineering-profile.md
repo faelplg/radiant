@@ -18,7 +18,7 @@ The contract is planned, not active: the owner answers the
 commit, such as the merge of this contract, records that commit as the entry
 commit at activation; the Allowed scope does not change.
 
-Owner routing: the Build runs as `radiant-dev` on the Codex harness at medium
+Routing: the Build runs as `radiant-dev` on the Codex harness at medium
 effort; the independent critique runs on the agy harness, from a vendor
 different from the Build's. Model IDs go only in the provenance lines of the
 Completion report, as
@@ -190,7 +190,7 @@ Do not create additional artifacts without an observed need.
 | Override | A `Pack overrides` table in the Profile, one row per changed pack section, with the reason |
 | Pack version | The Radiant pin; a pack has no version of its own |
 | Project practices | A Profile section lists the project's own practice cards, written with the card form and kept in the consumer; their ids never reuse a catalog id |
-| Pack structure check | None in this contract; a tracked follow-up issue adds it |
+| Pack structure check | None in this contract; a tracked follow-up issue adds it (open question 3) |
 | Demerzel example | `docs/engineering-profile.example.md`, after the `docs/routing.example.json` precedent |
 
 #### Where pack ids live
@@ -537,5 +537,11 @@ contract already follows.
    Profile file, with `.radiant.json` unchanged. Alternative: a new optional
    `stack_pack` field in the map, which lets a project select a pack without a
    Profile file but adds a field to the schema every consumer validates.
-The pack structure validator is no longer open: the owner chose a tracked
-follow-up issue, recorded in section 6.
+3. **Pack structure validator.** Default: no validator in this contract; the
+   tracked follow-up issue recorded in section 6 adds the
+   `check_repository.py` rule, and until then section 7 and the focused
+   script check pack structure, while the repository link check catches a
+   `Serves` link to a removed card. Alternative: add the
+   `check_repository.py` rule now, which brings
+   `validators/check_repository.py` and `tests/test_repository.py` into
+   scope.
