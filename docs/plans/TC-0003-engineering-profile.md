@@ -720,6 +720,8 @@ No consumer, schema, Constitution, generated file or CHANGELOG changed.
 
 ### Engineering notes
 
+PR #60 Copilot follow-up: require `path.is_file()` for pack candidates while excluding README; `test_profile_rejects_directory_as_pack` failed before the fix (exit 0 instead of HOLD) and passes afterward.
+
 Exact stem membership avoids turning an untrusted pack id into a path. The
 Profile is read only after existing path checks pass. No declaration preserves
 the old output byte for byte. Fence handling covers backticks and tildes.

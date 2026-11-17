@@ -61,7 +61,7 @@ def stack_pack(root, profile):
     if pack == "none":
         return None
     known = {path.stem for path in (root / "engineering/stacks").glob("*.md")
-             if path.name != "README.md"}
+             if path.is_file() and path.name != "README.md"}
     if pack not in known:
         raise ValueError(f"engineering_profile: unknown Stack pack: {pack}")
     return pack

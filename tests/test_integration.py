@@ -136,6 +136,10 @@ with patch.object(Path, "read_text", read):
         self.assertIn("cannot read Profile: fixture read denied", result.stderr)
         self.assertEqual(result.stdout, "")
 
+    def test_profile_rejects_directory_as_pack(self):
+        (self.root / "engineering/stacks/example.md").mkdir()
+        self.assert_profile_hold("- Stack pack: `example`\n")
+
     def test_profile_rejects_unknown_pack(self):
         self.assert_profile_hold("- Stack pack: `no-such-pack`\n")
 
