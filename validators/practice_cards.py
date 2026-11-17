@@ -33,7 +33,7 @@ def validate_sections(text: str) -> List[str]:
 def validate_card(text: str, stem: str, baseline: Set[str]) -> List[str]:
     errors = validate_sections(text)
     text = _prose(text)
-    if len(re.findall(r"(?m)^# .+\S.*$", text)) != 1:
+    if len(re.findall(r"(?m)^# [ \t]*\S.*$", text)) != 1:
         errors.append("card must have exactly one title")
     ids = re.findall(r"(?m)^- Id:[ \t]*(.*)$", text)
     match = re.fullmatch(r"`([^`]+)`", ids[0].strip()) if len(ids) == 1 else None

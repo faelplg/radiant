@@ -61,6 +61,7 @@ CONTRACT = """# 8. Engineering Check
 class PracticeCardTests(unittest.TestCase):
     def test_valid_card_passes(self):
         self.assertEqual(validate_card(VALID, "solid-srp", {"EB-05"}), [])
+        self.assertEqual(validate_card(VALID.replace("# Single responsibility", "# X"), "solid-srp", {"EB-05"}), [])
 
     def test_baseline_ids_reads_only_headings(self):
         self.assertEqual(baseline_ids("# 7. EB-05 - Maintainability\nEB-09\n```\n## EB-08\n```\n"), {"EB-05"})
@@ -128,7 +129,7 @@ class PracticeCardTests(unittest.TestCase):
         self.assertEqual(index_ids(INDEX + row + "\n"), (["solid-srp", "solid-srp"], []))
 
     def test_index_rejects_malformed_first_cells(self):
-        cells = ["solid-srp", "[`solid-srp`](solid-srp.txt)",
+        cells = ["", "solid-srp", "[`solid-srp`](solid-srp.txt)",
                  "[`solid-srp`](https://example.org/solid-srp.md)",
                  "[`solid-srp`](dir/solid-srp.md)", "[`solid-srp`](solid-srp.md#source)",
                  "[`solid-srp`](solid-srp.md) [`tdd`](tdd.md)",
