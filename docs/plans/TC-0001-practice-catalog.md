@@ -9,7 +9,7 @@
 **Capability:** `default`\
 **Engineering Baseline:** `Radiant Engineering Baseline v0.1`\
 **Engineering Profile:** `none`\
-**Entry commit:** `a12d8d0`\
+**Entry commit:** `a12d8d0b91e54821eac061c4ca0ddfebb50ee006`\
 **Plan:** [Lifecycle map and practice catalog](2026-11-16-lifecycle-and-practices.md), tasks 1 to 5
 
 ## 1. Objective
@@ -278,7 +278,8 @@ section 14 FAIL condition was triggered.
 Initial Build snapshot: `a047d3a`. The following line references and initial
 verification evidence describe that snapshot; review corrections follow below.
 
-- `4b6782b`: activation records `IN_PROGRESS` and entry `a12d8d0` in the header.
+- `4b6782b`: activation records `IN_PROGRESS` and entry
+  `a12d8d0b91e54821eac061c4ca0ddfebb50ee006` in the header.
 - `9379f9f`, `ac7678f`, `fc62558`, `c827fc4`:
   [card reader](../../validators/practice_cards.py), lines 1-101, and
   [unit tests](../../tests/test_practice_cards.py), lines 1-166. The follow-up
@@ -300,8 +301,8 @@ verification evidence describe that snapshot; review corrections follow below.
 ### Verification evidence
 
 Executed with radiant-cycle 0.1.5, `skills/radiant-cycle/SKILL.md` at entry
-`a12d8d0`, in Build mode. Tasks 1-5 ran in order. Mutation/readback findings
-received separate focused commits. The final evidence was read directly.
+`a12d8d0b91e54821eac061c4ca0ddfebb50ee006`, in Build mode. Tasks 1-5 ran in
+order. Mutation/readback findings received separate focused commits. The final evidence was read directly.
 
 ```text
 python3 -m unittest tests.test_practice_cards -v
