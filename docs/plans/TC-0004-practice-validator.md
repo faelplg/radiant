@@ -4,7 +4,7 @@
 **Template version:** `0.4`\
 **Project:** `radiant`\
 **Iteration:** `Practices milestone, issue #34`\
-**Status:** `READY` - for the owner's review; it does not authorize the Build\
+**Status:** `READY` - owner decisions recorded in section 18; the Build still needs the owner's go\
 **Owner:** `Fael (human); Build by an authorized agent`\
 **Risk tier:** `2` - the check joins `check_repository.py`, the CI gate of every Radiant change, and adds a command that consumers reach through their pin\
 **Capability:** `default`\
@@ -34,8 +34,8 @@ requires.
   version 0.4; this contract uses the template's numbers and titles.
 - The owner's comment on #34, from the TC-0001 critique on PR #44:
   `practice_ids` returns a linked cell as written, so this contract either
-  accepts the linked form or states that ids are bare backticks
-  (candidate 1 in section 5).
+  accepts the linked form or states that ids are bare backticks;
+  [owner decision 1](#18-owner-decisions) accepts the linked form.
 - [Issue #61](https://github.com/faelplg/radiant/issues/61): `# 18. Owner decisions`
   exists so that #34 can treat it as required. The template keeps the section
   "so a validator can require it", and the
@@ -76,7 +76,7 @@ The agent may assume as input:
   `Template version` field. A planning probe, kept outside the repository,
   applied the rules of section 7 to all three and reported no error; the
   template itself fails them, as a form with placeholders should;
-- when candidate 7 (a) is accepted, consumer contracts, read-only, from the
+- under owner decision 7, consumer contracts, read-only, from the
   owner's local checkouts of `faelplg/demerzel` and `faelplg/aikm`. The
   activation commit records here the full commit of each consumer, as
   TC-0003 did before its Build. The Build request supplies each checkout's
@@ -169,8 +169,8 @@ the consumer checkouts listed in section 3
    `docs/plans/TC-[0-9][0-9][0-9][0-9]-*.md`, against the catalog only, with
    tests in `tests/test_repository.py`.
 4. `validators/practice_cards.py`: the shared table-row reader of section 4,
-   and `practice_ids` reading the linked cell form when candidate 1 accepts
-   it.
+   and `practice_ids` reading the linked cell form, as owner decision 1
+   requires.
 5. Pointers: `validators/README.md` (the command and its output),
    `docs/verification.md` (the repository check now validates Radiant's
    contracts, replacing the sentence that says it does not),
@@ -190,7 +190,7 @@ Do not create additional artifacts without an observed need.
 | `18. Owner decisions` | Required when `Template version` is `0.4` or later; exempt when the field is absent or `0.3` or earlier |
 | Known practice ids | Card stems in the checkout's `engineering/practices/`, plus the ids in the `Project practices` table of the Profile given with `--profile` |
 | Radiant's own contracts | `check_repository.py` checks `docs/plans/TC-[0-9][0-9][0-9][0-9]-*.md` against the catalog; the template is a form and is not checked as a contract |
-| Practice cells | Bare `tdd`, backticked `` `tdd` `` and, with candidate 1 (a), a link whose text is `` `tdd` ``; bare ids stay accepted because `practice_ids` and `tests/test_practice_cards.py` already accept them and TC-0001 relies on that |
+| Practice cells | Bare `tdd`, backticked `` `tdd` `` and, by owner decision 1, a link whose text is `` `tdd` ``; bare ids stay accepted because `practice_ids` and `tests/test_practice_cards.py` already accept them and TC-0001 relies on that |
 | Consumer gates | `check_project.py` and `check_dispatch.py` keep their behavior and output byte for byte |
 
 Each decision stands unless the owner overturns it in review.
@@ -236,18 +236,20 @@ nothing changes. After one:
   and Demerzel's dispatch gate keep passing;
 - `check_contract.py` exists in the checkout but runs only when the consumer
   or its tooling calls it. Making it a gate is a consumer decision, taken in
-  that consumer's repository (candidate 5);
+  that consumer's repository (owner decision 5);
 - a consumer contract without `Template version` is exempt from section 18
   but not from sections 8 and 12. A consumer that adopts the command and has
   a contract that fails those rules fixes it through its own
   [integrity](../../contracts/README.md#integrity) rules, as an explicit
   amendment, never by a Radiant change.
 
-### Open questions for the owner
+### Questions decided by the owner
 
-Each candidate becomes an entry in section 18 once the owner answers. The
-recommended option comes first. The second-opinion review of this contract
-agreed with every recommended option.
+The owner decided all seven questions on 2026-11-17, choosing option (a),
+the recommended one, for each; the second-opinion review of this contract had
+agreed with every recommended option. The decisions and their contract impact
+are recorded in [section 18](#18-owner-decisions). The options below are kept
+as the record of what was weighed.
 
 1. **Linked practice cells.** TC-0001 and TC-0003 cite backticked ids, and
    `tests/test_practice_cards.py` also accepts a bare id; the catalog index
@@ -338,7 +340,7 @@ This task must **not**:
 
 - change `check_project.py`, `check_dispatch.py`, their output or their
   tests; a gate that calls the new command is a separate decision
-  (candidate 5);
+  (owner decision 5);
 - change the Task Contract template, its version or any other template;
 - edit TC-0001, TC-0002 or TC-0003, or any consumer contract;
 - change any consumer repository, its `.radiant.json` or its pin;
@@ -354,9 +356,6 @@ Record it as an observation or a Learn Back candidate.
 
 # 7. Functional requirements
 
-Rules assume the recommended option of each candidate in section 5; an owner
-answer that differs replaces the affected rule before activation.
-
 - [ ] Fenced blocks are ignored: a heading, row or line inside a fence never counts.
 - [ ] Sections `8. Engineering Check`, `12. Acceptance criteria` and `18. Owner decisions` are found and bounded as the section lookup decision in section 5 says; a heading of level 3 such as `### Practices` never ends a numbered section.
 - [ ] A contract without a `8. Engineering Check` heading produces `missing section: 8. Engineering Check`; the same holds for `12. Acceptance criteria`, and for `18. Owner decisions` when its version requires it.
@@ -364,7 +363,7 @@ answer that differs replaces the affected rule before activation.
 - [ ] Section 8's Baseline rows are the data rows of its table before the first level 3 heading. Each row starts with an EB id that exists in the Baseline and has status `REQUIRED`, `APPLICABLE` or `N/A`, with or without backticks; an unknown id, an undecided status such as `REQUIRED / N/A` and a repeated id are each refused, naming section 8 and the id.
 - [ ] Section 8 with no `REQUIRED` or `APPLICABLE` row is refused as empty, naming section 8.
 - [ ] Without a `### Practices` heading inside section 8, the contract cites no practice and passes this rule. A `### Practices` heading whose table has no data row is refused, naming the subsection; that is how an empty subsection differs from an absent one.
-- [ ] A practice cell is read as an id in three forms: bare `tdd`, backticked `` `tdd` `` and, with candidate 1 (a), a link whose text is `` `tdd` `` and whose target is a relative path with no URL scheme, query or fragment, not starting with `/`, ending in `tdd.md`. The link target is never opened. Any other cell, including a link that breaks those rules, is refused as an invalid practice cell, naming the cell.
+- [ ] A practice cell is read as an id in three forms: bare `tdd`, backticked `` `tdd` `` and, by owner decision 1, a link whose text is `` `tdd` `` and whose target is a relative path with no URL scheme, query or fragment, not starting with `/`, ending in `tdd.md`. The link target is never opened. Any other cell, including a link that breaks those rules, is refused as an invalid practice cell, naming the cell.
 - [ ] Each id read from `### Practices` is a catalog card stem or a Profile project id; otherwise `unknown practice id` names section 8, the Practices subsection and the id. A repeated id is refused, naming it.
 - [ ] A Profile's `Project practices` ids, bare or in backticks, are read from its table; an id outside the practice id pattern, equal to a catalog id or repeated is refused, naming the Profile and the id. A Profile without the section contributes no id.
 - [ ] Section 12's checklist items are the lines `- [ ] `, `- [x] ` or `- [X] ` followed by text. A placeholder is an item whose text, after removing trailing `;`, `.` or `,`, surrounding whitespace and one pair of surrounding backticks, starts with `[` and ends with `]`. A generic item is one of the template's four fixed items, compared with the same trailing punctuation removed. With no item that is neither a placeholder nor generic, section 12 is refused, naming section 12.
@@ -451,7 +450,7 @@ git diff --cached --check
 - Run `check_dispatch.py units` and `routing` on the template and the routing
   example, and `check_project.py` through its existing tests, at the entry
   commit and at the end; the outputs match.
-- With candidate 7 (a): run `check_contract.py` on each consumer contract,
+- Under owner decision 7: run `check_contract.py` on each consumer contract,
   read from the commit recorded in section 3 through standard input, and
   report per file the result and errors in section 16. Record
   `git -C <checkout> rev-parse HEAD` and `git -C <checkout> status --porcelain`
@@ -551,4 +550,44 @@ and provenance.
 
 # 18. Owner decisions
 
-None.
+Source of entries 1 to 7: the owner's message of 2026-11-17 at 14:56 BRT,
+answering the seven questions of section 5: "Aceito recomendações." ("I
+accept the recommendations"). Each entry is the recommended option (a) of the
+question with the same number.
+
+1. **`2026-11-17`:** Linked practice cells: option (a). Bare and backticked
+   ids stay accepted, and a Markdown link whose text is the backticked id and
+   whose target is a relative `.md` path ending in `<id>.md` is also
+   accepted; the target is compared, never opened. **Contract impact:**
+   section 7's practice cell rule, output 4 (`practice_ids` reads the linked
+   form) and the `Practice cells` row of the section 5 decisions.
+2. **`2026-11-17`:** Where the Profile comes from: option (a), an explicit
+   `--profile <path>`; there is no `--project` option. **Contract impact:**
+   output 2's command signature and section 7's Profile rule.
+3. **`2026-11-17`:** Empty Engineering Check: option (a). Section 8 is
+   refused when no row is `REQUIRED` or `APPLICABLE`; rows may be any subset
+   of EB-01 to EB-08, so an all-`N/A` table is refused. **Contract impact:**
+   section 7's empty Engineering Check rule.
+4. **`2026-11-17`:** Minimum acceptance criteria: option (a). Section 12
+   needs at least one checklist item that is neither a placeholder nor one of
+   the template's four generic items. **Contract impact:** section 7's
+   acceptance criteria rule.
+5. **`2026-11-17`:** Gate adoption: option (a). Outside Radiant the command
+   is opt-in; `check_repository.py` applies it only to Radiant's own
+   contracts, and `check_project.py` and `check_dispatch.py` are unchanged.
+   **Contract impact:** confirms the section 6 non-goal on those two
+   validators, the `Consumer gates` row of the section 5 decisions and the
+   section 14 FAIL condition on their output.
+6. **`2026-11-17`:** Shape of an owner decision entry: option (a). From
+   `Template version` `0.4`, section 18 must exist with a non-blank body,
+   `None.` or entries, and the template's unedited entry with its bracketed
+   date placeholder is refused; entry format is not validated. **Contract
+   impact:** section 7's section 18 rule; checking entry format stays out of
+   scope.
+7. **`2026-11-17`:** Consumer probe: option (a). The Build runs
+   `check_contract.py` read-only over Demerzel and AIKM contracts at the
+   commits recorded in section 3 at activation and reports in section 16; the
+   orchestrator, not the Build, opens any consumer pointer issue, with the
+   owner's authorization. **Contract impact:** section 3's consumer input,
+   section 11's consumer probe step, and the activation commit, which must
+   record both consumer commits.
