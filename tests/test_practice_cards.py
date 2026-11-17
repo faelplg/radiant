@@ -52,6 +52,8 @@ CONTRACT = """# 8. Engineering Check
 
 # 9. Constraints
 
+| Practice | Other |
+| --- | --- |
 | `unrelated` | ignored |
 """
 
