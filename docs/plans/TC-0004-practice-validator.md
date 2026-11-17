@@ -4,7 +4,7 @@
 **Template version:** `0.4`\
 **Project:** `radiant`\
 **Iteration:** `Practices milestone, issue #34`\
-**Status:** `ACTIVE` - Build authorized on 2026-11-17 at 15:04 BRT\
+**Status:** `DONE` - accepted after independent critique and orchestrator readback on 2026-11-17\
 **Owner:** `Fael (human); Build by an authorized agent`\
 **Risk tier:** `2` - the check joins `check_repository.py`, the CI gate of every Radiant change, and adds a command that consumers reach through their pin\
 **Capability:** `default`\
@@ -496,15 +496,15 @@ After execution:
 
 The task can only be declared `DONE` when:
 
-- [ ] `check_contract.py` refuses a contract with an empty Engineering Check, one with no acceptance criteria and one citing a practice id outside the catalog and the Profile, each with an error naming the section (issue #34);
-- [ ] tests cover the pass and fail case of every rule in section 7 (issue #34);
-- [ ] TC-0001, TC-0002, TC-0003 and this contract pass `check_repository.py` and `check_contract.py` unchanged, or the Build stopped on HOLD with the failure documented (issue #34);
-- [ ] a contract at `Template version` `0.4` without `18. Owner decisions` is refused, and one without the field is not (issue #61);
-- [ ] `check_project.py` and `check_dispatch.py` outputs are unchanged at the end;
-- [ ] all applicable checks in section 11 pass;
-- [ ] there was no change outside the Allowed scope;
-- [ ] relevant limitations are recorded;
-- [ ] the final evidence was read, not just presumed from the exit code.
+- [x] `check_contract.py` refuses a contract with an empty Engineering Check, one with no acceptance criteria and one citing a practice id outside the catalog and the Profile, each with an error naming the section (issue #34);
+- [x] tests cover the pass and fail case of every rule in section 7 (issue #34);
+- [x] TC-0001, TC-0002, TC-0003 and this contract pass `check_repository.py` and `check_contract.py` unchanged, or the Build stopped on HOLD with the failure documented (issue #34);
+- [x] a contract at `Template version` `0.4` without `18. Owner decisions` is refused, and one without the field is not (issue #61);
+- [x] `check_project.py` and `check_dispatch.py` outputs are unchanged at the end;
+- [x] all applicable checks in section 11 pass;
+- [x] there was no change outside the Allowed scope;
+- [x] relevant limitations are recorded;
+- [x] the final evidence was read, not just presumed from the exit code.
 
 # 13. HOLD conditions
 
@@ -550,8 +550,10 @@ The agent may not, without HOLD:
 
 ### Status
 
-`DONE` for the authorized Build return only. The contract remains `ACTIVE`;
-independent critique, orchestrator readback and owner acceptance are pending.
+`DONE`. The owner reported the completed independent critique and
+orchestrator readback on 2026-11-17 and authorized acceptance and closure.
+The Build returned with the contract `ACTIVE`; this acceptance closes it.
+No active-contract pointer exists in this repository, so none needs clearing.
 No HOLD condition triggered. No network, push, PR, issue creation or consumer
 edit was performed.
 
@@ -700,6 +702,26 @@ These AIKM results are measured adoption concerns, not a Radiant HOLD:
 owner decisions 5 and 7 keep adoption opt-in and assign any pointer issue to
 the orchestrator. The Build opened no issue.
 
+### Independent critique and orchestrator acceptance
+
+Source: the owner's acceptance instruction of 2026-11-17. The following
+critique and orchestrator results were supplied by the owner; this closing
+session records them without claiming to have launched the critique.
+
+- Independent critique: `VERDICT approve`, no Must-fix and no Should-fix.
+  The critic reran the checks, probed the command with its own contracts,
+  confirmed `check_dispatch.py` and `check_project.py` are unchanged, and
+  reproduced the consumer probe output.
+- Orchestrator readback: `check_repository.py` PASS (67 documents), all
+  154 tests OK, `git diff --check` clean, and `check_contract.py` accepts
+  TC-0001 through TC-0004. The orchestrator accepted the delivery following
+  the independent approval; the owner authorized setting the contract to
+  `DONE` and committing this closure.
+- Closure verification: the three requested checks were rerun for this
+  documentation change: `PYTHONDONTWRITEBYTECODE=1 python3 validators/check_repository.py`
+  PASS (67 documents), `python3 -m unittest discover -s tests` 154 tests OK,
+  and `git diff --check` clean. No implementation file changed in closure.
+
 ### Engineering notes
 
 - Standard library only, Python 3.9-compatible syntax and APIs. Text rules
@@ -712,8 +734,9 @@ the orchestrator. The Build opened no issue.
 
 ### Remaining limitations
 
-- Independent critique and final acceptance remain pending and must be
-  launched by the orchestrator. This Build did not launch a verifier.
+- Independent critique and orchestrator acceptance are complete, as reported
+  by the owner above. The critique transcript and exact invocation were not
+  supplied to this closing session; no invocation or usage metric is invented.
 - Execution used Python 3.14; Python 3.9 was not run in this session. No
   dependency installation or network access was attempted.
 - Structural checks do not establish whether a criterion is truly observable
@@ -736,6 +759,14 @@ or consumer document was changed for this candidate.
   Build return `DONE`, contract `ACTIVE`. Effective runtime model confirmation,
   context/round-volume counters and task duration are not exposed by this
   session's tool results, so those metrics are absent rather than inferred.
+- First critique attempt: `radiant-verifier`, `deep`, Antigravity CLI,
+  `claude-opus-5-5-high`; stopped on a quota limit before any verdict.
+- Completed critique: `radiant-verifier`, `deep`, Antigravity CLI,
+  `gemini-4-argon-high`; `VERDICT approve`, no Must-fix and no Should-fix.
+  Provenance supplied by the owner. Exact CLI invocation, dispatch identifier,
+  usage counters and duration were not supplied for either critique attempt.
+- Orchestrator readback and acceptance: completed and reported by the owner
+  on 2026-11-17; the orchestrator's harness, model and usage were not supplied.
 - Applied bodies: `radiant-cycle` version `0.1.6` and `radiant-delegation`
   version `0.2.2`, both read from the entry revision; Conventional Commits
   skill applied to each commit. No subagent delegation occurred.
