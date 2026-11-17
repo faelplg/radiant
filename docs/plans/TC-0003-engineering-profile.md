@@ -3,20 +3,18 @@
 **Contract ID:** `TC-0003`\
 **Project:** `radiant`\
 **Iteration:** `Practices milestone, issue #33`\
-**Status:** `READY` - the owner answered the planning questions on 2026-11-17; activation is a separate owner go\
+**Status:** `ACTIVE` - activated by Rafael on 2026-11-17\
 **Owner:** `Fael (human); Build by an authorized agent`\
 **Risk tier:** `2` - the pack declaration and the `check_project.py` change become part of the pin gate that every consumer, and Demerzel's dispatch, runs on its next pin bump\
 **Capability:** `default`\
 **Engineering Baseline:** `Radiant Engineering Baseline v0.1`\
 **Engineering Profile:** `none`\
-**Entry commit:** `1a3595997df6d226300ecc324592d4254532cc36`\
+**Entry commit:** `2b78cf5930594860e3107c6d73a3ec32901ddcf4`\
 **Tracking:** [issue #50](https://github.com/faelplg/radiant/issues/50), sub-issue of epic [#30](https://github.com/faelplg/radiant/issues/30)
 
-The contract is ready, not active: the owner answered the planning questions
-on 2026-11-17, as recorded in [Owner decisions](#owner-decisions-2026-11-17).
-Activation is a separate go from the owner after this contract merges. A Build that starts from a later `main`
-commit, such as the merge of this contract, records that commit as the entry
-commit at activation; the Allowed scope does not change.
+Rafael authorized activation on 2026-11-17. The Build entry commit above
+was recorded from `git rev-parse HEAD` before any change. The Allowed scope
+is unchanged.
 
 Routing: the Build runs as `radiant-dev` on the Codex harness at medium
 effort; the independent critique runs on the agy harness, from a vendor
