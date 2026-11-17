@@ -30,8 +30,11 @@ adapter's `provides.json`, the units example in the contract template, read as
 restricted YAML without dependencies, and the
 [routing example](routing.example.json). It validates practice card structure,
 the [catalog index](../engineering/practices/README.md) against the card files,
-and practice ids in the Task Contract template's example. It does not require
-practice citations or validate them in consumer contracts. The tests exercise
+and practice ids in the Task Contract template's example. It applies the
+[contract check](../validators/README.md) to Radiant's own
+`docs/plans/TC-[0-9][0-9][0-9][0-9]-*.md`, against the catalog only, naming
+each contract path on failure. Citations remain optional; consumer checks are
+opt-in through `check_contract.py`. The tests exercise
 the bootstrap and subagent generator, the pin gate and the repository validator
 through their real commands in temporary directories, including divergence,
 a dirty checkout, invalid paths and refusal to overwrite.

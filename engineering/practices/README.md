@@ -6,7 +6,9 @@ Use the [card form](../../templates/practice-card.md) for new entries.
 
 Citation is opt-in: a Task Contract cites a practice only when its "Applies
 when" holds. The Baseline table remains the required engineering check;
-no contract is required to cite a practice.
+no contract is required to cite a practice. Present citations are validated by
+the opt-in [contract check](../../validators/README.md), using catalog ids and
+any explicit Profile's project ids.
 
 New cards meet [Baseline section 14](../engineering-baseline.md#14-learn-back):
 they recur, apply to several projects, can be verified and cost less than the
