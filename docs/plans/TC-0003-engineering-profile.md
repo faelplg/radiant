@@ -3,20 +3,27 @@
 **Contract ID:** `TC-0003`\
 **Project:** `radiant`\
 **Iteration:** `Practices milestone, issue #33`\
-**Status:** `PROPOSED`\
-**Owner:** `Fael (human); Build by Codex gpt-6.1-sol, medium effort`\
+**Status:** `HOLD` - awaiting the owner's answers to the open questions and activation\
+**Owner:** `Fael (human); Build by an authorized agent`\
 **Risk tier:** `2` - the pack declaration and the `check_project.py` change become part of the pin gate that every consumer, and Demerzel's dispatch, runs on its next pin bump\
-**Capability:** `default` - `radiant-dev` runs at `standard`, which the Codex adapter maps to `gpt-6.1-sol`\
+**Capability:** `default`\
 **Engineering Baseline:** `Radiant Engineering Baseline v0.1`\
 **Engineering Profile:** `none`\
 **Entry commit:** `1a3595997df6d226300ecc324592d4254532cc36`\
 **Tracking:** [issue #50](https://github.com/faelplg/radiant/issues/50), sub-issue of epic [#30](https://github.com/faelplg/radiant/issues/30)
 
-`PROPOSED` means planned and not ready: the owner answers the
-[open questions](#open-questions-for-the-owner) first, then activates the
-contract. A Build that starts from a later `main` commit, such as the merge of
-this contract, records that commit as the entry commit at activation; the
-Allowed scope does not change.
+The contract is planned, not active: the owner answers the
+[open questions](#open-questions-for-the-owner), the contract moves to
+`READY`, and the owner activates it. A Build that starts from a later `main`
+commit, such as the merge of this contract, records that commit as the entry
+commit at activation; the Allowed scope does not change.
+
+Owner routing: the Build runs as `radiant-dev` on the Codex harness at medium
+effort; the independent critique runs on the agy harness, from a vendor
+different from the Build's. Model IDs go only in the provenance lines of the
+Completion report, as
+[radiant-delegation](../../skills/radiant-delegation/SKILL.md#provenance)
+requires.
 
 ## 1. Objective
 
@@ -61,10 +68,20 @@ The agent may assume as input:
 - `validators/check_project.py` and `tests/test_integration.py` as the code
   and test style to follow;
 - consumer evidence, read-only, from the owner's local checkouts of the
-  consumer repositories, at these commits:
+  consumer repositories. The contract does not carry their paths: the
+  repository check refuses personal paths, and relative paths such as
+  `../demerzel` do not resolve inside harness worktrees
+  ([delegation package](../../skills/radiant-delegation/SKILL.md#delegation-package)).
+  The Build request supplies the absolute root of each checkout and grants
+  the sandbox read access to it. The Build reads each file at its commit with
+  `git -C <checkout> show <commit>:<path>` and the layout with
+  `git -C <checkout> ls-tree -r --name-only <commit>`, never from the working
+  tree. The commits are:
   - `faelplg/demerzel` `8edd3b9d4028dc8fb8ad8a9e6ad9718e75bdaac0`:
     `package.json`, `tsconfig.json`, `.github/workflows/check.yml`,
-    `AGENTS.md`, `src/` and `test/` layout, `docs/project/SPEC.md`;
+    `AGENTS.md`, `src/` and `test/` layout, `docs/project/SPEC.md`, and
+    `src/radiant/validators.ts`, whose pin gate parses the `PASS` line of
+    `check_project.py`;
   - `faelplg/aikm` `a2cfd1bf6f415521567d0e48d8eebcc79a3e611d`:
     `package.json`, `biome.json`, `.github/workflows/check.yml`,
     `docs/project/SPEC.md`;
@@ -149,10 +166,13 @@ the consumer checkouts listed in section 3
 5. `validators/check_project.py`: the pack check; tests in
    `tests/test_integration.py`.
 6. Pointers: `docs/integration.md` (the `engineering_profile` field and the
-   pack check), `docs/lifecycle.md` (Requirements, Deployment and Operations
-   rows), thesis sections 6.3 and 24, Baseline section 11,
-   `templates/project-agents.md` (read the pack with the Profile),
-   `validators/README.md`, `README.md` and `docs/capabilities.md`.
+   pack check), `docs/lifecycle.md` (the Requirements, Deployment and
+   Operations rows and the "Deploy" section's checklist sentence), thesis
+   sections 6.3 and 24, Baseline section 11, `templates/project-agents.md`
+   (read the pack with the Profile), `validators/README.md`, `README.md`, and
+   `docs/capabilities.md` (an index row and the paragraph after the table
+   that names the Spec), plus the cross-links between packs, forms and the
+   example that earlier tasks could not write.
 
 Do not create additional artifacts without an observed need.
 
@@ -164,11 +184,13 @@ Do not create additional artifacts without an observed need.
 | Pack id | Lowercase kebab slug equal to the file stem, same pattern as practice ids; never renamed or reused |
 | First packs | `typescript-bun` and `python-uv` |
 | Pack sections | `Layering and dependency rule`, `Test layout and commands`, `Lint and format`, `Error handling`, `CI and release`, in that order and no others |
-| Mapping to practices | Each section opens with a `- Serves:` line of Markdown links to practice cards and Baseline anchors |
+| Mapping to practices | Each section opens with a `- Serves:` line of at least one Markdown link, each to a practice card or a Baseline anchor; `Lint and format` and `Error handling` have no card today and may cite Baseline rules only |
 | Declaration | One line in the Profile file: ``- Stack pack: `<id>` `` or ``- Stack pack: `none` ``; `.radiant.json` is unchanged |
 | Number of packs | At most one per Profile |
 | Override | A `Pack overrides` table in the Profile, one row per changed pack section, with the reason |
 | Pack version | The Radiant pin; a pack has no version of its own |
+| Project practices | A Profile section lists the project's own practice cards, written with the card form and kept in the consumer; their ids never reuse a catalog id |
+| Pack structure check | None in this contract; a tracked follow-up issue adds it |
 | Demerzel example | `docs/engineering-profile.example.md`, after the `docs/routing.example.json` precedent |
 
 #### Where pack ids live
@@ -208,13 +230,21 @@ and the existing path checks pass. Outside fenced blocks:
 - no `- Stack pack:` line, or the value `none`: no pack; accepted, so every
   existing Profile keeps passing;
 - exactly one line, of the form ``- Stack pack: `<id>` ``, whose `<id>` is a
-  pack stem: accepted, and the `PASS` line names the pack;
-- anything else is `HOLD` naming `engineering_profile`: an unknown id, an id
-  outside the pattern, empty backticks, a value without backticks, or a
-  repeated line.
+  pack stem: accepted, and the `PASS` line on stdout names the pack;
+- anything else is `HOLD` on stderr naming `engineering_profile`: an unknown
+  id, an id outside the pattern, empty backticks, a value without backticks,
+  or a repeated line.
 
-`none` is reserved and is never a pack id. The PASS output is unchanged when
-no pack is declared.
+`none` is reserved and is never a pack id. The `PASS` output is unchanged
+when no pack is declared. When a pack is declared, its name goes after the
+existing text, and the line keeps its `PASS: Radiant <commit>;` prefix:
+Demerzel's pin gate parses that prefix (`src/radiant/validators.ts`, the
+`PASS` expression, at the commit in section 3).
+
+`check_project.py` adds `engineering/stacks/README.md` to the files that make
+a complete Radiant checkout, so a checkout without the packs fails as
+incomplete instead of reporting every pack as unknown. A consumer pinned to an
+earlier revision runs that revision's validator and is unaffected.
 
 #### How a Profile overrides a pack
 
@@ -250,15 +280,25 @@ the Spec.
 
 `templates/engineering-profile.md` has a header with project, Radiant
 revision, Baseline version and the `- Stack pack:` line, then the sections of
-Baseline section 11 that a project fills: default risk, pack overrides,
-commands, test strategy beyond the pack, dependency policy, security
-boundaries, compatibility and performance, deploy checklist and operations.
-It states that the Profile copies neither the Baseline nor the pack.
+Baseline section 11 that a project fills: default risk, minimum quality per
+kind of change, pack overrides, commands, test strategy beyond the pack,
+dependency policy, security boundaries, UX requirements, compatibility and
+performance, project practices, deploy checklist and operations. It states
+that the Profile copies neither the Baseline nor the pack, and that a section
+with nothing project-specific is removed.
+
+The project practices section closes what
+[TC-0001](TC-0001-practice-catalog.md#6-non-goals) deferred to #33: it lists
+the project's own practice cards by id and link, written with
+`templates/practice-card.md` and kept in the consumer. #34 validates contract
+citations against the catalog and these ids; this contract does not.
 
 ### Build order
 
 Each task is one commit; after each, the three automated checks of section
-11 pass.
+11 pass. A task links only to files that exist at its commit: a link from an
+earlier file to a later one, such as from `engineering/stacks/README.md` to
+the Profile form or the example, waits for task 5.
 
 1. **Packs.** `engineering/stacks/README.md`, `typescript-bun.md`,
    `python-uv.md`. Commit: `docs(stacks): add TypeScript on Bun and Python stack packs`.
@@ -286,9 +326,12 @@ This task must **not**:
   Demerzel and AIKM) or its `engineering_profile`; bumping a pin and adopting
   a Profile are separate human decisions;
 - change the `.radiant.json` schema or `templates/radiant-project.json`;
-- add a pack structure validator to `check_repository.py` (open question 3);
+- add a pack structure validator to `check_repository.py`. Follow-up, to be
+  tracked in its own issue: `check_repository.py` checks each pack's id,
+  sections and `Serves` links and matches the pack files with the index rows
+  in both directions, as it does for practice cards;
 - validate Profile sections, override rows or Spec content;
-- validate practice ids in consumer contracts (#34);
+- validate practice ids in consumer contracts or project practice ids (#34);
 - add packs for other stacks, or allow several packs per Profile;
 - edit the Constitution, the Task Contract template, practice cards, skills
   or adapters;
@@ -300,25 +343,26 @@ Record it as an observation or a Learn Back candidate.
 
 # 7. Functional requirements
 
-- [ ] A Profile with ``- Stack pack: `typescript-bun` `` or `python-uv` passes `check_project.py`, and the `PASS` line names the pack.
+- [ ] A Profile with ``- Stack pack: `typescript-bun` `` or `python-uv` passes `check_project.py`, and the `PASS` line on stdout keeps its `PASS: Radiant <commit>;` prefix and names the pack.
 - [ ] A Profile without the line, or with `none`, passes with the current output.
-- [ ] `no-such-pack`, `README`, `readme`, `../templates/spec`, empty backticks, a value without backticks and two `Stack pack` lines each produce `HOLD` naming `engineering_profile`, with exit 1.
+- [ ] `no-such-pack`, `README`, `readme`, `../templates/spec`, empty backticks, a value without backticks and two `Stack pack` lines each produce `HOLD` on stderr naming `engineering_profile`, with exit 1.
 - [ ] A `- Stack pack:` line inside a fenced block is ignored.
 - [ ] `engineering_profile: null` never reads a pack.
+- [ ] A Radiant checkout without `engineering/stacks/README.md` produces `HOLD: incomplete Radiant checkout`.
 - [ ] The Demerzel example Profile, copied into a fixture project, passes `check_project.py`.
-- [ ] Each pack has the five sections in order, each opening with a `- Serves:` line whose links resolve to practice cards or Baseline anchors.
+- [ ] Each pack has the five sections in order, each opening with a `- Serves:` line of at least one link, each resolving to a practice card or a Baseline anchor.
 
 # 8. Engineering Check
 
 | Baseline                          | Status           | Application in this task | Evidence          |
 | --------------------------------- | ---------------- | ------------------------ | ----------------- |
-| EB-01 Deliberate complexity       | `REQUIRED`       | One line in the Profile, no schema change, no registry, one pack per Profile | Diff review against section 5 decisions |
+| EB-01 Deliberate complexity       | `REQUIRED`       | One line in the Profile, no schema change, no registry, one pack per Profile; `python-uv` generalizes from one repository, omr-ingestor, and says so | Diff review against section 5 decisions; limitation in the Completion report |
 | EB-02 Correctness and contracts   | `REQUIRED`       | Exact stem match; backward compatible with Profiles without a pack | Tests in `tests/test_integration.py` |
 | EB-03 Verification and tests      | `REQUIRED`       | Test-first, accept and reject cases, mutation proof | Commands in section 11 |
 | EB-04 Security and privacy        | `REQUIRED`       | The id never becomes a path; no read outside the Radiant root and the Profile | Refusal tests for `../templates/spec` and `readme` |
 | EB-05 Maintainability             | `REQUIRED`       | Packs and Profile point to the Baseline and cards instead of copying them | Review and focused script |
 | EB-06 Dependencies                | `REQUIRED`       | Standard library only | Diff review |
-| EB-07 Diagnosis                   | `REQUIRED`       | Each `HOLD` names `engineering_profile` and the reason; `PASS` names the pack | stderr assertions |
+| EB-07 Diagnosis                   | `REQUIRED`       | Each `HOLD` names `engineering_profile` and the reason; `PASS` names the pack | stderr assertions for `HOLD`, stdout assertions for `PASS` |
 | EB-08 Experience and efficiency   | `APPLICABLE`     | A consumer reaches the pack, the form and the example from `README.md` in one pass | Readback |
 
 ### Practices
@@ -359,17 +403,26 @@ git diff --cached --check
 
 - The new tests in `tests/test_integration.py` cover every item of section 7
   that names `check_project.py`, through the CLI as the existing tests do.
-- Before the check exists, the accept-with-pack test passes trivially and the
-  refusal tests fail; the Completion report shows that run.
-- After the validator commit, remove each refusal rule from `check_project.py`
-  one at a time, observe its named test fail, restore with
+- The accept-with-pack test asserts exit 0 and that stdout has a line
+  starting `PASS: Radiant <commit>;` that names the pack id. The fenced-block
+  test puts ``- Stack pack: `no-such-pack` `` inside a fence and a valid line
+  outside it, so reading the fence would refuse the Profile.
+- Before the check exists, the accept-with-pack test and the refusal tests
+  fail; the tests that expect today's behavior (no line, `none`, `null`,
+  fenced line) pass. The Completion report shows that run.
+- After the validator commit, mutate `check_project.py` one rule at a time:
+  each refusal rule, the pack name in `PASS`, the fence stripping and the new
+  required file. Observe the named test fail, restore with
   `git checkout -- validators/check_project.py` and confirm the suite passes
   before the next mutation. Gate each step on the command's exit code.
 - A one-off script, kept outside the repository, prints every pack whose `##`
   sections differ from the five of section 5 and every section without a
-  `- Serves:` line linking a practice card or a Baseline anchor; it also
-  prints every `Pack overrides` row of the Demerzel example whose section is
-  not a pack section. Expected: no output. Command, body and output go into
+  `- Serves:` line linking a practice card or a Baseline anchor, every pack
+  file without an index row in `engineering/stacks/README.md` and every row
+  without a pack file; it also prints every `Pack overrides` row of the
+  Demerzel example whose section is not a pack section. Expected: no output.
+  Until the follow-up issue of section 6 lands, this script is the only
+  structural check of packs. Command, body and output go into
   the Completion report.
 - Each command a pack names is found in the cited consumer file at the cited
   commit; the Completion report lists command, file and line.
@@ -383,21 +436,24 @@ After execution:
 - confirm that no path outside the Allowed scope changed, against the entry
   commit, including committed, staged, unstaged and untracked changes
   (`git diff --name-only <entry>..HEAD` and `git status --porcelain`);
-- confirm that the consumer checkouts are unchanged (`git status --porcelain`
-  in each).
+- confirm that the consumer checkouts are unchanged: record
+  `git -C <checkout> rev-parse HEAD` and `git -C <checkout> status --porcelain`
+  for each before the first task and again at the end, and report both. The
+  two records must match; neither is assumed to be empty.
 
 ## Independent critique
 
 `REQUIRED`
 
-- A different vendor from the Build: `agy` running `claude-opus-5-5` at high
-  effort, acting as `radiant-verifier`, against this contract, issue #33's
-  acceptance and the consumer evidence of section 3.
+- `radiant-verifier` at `deep`, from a vendor different from the Build's,
+  against this contract, issue #33's acceptance and the consumer evidence of
+  section 3.
 - Launched and collected by the orchestrator, never by the Build. The
-  orchestrator records the exact command and model in the Completion report.
-- External prerequisites: `agy` installed and authenticated on the owner's
-  machine. Radiant has no `agy` adapter yet (#29), so no capability map
-  applies; the model is named here.
+  orchestrator records the harness, the full model ID and the command in the
+  Completion report's provenance.
+- External prerequisites: the agy harness installed and authenticated on the
+  owner's machine. Radiant has no agy adapter yet (#29), so the orchestrator
+  resolves the `deep` model for it.
 
 # 12. Acceptance criteria
 
@@ -405,7 +461,7 @@ The task can only be declared `DONE` when:
 
 - [ ] `check_project.py` accepts a project whose Profile declares a pack and refuses an unknown pack id (issue #33);
 - [ ] the Demerzel example Profile passes `check_project.py` (issue #33);
-- [ ] the Spec form and the Engineering Profile form exist and are indexed in `templates/README.md` (issue #33);
+- [ ] the Spec form and the Engineering Profile form exist and are indexed in `templates/README.md`, and the Profile form covers the sections listed in section 5 (issue #33; Baseline section 11);
 - [ ] `typescript-bun` and `python-uv` cover layering and dependency rule, test layout and commands, lint and format, error handling, and CI and release, each section mapped to practice ids or Baseline rules (issue #33);
 - [ ] `engineering/stacks/README.md` says how a project selects and overrides a pack (issue #33);
 - [ ] no consumer repository and no `.radiant.json` schema changed;
@@ -473,16 +529,13 @@ contract already follows.
 1. **Python pack consumers.** #33 names AIKM and omr-ingestor for the Python
    pack, but AIKM is TypeScript on Bun at `a2cfd1b`, and omr-ingestor has no
    `.radiant.json`, so no Radiant consumer uses Python today. Default: keep
-   `python-uv`, grounded in omr-ingestor, and list AIKM as a `typescript-bun`
-   consumer. Alternative: drop the Python pack until a Python project adopts
-   Radiant, which shrinks this contract and changes #33's scope.
+   `python-uv`, grounded in omr-ingestor, list AIKM as a `typescript-bun`
+   consumer, and record the single-repository grounding as a limitation
+   under EB-01. Alternative: drop the Python pack until a Python project
+   adopts Radiant, which shrinks this contract and changes #33's scope.
 2. **Where the declaration lives.** Default: a `- Stack pack:` line in the
    Profile file, with `.radiant.json` unchanged. Alternative: a new optional
    `stack_pack` field in the map, which lets a project select a pack without a
    Profile file but adds a field to the schema every consumer validates.
-3. **Pack structure validator.** Default: no validator in this contract;
-   section 7 and the focused script check pack structure, and the repository
-   link check already catches a `Serves` link to a removed card. A follow-up
-   issue adds a `check_repository.py` rule, like the practice card rule, if
-   packs grow beyond two. Alternative: add it now, which brings
-   `validators/check_repository.py` and `tests/test_repository.py` into scope.
+The pack structure validator is no longer open: the owner chose a tracked
+follow-up issue, recorded in section 6.
