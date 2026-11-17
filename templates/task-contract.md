@@ -1,8 +1,8 @@
 # Radiant - Task Contract Template
 
-**Version:** 0.2\
+**Version:** 0.3\
 **Status:** Operational template\
-**Base:** Radiant Project Generation System v0.2 + Radiant Engineering Baseline v0.1
+**Base:** Radiant Project Generation System v0.2 + Radiant Engineering Baseline v0.1 + engineering practice catalog
 
 > Use this template for relevant agentic implementation work.\
 > Remove sections that are clearly `N/A`.\
@@ -165,6 +165,16 @@ Apply only what is relevant to this task.
 Record only items marked `N/A` whose absence is not obvious:
 
 - `[EB-xx: reason]`
+
+### Practices
+
+Optional. List only practices from the
+[practice catalog](../engineering/practices/README.md) whose "Applies when"
+holds for this task. Leave the subsection out when none applies.
+
+| Practice | Serves | Why it applies here | Evidence |
+| --- | --- | --- | --- |
+| `test-strategy` | EB-03 | `[boundary that needs proof]` | `[command / review]` |
 
 ---
 

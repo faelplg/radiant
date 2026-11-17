@@ -4,6 +4,8 @@ A template is the shared form. The filled document is project state, with its
 own identity, decisions and history. Do not keep a copy of the template in the
 consumer for distribution to other projects.
 
+- [practice-card.md](practice-card.md): applicability, observable signals and verification of an engineering practice.
+- [adr.md](adr.md): context, options and consequences of a structural decision.
 - [project-frame.md](project-frame.md): intent and smallest experiment.
 - [design-frame.md](design-frame.md): framing of the experience before
   implementation.

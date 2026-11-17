@@ -12,6 +12,8 @@ This index does not implement behavior. Read only the applicable body.
 | Frame the experience                     | [Design Frame](../templates/design-frame.md)                                     | Filled Design Frame                 |
 | Define the experience in detail          | [Design Spec](../templates/design-spec.md)                                       | Implementable Design Spec           |
 | Contract an increment                    | [Convention](../contracts/README.md), [form](../templates/task-contract.md)      | Contract and local pointer          |
+| Choose an engineering practice | [Practice catalog](../engineering/practices/README.md), [card form](../templates/practice-card.md) | Applicable practice and evidence |
+| Record a structural decision | [ADR form](../templates/adr.md) | Decision with context and consequences |
 | Map consumer state                       | [Integration](integration.md), [form](../templates/radiant-project.json)         | Paths and Radiant revision          |
 | Verify Radiant                           | [Verification](verification.md), [validators](../validators/README.md)           | Evidence about the change           |
 | Route learning                           | [Learn Back](learn-back.md)                                                      | Fix in the responsible owner        |

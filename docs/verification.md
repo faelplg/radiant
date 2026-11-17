@@ -28,10 +28,13 @@ Constitution, absence of personal paths in the documents and coherence between
 `capabilities.json`. It also checks the requirements vocabulary, each
 adapter's `provides.json`, the units example in the contract template, read as
 restricted YAML without dependencies, and the
-[routing example](routing.example.json). The tests exercise the bootstrap and
-subagent generator, the pin gate and the repository validator through their
-real commands in temporary directories, including divergence, a dirty
-checkout, invalid paths and refusal to overwrite.
+[routing example](routing.example.json). It validates practice card structure,
+the [catalog index](../engineering/practices/README.md) against the card files,
+and practice ids in the Task Contract template's example. It does not require
+practice citations or validate them in consumer contracts. The tests exercise
+the bootstrap and subagent generator, the pin gate and the repository validator
+through their real commands in temporary directories, including divergence,
+a dirty checkout, invalid paths and refusal to overwrite.
 
 ## Structural review separate from the Build
 
