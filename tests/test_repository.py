@@ -57,7 +57,7 @@ class RepositoryCheckTests(RepositoryFixture):
         relative = "engineering/practices/tdd.md"
         path = self.root / relative
         path.write_text(path.read_text().replace("## Verification", "Verification"))
-        self.assert_practice_failure(relative, "sections must occur exactly once")
+        self.assert_practice_failure(relative, "missing section: Verification")
 
     def test_practice_card_not_indexed_fails(self):
         text = (self.root / "engineering/practices/tdd.md").read_text()
@@ -84,7 +84,7 @@ class RepositoryCheckTests(RepositoryFixture):
         relative = "templates/practice-card.md"
         path = self.root / relative
         path.write_text(path.read_text().replace("## Source", "Source"))
-        self.assert_practice_failure(relative, "sections must occur exactly once")
+        self.assert_practice_failure(relative, "missing section: Source")
 
     def test_contract_template_cites_unknown_practice_fails(self):
         relative = "templates/task-contract.md"

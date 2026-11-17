@@ -70,17 +70,23 @@ class PracticeCardTests(unittest.TestCase):
         for section in CARD_SECTIONS:
             with self.subTest(section=section):
                 errors = validate_sections(VALID.replace("## " + section, "Ignored"))
-                self.assertTrue(any(section in error for error in errors), errors)
+                self.assertIn(f"missing section: {section}", errors)
+                for other in CARD_SECTIONS:
+                    if other != section:
+                        self.assertNotIn(f"missing section: {other}", errors)
 
     def test_sections_out_of_order_fail(self):
         text = VALID.replace("## Applies when", "## TEMP").replace("## Source", "## Applies when").replace("## TEMP", "## Source")
-        self.assertTrue(validate_sections(text))
+        self.assertTrue(any(error.startswith("sections out of order: found ")
+                            for error in validate_sections(text)))
 
     def test_repeated_section_fails(self):
-        self.assertTrue(validate_sections(VALID + "\n## Source\nDuplicate\n"))
+        self.assertIn("repeated section: Source",
+                      validate_sections(VALID + "\n## Source\nDuplicate\n"))
 
     def test_unknown_section_fails(self):
-        self.assertTrue(validate_sections(VALID + "\n## Other\nExtra\n"))
+        self.assertIn("unknown section: Other",
+                      validate_sections(VALID + "\n## Other\nExtra\n"))
 
     def test_empty_body_fails(self):
         self.assertTrue(validate_sections(VALID.replace("Review the last changes by actor.", "  ")))
@@ -145,7 +151,7 @@ class PracticeCardTests(unittest.TestCase):
     def test_index_row_numbers_survive_fences(self):
         ids, errors = index_ids("```\nexample\n```\n" + INDEX.replace("[`solid-srp`](solid-srp.md)", "bad"))
         self.assertEqual(ids, [])
-        self.assertIn("row 6:", errors[0])
+        self.assertIn("line 6:", errors[0])
 
     def test_index_rejects_malformed_first_cells(self):
         cells = ["", "solid-srp", "[`solid-srp`](solid-srp.txt)",
@@ -158,7 +164,7 @@ class PracticeCardTests(unittest.TestCase):
                 ids, errors = index_ids(INDEX.replace("[`solid-srp`](solid-srp.md)", cell))
                 self.assertEqual(ids, [])
                 self.assertEqual(len(errors), 1)
-                self.assertIn("3", errors[0])
+                self.assertIn("line 3:", errors[0])
                 self.assertIn(cell, errors[0])
 
 

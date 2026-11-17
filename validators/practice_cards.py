@@ -22,8 +22,17 @@ def validate_sections(text: str) -> List[str]:
     headings = list(re.finditer(r"(?m)^## (.+?)\s*$", text))
     names = [heading.group(1) for heading in headings]
     errors = []
-    if names != list(CARD_SECTIONS):
-        errors.append("sections must occur exactly once in order: " + ", ".join(CARD_SECTIONS))
+    for section in CARD_SECTIONS:
+        if section not in names:
+            errors.append(f"missing section: {section}")
+    for section in dict.fromkeys(names):
+        if section not in CARD_SECTIONS:
+            errors.append(f"unknown section: {section}")
+        if names.count(section) > 1:
+            errors.append(f"repeated section: {section}")
+    if not errors and names != list(CARD_SECTIONS):
+        errors.append("sections out of order: found " + ", ".join(names)
+                      + "; expected " + ", ".join(CARD_SECTIONS))
     for index, heading in enumerate(headings):
         end = headings[index + 1].start() if index + 1 < len(headings) else len(text)
         if not text[heading.end():end].strip():
@@ -95,7 +104,7 @@ def index_ids(markdown: str) -> Tuple[List[str], List[str]]:
     for number, cell in _table_rows(markdown):
         match = re.fullmatch(r"\[`([^`]+)`\]\(([a-z0-9]+(?:-[a-z0-9]+)*)\.md\)", cell)
         if match is None or match.group(1) != match.group(2):
-            errors.append(f"row {number}: first cell must be one sibling card link: {cell!r}")
+            errors.append(f"line {number}: first cell must be one sibling card link: {cell!r}")
         else:
             ids.append(match.group(2))
     return ids, errors
