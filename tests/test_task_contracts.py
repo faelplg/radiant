@@ -82,7 +82,7 @@ class ContractRuleTests(unittest.TestCase):
         self.refuses(VALID.replace('| `tdd` | EB-03 |', ''), '8. Engineering Check / Practices: empty')
 
     def test_practice_cells(self):
-        for cell in ('tdd', '`tdd`', '[`tdd`](../cards/tdd.md)', '[`tdd`](tdd.md)'):
+        for cell in ('tdd', '`tdd`', '[`tdd`](../cards/tdd.md)', '[`tdd`](tdd.md)', '[`tdd`](../cards:local/tdd.md)'):
             self.assertEqual(self.check(VALID.replace('`tdd`', cell))[1], [])
         for cell in ('', '../tdd', '`bad id`', '[tdd](tdd.md)', '[`tdd`](wrong.md)',
                      '[`tdd`](https://host/tdd.md)', '[`tdd`](/tdd.md)', '[`tdd`](//host/tdd.md)',

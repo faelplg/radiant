@@ -101,7 +101,8 @@ def practice_cell(cell: str) -> str:
     match = re.fullmatch(r"\[`([a-z0-9]+(?:-[a-z0-9]+)*)`\]\(([^\s()]+)\)", cell)
     if match:
         ident, target = match.groups()
-        if (not target.startswith("/") and not re.search(r"[:?#\\]", target)
+        if (not target.startswith("/") and not re.match(r"[A-Za-z][A-Za-z0-9+.-]*:", target)
+                and not re.search(r"[?#]", target)
                 and target.split("/")[-1] == ident + ".md"):
             return ident
         return cell

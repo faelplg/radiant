@@ -136,6 +136,10 @@ class PracticeCardTests(unittest.TestCase):
                      "[`tdd`](/tdd.md)", "[`tdd`](tdd.md#source)", "[`tdd`](tdd.md?q)"):
             self.assertEqual(practice_ids(CONTRACT.replace("`tdd`", cell)), [cell, "solid-srp"])
 
+    def test_relative_link_colon_outside_scheme_is_accepted(self):
+        cell = "[`tdd`](../cards:local/tdd.md)"
+        self.assertEqual(practice_ids(CONTRACT.replace("`tdd`", cell)), ["tdd", "solid-srp"])
+
     def test_table_cells_preserves_all_cells_and_first_cell_reader(self):
         from practice_cards import table_rows, _table_rows
         text = "A | B | C\n--- | --- | ---\n|| second | third |\n"
