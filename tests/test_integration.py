@@ -73,6 +73,13 @@ class IntegrationTests(unittest.TestCase):
         self.assertIn("engineering_profile", result.stderr)
         self.assertEqual(result.stdout, "")
 
+    def test_demerzel_example_profile_passes(self):
+        self.profile((SOURCE / "docs/engineering-profile.example.md").read_text(encoding="utf-8"))
+        result = self.gate()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue(result.stdout.startswith(f"PASS: Radiant {self.revision};"))
+        self.assertIn("typescript-bun", result.stdout)
+
     def test_profile_accepts_known_pack_and_names_it_after_pass_prefix(self):
         self.profile("- Stack pack: `typescript-bun`\n")
         result = self.gate()
