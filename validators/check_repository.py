@@ -9,6 +9,8 @@ from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
 import radiant_yaml
+from practice_cards import (PRACTICE_ID, baseline_ids, index_ids, practice_ids,
+                            validate_card, validate_sections)
 from dispatch_formats import (CAPABILITIES, extract_units_block, load_requirements,
                               validate_provides, validate_routing, validate_units)
 
@@ -118,10 +120,47 @@ def check_dispatch(errors):
     errors.extend(f"{template}: {message}" for message in validate_units(units, agents, requirements))
 
 
+def check_practices(errors):
+    """Validate the catalog and its shared forms, not consumer contracts."""
+    baseline = baseline_ids((ROOT / "engineering/engineering-baseline.md").read_text(encoding="utf-8"))
+    cards = sorted(path for path in (ROOT / "engineering/practices").glob("*.md")
+                   if path.name != "README.md")
+    stems = {path.stem for path in cards}
+    for path in cards:
+        relative = path.relative_to(ROOT).as_posix()
+        errors.extend(f"{relative}: {message}" for message in
+                      validate_card(path.read_text(encoding="utf-8"), path.stem, baseline))
+    index = "engineering/practices/README.md"
+    ids, messages = index_ids((ROOT / index).read_text(encoding="utf-8"))
+    errors.extend(f"{index}: {message}" for message in messages)
+    seen = set()
+    for ident in ids:
+        if ident in seen:
+            errors.append(f"{index}: repeated practice id: {ident}")
+        seen.add(ident)
+    for ident in sorted(stems - set(ids)):
+        errors.append(f"{index}: card is not indexed: {ident}")
+    for ident in sorted(set(ids) - stems):
+        errors.append(f"{index}: indexed card is missing: {ident}")
+    form = "templates/practice-card.md"
+    errors.extend(f"{form}: {message}" for message in
+                  validate_sections((ROOT / form).read_text(encoding="utf-8")))
+    contract = "templates/task-contract.md"
+    examples = practice_ids((ROOT / contract).read_text(encoding="utf-8"))
+    if not examples:
+        errors.append(f"{contract}: Practices example must name at least one practice")
+    for ident in examples:
+        if not PRACTICE_ID.fullmatch(ident):
+            errors.append(f"{contract}: invalid practice id: {ident}")
+        elif ident not in stems:
+            errors.append(f"{contract}: unknown practice id: {ident}")
+
+
 def check():
     errors = []
     check_delegation(errors)
     check_dispatch(errors)
+    check_practices(errors)
     link_count = 0
     documents = markdown_documents()
     for source in documents:

@@ -47,6 +47,51 @@ class RepositoryCheckTests(RepositoryFixture):
         result = self.check()
         self.assertEqual(result.returncode, 0, result.stderr)
 
+    def assert_practice_failure(self, relative, message):
+        result = self.check()
+        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+        self.assertIn(relative, result.stderr)
+        self.assertIn(message, result.stderr)
+
+    def test_practice_card_missing_section_fails(self):
+        relative = "engineering/practices/tdd.md"
+        path = self.root / relative
+        path.write_text(path.read_text().replace("## Verification", "Verification"))
+        self.assert_practice_failure(relative, "sections must occur exactly once")
+
+    def test_practice_card_not_indexed_fails(self):
+        text = (self.root / "engineering/practices/tdd.md").read_text()
+        (self.root / "engineering/practices/new-practice.md").write_text(text.replace("`tdd`", "`new-practice`"))
+        self.assert_practice_failure("engineering/practices/README.md", "card is not indexed: new-practice")
+
+    def test_indexed_practice_without_card_fails(self):
+        (self.root / "engineering/practices/adr.md").unlink()
+        self.assert_practice_failure("engineering/practices/README.md", "indexed card is missing: adr")
+
+    def test_repeated_index_row_fails(self):
+        path = self.root / "engineering/practices/README.md"
+        text = path.read_text()
+        row = next(line for line in text.splitlines() if line.startswith("| [`tdd`]"))
+        path.write_text(text + row + "\n")
+        self.assert_practice_failure("engineering/practices/README.md", "repeated practice id: tdd")
+
+    def test_malformed_index_row_fails(self):
+        path = self.root / "engineering/practices/README.md"
+        path.write_text(path.read_text().replace("[`tdd`](tdd.md)", "tdd"))
+        self.assert_practice_failure("engineering/practices/README.md", "first cell must be one sibling card link")
+
+    def test_practice_template_missing_section_fails(self):
+        relative = "templates/practice-card.md"
+        path = self.root / relative
+        path.write_text(path.read_text().replace("## Source", "Source"))
+        self.assert_practice_failure(relative, "sections must occur exactly once")
+
+    def test_contract_template_cites_unknown_practice_fails(self):
+        relative = "templates/task-contract.md"
+        path = self.root / relative
+        path.write_text(path.read_text().replace("`test-strategy`", "`no-such-practice`"))
+        self.assert_practice_failure(relative, "unknown practice id: no-such-practice")
+
     def test_adapter_missing_a_capability_fails(self):
         path = self.root / "adapters/codex/capabilities.json"
         data = json.loads(path.read_text(encoding="utf-8"))
