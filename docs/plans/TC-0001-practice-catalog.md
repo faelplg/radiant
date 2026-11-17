@@ -220,7 +220,7 @@ The task can only be declared `DONE` when:
 - [x] `python3 validators/check_repository.py` checks card structure, and a card missing a section makes it exit 1 with the card's path (issue #32);
 - [x] `templates/adr.md` exists and is indexed (issue #32);
 - [x] section 8 of `templates/task-contract.md` cites practice ids from the catalog, and the validator fails when the example cites an unknown id (issue #32);
-- [ ] all applicable checks in section 11 pass; independent critique is pending;
+- [ ] all applicable checks in section 11 pass;
 - [x] there was no change outside the Allowed scope;
 - [x] relevant limitations are recorded;
 - [x] the final evidence was read, not just presumed from the exit code.
@@ -267,12 +267,16 @@ The agent may not, without HOLD:
 
 ### Status
 
-Build return: `DONE`. Contract state: `VERIFY`, awaiting the independent
-critique required by section 11. This report is not acceptance of the
-contract. No section 13 HOLD or section 14 FAIL condition was triggered.
-The owner activates the next stage through the orchestrator.
+Build return: `DONE`. Contract state: `VERIFY`. The owner supplied the
+independent critique result, `APPROVE WITH CHANGES`, from Claude Opus 5.5 high
+acting as radiant-verifier. Items 1-9 are fixed below; the orchestrator still
+owns assessment of the corrections and acceptance. No section 13 HOLD or
+section 14 FAIL condition was triggered.
 
 ### Changed
+
+Initial Build snapshot: `a047d3a`. The following line references and initial
+verification evidence describe that snapshot; review corrections follow below.
 
 - `4b6782b`: activation records `IN_PROGRESS` and entry `a12d8d0` in the header.
 - `9379f9f`, `ac7678f`, `fc62558`, `c827fc4`:
@@ -424,8 +428,8 @@ confirms Nathen Harvey, the guide title, `date: 2024-03-29` and
 `updated: 2026-01-05`. The card uses the current five metric names and gives
 older names as aliases, narrowing recovery to failed deployments.
 
-No planned bibliographic source was omitted. An optional archived ISP article
-could not be retrieved and was not cited; the ISP card uses the confirmed
+The initial Build omitted no planned bibliographic source. An optional
+archived ISP article could not be retrieved and was not cited; the ISP card uses the confirmed
 Martin 2002 book. No card was cut and no Source section is empty.
 
 ### Engineering notes
@@ -442,13 +446,68 @@ Martin 2002 book. No card was cut and no Source section is empty.
 
 ### Remaining limitations
 
-- Independent critique is pending and must be launched and collected by the
-  orchestrator. The contract remains `VERIFY`; this Build does not accept it.
-- Bibliographic confirmation is not a full-text reading of the printed books
-  or the DORA report. Primary online articles provide directly inspected
-  support where available.
-- No push, PR, publication, independent critique, Constitution edit or change
-  to `faelplg/design-systems` was performed.
+- Independent critique returned `APPROVE WITH CHANGES`; assessment of these
+  corrections remains with the orchestrator. The contract stays `VERIFY`.
+- Bibliographic confirmation is not a full-text reading of the printed books.
+  The unread DORA report citation was removed after critique; the card retains
+  Accelerate and the inspected Harvey guide.
+- The Build performed no push, PR, publication, independent critique,
+  Constitution edit or change to `faelplg/design-systems`. The critique result
+  above is supplied by the owner, not independently reproduced by the Build.
+
+### Independent critique corrections
+
+The owner authorized items 1-9 on 2026-11-17, within the existing Allowed
+scope. Applied using radiant-cycle 0.1.5 in Build mode, starting at `a047d3a`.
+
+| Items | Correction | Commit |
+| --- | --- | --- |
+| 1-2 | Report each missing, repeated or unknown heading, and actual order for an ordering error. Tests require the specific missing section and reject false missing claims for other sections. Repository tests require the new specific diagnostics. | `0c7ff03` |
+| 6-7 | Call the original file position `line N:` and assert exact `line 3:` and `line 6:` prefixes. | `0c7ff03` |
+| 4 | Pass `encoding="utf-8"` to every read/write in the seven repository tests. | `9b4c731` |
+| 3 | Drop the unread DORA 2025 report citation; retain Accelerate and Harvey's inspected public guide. | `e3dc3b1` |
+| 5 | Name Radiant's history explicitly in the semantic-versioning card. | `e3dc3b1` |
+| 8 | Rewrap the affected verification paragraph to its existing width. | `e3dc3b1` |
+| 9 | Restore the original section 12 criterion wording; keep review status here in section 16. | This report update |
+
+Test-first evidence: before changing the validator, the strengthened unit and
+repository tests ran 44 tests with 20 failing assertions/subtests. Failures
+covered all five missing headings, repeated/unknown/order diagnostics, exact
+line prefixes and both repository section diagnostics. After the fix, all
+44 focused tests passed.
+
+After committing the diagnostic fix, seven mutations each failed their
+intended regression test: suppress missing, falsely report every section as
+missing, suppress repeated, suppress unknown, suppress out-of-order, and
+revert `line` to `row` for each of the two line-number tests. After every
+restoration, the 44-test focused suite passed. No mutation remains.
+This stronger evidence supersedes the initial missing-section assertion's
+claim to distinguish which heading is absent; the reviewer correctly found
+that the old assertion only checked a name always present in the generic list.
+
+Final correction checks:
+
+```text
+python3 validators/check_repository.py
+  PASS: 57 documents; 314 local links; exit 0.
+python3 -m unittest discover -s tests -v
+  110 tests PASS; exit 0.
+git diff --check a12d8d0..HEAD
+  No output; exit 0.
+git status --porcelain
+  No output after the report commit.
+```
+
+Note for #34, with no reader code change in this correction: `practice_ids`
+returns a linked first cell as written, for example:
+
+```markdown
+[`tdd`](.../tdd.md)
+```
+
+The #34 specification should either accept that linked form or state that
+ids must be bare backticks. The current template uses bare backticks, and
+consumer-contract validation remains outside TC-0001.
 
 ### Learn Back candidate
 
