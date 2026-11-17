@@ -3,7 +3,7 @@
 **Contract ID:** `TC-0001`\
 **Project:** `radiant`\
 **Iteration:** `Practices milestone, issue #32`\
-**Status:** `VERIFY`\
+**Status:** `DONE`\
 **Owner:** `Fael (human); Build by an authorized agent`\
 **Risk tier:** `2` - the id scheme and the section 8 format become the base of #33 and #34 and of every consumer contract that cites a practice\
 **Capability:** `default`\
@@ -220,7 +220,7 @@ The task can only be declared `DONE` when:
 - [x] `python3 validators/check_repository.py` checks card structure, and a card missing a section makes it exit 1 with the card's path (issue #32);
 - [x] `templates/adr.md` exists and is indexed (issue #32);
 - [x] section 8 of `templates/task-contract.md` cites practice ids from the catalog, and the validator fails when the example cites an unknown id (issue #32);
-- [ ] all applicable checks in section 11 pass;
+- [x] all applicable checks in section 11 pass;
 - [x] there was no change outside the Allowed scope;
 - [x] relevant limitations are recorded;
 - [x] the final evidence was read, not just presumed from the exit code.
@@ -267,11 +267,14 @@ The agent may not, without HOLD:
 
 ### Status
 
-Build return: `DONE`. Contract state: `VERIFY`. The owner supplied the
-independent critique result, `APPROVE WITH CHANGES`, from Claude Opus 5.5 high
-acting as radiant-verifier. Items 1-9 are fixed below; the orchestrator still
-owns assessment of the corrections and acceptance. No section 13 HOLD or
-section 14 FAIL condition was triggered.
+`DONE`. Closed under issue #46 after PR #44 merged as
+`87d92456f57131b2131fe084a521f7635d183276`. The independent critique
+(Claude Opus 5.5 high, acting as radiant-verifier) returned
+`APPROVE WITH CHANGES`; all findings were applied as recorded below.
+The Copilot review's full entry SHA finding was fixed. Its table-parsing
+comment was declined because GFM continues tables. The section 16 evidence
+supports all section 12 acceptance criteria. No section 13 HOLD or section 14
+FAIL condition was triggered.
 
 ### Changed
 
@@ -447,8 +450,9 @@ Martin 2002 book. No card was cut and no Source section is empty.
 
 ### Remaining limitations
 
-- Independent critique returned `APPROVE WITH CHANGES`; assessment of these
-  corrections remains with the orchestrator. The contract stays `VERIFY`.
+- At Build handoff, independent critique returned `APPROVE WITH CHANGES`;
+  assessment of the corrections remained with the orchestrator and the
+  contract stayed `VERIFY`. The closure above supersedes that handoff state.
 - Bibliographic confirmation is not a full-text reading of the printed books.
   The unread DORA report citation was removed after critique; the card retains
   Accelerate and the inspected Harvey guide.
