@@ -13,13 +13,7 @@ consumer for distribution to other projects.
 - [design-spec.md](design-spec.md): structure of the experience, states, flows,
   accessibility and verification criteria.
 - [task-contract.md](task-contract.md): bounded delegation; use the
-  [convention](../contracts/README.md). Historical gap in `docs/plans/`:
-  [TC-0001-practice-catalog.md](../docs/plans/TC-0001-practice-catalog.md)
-  and [TC-0002-lifecycle-map.md](../docs/plans/TC-0002-lifecycle-map.md)
-  predate `# 18. Owner decisions` and remain without that section as
-  historical contracts;
-  [TC-0003-engineering-profile.md](../docs/plans/TC-0003-engineering-profile.md)
-  records its owner decisions under `## Owner decisions (2026-11-17)`.
+  [convention](../contracts/README.md).
 - [spec.md](spec.md): concepts, behavior, interfaces and observable acceptance.
 - [engineering-profile.md](engineering-profile.md): project-specific engineering
   decisions and stack pack overrides; the filled Profile stays in the consumer.

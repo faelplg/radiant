@@ -1,11 +1,11 @@
 # Radiant - Task Contract Template
 
-**Version:** 0.3\
+**Version:** 0.4\
 **Status:** Operational template\
 **Base:** Radiant Project Generation System v0.2 + Radiant Engineering Baseline v0.1 + engineering practice catalog
 
 > Use this template for relevant agentic implementation work.\
-> Remove sections that are clearly `N/A`.\
+> Remove sections that are clearly `N/A`, except `# 18. Owner decisions`.\
 > The contract must stay bounded.
 
 ---
@@ -382,9 +382,12 @@ return to the orchestrator.
 
 Record each decision the owner makes during the contract. Keep this section
 even when empty (`None.`); never remove it, so a validator can require it.
+Contracts written against earlier template versions (`0.3` and earlier) are
+exempt from requiring this section.
 
-Only the owner's own words count, never an agent's report of them.
+The source must be the owner's own message, never an agent's report of it;
+the entry may quote or faithfully summarize that message.
 
 For each decision, record:
 
-1. **Number and date (`YYYY-MM-DD`):** `[decision in the owner's words or a faithful summary]`. **Contract impact:** `[which section, scope boundary, or FAIL condition it narrows or clarifies]`.
+1. **`[YYYY-MM-DD]`:** `[decision in the owner's words or a faithful summary]`. **Contract impact:** `[which section, scope boundary, or FAIL condition it narrows or clarifies]`.
