@@ -3,7 +3,9 @@
 The SDLC (software development lifecycle) and PDLC (product development
 lifecycle) phase lists below are a working model for this map, not a
 standard. The Radiant cycle is the process; this map shows where each
-phase's evidence lives, without requiring a document per phase.
+phase's evidence lives, without requiring a document per phase. For the
+step-by-step GitHub workflow from issue to cleanup, see the
+[GitHub delivery flow](delivery-flow.md).
 
 ## SDLC
 

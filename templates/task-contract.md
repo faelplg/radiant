@@ -1,11 +1,11 @@
 # Radiant - Task Contract Template
 
-**Version:** 0.3\
+**Version:** 0.4\
 **Status:** Operational template\
 **Base:** Radiant Project Generation System v0.2 + Radiant Engineering Baseline v0.1 + engineering practice catalog
 
 > Use this template for relevant agentic implementation work.\
-> Remove sections that are clearly `N/A`.\
+> Remove sections that are clearly `N/A`, except `# 18. Owner decisions`.\
 > The contract must stay bounded.
 
 ---
@@ -13,6 +13,7 @@
 # Radiant Task Contract - [Project] - [Iteration / Task]
 
 **Contract ID:** `[id]`\
+**Template version:** `0.4`\
 **Project:** `[project]`\
 **Iteration:** `[iteration]`\
 **Status:** `READY | HOLD | IN_PROGRESS | VERIFY | DONE | FAIL`\
@@ -377,3 +378,17 @@ return to the orchestrator.
 # 17. Completion rule
 
 > **Do not declare DONE because the code looks right. Declare DONE only when the observable criteria, the applicable engineering and the verification evidence converge.**
+
+# 18. Owner decisions
+
+Record each decision the owner makes during the contract. Keep this section
+even when empty (`None.`); never remove it, so a validator can require it.
+A contract without a `Template version` field, or with `Template version`
+`0.3` or earlier, is exempt from requiring this section.
+
+The source must be the owner's own message, never an agent's report of it;
+the entry may quote or faithfully summarize that message.
+
+For each decision, record:
+
+1. **`[YYYY-MM-DD]`:** `[decision in the owner's words or a faithful summary]`. **Contract impact:** `[which section, scope boundary, or FAIL condition it narrows or clarifies]`.

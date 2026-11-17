@@ -36,7 +36,17 @@ useful.
 The [template](../templates/task-contract.md) captures the delegation. Use the
 [revision policy](../docs/integration.md) to pin which Radiant guides it.
 Record the procedure actually applied in the evidence, with version and
-commit/digest. Shared updates do not rewrite past execution.
+commit/digest. Shared updates do not rewrite past execution. A contract without
+a `Template version` field, or with `Template version` `0.3` or earlier, is
+exempt from requiring `# 18. Owner decisions`. In `docs/plans/`:
+[TC-0001-practice-catalog.md](../docs/plans/TC-0001-practice-catalog.md)
+predates `# 18. Owner decisions` and remains without that section as a
+historical contract;
+[TC-0002-lifecycle-map.md](../docs/plans/TC-0002-lifecycle-map.md) also
+predates `# 18. Owner decisions`, though it records an owner decision dated
+`2026-11-16` in its activation preamble;
+[TC-0003-engineering-profile.md](../docs/plans/TC-0003-engineering-profile.md)
+records its owner decisions under `## Owner decisions (2026-11-17)`.
 
 Verification and learning reports point to the contract's ID/path, without
 copying its body. Close the contract and update `ACTIVE.md` when the
