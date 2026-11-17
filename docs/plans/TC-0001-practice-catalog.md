@@ -3,13 +3,13 @@
 **Contract ID:** `TC-0001`\
 **Project:** `radiant`\
 **Iteration:** `Practices milestone, issue #32`\
-**Status:** `READY`\
+**Status:** `IN_PROGRESS`\
 **Owner:** `Fael (human); Build by an authorized agent`\
 **Risk tier:** `2` - the id scheme and the section 8 format become the base of #33 and #34 and of every consumer contract that cites a practice\
 **Capability:** `default`\
 **Engineering Baseline:** `Radiant Engineering Baseline v0.1`\
 **Engineering Profile:** `none`\
-**Entry commit:** set at activation: the `main` commit the Build branches from\
+**Entry commit:** `a12d8d0`\
 **Plan:** [Lifecycle map and practice catalog](2026-11-16-lifecycle-and-practices.md), tasks 1 to 5
 
 ## 1. Objective
