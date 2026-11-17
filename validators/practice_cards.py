@@ -67,8 +67,8 @@ def validate_card(text: str, stem: str, baseline: Set[str]) -> List[str]:
     return errors
 
 
-def _table_rows(markdown: str):
-    """Yield every data row, with its original line number and first cell."""
+def table_rows(markdown: str):
+    """Yield every data row with its original line number and all cells."""
     lines = _prose(markdown).splitlines()
     in_table = False
     for number, line in enumerate(lines, 1):
@@ -82,7 +82,32 @@ def _table_rows(markdown: str):
             row = line.strip()
             if row.startswith("|"):
                 row = row[1:]
-            yield number, row.split("|", 1)[0].strip()
+            if row.endswith("|"):
+                row = row[:-1]
+            yield number, [cell.strip() for cell in row.split("|")]
+
+
+def _table_rows(markdown: str):
+    """Keep the first-cell reader used by card and index validation."""
+    for number, cells in table_rows(markdown):
+        yield number, cells[0]
+
+
+def practice_cell(cell: str) -> str:
+    """Read a practice id or preserve an invalid cell for diagnostics.
+
+    Relative link targets are compared as text, never opened.
+    """
+    match = re.fullmatch(r"\[`([a-z0-9]+(?:-[a-z0-9]+)*)`\]\(([^\s()]+)\)", cell)
+    if match:
+        ident, target = match.groups()
+        if (not target.startswith("/") and not re.match(r"[A-Za-z][A-Za-z0-9+.-]*:", target)
+                and not re.search(r"[?#]", target)
+                and target.split("/")[-1] == ident + ".md"):
+            return ident
+        return cell
+    return (cell[1:-1] if len(cell) >= 2 and cell.startswith("`")
+            and cell.endswith("`") else cell)
 
 
 def practice_ids(markdown: str) -> List[str]:
@@ -94,8 +119,7 @@ def practice_ids(markdown: str) -> List[str]:
     end = re.search(r"(?m)^#{1,3} ", body)
     if end:
         body = body[:end.start()]
-    return [cell[1:-1] if len(cell) >= 2 and cell.startswith("`") and cell.endswith("`")
-            else cell for _, cell in _table_rows(body)]
+    return [practice_cell(cell) for _, cell in _table_rows(body)]
 
 
 def index_ids(markdown: str) -> Tuple[List[str], List[str]]:

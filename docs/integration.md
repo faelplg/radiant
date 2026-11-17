@@ -180,6 +180,10 @@ When deciding:
   the kind of piece chooses the surface and, with it, the context cost. A
   fragment rendered into `AGENTS.md` goes through the same always-loaded test.
 
+Consumers may opt into the [contract check](../validators/README.md) with
+`python3 <radiant-root>/validators/check_contract.py <contract|-> [--profile <path>]`
+from their pinned checkout; it does not change the pin or dispatch gates.
+
 ## No silent update
 
 Before loading the Constitution and capabilities for a consumer, check:

@@ -53,6 +53,9 @@ copying its body. Close the contract and update `ACTIVE.md` when the
 completion is supported. Do not create retroactive contracts to fabricate
 compliance.
 
+Validate an instance with the opt-in [contract check](../validators/README.md):
+`python3 <radiant-root>/validators/check_contract.py <contract|-> [--profile <path>]`.
+
 ## Execution units
 
 A contract may split the work into units, in a ` ```yaml radiant-units ` block

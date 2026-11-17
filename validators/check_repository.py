@@ -9,6 +9,7 @@ from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
 import radiant_yaml
+from task_contracts import unfenced, validate_contract, version_field
 from practice_cards import (PRACTICE_ID, baseline_ids, index_ids, practice_ids,
                             validate_card, validate_sections)
 from dispatch_formats import (CAPABILITIES, extract_units_block, load_requirements,
@@ -156,11 +157,24 @@ def check_practices(errors):
             errors.append(f"{contract}: unknown practice id: {ident}")
 
 
+def check_contracts(errors):
+    """Apply the opt-in contract rules to Radiant's own contract instances."""
+    baseline = baseline_ids((ROOT / "engineering/engineering-baseline.md").read_text(encoding="utf-8"))
+    catalog = {path.stem for path in (ROOT / "engineering/practices").glob("*.md")
+               if path.name != "README.md"}
+    latest = version_field(unfenced((ROOT / "templates/task-contract.md").read_text(encoding="utf-8")), "Version")
+    for path in sorted((ROOT / "docs/plans").glob("TC-[0-9][0-9][0-9][0-9]-*.md")):
+        _, messages = validate_contract(path.read_text(encoding="utf-8"), baseline, catalog, latest)
+        relative = path.relative_to(ROOT).as_posix()
+        errors.extend(f"{relative}: {message}" for message in messages)
+
+
 def check():
     errors = []
     check_delegation(errors)
     check_dispatch(errors)
     check_practices(errors)
+    check_contracts(errors)
     link_count = 0
     documents = markdown_documents()
     for source in documents:

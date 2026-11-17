@@ -4,13 +4,13 @@
 **Template version:** `0.4`\
 **Project:** `radiant`\
 **Iteration:** `Practices milestone, issue #34`\
-**Status:** `READY` - owner decisions recorded in section 18; the Build still needs the owner's go\
+**Status:** `DONE` - accepted after independent critique and orchestrator readback on 2026-11-17\
 **Owner:** `Fael (human); Build by an authorized agent`\
 **Risk tier:** `2` - the check joins `check_repository.py`, the CI gate of every Radiant change, and adds a command that consumers reach through their pin\
 **Capability:** `default`\
 **Engineering Baseline:** `Radiant Engineering Baseline v0.1`\
 **Engineering Profile:** `none`\
-**Entry commit:** recorded at activation, from `git rev-parse HEAD` before any change\
+**Entry commit:** `92bcf449ee538476748770edaac8757835650451`\
 **Tracking:** [issue #34](https://github.com/faelplg/radiant/issues/34), sub-issue of epic [#30](https://github.com/faelplg/radiant/issues/30); [#61](https://github.com/faelplg/radiant/issues/61), which blocked it, is closed
 
 Routing: the Build runs as `radiant-dev` at `standard`, the build tier, on
@@ -19,6 +19,10 @@ the Codex harness. The independent critique runs as `radiant-verifier` at
 IDs go only in the provenance lines of the Completion report, as
 [radiant-delegation](../../skills/radiant-delegation/SKILL.md#provenance)
 requires.
+
+Activation: the owner authorized Build on 2026-11-17 at 15:04 BRT: "Merge
+feito, pode seguir." ("Merged, you may proceed."). No active-contract pointer
+is present in this repository; this activation records the governing contract.
 
 ## 1. Objective
 
@@ -60,6 +64,11 @@ requires.
   instead of loosening a rule silently or editing a `DONE` contract.
 
 ## 3. Inputs
+
+Consumer probe revisions fixed at activation:
+
+- `faelplg/demerzel`: `8edd3b9d4028dc8fb8ad8a9e6ad9718e75bdaac0`.
+- `faelplg/aikm`: `a2cfd1bf6f415521567d0e48d8eebcc79a3e611d`.
 
 The agent may assume as input:
 
@@ -487,15 +496,15 @@ After execution:
 
 The task can only be declared `DONE` when:
 
-- [ ] `check_contract.py` refuses a contract with an empty Engineering Check, one with no acceptance criteria and one citing a practice id outside the catalog and the Profile, each with an error naming the section (issue #34);
-- [ ] tests cover the pass and fail case of every rule in section 7 (issue #34);
-- [ ] TC-0001, TC-0002, TC-0003 and this contract pass `check_repository.py` and `check_contract.py` unchanged, or the Build stopped on HOLD with the failure documented (issue #34);
-- [ ] a contract at `Template version` `0.4` without `18. Owner decisions` is refused, and one without the field is not (issue #61);
-- [ ] `check_project.py` and `check_dispatch.py` outputs are unchanged at the end;
-- [ ] all applicable checks in section 11 pass;
-- [ ] there was no change outside the Allowed scope;
-- [ ] relevant limitations are recorded;
-- [ ] the final evidence was read, not just presumed from the exit code.
+- [x] `check_contract.py` refuses a contract with an empty Engineering Check, one with no acceptance criteria and one citing a practice id outside the catalog and the Profile, each with an error naming the section (issue #34);
+- [x] tests cover the pass and fail case of every rule in section 7 (issue #34);
+- [x] TC-0001, TC-0002, TC-0003 and this contract pass `check_repository.py` and `check_contract.py` unchanged, or the Build stopped on HOLD with the failure documented (issue #34);
+- [x] a contract at `Template version` `0.4` without `18. Owner decisions` is refused, and one without the field is not (issue #61);
+- [x] `check_project.py` and `check_dispatch.py` outputs are unchanged at the end;
+- [x] all applicable checks in section 11 pass;
+- [x] there was no change outside the Allowed scope;
+- [x] relevant limitations are recorded;
+- [x] the final evidence was read, not just presumed from the exit code.
 
 # 13. HOLD conditions
 
@@ -539,10 +548,228 @@ The agent may not, without HOLD:
 
 # 16. Completion report
 
-To be filled by the Build, in the template's format: status, changed paths
-with commits and line references, verification evidence with the failing and
-mutation runs, engineering notes, remaining limitations, Learn Back candidate
-and provenance.
+### Status
+
+`DONE`. The owner reported the completed independent critique and
+orchestrator readback on 2026-11-17 and authorized acceptance and closure.
+The Build returned with the contract `ACTIVE`; this acceptance closes it.
+No active-contract pointer exists in this repository, so none needs clearing.
+No HOLD condition triggered. No network, push, PR, issue creation or consumer
+edit was performed.
+
+### Changed
+
+Line references below refer to the indicated commit's files:
+
+| Commit | Paths and evidence |
+| --- | --- |
+| `e7a2780` | `docs/plans/TC-0004-practice-validator.md:7`: activation, entry commit, authorization and pinned consumer revisions; no active pointer exists in this repository |
+| `2adaba3` | `validators/task_contracts.py:19`: fence and section readers; `:76`: Engineering Check and practices; `:125`: version, acceptance and owner decisions; `tests/test_task_contracts.py:47`: rule tests; `validators/practice_cards.py:70`: shared all-cell reader preserving `_table_rows`; `:96`: practice cells; `tests/test_practice_cards.py:133`: new shared-reader tests, with all existing tests unchanged |
+| `dd6803a` | `validators/check_contract.py:19`: read-only input and CLI; `tests/test_check_contract.py:32`: real command tests |
+| `1ec1295` | `validators/check_repository.py:160`: separate contract gate and path-prefixed errors; `tests/test_repository.py:95`: real repository command tests |
+| `be333ed` | `validators/practice_cards.py:104`, `tests/test_practice_cards.py:139`, `tests/test_task_contracts.py:85`: distinguish a URL scheme from a colon inside a relative link path |
+| `b6f2af4` | `validators/README.md:34`, `docs/verification.md:34`, `docs/integration.md:183`, `contracts/README.md:56`, `engineering/practices/README.md:9`: command, rules, output and opt-in pointers |
+
+The separate `be333ed` increment corrects an over-restriction found during
+readback: `../cards:local/tdd.md` has no URL scheme and is allowed by owner
+decision 1. It adds no rule or output field and changes only authorized shared
+code and tests. This is the one extra implementation commit beyond section 5's
+four-step sequence.
+
+### Verification evidence
+
+All commands ran locally with no network. Ephemeral detailed logs were kept
+under `/tmp/tc-0004-evidence`; the evidence needed for handoff is recorded here.
+
+Test-first runs, before each implementation:
+
+| Command (`PYTHONDONTWRITEBYTECODE=1` prefix) | Observed failing-before result |
+| --- | --- |
+| `python3 -m unittest discover -s tests -p test_task_contracts.py` | Exit 1, `ModuleNotFoundError: No module named 'task_contracts'`; this proves the import boundary, not each rule |
+| `python3 -m unittest discover -s tests -p test_practice_cards.py` | Exit 1, 26 tests: linked-cell assertion failed and `table_rows` import failed; the 24 existing tests passed |
+| `python3 -m unittest discover -s tests -p test_check_contract.py` | Exit 1, all 7 tests failed because the command file did not exist; the usage test also requires argparse's usage text |
+| `python3 -m unittest discover -s tests -p test_repository.py` | Exit 1, 23 tests: two new refusal tests failed because invalid contracts returned PASS; 21 other tests passed |
+| `python3 -m unittest discover -s tests -p test_practice_cards.py` (relative-colon increment) | Exit 1, 27 tests: `test_relative_link_colon_outside_scheme_is_accepted` failed because the link cell stayed unread; 26 other tests passed |
+
+After staging each increment, `check_repository.py`, the full unittest suite,
+`git diff --check` and `git diff --cached --check` passed before committing:
+143 tests for rules, 150 for the command, 153 for the repository gate, and
+154 for the relative-link correction and pointers.
+
+Mutation proofs ran only after committing the target file. Each successful
+mutation produced exit 1 and a named assertion failure. Each target was
+restored with `git checkout -- <file>`, then the rule and shared-reader suites
+passed before the next mutation (40 tests initially, 41 after the extra link
+case). No mutation remains in the delivery.
+
+| Disabled or regressed rule | Named test in `ContractRuleTests`, unless qualified |
+| --- | --- |
+| Missing required section | `test_missing_sections` |
+| Repeated section or Practices heading | `test_repeated_sections_and_practices` |
+| Unknown EB id, repeated EB id, invalid status (three separate mutations) | `test_baseline_rows` |
+| No active Engineering Check row | `test_empty_engineering_and_subsection_boundary` |
+| Present but empty Practices table | `test_practices_optional_but_not_empty` |
+| Invalid practice cell | `test_practice_cells` |
+| Unknown practice id, repeated practice id (two separate mutations) | `test_unknown_repeated_and_ordered_practices` |
+| Invalid, catalog-colliding or repeated Profile id (three separate mutations) | `test_profile_ids` |
+| No concrete acceptance criterion | `test_acceptance_checklists_and_normalization` |
+| Empty or placeholder owner decisions | `test_owner_decisions_and_exemption` |
+| Malformed version, unsupported version (two separate mutations) | `test_numeric_versions_and_value_as_written` |
+| String comparison replacing numeric comparison | `test_numeric_versions_and_value_as_written` |
+| Absent-version exemption, old-version exemption (two separate mutations) | `test_owner_decisions_and_exemption` |
+| Fence stripping | `test_fences_ignore_headings_rows_items_and_metadata` |
+| Linked practice cell | `PracticeCardTests.test_practice_ids_reads_linked_cells` |
+| Command content refusal | `ContractCommandTests.test_all_content_errors_exit_1` |
+| Hardcoded supported version instead of the checkout template | `ContractCommandTests.test_checkout_template_controls_supported_version` |
+| Repository contract gate, repository path prefix (two separate mutations) | `RepositoryCheckTests.test_contract_rules_fail_with_each_contract_path` |
+| Rejecting a colon outside a URL scheme | `PracticeCardTests.test_relative_link_colon_outside_scheme_is_accepted` |
+
+There were 27 successful assertion-producing mutation proofs. An initial
+absent-version mutant instead raised `TypeError` while formatting a missing
+version; it was restored and excluded from that count. A replacement mutant
+that incorrectly refuses the absent version produced the required assertion
+failure. The successful absent-version and old-version proofs were then run
+separately.
+
+Direct command runs, all exit 0:
+
+```text
+python3 validators/check_contract.py docs/plans/TC-0001-practice-catalog.md
+{"template_version": null, "practices": ["tdd", "test-strategy"]}
+python3 validators/check_contract.py docs/plans/TC-0002-lifecycle-map.md
+{"template_version": null, "practices": []}
+python3 validators/check_contract.py docs/plans/TC-0003-engineering-profile.md
+{"template_version": null, "practices": ["tdd", "test-strategy"]}
+python3 validators/check_contract.py docs/plans/TC-0004-practice-validator.md
+{"template_version": "0.4", "practices": ["tdd", "test-strategy", "solid-srp"]}
+```
+
+Compatibility: before implementation and at the end,
+`check_dispatch.py units templates/task-contract.md` and
+`check_dispatch.py routing docs/routing.example.json` exited 0. Their saved
+stdout files compared byte for byte with `cmp`, both exit 0.
+`python3 -m unittest discover -s tests -p test_integration.py` passed all 32
+existing pin/project-gate tests at entry and at the end. The two gate files
+and their existing tests have no diff against the entry commit.
+
+Final checks:
+
+```text
+PYTHONDONTWRITEBYTECODE=1 python3 validators/check_repository.py
+PASS: 67 documents; 496 local links. Exit 0.
+python3 -m unittest discover -s tests
+154 tests, OK. Exit 0.
+git diff --check
+Exit 0.
+git diff --cached --check
+Exit 0.
+```
+
+Readback covered the module, command, all changed pointers and error messages.
+The committed path list against the entry, staged/unstaged diff and untracked
+status were checked against section 4. Only the 14 allowed paths changed.
+TC-0001 to TC-0003, templates, adapters, skills and consumer checkouts are
+unchanged.
+
+### Consumer probe
+
+Each consumer's `.radiant.json`, contract listing and contract bodies were
+read exclusively with `git -C <checkout> show <recorded-commit>:<path>` and
+`git -C <checkout> ls-tree -r --name-only <recorded-commit>`. All TC Markdown
+files in those listings were checked through `check_contract.py -` with their
+body on stdin. Both recorded maps have a null Engineering Profile, so no
+`--profile` was supplied. Every result is listed below; no consumer gate was
+changed or adopted.
+
+| Consumer | Recorded commit, also HEAD before and after | `status --porcelain` before and after |
+| --- | --- | --- |
+| `faelplg/demerzel` | `8edd3b9d4028dc8fb8ad8a9e6ad9718e75bdaac0` | Empty, identical |
+| `faelplg/aikm` | `a2cfd1bf6f415521567d0e48d8eebcc79a3e611d` | Empty, identical |
+
+All paths below are under each consumer's `docs/project/contracts/`.
+
+| Consumer file | Exit | Exact JSON stdout |
+| --- | --- | --- |
+| Demerzel `TC-0001-core.md` | 0 | `{"template_version": null, "practices": []}` |
+| Demerzel `TC-0002-herdr-backend.md` | 0 | `{"template_version": null, "practices": []}` |
+| Demerzel `TC-0003-radiant-integration.md` | 0 | `{"template_version": null, "practices": []}` |
+| Demerzel `TC-0004-project-preparation.md` | 0 | `{"template_version": null, "practices": []}` |
+| AIKM `TC-0023-pipeline-skills-three-harnesses.md` | 1 | `{"errors": ["missing section: 8. Engineering Check", "missing section: 12. Acceptance criteria"]}` |
+| AIKM `TC-0024-skills-antigravity.md` | 1 | `{"errors": ["missing section: 8. Engineering Check", "missing section: 12. Acceptance criteria"]}` |
+| AIKM `TC-0025-external-sources.md` | 1 | `{"errors": ["missing section: 8. Engineering Check", "missing section: 12. Acceptance criteria"]}` |
+
+These AIKM results are measured adoption concerns, not a Radiant HOLD:
+owner decisions 5 and 7 keep adoption opt-in and assign any pointer issue to
+the orchestrator. The Build opened no issue.
+
+### Independent critique and orchestrator acceptance
+
+Source: the owner's acceptance instruction of 2026-11-17. The following
+critique and orchestrator results were supplied by the owner; this closing
+session records them without claiming to have launched the critique.
+
+- Independent critique: `VERDICT approve`, no Must-fix and no Should-fix.
+  The critic reran the checks, probed the command with its own contracts,
+  confirmed `check_dispatch.py` and `check_project.py` are unchanged, and
+  reproduced the consumer probe output.
+- Orchestrator readback: `check_repository.py` PASS (67 documents), all
+  154 tests OK, `git diff --check` clean, and `check_contract.py` accepts
+  TC-0001 through TC-0004. The orchestrator accepted the delivery following
+  the independent approval; the owner authorized setting the contract to
+  `DONE` and committing this closure.
+- Closure verification: the three requested checks were rerun for this
+  documentation change: `PYTHONDONTWRITEBYTECODE=1 python3 validators/check_repository.py`
+  PASS (67 documents), `python3 -m unittest discover -s tests` 154 tests OK,
+  and `git diff --check` clean. No implementation file changed in closure.
+
+### Engineering notes
+
+- Standard library only, Python 3.9-compatible syntax and APIs. Text rules
+  have no filesystem access; the CLI reads only explicit inputs and checkout
+  catalog/Baseline/template sources. Link targets never become opened paths.
+- Section lookup and practice parsing are shared between the standalone
+  command and repository gate. The dispatch gate remains independent.
+- Existing shared-reader tests remain unchanged. New fixtures are minimal
+  contracts in tests, independent of the template.
+
+### Remaining limitations
+
+- Independent critique and orchestrator acceptance are complete, as reported
+  by the owner above. The critique transcript and exact invocation were not
+  supplied to this closing session; no invocation or usage metric is invented.
+- Execution used Python 3.14; Python 3.9 was not run in this session. No
+  dependency installation or network access was attempted.
+- Structural checks do not establish whether a criterion is truly observable
+  or a practice is appropriate. Profile card contents and links are not read.
+- AIKM would need its own integrity-preserving adoption decision for the
+  three refusals above. No consumer amendment is authorized by this Build.
+
+### Learn Back candidate
+
+Consumer gate adoption should begin with a pinned read-only probe: these
+results show that historical section numbering can prevent adoption even
+when the existing pin and dispatch gates pass. The consumer owns any amendment;
+the orchestrator owns its pointer issue under decision 7. No shared procedure
+or consumer document was changed for this candidate.
+
+### Provenance
+
+- Build round: `radiant-dev`, `standard`, Codex; adapter-resolved full model
+  ID `gpt-6.1-sol` at entry `92bcf449ee538476748770edaac8757835650451`;
+  Build return `DONE`, contract `ACTIVE`. Effective runtime model confirmation,
+  context/round-volume counters and task duration are not exposed by this
+  session's tool results, so those metrics are absent rather than inferred.
+- First critique attempt: `radiant-verifier`, `deep`, Antigravity CLI,
+  `claude-opus-5-5-high`; stopped on a quota limit before any verdict.
+- Completed critique: `radiant-verifier`, `deep`, Antigravity CLI,
+  `gemini-4-argon-high`; `VERDICT approve`, no Must-fix and no Should-fix.
+  Provenance supplied by the owner. Exact CLI invocation, dispatch identifier,
+  usage counters and duration were not supplied for either critique attempt.
+- Orchestrator readback and acceptance: completed and reported by the owner
+  on 2026-11-17; the orchestrator's harness, model and usage were not supplied.
+- Applied bodies: `radiant-cycle` version `0.1.6` and `radiant-delegation`
+  version `0.2.2`, both read from the entry revision; Conventional Commits
+  skill applied to each commit. No subagent delegation occurred.
 
 # 17. Completion rule
 
