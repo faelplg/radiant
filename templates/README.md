@@ -6,6 +6,7 @@ consumer for distribution to other projects.
 
 - [practice-card.md](practice-card.md): applicability, observable signals and verification of an engineering practice.
 - [adr.md](adr.md): context, options and consequences of a structural decision.
+- [learning-record.md](learning-record.md): outcome, evidence, diagnosis, fix target, change, verification and reuse, with an optional incident section.
 - [project-frame.md](project-frame.md): intent and smallest experiment.
 - [design-frame.md](design-frame.md): framing of the experience before
   implementation.
