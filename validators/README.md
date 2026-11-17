@@ -6,7 +6,9 @@ Requirements: Python 3.9+ and Git. No external packages.
   links/anchors, a single Constitution, Core portability and coherence between
   delegable profiles and each adapter's capability map, requirements and the
   adapters' `provides.json`, the template's units example and the routing
-  example. Read-only.
+  example. It also validates practice cards, the catalog index and the practice
+  ids in the Task Contract template's example, without checking consumer
+  contracts or requiring practice citations. Read-only.
 - `radiant_yaml.py` reads the restricted YAML of `radiant-units` blocks, and
   `dispatch_formats.py` validates units, `provides` and routing rules.
 - `python3 <radiant-root>/validators/check_project.py <project-root>`: checks
