@@ -13,6 +13,7 @@
 # Radiant Task Contract - [Project] - [Iteration / Task]
 
 **Contract ID:** `[id]`\
+**Template version:** `0.4`\
 **Project:** `[project]`\
 **Iteration:** `[iteration]`\
 **Status:** `READY | HOLD | IN_PROGRESS | VERIFY | DONE | FAIL`\
@@ -382,8 +383,8 @@ return to the orchestrator.
 
 Record each decision the owner makes during the contract. Keep this section
 even when empty (`None.`); never remove it, so a validator can require it.
-Contracts written against earlier template versions (`0.3` and earlier) are
-exempt from requiring this section.
+A contract without a `Template version` field, or with `Template version`
+`0.3` or earlier, is exempt from requiring this section.
 
 The source must be the owner's own message, never an agent's report of it;
 the entry may quote or faithfully summarize that message.

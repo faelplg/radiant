@@ -36,9 +36,9 @@ useful.
 The [template](../templates/task-contract.md) captures the delegation. Use the
 [revision policy](../docs/integration.md) to pin which Radiant guides it.
 Record the procedure actually applied in the evidence, with version and
-commit/digest. Shared updates do not rewrite past execution. Contracts written
-against template version `0.3` or earlier are exempt from requiring
-`# 18. Owner decisions`. In `docs/plans/`:
+commit/digest. Shared updates do not rewrite past execution. A contract without
+a `Template version` field, or with `Template version` `0.3` or earlier, is
+exempt from requiring `# 18. Owner decisions`. In `docs/plans/`:
 [TC-0001-practice-catalog.md](../docs/plans/TC-0001-practice-catalog.md)
 predates `# 18. Owner decisions` and remains without that section as a
 historical contract;
