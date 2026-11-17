@@ -30,7 +30,7 @@ class IntegrationTests(unittest.TestCase):
         self.project.mkdir()
         self.root.mkdir()
         # Copy only the shared layers: the consumer must work without anything else.
-        for directory in ("constitution", "docs", "skills", "templates", "adapters", "validators"):
+        for directory in ("constitution", "docs", "skills", "templates", "adapters", "validators", "engineering"):
             shutil.copytree(SOURCE / directory, self.root / directory,
                             ignore=shutil.ignore_patterns("__pycache__"))
         shutil.copy2(SOURCE / ".gitignore", self.root / ".gitignore")
@@ -59,6 +59,88 @@ class IntegrationTests(unittest.TestCase):
         result = self.gate()
         self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
         self.assertIn("HOLD:", result.stderr)
+
+    def profile(self, content):
+        (self.project / "PROFILE.md").write_text(content, encoding="utf-8")
+        self.config["engineering_profile"] = "PROFILE.md"
+        self.write_map()
+
+    def assert_profile_hold(self, content):
+        self.profile(content)
+        result = self.gate()
+        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+        self.assertIn("HOLD:", result.stderr)
+        self.assertIn("engineering_profile", result.stderr)
+        self.assertEqual(result.stdout, "")
+
+    def test_profile_accepts_known_pack_and_names_it_after_pass_prefix(self):
+        self.profile("- Stack pack: `typescript-bun`\n")
+        result = self.gate()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue(result.stdout.startswith(f"PASS: Radiant {self.revision};"))
+        self.assertIn("typescript-bun", result.stdout)
+        self.assertEqual(result.stderr, "")
+
+    def test_profile_without_pack_or_with_none_preserves_output(self):
+        expected = (f"PASS: Radiant {self.revision}; pin and paths checked. "
+                    "Task authorization is separate.\n")
+        for content in ("# Existing Profile\n", "- Stack pack: `none`\n"):
+            with self.subTest(content=content):
+                self.profile(content)
+                result = self.gate()
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual(result.stdout, expected)
+
+    def test_profile_rejects_unknown_pack(self):
+        self.assert_profile_hold("- Stack pack: `no-such-pack`\n")
+
+    def test_profile_rejects_readme_pack(self):
+        self.assert_profile_hold("- Stack pack: `README`\n")
+
+    def test_profile_rejects_lowercase_readme_pack(self):
+        self.assert_profile_hold("- Stack pack: `readme`\n")
+
+    def test_profile_rejects_path_pack(self):
+        self.assert_profile_hold("- Stack pack: `../templates/spec`\n")
+
+    def test_profile_rejects_empty_pack(self):
+        self.assert_profile_hold("- Stack pack: ``\n")
+
+    def test_profile_rejects_unquoted_pack(self):
+        self.assert_profile_hold("- Stack pack: typescript-bun\n")
+
+    def test_profile_rejects_repeated_pack_lines(self):
+        for value in ("typescript-bun", "none"):
+            with self.subTest(value=value):
+                self.assert_profile_hold(f"- Stack pack: `{value}`\n" * 2)
+
+    def test_profile_ignores_fenced_pack_lines(self):
+        for marker in ("```", "~~~~"):
+            with self.subTest(marker=marker):
+                self.profile(f"{marker}text\n- Stack pack: `no-such-pack`\n"
+                             f"{marker}\n- Stack pack: `typescript-bun`\n")
+                result = self.gate()
+                self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_null_profile_does_not_read_unselected_profile(self):
+        (self.project / "PROFILE.md").write_bytes(b"\xff- Stack pack: `no-such-pack`")
+        result = self.gate()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertNotIn("Stack pack", result.stdout)
+
+    def test_checkout_without_stack_index_is_incomplete(self):
+        index = self.root / "engineering/stacks/README.md"
+        index.unlink()
+        # Commit the deletion so the dirty-checkout gate cannot mask the check.
+        self.assertEqual(run("git", "add", ".", cwd=self.root).returncode, 0)
+        result = run("git", "-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid",
+                     "-c", "commit.gpgsign=false", "commit", "-qm", "test: remove index", cwd=self.root)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.config["radiant_revision"] = run("git", "rev-parse", "HEAD", cwd=self.root).stdout.strip()
+        self.write_map()
+        result = self.gate()
+        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+        self.assertIn("HOLD: incomplete Radiant checkout", result.stderr)
 
     def test_new_project_then_local_state_without_copying_core(self):
         self.assertEqual(self.gate().returncode, 0)
