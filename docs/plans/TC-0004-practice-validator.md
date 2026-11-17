@@ -4,13 +4,13 @@
 **Template version:** `0.4`\
 **Project:** `radiant`\
 **Iteration:** `Practices milestone, issue #34`\
-**Status:** `READY` - owner decisions recorded in section 18; the Build still needs the owner's go\
+**Status:** `ACTIVE` - Build authorized on 2026-11-17 at 15:04 BRT\
 **Owner:** `Fael (human); Build by an authorized agent`\
 **Risk tier:** `2` - the check joins `check_repository.py`, the CI gate of every Radiant change, and adds a command that consumers reach through their pin\
 **Capability:** `default`\
 **Engineering Baseline:** `Radiant Engineering Baseline v0.1`\
 **Engineering Profile:** `none`\
-**Entry commit:** recorded at activation, from `git rev-parse HEAD` before any change\
+**Entry commit:** `92bcf449ee538476748770edaac8757835650451`\
 **Tracking:** [issue #34](https://github.com/faelplg/radiant/issues/34), sub-issue of epic [#30](https://github.com/faelplg/radiant/issues/30); [#61](https://github.com/faelplg/radiant/issues/61), which blocked it, is closed
 
 Routing: the Build runs as `radiant-dev` at `standard`, the build tier, on
@@ -19,6 +19,10 @@ the Codex harness. The independent critique runs as `radiant-verifier` at
 IDs go only in the provenance lines of the Completion report, as
 [radiant-delegation](../../skills/radiant-delegation/SKILL.md#provenance)
 requires.
+
+Activation: the owner authorized Build on 2026-11-17 at 15:04 BRT: "Merge
+feito, pode seguir." ("Merged, you may proceed."). No active-contract pointer
+is present in this repository; this activation records the governing contract.
 
 ## 1. Objective
 
@@ -60,6 +64,11 @@ requires.
   instead of loosening a rule silently or editing a `DONE` contract.
 
 ## 3. Inputs
+
+Consumer probe revisions fixed at activation:
+
+- `faelplg/demerzel`: `8edd3b9d4028dc8fb8ad8a9e6ad9718e75bdaac0`.
+- `faelplg/aikm`: `a2cfd1bf6f415521567d0e48d8eebcc79a3e611d`.
 
 The agent may assume as input:
 
