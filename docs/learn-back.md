@@ -20,7 +20,7 @@ destinations in the repository.
 | Demonstrated cross-cutting invariant | Candidate for a constitutional amendment |
 
 The originating project keeps evidence and diagnosis. To propose a change in
-Radiant, record in the diff/commit or in a selective record: authorized
+Radiant, record in the diff/commit or in a [selective record](../templates/learning-record.md): authorized
 origin, Radiant commit used, finding, evidence, reusable reach, `fixTarget`,
 change and verification. Do not bring unnecessary private data into the Core.
 

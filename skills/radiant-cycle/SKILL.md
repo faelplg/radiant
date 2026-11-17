@@ -6,7 +6,7 @@ description:
   or resuming a Radiant delivery; a one-off question does not require running
   the whole cycle.
 metadata:
-  version: "0.1.5"
+  version: "0.1.6"
 ---
 
 # Radiant operational cycle
@@ -37,6 +37,8 @@ come from the consumer project's operational map.
    [radiant-maintenance skill](../radiant-maintenance/SKILL.md).
 
 ## Plan and frame
+
+Use the [lifecycle map](../../docs/lifecycle.md) to locate SDLC and PDLC evidence within this cycle.
 
 - Relate the real need to the Frame and look for existing knowledge and
   procedures before producing another body. Separate shared process from

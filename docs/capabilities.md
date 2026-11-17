@@ -5,6 +5,7 @@ This index does not implement behavior. Read only the applicable body.
 | Need                                     | Canonical body                                                                   | Local result in the consumer        |
 | ---------------------------------------- | -------------------------------------------------------------------------------- | ----------------------------------- |
 | Plan, execute, verify and learn          | [radiant-cycle](../skills/radiant-cycle/SKILL.md)                                | Bounded increment and evidence      |
+| Locate lifecycle evidence                | [Lifecycle map](lifecycle.md)                                                    | SDLC and PDLC artifact coverage     |
 | Orchestrate roles and delegate           | [radiant-delegation](../skills/radiant-delegation/SKILL.md)                      | Delegations with evidence and acceptance |
 | Triage maintenance of a consumer         | [radiant-maintenance](../skills/radiant-maintenance/SKILL.md), [report](../templates/maintenance-report.md) | Report with proposals               |
 | Set up the harness                       | [Codex](../adapters/codex/README.md), [Claude Code](../adapters/claude-code/README.md) | User bootstrap and subagents        |
@@ -12,8 +13,8 @@ This index does not implement behavior. Read only the applicable body.
 | Frame the experience                     | [Design Frame](../templates/design-frame.md)                                     | Filled Design Frame                 |
 | Define the experience in detail          | [Design Spec](../templates/design-spec.md)                                       | Implementable Design Spec           |
 | Contract an increment                    | [Convention](../contracts/README.md), [form](../templates/task-contract.md)      | Contract and local pointer          |
-| Choose an engineering practice | [Practice catalog](../engineering/practices/README.md), [card form](../templates/practice-card.md) | Applicable practice and evidence |
-| Record a structural decision | [ADR form](../templates/adr.md) | Decision with context and consequences |
+| Choose an engineering practice           | [Practice catalog](../engineering/practices/README.md), [card form](../templates/practice-card.md) | Applicable practice and evidence    |
+| Record a structural decision             | [ADR form](../templates/adr.md)                                                  | Decision with context and consequences |
 | Map consumer state                       | [Integration](integration.md), [form](../templates/radiant-project.json)         | Paths and Radiant revision          |
 | Verify Radiant                           | [Verification](verification.md), [validators](../validators/README.md)           | Evidence about the change           |
 | Route learning                           | [Learn Back](learn-back.md)                                                      | Fix in the responsible owner        |
