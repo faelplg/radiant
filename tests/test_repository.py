@@ -92,6 +92,36 @@ class RepositoryCheckTests(RepositoryFixture):
         path.write_text(path.read_text(encoding="utf-8").replace("`test-strategy`", "`no-such-practice`"), encoding="utf-8")
         self.assert_practice_failure(relative, "unknown practice id: no-such-practice")
 
+    def test_contract_rules_fail_with_each_contract_path(self):
+        from test_task_contracts import VALID
+        for name in ("TC-9001-one.md", "TC-9002-two.md"):
+            (self.root / "docs/plans" / name).write_text(
+                VALID.replace("`REQUIRED`", "N/A").replace("`tdd`", "unknown")
+                .replace("- [ ] The command refuses invalid input.", ""), encoding="utf-8")
+        result = self.check()
+        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+        for name in ("TC-9001-one.md", "TC-9002-two.md"):
+            for message in ("8. Engineering Check: empty", "unknown practice id: unknown",
+                            "12. Acceptance criteria: empty"):
+                self.assertIn("docs/plans/" + name + ": ", result.stderr)
+                self.assertTrue(any(line.startswith("docs/plans/" + name + ": ")
+                                    and message in line for line in result.stderr.splitlines()), result.stderr)
+
+    def test_contract_version_owner_decisions_and_catalog_only(self):
+        from test_task_contracts import VALID
+        relative = "docs/plans/TC-9003-version.md"
+        path = self.root / relative
+        for text, message in ((VALID.split("# 18.")[0], "missing section: 18. Owner decisions"),
+                              (VALID.replace("`tdd`", "local-test"), "unknown practice id: local-test"),
+                              (VALID.replace("0.4", "0.10"), "Template version: unsupported")):
+            path.write_text(text, encoding="utf-8")
+            self.assert_practice_failure(relative, message)
+
+    def test_contract_glob_excludes_other_markdown(self):
+        for name in ("TC-123-short.md", "TC-abcd-other.md", "notes.md"):
+            (self.root / "docs/plans" / name).write_text("# Notes\n", encoding="utf-8")
+        self.assertEqual(self.check().returncode, 0)
+
     def test_adapter_missing_a_capability_fails(self):
         path = self.root / "adapters/codex/capabilities.json"
         data = json.loads(path.read_text(encoding="utf-8"))
