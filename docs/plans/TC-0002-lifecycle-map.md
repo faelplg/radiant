@@ -3,14 +3,19 @@
 **Contract ID:** `TC-0002`\
 **Project:** `radiant`\
 **Iteration:** `Practices milestone, issue #31`\
-**Status:** `READY`\
+**Status:** `IN_PROGRESS`\
 **Owner:** `Fael (human); Build by an authorized agent`\
 **Risk tier:** `1` - durable documentation and forms, reversible, no code\
 **Capability:** `default`\
 **Engineering Baseline:** `Radiant Engineering Baseline v0.1`\
 **Engineering Profile:** `none`\
-**Entry commit:** set at activation: the `main` commit that contains the merge of TC-0001\
+**Entry commit:** `87d92456f57131b2131fe084a521f7635d183276`\
 **Plan:** [Lifecycle map and practice catalog](2026-11-16-lifecycle-and-practices.md), tasks 6 to 8
+
+Activation authorized by Rafael on 2026-11-17. The entry commit is the local
+`main` merge of TC-0001. The owner decided on 2026-11-16 that the lifecycle
+map is linked from the thesis section 6 and the cycle skill, without a
+Constitution change. This decision supersedes the plan's open question.
 
 ## 1. Objective
 
@@ -102,7 +107,7 @@ Do not create additional artifacts without an observed need.
 
 This task must **not**:
 
-- edit the Constitution, pending the plan's open question;
+- edit the Constitution, per the owner's decision on 2026-11-16;
 - create a release notes form, a deploy checklist form or an incident
   response runbook;
 - create the Spec or Engineering Profile forms (#33);
@@ -192,7 +197,7 @@ The task can only be declared `DONE` when:
 
 - [ ] every SDLC and PDLC phase in the map points to an artifact or is marked out of scope with a reason (issue #31);
 - [ ] release notes and versioning, deploy checklist, incident and postmortem, user validation and outcome metric each have the artifact the plan assigns (issue #31);
-- [ ] the map is linked from the thesis section 6 and the cycle skill (issue #31, without the Constitution unless the owner decides otherwise);
+- [ ] the map is linked from the thesis section 6 and the cycle skill (issue #31; owner decision on 2026-11-16: the Constitution is unchanged);
 - [ ] repository validators pass (issue #31);
 - [ ] all applicable checks in section 11 pass;
 - [ ] there was no change outside the Allowed scope;
