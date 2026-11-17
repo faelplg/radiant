@@ -13,7 +13,7 @@ A published interface has consumers that pin versions.
 ## Does not apply when
 
 No interface is published, or consumers pin commits, as Radiant's do.
-Conventional Commits still applies to this repository's history.
+Conventional Commits still applies to Radiant's history.
 
 ## Violation signals
 

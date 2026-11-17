@@ -35,8 +35,5 @@ people.
 Nicole Forsgren, Jez Humble and Gene Kim, [Accelerate: The Science of Lean
 Software and DevOps](https://itrevolution.com/product/accelerate/) (2018).
 
-DORA, [State of AI-assisted Software
-Development](https://dora.dev/research/2025/dora-report/) (2025).
-
 Nathen Harvey, [DORA's software delivery performance
 metrics](https://dora.dev/guides/dora-metrics/) (2024; updated 2026).
