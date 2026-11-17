@@ -121,9 +121,10 @@ Discarded alternatives:
 | Harness | Who executes the unit? | Session with the role and unit received | Further delegation (rule 7) |
 | AIKM | Which skills, context and MCP does the project have? | Native files per harness | Dispatch or execution state |
 
-1. The orchestrator remains the main session with the human. Demerzel is a
-   tool it calls instead of the native subagent tool, and which the human may
-   also call.
+1. The orchestrator remains the main session with the human. Demerzel is the
+   target tool it will call instead of the native subagent tool, and which the
+   human may also call (today the orchestrator dispatches directly through
+   herdr; see [Amendments](#amendments)).
 2. Demerzel reads the contract and never changes it. It writes only its
    dispatch log. The return is still the Completion report, and acceptance
    stays with the orchestrator and the verifier.
@@ -383,3 +384,7 @@ it fail, following eve's `test-audit` gate.
 - 2026-10-17: [ADR-0003](ADR-0003-demerzel-independent-core.md) supersedes
   the Demerzel row of section 1, confines the dependency on Radiant to an
   integration inside Demerzel and corrects the egress sentence in section 4.
+- 2026-11-17: decision by the owner (Rafael). Today the orchestrator dispatches
+  directly through herdr. Demerzel is the target dispatch path. The switch
+  happens when the criterion in https://github.com/faelplg/demerzel/issues/61
+  is met.
