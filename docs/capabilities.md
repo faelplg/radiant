@@ -13,6 +13,7 @@ This index does not implement behavior. Read only the applicable body.
 | Frame the experience                     | [Design Frame](../templates/design-frame.md)                                     | Filled Design Frame                 |
 | Define the experience in detail          | [Design Spec](../templates/design-spec.md)                                       | Implementable Design Spec           |
 | Contract an increment                    | [Convention](../contracts/README.md), [form](../templates/task-contract.md)      | Contract and local pointer          |
+| Specify behavior and engineering          | [Spec form](../templates/spec.md), [Profile form](../templates/engineering-profile.md), [stack packs](../engineering/stacks/README.md), [example](engineering-profile.example.md) | Spec and Profile with pack selection |
 | Choose an engineering practice           | [Practice catalog](../engineering/practices/README.md), [card form](../templates/practice-card.md) | Applicable practice and evidence    |
 | Record a structural decision             | [ADR form](../templates/adr.md)                                                  | Decision with context and consequences |
 | Map consumer state                       | [Integration](integration.md), [form](../templates/radiant-project.json)         | Paths and Radiant revision          |
@@ -21,9 +22,11 @@ This index does not implement behavior. Read only the applicable body.
 | Dispatch units through a backend         | [radiant-delegation](../skills/radiant-delegation/SKILL.md#backend-dispatch), [routing](routing.md) | Units running on chosen harnesses   |
 | Operate the design layer                 | [Design Layer](design-layer.md)                                                  | Design system inside Radiant        |
 
-Spec and Plan are guided by the skill and by sections 6.3 and 6.5 of the
-[thesis](project-generation-system.md). The design layer now has its own
-canonical body and specific templates, keeping the separation between System
-Design and Experience Design. Future capabilities may come in as skills,
+The [Spec form](../templates/spec.md) and Plan are guided by the skill and
+sections 6.3 and 6.5 of the [thesis](project-generation-system.md); engineering
+constraints use the [Profile form](../templates/engineering-profile.md) and
+its selected [stack pack](../engineering/stacks/README.md). The design layer
+now has its own canonical body and specific templates, keeping the separation
+between System Design and Experience Design. Future capabilities may come in as skills,
 templates, validators or workflows of their own when there is a distinct body
 and a proven need.

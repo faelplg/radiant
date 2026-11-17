@@ -25,13 +25,15 @@ planned in [#29](https://github.com/faelplg/radiant/issues/29).
 | [constitution/CONSTITUTION.md](constitution/CONSTITUTION.md)               | Invariants and precedence                                |
 | [engineering/engineering-baseline.md](engineering/engineering-baseline.md) | Proportional engineering baseline                        |
 | [engineering/practices/](engineering/practices/README.md)                  | Opt-in engineering practices and verification methods    |
+| [engineering/stacks/](engineering/stacks/README.md)                        | Shared stack conventions selected by a Profile            |
+| [Spec form](templates/spec.md), [Profile form](templates/engineering-profile.md), [example](docs/engineering-profile.example.md) | Behavior and project engineering decisions |
 | [docs/lifecycle.md](docs/lifecycle.md)                                     | SDLC and PDLC coverage and evidence                      |
 | [docs/capabilities.md](docs/capabilities.md)                               | Index of available capabilities                          |
 | [docs/design-layer.md](docs/design-layer.md)                               | Radiant's canonical design layer                         |
 | [skills/radiant-cycle/SKILL.md](skills/radiant-cycle/SKILL.md)             | Reusable cycle procedure                                 |
 | [skills/radiant-delegation/SKILL.md](skills/radiant-delegation/SKILL.md)   | Roles, capabilities and delegation                       |
 | [skills/radiant-maintenance/SKILL.md](skills/radiant-maintenance/SKILL.md) | Maintenance triage that only proposes                    |
-| [templates/](templates/README.md)                                          | Forms for Frame, Contract, Design and the project map    |
+| [templates/](templates/README.md)                                          | Forms for Frame, Spec, Profile, Contract, Design and the project map    |
 | [contracts/README.md](contracts/README.md)                                 | Shared contract convention                               |
 | [adapters/codex/](adapters/codex/README.md)                                | Codex bootstrap and subagents                            |
 | [adapters/claude-code/](adapters/claude-code/README.md)                    | Claude Code bootstrap and subagents                      |

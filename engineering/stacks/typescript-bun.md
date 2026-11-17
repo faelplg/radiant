@@ -12,6 +12,10 @@
   [Spec](https://github.com/faelplg/aikm/blob/a2cfd1bf6f415521567d0e48d8eebcc79a3e611d/docs/project/SPEC.md),
   [CI](https://github.com/faelplg/aikm/blob/a2cfd1bf6f415521567d0e48d8eebcc79a3e611d/.github/workflows/check.yml).
 
+Use the [Profile form](../../templates/engineering-profile.md) to select this
+pack; the [Demerzel example](../../docs/engineering-profile.example.md) records
+a real override. Selection and precedence are in the [index](README.md).
+
 ## Layering and dependency rule
 
 - Serves: [clean-architecture](../practices/clean-architecture.md), [EB-01](../engineering-baseline.md#3-eb-01---deliberate-complexity)

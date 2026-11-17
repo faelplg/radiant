@@ -238,6 +238,8 @@ It may produce:
 - safety limits.
 
 The specification works as an intermediate contract between intent and code.
+The [Spec form](../templates/spec.md) records that behavior and points to the
+[Engineering Profile form](../templates/engineering-profile.md) for engineering constraints.
 
 ---
 
@@ -928,6 +930,9 @@ Defines the minimum engineering standard reusable across projects.
 ### Engineering Profile
 
 Puts the Baseline in context for a project without duplicating it.
+Use the [Profile form](../templates/engineering-profile.md),
+[stack packs](../engineering/stacks/README.md) and
+[Demerzel example](engineering-profile.example.md).
 
 Not every project needs every artifact.
 

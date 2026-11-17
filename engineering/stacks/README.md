@@ -5,7 +5,7 @@ package manager. Its version is the consumer's Radiant pin, without a separate
 pack version. Read it together with the Engineering Baseline and the project's
 Engineering Profile.
 
-A pack id is a lowercase kebab slug matching `[a-z][a-z0-9]*(?:-[a-z0-9]+)*`
+A pack id is a lowercase kebab slug matching `[a-z0-9]+(?:-[a-z0-9]+)*`
 and equals its Markdown file stem. Never rename or reuse an id. `none` is
 reserved; `README.md` is the index, not a pack.
 
@@ -30,3 +30,10 @@ Overrides are not machine-validated.
 | Pack id | Shared conventions |
 | --- | --- |
 | [typescript-bun](typescript-bun.md) | Strict TypeScript on Bun, tests, Biome and CI |
+
+Use the [Profile form](../../templates/engineering-profile.md) and the
+[Demerzel example](../../docs/engineering-profile.example.md). The
+[Spec form](../../templates/spec.md) describes behavior and points to the
+Profile for engineering constraints. The
+[pin gate](../../docs/integration.md#project-map) checks the selection, not
+override content or pack structure.

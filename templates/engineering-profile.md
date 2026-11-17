@@ -10,7 +10,8 @@ Replace `none` with at most one known id from the
 pin. This Profile copies neither the
 [Baseline](../engineering/engineering-baseline.md#11-engineering-profile-per-project)
 nor the selected pack; remove any section with nothing project-specific.
-For a concrete instance, see the Demerzel example when adopting a Profile.
+For a concrete instance, see the
+[Demerzel example](../docs/engineering-profile.example.md).
 
 ## Default risk
 
