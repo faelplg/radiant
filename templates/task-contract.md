@@ -377,3 +377,14 @@ return to the orchestrator.
 # 17. Completion rule
 
 > **Do not declare DONE because the code looks right. Declare DONE only when the observable criteria, the applicable engineering and the verification evidence converge.**
+
+# 18. Owner decisions
+
+Record each decision the owner makes during the contract. Keep this section
+even when empty (`None.`); never remove it, so a validator can require it.
+
+Only the owner's own words count, never an agent's report of them.
+
+For each decision, record:
+
+1. **Number and date (`YYYY-MM-DD`):** `[decision in the owner's words or a faithful summary]`. **Contract impact:** `[which section, scope boundary, or FAIL condition it narrows or clarifies]`.
