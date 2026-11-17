@@ -31,9 +31,45 @@ def unique_object(pairs):
     return result
 
 
+def stack_pack(root, profile):
+    declarations = []
+    fence = None
+    try:
+        text = profile.read_text(encoding="utf-8-sig")
+    except (UnicodeDecodeError, OSError) as error:
+        raise ValueError(f"engineering_profile: cannot read Profile: {error}") from error
+    for line in text.splitlines():
+        marker = re.match(r"^ {0,3}(`{3,}|~{3,})(.*)$", line)
+        if fence is not None:
+            if (marker and marker[1][0] == fence[0] and len(marker[1]) >= len(fence)
+                    and not marker[2].strip()):
+                fence = None
+            continue
+        if marker:
+            fence = marker[1]
+            continue
+        if re.match(r"^[ \t]*- Stack pack:", line):
+            declarations.append(line.strip())
+    if not declarations:
+        return None
+    if len(declarations) != 1:
+        raise ValueError("engineering_profile: repeated Stack pack lines")
+    match = re.fullmatch(r"- Stack pack: `([a-z0-9]+(?:-[a-z0-9]+)*)`", declarations[0])
+    if match is None:
+        raise ValueError("engineering_profile: expected - Stack pack: `<lowercase-kebab-id>`")
+    pack = match[1]
+    if pack == "none":
+        return None
+    known = {path.stem for path in (root / "engineering/stacks").glob("*.md")
+             if path.is_file() and path.name != "README.md"}
+    if pack not in known:
+        raise ValueError(f"engineering_profile: unknown Stack pack: {pack}")
+    return pack
+
+
 def validate(root, project):
     required = ("constitution/CONSTITUTION.md", "docs/integration.md",
-                "skills/radiant-cycle/SKILL.md")
+                "skills/radiant-cycle/SKILL.md", "engineering/stacks/README.md")
     if not all((root / path).is_file() for path in required):
         raise ValueError("incomplete Radiant checkout")
     if Path(git(root, "rev-parse", "--show-toplevel")).resolve() != root:
@@ -68,7 +104,9 @@ def validate(root, project):
         valid = target.is_file() if field in FILES else target.is_dir()
         if not valid:
             raise ValueError(f"{field}: target missing or of the wrong type")
-    return revision
+    profile = config["engineering_profile"]
+    pack = stack_pack(root, project / profile) if profile is not None else None
+    return revision, pack
 
 
 def main():
@@ -77,11 +115,12 @@ def main():
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     try:
-        revision = validate(root, args.project.resolve())
+        revision, pack = validate(root, args.project.resolve())
     except (OSError, ValueError, subprocess.CalledProcessError) as error:
         detail = error.stderr.strip() if isinstance(error, subprocess.CalledProcessError) else str(error)
         parser.exit(1, f"HOLD: {detail}\n")
-    print(f"PASS: Radiant {revision}; pin and paths checked. Task authorization is separate.")
+    suffix = f" Stack pack: {pack}." if pack else ""
+    print(f"PASS: Radiant {revision}; pin and paths checked. Task authorization is separate.{suffix}")
 
 
 if __name__ == "__main__":

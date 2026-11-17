@@ -42,7 +42,10 @@ the [form](../templates/radiant-project.json). Its initial schema is:
 - `frame`, `spec`, `plan`, `workflow`, `active_contract`: a file relative to
   the consumer root, or `null` while it does not exist.
 - `engineering_profile`: a file relative to the consumer, or `null` when the
-  Baseline is enough and there are no project-specific decisions.
+  Baseline is enough and there are no project-specific decisions. Use the
+  [Profile form](../templates/engineering-profile.md) and
+  [Demerzel example](engineering-profile.example.md); a Profile may select one
+  [stack pack](../engineering/stacks/README.md).
 - `contracts`, `adrs`, `verification`, `learning`: a relative directory or
   `null`.
 - `maintenance`: optional; a relative directory ignored by Git where
@@ -55,6 +58,17 @@ paths, `..` or symlinks that escape the project. When an artifact is created,
 update its pointer. `null` does not waive an input the task needs: the skill
 identifies the gap and guides its framing. The structural validator does not
 grant authorization.
+
+After checking the Profile path, `check_project.py` reads an optional line
+outside fenced blocks: ``- Stack pack: `<id>` ``. An absent line or `none`
+preserves the existing PASS output. One exact pack file stem from the pinned
+`engineering/stacks/` directory is accepted; the PASS line appends the pack
+name while keeping its `PASS: Radiant <commit>;` prefix. Malformed, repeated
+or unknown selections produce `HOLD` naming `engineering_profile` on stderr
+and exit 1. `README` is not a pack. A null Profile is not read, and the stack
+index is required for a complete Radiant checkout. The map schema is unchanged;
+no validator checks Profile sections or override rows. Only fenced code blocks
+are ignored; indented code blocks and HTML comments are still read.
 
 The consumer's `AGENTS.md` points to that map and to the harness entry. The
 engineering Baseline lives in Radiant; the Profile, when there is one, lives in

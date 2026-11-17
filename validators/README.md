@@ -12,7 +12,12 @@ Requirements: Python 3.9+ and Git. No external packages.
 - `radiant_yaml.py` reads the restricted YAML of `radiant-units` blocks, and
   `dispatch_formats.py` validates units, `provides` and routing rules.
 - `python3 <radiant-root>/validators/check_project.py <project-root>`: checks
-  `.radiant.json`, the pin, a clean checkout and local paths. Read-only;
+  `.radiant.json`, the pin, a clean checkout, local paths and any
+  [stack pack declaration](../docs/integration.md#project-map) in the
+  Engineering Profile. The stack index is required; unknown, malformed or
+  repeated selections are refused. A selected pack is appended to the PASS
+  line without changing its prefix; no selection keeps the current output.
+  Profile sections, overrides and pack structure are not validated. Read-only;
   divergences produce `HOLD` and exit 1. Structural success does not activate
   contracts.
 - `python3 <radiant-root>/validators/check_dispatch.py units <contract|->` and

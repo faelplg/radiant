@@ -339,6 +339,9 @@ The Profile may define:
 The Profile must not duplicate the Baseline.
 
 It records only what is specific to that project.
+Use the [Profile form](../templates/engineering-profile.md),
+[stack packs](stacks/README.md) and
+[Demerzel example](../docs/engineering-profile.example.md).
 
 ---
 

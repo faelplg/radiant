@@ -14,8 +14,9 @@ consumer for distribution to other projects.
   accessibility and verification criteria.
 - [task-contract.md](task-contract.md): bounded delegation; use the
   [convention](../contracts/README.md).
-- The Engineering Profile is a consumer artifact; the Baseline stays in
-  [engineering/engineering-baseline.md](../engineering/engineering-baseline.md).
+- [spec.md](spec.md): concepts, behavior, interfaces and observable acceptance.
+- [engineering-profile.md](engineering-profile.md): project-specific engineering
+  decisions and stack pack overrides; the filled Profile stays in the consumer.
 - [radiant-project.json](radiant-project.json): local map and pin, according to
   [integration](../docs/integration.md). Replace `RADIANT_COMMIT` with a real
   full commit; `null` means the artifact does not exist yet.

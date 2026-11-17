@@ -3,20 +3,18 @@
 **Contract ID:** `TC-0003`\
 **Project:** `radiant`\
 **Iteration:** `Practices milestone, issue #33`\
-**Status:** `READY` - the owner answered the planning questions on 2026-11-17; activation is a separate owner go\
+**Status:** `DONE` - accepted by Rafael on 2026-11-17 at 12:26 BRT\
 **Owner:** `Fael (human); Build by an authorized agent`\
 **Risk tier:** `2` - the pack declaration and the `check_project.py` change become part of the pin gate that every consumer, and Demerzel's dispatch, runs on its next pin bump\
 **Capability:** `default`\
 **Engineering Baseline:** `Radiant Engineering Baseline v0.1`\
 **Engineering Profile:** `none`\
-**Entry commit:** `1a3595997df6d226300ecc324592d4254532cc36`\
+**Entry commit:** `2b78cf5930594860e3107c6d73a3ec32901ddcf4`\
 **Tracking:** [issue #50](https://github.com/faelplg/radiant/issues/50), sub-issue of epic [#30](https://github.com/faelplg/radiant/issues/30)
 
-The contract is ready, not active: the owner answered the planning questions
-on 2026-11-17, as recorded in [Owner decisions](#owner-decisions-2026-11-17).
-Activation is a separate go from the owner after this contract merges. A Build that starts from a later `main`
-commit, such as the merge of this contract, records that commit as the entry
-commit at activation; the Allowed scope does not change.
+Rafael authorized activation on 2026-11-17. The Build entry commit above
+was recorded from `git rev-parse HEAD` before any change. The Allowed scope
+is unchanged.
 
 Routing: the Build runs as `radiant-dev` on the Codex harness at medium
 effort; the independent critique runs on the agy harness, from a vendor
@@ -345,14 +343,14 @@ Record it as an observation or a Learn Back candidate.
 
 # 7. Functional requirements
 
-- [ ] A Profile with ``- Stack pack: `typescript-bun` `` passes `check_project.py`, and the `PASS` line on stdout keeps its `PASS: Radiant <commit>;` prefix and names the pack.
-- [ ] A Profile without the line, or with `none`, passes with the current output.
-- [ ] `no-such-pack`, `README`, `readme`, `../templates/spec`, empty backticks, a value without backticks and two `Stack pack` lines each produce `HOLD` on stderr naming `engineering_profile`, with exit 1.
-- [ ] A `- Stack pack:` line inside a fenced block is ignored.
-- [ ] `engineering_profile: null` never reads a pack.
-- [ ] A Radiant checkout without `engineering/stacks/README.md` produces `HOLD: incomplete Radiant checkout`.
-- [ ] The Demerzel example Profile, copied into a fixture project, passes `check_project.py`.
-- [ ] Each pack has the five sections in order, each opening with a `- Serves:` line of at least one link, each resolving to a practice card or a Baseline anchor.
+- [x] A Profile with ``- Stack pack: `typescript-bun` `` passes `check_project.py`, and the `PASS` line on stdout keeps its `PASS: Radiant <commit>;` prefix and names the pack.
+- [x] A Profile without the line, or with `none`, passes with the current output.
+- [x] `no-such-pack`, `README`, `readme`, `../templates/spec`, empty backticks, a value without backticks and two `Stack pack` lines each produce `HOLD` on stderr naming `engineering_profile`, with exit 1.
+- [x] A `- Stack pack:` line inside a fenced block is ignored.
+- [x] `engineering_profile: null` never reads a pack.
+- [x] A Radiant checkout without `engineering/stacks/README.md` produces `HOLD: incomplete Radiant checkout`.
+- [x] The Demerzel example Profile, copied into a fixture project, passes `check_project.py`.
+- [x] Each pack has the five sections in order, each opening with a `- Serves:` line of at least one link, each resolving to a practice card or a Baseline anchor.
 
 # 8. Engineering Check
 
@@ -461,16 +459,16 @@ After execution:
 
 The task can only be declared `DONE` when:
 
-- [ ] `check_project.py` accepts a project whose Profile declares a pack and refuses an unknown pack id (issue #33);
-- [ ] the Demerzel example Profile passes `check_project.py` (issue #33);
-- [ ] the Spec form and the Engineering Profile form exist and are indexed in `templates/README.md`, and the Profile form covers the sections listed in section 5 (issue #33; Baseline section 11);
-- [ ] `typescript-bun` covers layering and dependency rule, test layout and commands, lint and format, error handling, and CI and release, each section mapped to practice ids or Baseline rules (issue #33; the Python pack is deferred by owner decision 1);
-- [ ] `engineering/stacks/README.md` says how a project selects and overrides a pack (issue #33);
-- [ ] no consumer repository and no `.radiant.json` schema changed;
-- [ ] all applicable checks in section 11 pass;
-- [ ] there was no change outside the Allowed scope;
-- [ ] relevant limitations are recorded;
-- [ ] the final evidence was read, not just presumed from the exit code.
+- [x] `check_project.py` accepts a project whose Profile declares a pack and refuses an unknown pack id (issue #33);
+- [x] the Demerzel example Profile passes `check_project.py` (issue #33);
+- [x] the Spec form and the Engineering Profile form exist and are indexed in `templates/README.md`, and the Profile form covers the sections listed in section 5 (issue #33; Baseline section 11);
+- [x] `typescript-bun` covers layering and dependency rule, test layout and commands, lint and format, error handling, and CI and release, each section mapped to practice ids or Baseline rules (issue #33; the Python pack is deferred by owner decision 1);
+- [x] `engineering/stacks/README.md` says how a project selects and overrides a pack (issue #33);
+- [x] no consumer repository and no `.radiant.json` schema changed;
+- [x] all applicable checks in section 11 pass; independent critique round 2 returned `APPROVE`, and the owner accepted the result;
+- [x] there was no change outside the Allowed scope;
+- [x] relevant limitations are recorded;
+- [x] the final evidence was read, not just presumed from the exit code.
 
 # 13. HOLD conditions
 
@@ -495,7 +493,9 @@ Mark `FAIL` when:
 - acceptance criteria cannot be met;
 - verification shows a material regression in the existing checks;
 - an existing Profile without a pack line would stop passing
-  `check_project.py`;
+  `check_project.py`; owner decision 4 narrows this condition to every
+  readable Profile without a pack line. Unreadable or undecodable Profiles
+  HOLD with an `engineering_profile` message;
 - an external blocker makes the goal impossible within this contract.
 
 Do not disguise `FAIL` as `DONE WITH NOTES`.
@@ -516,8 +516,355 @@ The agent may not, without HOLD:
 
 # 16. Completion report
 
-Filled by the Build in the format of
-[the template](../../templates/task-contract.md#16-completion-report).
+### Status
+
+`DONE`. Rafael accepted TC-0003 on 2026-11-17 at 12:26 BRT after the
+independent critic's round 2 `APPROVE`, with no must-fix. The five-step Build,
+round 1 fixes, deterministic checks and independent critique are complete.
+Owner decision 4 confirms the unreadable or undecodable Profile policy.
+
+### Changed
+
+| Build commit | Paths and result |
+| --- | --- |
+| `4c41128c4cbfd63fb85a7156d5f117c2d23aceda` | `engineering/stacks/README.md:1`, `engineering/stacks/typescript-bun.md:1`: pack selection, precedence and grounded rules; this contract's header: activation and entry SHA. |
+| `1439b1cb2980e1f595277dc296f65ee749ffc385` | `validators/check_project.py:34`, `tests/test_integration.py:63`: Profile selection at the CLI boundary, required index and test-first coverage. |
+| `c046ed76ccf9e9be512fedd40f2d60149b0cfe47` | `templates/spec.md:1`, `templates/engineering-profile.md:1`, `templates/README.md:17`: forms and index. |
+| `830c4d737968c115f0079dd8e88066df484de7d2` | `docs/engineering-profile.example.md:1`, `tests/test_integration.py:76`: Demerzel example and acceptance test. |
+| Fifth Build commit, `docs: point to the profile forms and stack packs` | `README.md:28`, `docs/capabilities.md:16`, `docs/integration.md:44`, `docs/lifecycle.md:13`, `docs/project-generation-system.md:241`, `engineering/engineering-baseline.md:342`, `templates/project-agents.md:15`, `validators/README.md:14`: pointers; pack/form cross-links and this report. The stack index's displayed slug expression also matches the practice-id rule exactly. |
+
+### Verification evidence
+
+Entry: `2b78cf5930594860e3107c6d73a3ec32901ddcf4`, branch
+`feat/tc-0003-build`. Applied `skills/radiant-cycle/SKILL.md` v0.1.6 and
+`skills/radiant-delegation/SKILL.md` v0.2.2 from that revision. Commit messages
+follow the conventional-commits skill and the contract's exact subjects.
+
+Every task staged its new files before the full test run. The repository
+check and both whitespace checks passed at every step:
+
+| Task | Repository check stdout | Full unittest summary |
+| --- | --- | --- |
+| 1 | `PASS: 62 documents; 407 local links.` | `Ran 110 tests`, `OK` |
+| 2 | `PASS: 62 documents; 407 local links.` | `Ran 122 tests`, `OK` |
+| 3 | `PASS: 64 documents; 416 local links.` | `Ran 122 tests`, `OK` |
+| 4 | `PASS: 65 documents; 418 local links.` | `Ran 123 tests`, `OK` |
+| 5 | `PASS: 65 documents; 449 local links.` | `Ran 123 tests`, `OK` |
+
+Commands:
+
+```text
+python3 validators/check_repository.py
+python3 -m unittest discover -s tests -v
+git diff --check
+git diff --cached --check
+```
+
+Test-first run, before changing the validator (exit 1; full log retained
+outside the repository as `/tmp/tc0003-failing-before.log`):
+
+```text
+python3 -m unittest discover -s tests -p test_integration.py -v
+Ran 27 tests
+FAILED (failures=10)
+```
+
+The known-pack test failed because stdout did not name the pack. Every
+refusal test failed because the old validator returned exit 0. The repeated
+line test failed for both subcases. The missing-index test failed because the
+old validator accepted the incomplete checkout. Tests for absent selection,
+`none`, `null` and fenced lines passed. After implementation, the same 27
+tests passed before the full 122-test run.
+
+Mutation proofs ran after the validator commit, one mutation at a time.
+Each named test failed with exit 1, and after
+`git checkout -- validators/check_project.py` the full 122-test suite passed
+with exit 0 before the next mutation. Logs are retained outside Git as
+`/tmp/tc0003-mutation-00.log` through `/tmp/tc0003-mutation-09.log`, with
+corresponding `-restored.log` files.
+
+| Mutation | Test that failed |
+| --- | --- |
+| Skip unknown-id refusal | `test_profile_rejects_unknown_pack` |
+| Return no pack on malformed declaration, admitting `README` | `test_profile_rejects_readme_pack` |
+| Exempt lowercase `readme` from exact-stem refusal | `test_profile_rejects_lowercase_readme_pack` |
+| Return no pack on malformed declaration, admitting a path | `test_profile_rejects_path_pack` |
+| Return no pack on malformed declaration, admitting empty backticks | `test_profile_rejects_empty_pack` |
+| Return no pack on malformed declaration, admitting unquoted value | `test_profile_rejects_unquoted_pack` |
+| Return no pack on repeated declarations | `test_profile_rejects_repeated_pack_lines` |
+| Remove pack suffix from PASS | `test_profile_accepts_known_pack_and_names_it_after_pass_prefix` |
+| Disable opening-fence recognition | `test_profile_ignores_fenced_pack_lines` |
+| Remove stack index from required checkout files | `test_checkout_without_stack_index_is_incomplete` |
+
+The one-off structure check lives outside the repository. Command and result:
+
+```text
+python3 /tmp/tc0003-structure.py
+stdout: empty
+stderr: empty
+exit: 0
+```
+
+Complete script body:
+
+```python
+from pathlib import Path
+import re
+import sys
+
+root = Path.cwd()
+folder = root / 'engineering/stacks'
+expected = ['Layering and dependency rule', 'Test layout and commands',
+            'Lint and format', 'Error handling', 'CI and release']
+errors = []
+
+def prose(text):
+    return re.sub(r'(?ms)^```[^\n]*\n.*?^```[^\n]*$', '', text)
+
+def anchors(path):
+    result = set()
+    for heading in re.findall(r'(?m)^#{1,6} (.+)$', prose(path.read_text())):
+        heading = re.sub(r'[^\w\- ]', '', heading.lower()).replace(' ', '-')
+        result.add(heading)
+    return result
+
+packs = {p.stem: p for p in folder.glob('*.md') if p.name != 'README.md'}
+for ident, path in sorted(packs.items()):
+    text = prose(path.read_text())
+    headings = list(re.finditer(r'(?m)^## (.+)$', text))
+    if [h[1] for h in headings] != expected:
+        errors.append(f'{ident}: sections differ from required order')
+    for i, heading in enumerate(headings):
+        end = headings[i + 1].start() if i + 1 < len(headings) else len(text)
+        body = text[heading.end():end].strip().splitlines()
+        first = body[0] if body else ''
+        links = re.findall(r'\[[^]]+\]\(([^)]+)\)', first)
+        if not first.startswith('- Serves:') or not links:
+            errors.append(f'{ident}: {heading[1]} does not open with Serves links')
+        for link in links:
+            name, _, anchor = link.partition('#')
+            target = (path.parent / name).resolve()
+            practice = (target.parent == root / 'engineering/practices'
+                        and target.suffix == '.md' and target.name != 'README.md')
+            baseline = target == root / 'engineering/engineering-baseline.md' and bool(anchor)
+            if (not (practice or baseline) or not target.is_file()
+                    or (anchor and target.is_file() and anchor not in anchors(target))):
+                errors.append(f'{ident}: {heading[1]} invalid Serves target: {link}')
+index = (folder / 'README.md').read_text()
+rows = []
+for line in index.splitlines():
+    if line.startswith('|') and not re.match(r'^\|\s*(?:Pack id|---)', line):
+        cell = line.split('|')[1].strip()
+        match = re.fullmatch(r'\[([^]]+)\]\(([^)]+)\.md\)', cell)
+        if not match or match[1].strip("`") != match[2]:
+            errors.append(f'invalid pack index row: {cell}')
+        else:
+            rows.append(match[2])
+for ident in sorted(set(packs) - set(rows)):
+    errors.append(f'{ident}: missing index row')
+for ident in rows:
+    if ident not in packs or rows.count(ident) != 1:
+        errors.append(f'{ident}: index row has no unique pack')
+example = (root / 'docs/engineering-profile.example.md').read_text()
+overrides = example.split('## Pack overrides\n', 1)[1].split('\n## ', 1)[0]
+for line in overrides.splitlines():
+    if line.startswith('|'):
+        section = line.split('|')[1].strip()
+        if section not in ('Pack section', '---') and section not in expected:
+            errors.append(f'unknown override section: {section}')
+for error in errors:
+    print(error)
+sys.exit(bool(errors))
+```
+
+Consumer command provenance, read with `git show` at the fixed commits of
+section 3, not from consumer working trees:
+
+| Pack command | Consumer | File and line |
+| --- | --- | --- |
+| `bun test` | Demerzel | `package.json:14` |
+| `bun run check` | Demerzel; AIKM | `.github/workflows/check.yml:48`; `.github/workflows/check.yml:17` |
+| `bun run typecheck` | Demerzel; AIKM | Demerzel `package.json:16` defines the script, invoked by the aggregate at line 17; AIKM `package.json:14` |
+| `bun run lint` | AIKM | `package.json:14` (script implementation at line 12) |
+| `bun install --frozen-lockfile` | Demerzel; AIKM | `.github/workflows/check.yml:33`; `.github/workflows/check.yml:16` |
+
+The example's extra commands come from Demerzel `AGENTS.md:23`, `:29`,
+`:33`, `:36`, with their scripts in `package.json:15`, `:18`, `:19`.
+Demerzel's PASS parser at `src/radiant/validators.ts:60` requires only the
+preserved prefix and full commit. No consumer command was executed.
+
+Consumer records, before the first task and again after implementation:
+
+| Consumer | Before HEAD | Before status porcelain | After HEAD | After status porcelain |
+| --- | --- | --- | --- | --- |
+| Demerzel | `8edd3b9d4028dc8fb8ad8a9e6ad9718e75bdaac0` | empty | `8edd3b9d4028dc8fb8ad8a9e6ad9718e75bdaac0` | empty |
+| AIKM | `a2cfd1bf6f415521567d0e48d8eebcc79a3e611d` | empty | `a2cfd1bf6f415521567d0e48d8eebcc79a3e611d` | empty |
+
+For each checkout, both records came from `git -C <checkout> rev-parse HEAD`
+and `git -C <checkout> status --porcelain`. The records match exactly.
+Layouts came from `git -C <checkout> ls-tree -r --name-only <commit>`;
+all evidence file bodies came from `git -C <checkout> show <commit>:<path>`.
+
+Readback reopened the stack index and pack, both forms, the example, every
+pointer and the validator/test diff. The example is 48 lines against the
+pack's 76; review and normalized paragraph comparison found no copied
+Baseline or pack prose. Added text has no em or en dash. Python 3.9 grammar
+parsing passed for both changed Python files; no dependency was added.
+The Baseline and thesis receive pointer sentences only.
+
+Scope was checked against the entry commit, including committed, staged,
+unstaged and untracked paths. All changes are within section 4. The final
+`git diff --name-only <entry>..HEAD` and `git status --porcelain` are read
+again after the fifth commit and returned to the orchestrator with its hash.
+No consumer, schema, Constitution, generated file or CHANGELOG changed.
+
+### Engineering notes
+
+PR #60 Copilot follow-up: require `path.is_file()` for pack candidates while excluding README; `test_profile_rejects_directory_as_pack` failed before the fix (exit 0 instead of HOLD) and passes afterward.
+
+Exact stem membership avoids turning an untrusted pack id into a path. The
+Profile is read only after existing path checks pass. No declaration preserves
+the old output byte for byte. Fence handling covers backticks and tildes.
+The CLI fixture proves compatibility of the PASS prefix and appended name.
+
+### Remaining limitations
+
+- Consumer evidence establishes rules and command provenance at the cited
+  commits, not adoption or end-to-end consumer execution against this Build.
+- Pack structure is checked only by the one-off script. Profile sections,
+  overrides, Spec content and practice citations are not machine-validated.
+- Pack structure validation, a future Python pack and living-page updates
+  remain the follow-ups already defined in section 6. No GitHub writes or
+  network access were permitted in this Build.
+
+### Learn Back candidate
+
+The stack index is a completeness prerequisite for a pinned checkout. Its
+refusal test commits the missing-file fixture so that the existing dirty
+checkout gate cannot mask the intended diagnostic. The planned pack structure
+follow-up should preserve that distinction.
+
+### Fix round 1
+
+Authorized by the owner after the independent critic returned
+`APPROVE WITH CHANGES`, with no must-fix. This round starts at
+`2a33a73d6b3c0f3621ba4723dfa384c242e9ddaa`. The contract remained
+`ACTIVE` during the fixes; acceptance and critique provenance are recorded
+below.
+
+- S1: the critic offered both options; the Build picked HOLD, and the
+  owner confirmed it at acceptance in decision 4. `stack_pack` catches
+  `UnicodeDecodeError` and `OSError` and reports
+  `HOLD: engineering_profile: cannot read Profile: ...`. Section 5 needs the
+  selection to be read; EB-07 needs an attributable diagnostic. Treating a
+  failed read as no selection could silently skip a declared pack. This
+  deliberately narrows section 14's original backward-compatibility promise
+  for unreadable or undecodable Profiles, including those without a pack
+  line, as confirmed by owner decision 4 at acceptance. Readable Profiles
+  without a pack line still retain the original PASS output.
+- S2: read with `utf-8-sig`, so a BOM cannot hide an unknown pack selection.
+- N1: the fenced-line test asserts the PASS prefix, full pin and pack name.
+- N2: integration documents that only fenced blocks are ignored; indented
+  code and HTML comments are still read.
+- N3: aligned the affected README and capability index table columns.
+- N4: the example Commands table now uses the form's three columns.
+- N5: added fixed-commit citations for Demerzel Spec section 5 and
+  `src/radiant/validators.ts:10`, and AIKM Spec section 7. Verified all three
+  with `git show` at the section 3 commits before citing them.
+- N6: the stack index uses the practice index's backticked id link style.
+  The outside-repository structure script and its body above now accept
+  that display style while matching the exact linked file stem.
+- N7: command provenance cites Demerzel `package.json:16`, verified with
+  `git show`, as the typecheck script definition.
+
+Test-first evidence, before changing the validator:
+
+```text
+python3 -m unittest discover -s tests -p test_integration.py
+Ran 31 tests
+FAILED (failures=3)
+```
+
+The three failures reproduced S1 and S2: the BOM selection passed, while the
+decode and OS read failures produced HOLD without `engineering_profile`.
+After implementation, all 31 integration tests passed. The OS error fixture
+injects a read failure at the CLI boundary after path validation; it does
+not rely on filesystem permission behavior or the test user's privileges.
+Full before/after logs are `/tmp/tc0003-round1-before.log` and
+`/tmp/tc0003-round1-after.log`, outside the repository.
+
+| Round 1 mutation | Test that failed with exit 1 |
+| --- | --- |
+| Read with `utf-8` instead of `utf-8-sig` | `test_profile_with_bom_rejects_unknown_pack` |
+| Reraise decode errors without Profile context | `test_undecodable_profile_names_engineering_profile` |
+| Reraise OS errors without Profile context | `test_unreadable_profile_names_engineering_profile` |
+
+After each mutation, restored the exact in-progress validator bytes, preserving
+this round's edits, and ran the full suite: 126 tests, OK, exit 0 before the
+next mutation. Mutation and restored-suite logs are retained under
+`/tmp/tc0003-round1-mutation-0.log` through `-2.log` and
+`/tmp/tc0003-round1-restored-0.log` through `-2.log`.
+
+Final round 1 gates:
+
+```text
+python3 validators/check_repository.py
+PASS: 65 documents; 449 local links.
+python3 -m unittest discover -s tests
+Ran 126 tests
+OK
+git diff --check
+(empty output, exit 0)
+git diff --cached --check
+(empty output, exit 0)
+python3 /tmp/tc0003-structure.py
+(empty output, exit 0)
+```
+
+Python 3.9 grammar parsing and added-text punctuation checks also pass.
+All round 1 changes stay within the Allowed scope. No consumer, dependency,
+schema, generated file or CHANGELOG changed. No push was performed.
+
+### Acceptance
+
+Rafael confirmed decision 4 and accepted the contract on 2026-11-17 at
+12:26 BRT. The critic's Python 3.9.6 integration run covers the previous
+integration-runtime limitation; the local full-suite evidence uses Python
+3.14.7. No claim is made that the entire suite ran on Python 3.9.6.
+
+Acceptance checks:
+
+```text
+python3 validators/check_repository.py
+PASS: 65 documents; 449 local links.
+python3 -m unittest discover -s tests
+Ran 126 tests
+OK
+git diff --check
+(empty output, exit 0)
+```
+
+Only this contract changed at acceptance. No push was performed.
+
+### Provenance
+
+- Build: `radiant-dev`; capability `default` (standard); harness `codex`;
+  configured adapter model `gpt-6.1-sol`; runtime full model identity and
+  usage metric are not exposed in this session; state: `DONE`, accepted by
+  the owner after independent critique. No secondary agent was delegated.
+- Independent critique round 1: `radiant-verifier` at `deep`; launched and
+  collected by the orchestrator; Antigravity CLI 1.5.10 running Claude Opus
+  5.5 high. Verdict: `APPROVE WITH CHANGES` (S1, S2, N1 to N7), fixed in
+  `79459f33a9d135f09090b6452350424a8aece8d3`. The exact launch command,
+  machine-readable full model ID and usage metric were not supplied in the
+  acceptance evidence.
+- Independent critique round 2: `radiant-verifier` at `deep`; launched and
+  collected by the orchestrator; Antigravity CLI 1.5.10 running Claude Opus
+  5.5 high. Verdict: `APPROVE`, no must-fix. The critic ran
+  `tests/test_integration.py` on Python 3.9.6 (`/usr/bin/python3`): 31 tests,
+  OK, 1 skipped. This result is supplied by the orchestrator, not a run by
+  the Build. The exact launch command, machine-readable full model ID and
+  usage metric were not supplied in the acceptance evidence.
 
 # 17. Completion rule
 
@@ -525,7 +872,8 @@ Filled by the Build in the format of
 
 ## Owner decisions (2026-11-17)
 
-The owner answered the three planning questions on 2026-11-17:
+The owner answered the three planning questions on 2026-11-17 and confirmed
+decision 4 at acceptance at 12:26 BRT:
 
 1. **Python pack.** Not in this contract. Only `typescript-bun` ships, for
    Demerzel and AIKM; a Python pack is a follow-up for when a Python project
@@ -534,3 +882,7 @@ The owner answered the three planning questions on 2026-11-17:
    file; `.radiant.json` and `templates/radiant-project.json` are unchanged.
 3. **Pack structure validator.** Not in this contract; the follow-up issue
    described in section 6 adds the `check_repository.py` rule.
+4. Unreadable or undecodable Profiles HOLD with an engineering_profile
+   message; this narrows section 14 FAIL condition 3, which still holds for
+   every readable Profile without a pack line. Decided by the owner on
+   2026-11-17.
