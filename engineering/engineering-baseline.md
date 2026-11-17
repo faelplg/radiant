@@ -211,6 +211,8 @@ must receive specific security verification.
 SOLID, Clean Code, Clean Architecture, DRY, KISS and design patterns are useful references.
 
 None of them is to be applied mechanically.
+The [practice catalog](practices/README.md) states when each practice applies
+and when it does not.
 
 The right decision is the one that improves clarity, correctness, ability to change and verifiability in the real context.
 
