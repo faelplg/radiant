@@ -76,12 +76,16 @@ The agent may assume as input:
   `Template version` field. A planning probe, kept outside the repository,
   applied the rules of section 7 to all three and reported no error; the
   template itself fails them, as a form with placeholders should;
-- when candidate 7 is accepted, consumer contracts, read-only, from the
-  owner's local checkouts of `faelplg/demerzel` and `faelplg/aikm`. The Build
-  request supplies each checkout's absolute root and the commit recorded at
-  activation; the Build reads with `git -C <checkout> show <commit>:<path>`
+- when candidate 7 (a) is accepted, consumer contracts, read-only, from the
+  owner's local checkouts of `faelplg/demerzel` and `faelplg/aikm`. The
+  activation commit records here the full commit of each consumer, as
+  TC-0003 did before its Build. The Build request supplies each checkout's
+  absolute root and grants the sandbox read access to it. The Build reads
+  only at the recorded commits, with `git -C <checkout> show <commit>:<path>`
   and `git -C <checkout> ls-tree -r --name-only <commit>`, never from the
-  working tree. The contract does not carry the paths: the repository check
+  working tree, and reports the results in section 16. The Build opens no
+  issue; the orchestrator opens any consumer pointer issue, with the owner's
+  authorization. The contract does not carry the paths: the repository check
   refuses personal paths.
 
 [Issue #52](https://github.com/faelplg/radiant/issues/52) also edits
@@ -112,8 +116,12 @@ docs/plans/TC-0004-practice-validator.md
 ```
 
 `validators/practice_cards.py` and `tests/test_practice_cards.py` change only
-for `practice_ids` and its tests. `docs/integration.md`, `contracts/README.md`
-and `engineering/practices/README.md` take pointer sentences only.
+for two shared pieces and their tests: a table-row reader that returns every
+cell of a row, on which `_table_rows` keeps its current behavior, and the
+practice cell reading of `practice_ids`. Every existing test in
+`tests/test_practice_cards.py` stays unchanged and passes.
+`docs/integration.md`, `contracts/README.md` and
+`engineering/practices/README.md` take pointer sentences only.
 
 ### Paths read-only
 
@@ -160,8 +168,9 @@ the consumer checkouts listed in section 3
 3. `validators/check_repository.py`: the same rules over
    `docs/plans/TC-[0-9][0-9][0-9][0-9]-*.md`, against the catalog only, with
    tests in `tests/test_repository.py`.
-4. `validators/practice_cards.py`: `practice_ids` reads the linked cell form
-   when candidate 1 accepts it.
+4. `validators/practice_cards.py`: the shared table-row reader of section 4,
+   and `practice_ids` reading the linked cell form when candidate 1 accepts
+   it.
 5. Pointers: `validators/README.md` (the command and its output),
    `docs/verification.md` (the repository check now validates Radiant's
    contracts, replacing the sentence that says it does not),
@@ -177,10 +186,11 @@ Do not create additional artifacts without an observed need.
 | --- | --- |
 | Entry point | A new command, `validators/check_contract.py`, over a new rule module, `validators/task_contracts.py`; `check_dispatch.py` is unchanged |
 | Output | Same convention as `check_dispatch.py`: success prints JSON and exits 0; invalid content prints `{"errors": [...]}` and exits 1; a usage error exits 2 |
-| Section lookup | A heading of level 1 to 3 whose text is exactly the template's number and title, such as `8. Engineering Check`, outside fenced blocks |
+| Section lookup | A heading of level 1 or 2 whose text is exactly the template's number and title, such as `8. Engineering Check`, outside fenced blocks; it runs until the next heading of level 1 or 2. Inside section 8, the Baseline table is read before the first level 3 heading, and `### Practices` is a level 3 subsection that runs until the next heading of level 1 to 3 |
 | `18. Owner decisions` | Required when `Template version` is `0.4` or later; exempt when the field is absent or `0.3` or earlier |
 | Known practice ids | Card stems in the checkout's `engineering/practices/`, plus the ids in the `Project practices` table of the Profile given with `--profile` |
-| Radiant's own contracts | `check_repository.py` checks `docs/plans/TC-*.md` against the catalog; the template is a form and is not checked as a contract |
+| Radiant's own contracts | `check_repository.py` checks `docs/plans/TC-[0-9][0-9][0-9][0-9]-*.md` against the catalog; the template is a form and is not checked as a contract |
+| Practice cells | Bare `tdd`, backticked `` `tdd` `` and, with candidate 1 (a), a link whose text is `` `tdd` ``; bare ids stay accepted because `practice_ids` and `tests/test_practice_cards.py` already accept them and TC-0001 relies on that |
 | Consumer gates | `check_project.py` and `check_dispatch.py` keep their behavior and output byte for byte |
 
 Each decision stands unless the owner overturns it in review.
@@ -236,18 +246,19 @@ nothing changes. After one:
 ### Open questions for the owner
 
 Each candidate becomes an entry in section 18 once the owner answers. The
-recommended option comes first.
+recommended option comes first. The second-opinion review of this contract
+agreed with every recommended option.
 
-1. **Linked practice cells.** TC-0001 and TC-0003 cite bare backticks; the
-   catalog index uses links.
-   - (a) Accept `` `id` `` and a Markdown link whose text is `` `id` `` and
-     whose target file stem equals the id; the target is compared, never
-     opened.
+1. **Linked practice cells.** TC-0001 and TC-0003 cite backticked ids, and
+   `tests/test_practice_cards.py` also accepts a bare id; the catalog index
+   uses links. Bare and backticked ids stay accepted under both options.
+   - (a) Also accept a Markdown link whose text is `` `id` `` and whose target
+     is a relative `.md` path ending in `id.md`; the target is compared,
+     never opened.
      Consequence: authors may link cards for readers; `practice_ids` and
      `check_repository.py` change together.
-   - (b) Accept only `` `id` ``; refuse a link with a message that says so.
-     Consequence: one form, no change to `practice_ids`; readers lose the
-     link.
+   - (b) Accept no link; refuse it with a message that says so.
+     Consequence: no change to `practice_ids`; readers lose the link.
 2. **Where the Profile comes from.**
    - (a) `--profile <path>`, explicit. Consequence: simple and testable; a
      consumer that forgets it sees its own ids refused, a safe failure.
@@ -282,17 +293,21 @@ recommended option comes first.
      Consequence: the pin gate reads contracts and fails a project whose
      active contract fails, a change to the map gate's meaning.
 6. **Shape of an owner decision entry.**
-   - (a) Require the section with a non-blank body, `None.` or entries.
+   - (a) Require the section with a non-blank body, `None.` or entries, and
+     refuse the template's unedited `[YYYY-MM-DD]` entry placeholder.
      Consequence: the issue's need is met; entry format stays a review
      concern.
    - (b) Also check each entry's date and `Contract impact`. Consequence:
      stronger provenance, more rules and more failing contracts to amend.
 7. **Consumer probe.**
-   - (a) Run `check_contract.py`, read-only, over the contracts of Demerzel and
-     AIKM at the commits recorded at activation, and report the results;
-     each consumer with failures gets one pointer issue in its repository.
+   - (a) The Build runs `check_contract.py`, read-only, over the contracts of
+     Demerzel and AIKM at the commits recorded in section 3 at activation,
+     and reports the results in section 16. The orchestrator, not the Build,
+     opens one pointer issue in each consumer with failures, with the
+     owner's authorization.
      Consequence: the effect on consumers is measured before any adopts the
-     command; the sandbox needs read access to both checkouts.
+     command; the sandbox needs read access to both checkouts, and the
+     Build's network boundary does not change.
    - (b) No probe. Consequence: no consumer access; the effect is learned at
      adoption.
 
@@ -302,10 +317,11 @@ Each task is one commit; after each, all the automated checks of section 11
 pass. New files are staged before the full test run:
 `tests/test_repository.py` copies only `git ls-files` into its fixtures.
 
-1. **Rules, test-first.** `tests/test_task_contracts.py` and, for
-   candidate 1, `tests/test_practice_cards.py`; run them and see the new ones
-   fail; implement `validators/task_contracts.py` and `practice_ids`; run
-   them and see them pass; commit; then prove each rule by mutation. Commit:
+1. **Rules, test-first.** `tests/test_task_contracts.py` and the new tests in
+   `tests/test_practice_cards.py`; run them and see them fail as section 11
+   describes; implement `validators/task_contracts.py` and the shared pieces
+   in `practice_cards.py`; run them and see them pass; commit; then prove
+   each rule by mutation. Commit:
    `feat(validators): add Task Contract rules for practices and acceptance`.
 2. **Command, test-first.** `tests/test_check_contract.py`, then
    `validators/check_contract.py`, same order. Commit:
@@ -342,18 +358,21 @@ Rules assume the recommended option of each candidate in section 5; an owner
 answer that differs replaces the affected rule before activation.
 
 - [ ] Fenced blocks are ignored: a heading, row or line inside a fence never counts.
-- [ ] A contract without a `8. Engineering Check` heading produces `missing section: 8. Engineering Check`.
-- [ ] In section 8, each Baseline row starts with an EB id that exists in the Baseline and has status `REQUIRED`, `APPLICABLE` or `N/A`, with or without backticks; an unknown id, an undecided status such as `REQUIRED / N/A` and a repeated id are each refused, naming section 8 and the id.
+- [ ] Sections `8. Engineering Check`, `12. Acceptance criteria` and `18. Owner decisions` are found and bounded as the section lookup decision in section 5 says; a heading of level 3 such as `### Practices` never ends a numbered section.
+- [ ] A contract without a `8. Engineering Check` heading produces `missing section: 8. Engineering Check`; the same holds for `12. Acceptance criteria`, and for `18. Owner decisions` when its version requires it.
+- [ ] A numbered section heading that appears more than once, and a second `### Practices` inside section 8, are each refused as a repeated heading, naming the section.
+- [ ] Section 8's Baseline rows are the data rows of its table before the first level 3 heading. Each row starts with an EB id that exists in the Baseline and has status `REQUIRED`, `APPLICABLE` or `N/A`, with or without backticks; an unknown id, an undecided status such as `REQUIRED / N/A` and a repeated id are each refused, naming section 8 and the id.
 - [ ] Section 8 with no `REQUIRED` or `APPLICABLE` row is refused as empty, naming section 8.
-- [ ] Each id in section 8's `### Practices` table is a catalog card stem or a Profile project id; otherwise `unknown practice id` names section 8, the Practices subsection and the id. A `### Practices` heading without rows is refused; no heading is accepted.
-- [ ] Cells `` `tdd` `` and `` [`tdd`](../../engineering/practices/tdd.md) `` are both read as `tdd`; a link whose stem differs from its text, and any other form, is refused as an invalid practice cell.
-- [ ] A Profile's `Project practices` ids, bare or in backticks, are read from its table; an id outside the practice id pattern or equal to a catalog id is refused, naming the Profile.
-- [ ] A contract without a `12. Acceptance criteria` heading produces `missing section: 12. Acceptance criteria`; with no checklist item, or with only placeholders and the template's four generic items, it is refused naming section 12.
+- [ ] Without a `### Practices` heading inside section 8, the contract cites no practice and passes this rule. A `### Practices` heading whose table has no data row is refused, naming the subsection; that is how an empty subsection differs from an absent one.
+- [ ] A practice cell is read as an id in three forms: bare `tdd`, backticked `` `tdd` `` and, with candidate 1 (a), a link whose text is `` `tdd` `` and whose target is a relative path with no URL scheme, query or fragment, not starting with `/`, ending in `tdd.md`. The link target is never opened. Any other cell, including a link that breaks those rules, is refused as an invalid practice cell, naming the cell.
+- [ ] Each id read from `### Practices` is a catalog card stem or a Profile project id; otherwise `unknown practice id` names section 8, the Practices subsection and the id. A repeated id is refused, naming it.
+- [ ] A Profile's `Project practices` ids, bare or in backticks, are read from its table; an id outside the practice id pattern, equal to a catalog id or repeated is refused, naming the Profile and the id. A Profile without the section contributes no id.
+- [ ] Section 12's checklist items are the lines `- [ ] `, `- [x] ` or `- [X] ` followed by text. A placeholder is an item whose text, after removing trailing `;`, `.` or `,`, surrounding whitespace and one pair of surrounding backticks, starts with `[` and ends with `]`. A generic item is one of the template's four fixed items, compared with the same trailing punctuation removed. With no item that is neither a placeholder nor generic, section 12 is refused, naming section 12.
 - [ ] A contract without `Template version`, or at `0.3` or earlier, passes without `18. Owner decisions`.
-- [ ] A contract at `0.4` or later without a `18. Owner decisions` heading, or with a blank body, is refused naming section 18 and the template version that requires it; `None.` is accepted.
-- [ ] A malformed `Template version`, or one later than the checkout's template, is refused, naming the field.
-- [ ] `check_contract.py` reads a path or `-` for standard input; success prints `{"template_version": ..., "practices": [...]}` and exits 0; failure prints every error in `{"errors": [...]}` and exits 1; a missing or unreadable contract or Profile exits 1 with an error naming it; a usage error exits 2.
-- [ ] `check_repository.py` checks every `docs/plans/TC-*.md` against the catalog, prefixes each error with the contract's path and exits 1 on any; the current tree passes, including this contract.
+- [ ] A contract at `0.4` or later is refused, naming section 18 and the template version that requires it, when the heading is missing, its body is blank, or its body still holds the template's unedited entry placeholder `[YYYY-MM-DD]`. `None.` is accepted.
+- [ ] A malformed `Template version`, one that is not `MAJOR.MINOR` digits, or one later than the checkout's template, is refused, naming the field.
+- [ ] `check_contract.py` reads a path or `-` for standard input. Success prints `{"template_version": "0.4", "practices": [...]}` and exits 0; `template_version` is the field's value as written, or JSON `null` when the field is absent, and `practices` lists the ids in table order. Failure prints every error in `{"errors": [...]}` and exits 1; a missing or unreadable contract or Profile exits 1 with an error naming it; a usage error exits 2.
+- [ ] `check_repository.py` checks every `docs/plans/TC-[0-9][0-9][0-9][0-9]-*.md` against the catalog, prefixes each error with the contract's path and exits 1 on any; the current tree passes, including this contract.
 - [ ] `check_project.py` and `check_dispatch.py` outputs are unchanged.
 
 # 8. Engineering Check
@@ -411,9 +430,16 @@ git diff --cached --check
   `tests/test_check_dispatch.py` and `tests/test_repository.py` do.
 - Fixture contracts are built in the tests from a minimal valid contract, not
   from the template, so a template edit cannot silently change them.
-- Before each implementation, the new refusal tests and the accept-with-link
-  test fail, and the tests that expect today's behavior pass. The Completion
-  report shows each run.
+- Before each implementation, the new tests are run and seen to fail, and
+  the Completion report shows each run. For the new files,
+  `validators/task_contracts.py` and `validators/check_contract.py`, every
+  new test fails because the module or script does not exist yet
+  (`ModuleNotFoundError` or a missing file); that run proves the tests reach
+  the new code, not each rule, so each rule's own proof is its mutation
+  below. For the existing files, `practice_cards.py` and
+  `check_repository.py`, the new tests fail on the missing behavior while
+  every existing test, including those of `tests/test_practice_cards.py`,
+  passes.
 - After each validator commit, mutate one rule at a time: each refusal, the
   version comparison (string instead of numeric), the exemption, fence
   stripping, the linked cell and the path prefix in `check_repository.py`.
@@ -426,9 +452,11 @@ git diff --cached --check
   example, and `check_project.py` through its existing tests, at the entry
   commit and at the end; the outputs match.
 - With candidate 7 (a): run `check_contract.py` on each consumer contract,
-  read from the recorded commit through standard input, and report per file
-  the result and errors. Record `git -C <checkout> rev-parse HEAD` and
-  `git -C <checkout> status --porcelain` before and after; the records match.
+  read from the commit recorded in section 3 through standard input, and
+  report per file the result and errors in section 16. Record
+  `git -C <checkout> rev-parse HEAD` and `git -C <checkout> status --porcelain`
+  before and after; the records match. The Build opens no issue and makes no
+  network call for the probe.
 
 ## Readback
 
@@ -501,8 +529,8 @@ Do not disguise `FAIL` as `DONE WITH NOTES`.
 
 The agent may:
 
-- extract a helper from `practice_cards.py` that both modules need, such as
-  table row reading, without changing its behavior;
+- add the two shared pieces of `practice_cards.py` that section 4 allows,
+  keeping every existing test unchanged and passing;
 - update directly affected tests and pointers.
 
 The agent may not, without HOLD:
