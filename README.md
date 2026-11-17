@@ -24,8 +24,8 @@ planned in [#29](https://github.com/faelplg/radiant/issues/29).
 | [AGENTS.md](AGENTS.md)                                                     | Map for working on Radiant itself                        |
 | [constitution/CONSTITUTION.md](constitution/CONSTITUTION.md)               | Invariants and precedence                                |
 | [engineering/engineering-baseline.md](engineering/engineering-baseline.md) | Proportional engineering baseline                        |
-| [engineering/practices/](engineering/practices/README.md) | Opt-in engineering practices and verification methods |
-| [docs/lifecycle.md](docs/lifecycle.md) | SDLC and PDLC coverage and evidence |
+| [engineering/practices/](engineering/practices/README.md)                  | Opt-in engineering practices and verification methods    |
+| [docs/lifecycle.md](docs/lifecycle.md)                                     | SDLC and PDLC coverage and evidence                      |
 | [docs/capabilities.md](docs/capabilities.md)                               | Index of available capabilities                          |
 | [docs/design-layer.md](docs/design-layer.md)                               | Radiant's canonical design layer                         |
 | [skills/radiant-cycle/SKILL.md](skills/radiant-cycle/SKILL.md)             | Reusable cycle procedure                                 |

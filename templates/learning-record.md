@@ -2,6 +2,7 @@
 
 Date: <YYYY-MM-DD>
 Project: <project>
+Origin and authorization: <project, owner, consent to share>
 Radiant revision: <full commit>
 Related contract or ADR: <reference>
 
@@ -31,7 +32,7 @@ Related contract or ADR: <reference>
 
 ## Reuse
 
-<Later application and its evidence, or state that reuse has not yet been demonstrated.>
+<Expected reach (project, family or Radiant Core); later application and its evidence, or state that reuse has not yet been demonstrated.>
 
 ## Incident (optional)
 
