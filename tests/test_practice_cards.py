@@ -130,6 +130,18 @@ class PracticeCardTests(unittest.TestCase):
     def test_practice_ids_ignores_fenced_table(self):
         self.assertEqual(practice_ids("```\n" + CONTRACT + "```\n"), [])
 
+    def test_practice_ids_reads_linked_cells(self):
+        self.assertEqual(practice_ids(CONTRACT.replace("`tdd`", "[`tdd`](../cards/tdd.md)")), ["tdd", "solid-srp"])
+        for cell in ("[`tdd`](wrong.md)", "[`tdd`](https://host/tdd.md)",
+                     "[`tdd`](/tdd.md)", "[`tdd`](tdd.md#source)", "[`tdd`](tdd.md?q)"):
+            self.assertEqual(practice_ids(CONTRACT.replace("`tdd`", cell)), [cell, "solid-srp"])
+
+    def test_table_cells_preserves_all_cells_and_first_cell_reader(self):
+        from practice_cards import table_rows, _table_rows
+        text = "A | B | C\n--- | --- | ---\n|| second | third |\n"
+        self.assertEqual(list(table_rows(text)), [(3, ["", "second", "third"])])
+        self.assertEqual(list(_table_rows(text)), [(3, "")])
+
     def test_index_ignores_serves_and_keeps_repetitions(self):
         row = INDEX.splitlines()[-1]
         self.assertEqual(index_ids(INDEX + row + "\n"), (["solid-srp", "solid-srp"], []))
