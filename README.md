@@ -28,6 +28,7 @@ planned in [#29](https://github.com/faelplg/radiant/issues/29).
 | [engineering/stacks/](engineering/stacks/README.md)                                                                              | Shared stack conventions selected by a Profile                       |
 | [Spec form](templates/spec.md), [Profile form](templates/engineering-profile.md), [example](docs/engineering-profile.example.md) | Behavior and project engineering decisions                           |
 | [docs/lifecycle.md](docs/lifecycle.md)                                                                                           | SDLC and PDLC coverage and evidence                                  |
+| [docs/delivery-flow.md](docs/delivery-flow.md)                                                                                   | End-to-end GitHub delivery flow                                      |
 | [docs/capabilities.md](docs/capabilities.md)                                                                                     | Index of available capabilities                                      |
 | [docs/design-layer.md](docs/design-layer.md)                                                                                     | Radiant's canonical design layer                                     |
 | [skills/radiant-cycle/SKILL.md](skills/radiant-cycle/SKILL.md)                                                                   | Reusable cycle procedure                                             |
