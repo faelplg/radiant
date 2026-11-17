@@ -3,7 +3,7 @@
 **Contract ID:** `TC-0003`\
 **Project:** `radiant`\
 **Iteration:** `Practices milestone, issue #33`\
-**Status:** `HOLD` - awaiting the owner's answers to the open questions and activation\
+**Status:** `READY` - the owner answered the planning questions on 2026-11-17; activation is a separate owner go\
 **Owner:** `Fael (human); Build by an authorized agent`\
 **Risk tier:** `2` - the pack declaration and the `check_project.py` change become part of the pin gate that every consumer, and Demerzel's dispatch, runs on its next pin bump\
 **Capability:** `default`\
@@ -12,9 +12,9 @@
 **Entry commit:** `1a3595997df6d226300ecc324592d4254532cc36`\
 **Tracking:** [issue #50](https://github.com/faelplg/radiant/issues/50), sub-issue of epic [#30](https://github.com/faelplg/radiant/issues/30)
 
-The contract is planned, not active: the owner answers the
-[open questions](#open-questions-for-the-owner), the contract moves to
-`READY`, and the owner activates it. A Build that starts from a later `main`
+The contract is ready, not active: the owner answered the planning questions
+on 2026-11-17, as recorded in [Owner decisions](#owner-decisions-2026-11-17).
+Activation is a separate go from the owner after this contract merges. A Build that starts from a later `main`
 commit, such as the merge of this contract, records that commit as the entry
 commit at activation; the Allowed scope does not change.
 
@@ -27,7 +27,7 @@ requires.
 
 ## 1. Objective
 
-> **Radiant has a Spec form, an Engineering Profile form and two stack packs (`typescript-bun`, `python-uv`) under `engineering/stacks/`; a Profile declares at most one pack by id, `check_project.py` accepts a known id and refuses an unknown one, and a Demerzel example Profile kept in Radiant passes that check.**
+> **Radiant has a Spec form, an Engineering Profile form and one stack pack (`typescript-bun`) under `engineering/stacks/`; a Profile declares at most one pack by id, `check_project.py` accepts a known id and refuses an unknown one, and a Demerzel example Profile kept in Radiant passes that check.**
 
 ## 2. Why this task exists
 
@@ -85,12 +85,11 @@ The agent may assume as input:
   - `faelplg/aikm` `a2cfd1bf6f415521567d0e48d8eebcc79a3e611d`:
     `package.json`, `biome.json`, `.github/workflows/check.yml`,
     `docs/project/SPEC.md`;
-  - `faelplg/omr-ingestor` `c9ea3b9672b4af092812da611091c8e723f0ee48`:
-    `pyproject.toml`, `.github/workflows/ci.yml`, `src/` and `tests/` layout.
 
 Planning found that AIKM is TypeScript on Bun at that commit (`package.json`,
 `bun.lock`, `biome.json`, no `.py` file), although #33 lists it under Python.
-Open question 1 decides the consequence.
+Owner decision 1 records the consequence: AIKM is a `typescript-bun`
+consumer, and no Python pack ships here.
 
 Do not infer missing inputs that would materially change the solution.
 
@@ -157,8 +156,8 @@ the consumer checkouts listed in section 3
 1. `engineering/stacks/README.md`: what a pack is, the id rule, how a Profile
    selects one, how it overrides a pack section, precedence, and an index
    table with one row per pack.
-2. `engineering/stacks/typescript-bun.md` and `engineering/stacks/python-uv.md`,
-   in the pack format of the decisions below.
+2. `engineering/stacks/typescript-bun.md`, in the pack format of the
+   decisions below.
 3. `templates/spec.md` and `templates/engineering-profile.md`, indexed in
    `templates/README.md`.
 4. `docs/engineering-profile.example.md`: the Demerzel example Profile,
@@ -182,15 +181,15 @@ Do not create additional artifacts without an observed need.
 | --- | --- |
 | Pack location | `engineering/stacks/`, next to `engineering/practices/` |
 | Pack id | Lowercase kebab slug equal to the file stem, same pattern as practice ids; never renamed or reused |
-| First packs | `typescript-bun` and `python-uv` |
+| First pack | `typescript-bun` only, for Demerzel and AIKM |
 | Pack sections | `Layering and dependency rule`, `Test layout and commands`, `Lint and format`, `Error handling`, `CI and release`, in that order and no others |
 | Mapping to practices | Each section opens with a `- Serves:` line of at least one Markdown link, each to a practice card or a Baseline anchor; `Lint and format` and `Error handling` have no card today and may cite Baseline rules only |
-| Declaration | One line in the Profile file: ``- Stack pack: `<id>` `` or ``- Stack pack: `none` ``; `.radiant.json` is unchanged |
+| Declaration | Decided by the owner: one line in the Profile file: ``- Stack pack: `<id>` `` or ``- Stack pack: `none` ``; `.radiant.json` is unchanged |
 | Number of packs | At most one per Profile |
 | Override | A `Pack overrides` table in the Profile, one row per changed pack section, with the reason |
 | Pack version | The Radiant pin; a pack has no version of its own |
 | Project practices | A Profile section lists the project's own practice cards, written with the card form and kept in the consumer; their ids never reuse a catalog id |
-| Pack structure check | None in this contract; a tracked follow-up issue adds it (open question 3) |
+| Pack structure check | None in this contract; a tracked follow-up issue adds it (owner decision 3) |
 | Demerzel example | `docs/engineering-profile.example.md`, after the `docs/routing.example.json` precedent |
 
 #### Where pack ids live
@@ -203,15 +202,16 @@ match is exact against the stems listed in `engineering/stacks/` except
 `README.md`, never a path lookup: on a case-insensitive filesystem,
 `readme.md` would otherwise resolve to the index.
 
-`python-uv` names the tool manager because a pack fixes commands, and
-commands depend on it: `uv sync --locked`, `uv run pytest`. A Python project
-on another manager needs another pack, not overrides of every command.
-`typescript-bun` follows the same rule.
+`typescript-bun` names the runtime and package manager because a pack fixes
+commands, and commands depend on them: `bun install --frozen-lockfile`,
+`bun run check`. A TypeScript project on another runtime needs another pack,
+not overrides of every command.
 
 #### How a consumer declares a pack
 
-The `engineering_profile` slot keeps its meaning: a file path or `null`. The
-Profile file it points to carries the pack line. Reasons:
+Owner decision 2 settles it. The `engineering_profile` slot keeps its
+meaning: a file path or `null`. The Profile file it points to carries the
+pack line, and `.radiant.json` is unchanged. Reasons:
 
 - the map stays a map of pointers and the pin, as
   [integration](../integration.md#project-map) defines it, and
@@ -260,7 +260,7 @@ recorded with its reason. No validator reads the overrides in this contract.
 
 Every pack rule is grounded in the consumer evidence of section 3 or in a
 practice card: commands are the consumers' real commands, such as
-`bun run check` and `uv run pytest -q`, not invented ones. When consumers
+`bun run check` and `bun test`, not invented ones. When consumers
 differ, the pack states the default and the reason, and the difference
 becomes an override in that consumer's Profile. Demerzel has no linter while
 AIKM uses Biome; if the pack defaults to Biome, the Demerzel example records
@@ -300,8 +300,8 @@ Each task is one commit; after each, the three automated checks of section
 earlier file to a later one, such as from `engineering/stacks/README.md` to
 the Profile form or the example, waits for task 5.
 
-1. **Packs.** `engineering/stacks/README.md`, `typescript-bun.md`,
-   `python-uv.md`. Commit: `docs(stacks): add TypeScript on Bun and Python stack packs`.
+1. **Pack.** `engineering/stacks/README.md` and `typescript-bun.md`.
+   Commit: `docs(stacks): add the TypeScript on Bun stack pack`.
 2. **Validator, test-first.** In `tests/test_integration.py`, add
    `engineering` to the directories copied into the fixture, then the tests of
    section 11; run them and see the new ones fail; implement the check in
@@ -332,6 +332,8 @@ This task must **not**:
   in both directions, as it does for practice cards;
 - validate Profile sections, override rows or Spec content;
 - validate practice ids in consumer contracts or project practice ids (#34);
+- add a Python pack. Follow-up, for when a Python project, for example
+  omr-ingestor, adopts Radiant: a pack grounded in that project's evidence;
 - add packs for other stacks, or allow several packs per Profile;
 - edit the Constitution, the Task Contract template, practice cards, skills
   or adapters;
@@ -343,7 +345,7 @@ Record it as an observation or a Learn Back candidate.
 
 # 7. Functional requirements
 
-- [ ] A Profile with ``- Stack pack: `typescript-bun` `` or `python-uv` passes `check_project.py`, and the `PASS` line on stdout keeps its `PASS: Radiant <commit>;` prefix and names the pack.
+- [ ] A Profile with ``- Stack pack: `typescript-bun` `` passes `check_project.py`, and the `PASS` line on stdout keeps its `PASS: Radiant <commit>;` prefix and names the pack.
 - [ ] A Profile without the line, or with `none`, passes with the current output.
 - [ ] `no-such-pack`, `README`, `readme`, `../templates/spec`, empty backticks, a value without backticks and two `Stack pack` lines each produce `HOLD` on stderr naming `engineering_profile`, with exit 1.
 - [ ] A `- Stack pack:` line inside a fenced block is ignored.
@@ -356,7 +358,7 @@ Record it as an observation or a Learn Back candidate.
 
 | Baseline                          | Status           | Application in this task | Evidence          |
 | --------------------------------- | ---------------- | ------------------------ | ----------------- |
-| EB-01 Deliberate complexity       | `REQUIRED`       | One line in the Profile, no schema change, no registry, one pack per Profile; `python-uv` generalizes from one repository, omr-ingestor, and says so | Diff review against section 5 decisions; limitation in the Completion report |
+| EB-01 Deliberate complexity       | `REQUIRED`       | One line in the Profile, no schema change, no registry, one pack per Profile; one pack, for the only stack with Radiant consumers | Diff review against section 5 decisions |
 | EB-02 Correctness and contracts   | `REQUIRED`       | Exact stem match; backward compatible with Profiles without a pack | Tests in `tests/test_integration.py` |
 | EB-03 Verification and tests      | `REQUIRED`       | Test-first, accept and reject cases, mutation proof | Commands in section 11 |
 | EB-04 Security and privacy        | `REQUIRED`       | The id never becomes a path; no read outside the Radiant root and the Profile | Refusal tests for `../templates/spec` and `readme` |
@@ -462,7 +464,7 @@ The task can only be declared `DONE` when:
 - [ ] `check_project.py` accepts a project whose Profile declares a pack and refuses an unknown pack id (issue #33);
 - [ ] the Demerzel example Profile passes `check_project.py` (issue #33);
 - [ ] the Spec form and the Engineering Profile form exist and are indexed in `templates/README.md`, and the Profile form covers the sections listed in section 5 (issue #33; Baseline section 11);
-- [ ] `typescript-bun` and `python-uv` cover layering and dependency rule, test layout and commands, lint and format, error handling, and CI and release, each section mapped to practice ids or Baseline rules (issue #33);
+- [ ] `typescript-bun` covers layering and dependency rule, test layout and commands, lint and format, error handling, and CI and release, each section mapped to practice ids or Baseline rules (issue #33; the Python pack is deferred by owner decision 1);
 - [ ] `engineering/stacks/README.md` says how a project selects and overrides a pack (issue #33);
 - [ ] no consumer repository and no `.radiant.json` schema changed;
 - [ ] all applicable checks in section 11 pass;
@@ -474,7 +476,7 @@ The task can only be declared `DONE` when:
 
 Stop and ask for a decision when:
 
-- the owner's answer to an open question changes a decision in section 5;
+- a Build finding contradicts an [owner decision](#owner-decisions-2026-11-17);
 - a pack rule can be grounded neither in the consumer evidence of section 3
   nor in a practice card;
 - the Demerzel example cannot avoid copying pack or Baseline text;
@@ -521,27 +523,14 @@ Filled by the Build in the format of
 
 > **Do not declare DONE because the code looks right. Declare DONE only when the observable criteria, the applicable engineering and the verification evidence converge.**
 
-## Open questions for the owner
+## Owner decisions (2026-11-17)
 
-Only questions whose answer changes the solution. Each has a default the
-contract already follows.
+The owner answered the three planning questions on 2026-11-17:
 
-1. **Python pack consumers.** #33 names AIKM and omr-ingestor for the Python
-   pack, but AIKM is TypeScript on Bun at `a2cfd1b`, and omr-ingestor has no
-   `.radiant.json`, so no Radiant consumer uses Python today. Default: keep
-   `python-uv`, grounded in omr-ingestor, list AIKM as a `typescript-bun`
-   consumer, and record the single-repository grounding as a limitation
-   under EB-01. Alternative: drop the Python pack until a Python project
-   adopts Radiant, which shrinks this contract and changes #33's scope.
-2. **Where the declaration lives.** Default: a `- Stack pack:` line in the
-   Profile file, with `.radiant.json` unchanged. Alternative: a new optional
-   `stack_pack` field in the map, which lets a project select a pack without a
-   Profile file but adds a field to the schema every consumer validates.
-3. **Pack structure validator.** Default: no validator in this contract; the
-   tracked follow-up issue recorded in section 6 adds the
-   `check_repository.py` rule, and until then section 7 and the focused
-   script check pack structure, while the repository link check catches a
-   `Serves` link to a removed card. Alternative: add the
-   `check_repository.py` rule now, which brings
-   `validators/check_repository.py` and `tests/test_repository.py` into
-   scope.
+1. **Python pack.** Not in this contract. Only `typescript-bun` ships, for
+   Demerzel and AIKM; a Python pack is a follow-up for when a Python project
+   adopts Radiant (section 6).
+2. **Where the declaration lives.** A `- Stack pack:` line in the Profile
+   file; `.radiant.json` and `templates/radiant-project.json` are unchanged.
+3. **Pack structure validator.** Not in this contract; the follow-up issue
+   described in section 6 adds the `check_repository.py` rule.
