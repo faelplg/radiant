@@ -41,5 +41,6 @@ Related contract or ADR: <reference>
 - Detection: <how and when the incident was detected.>
 - Impact: <affected participants, systems and duration.>
 - Timeline (UTC): <timestamped events, response actions and restoration.>
-- Time to restore: <elapsed time and start/end timestamps, as input to the dora-metrics practice.>
+- Time to restore: <elapsed time and start/end timestamps for every postmortem;
+  feed dora-metrics only when the incident is a failed deployment.>
 - Contributing factors: <conditions and system behavior, written without blame.>

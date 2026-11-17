@@ -475,6 +475,27 @@ and this contract. The full entry-to-HEAD scope remains the same ten allowed
 paths listed above. No Constitution or TC-0001 edits, network access, push,
 PR, independent critique execution or design-systems edits occurred.
 
+### PR #45 Copilot review follow-up
+
+The owner supplied and accepted a Copilot finding: the Incident restore-time
+field implied that every incident feeds `dora-metrics`, whose recovery measure
+is limited to failed deployments. The Learning Record now records restore
+time for every postmortem and feeds DORA only for a failed-deployment incident.
+Status remains `VERIFY`.
+
+The owner authorized this follow-up commit and a push to the feature branch
+`origin docs/lifecycle-map`, superseding the earlier no-push restriction for
+this action. No PR creation, merge or review-thread action is authorized here.
+
+```text
+python3 validators/check_repository.py
+PASS: 59 documents; 378 local links.
+python3 -m unittest discover -s tests
+Ran 110 tests; OK.
+git diff --check
+Exit 0, no output.
+```
+
 ### Learn Back candidate
 
 None new. The separate living-page follow-up is already identified by the
