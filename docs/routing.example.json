@@ -2,17 +2,36 @@
   "schema": 1,
   "rules": [
     {
-      "id": "ui-browser",
-      "when": "Interface units that need to open and inspect pages",
-      "use": [{ "harness": "claude-code" }, { "harness": "codex" }],
-      "why": "Owner preference for visual inspection"
+      "id": "build",
+      "when": "Standard implementation and Build units",
+      "use": [{ "harness": "codex", "effort": "medium" }],
+      "why": "Owner routing (2026-11-24): Codex gpt-6.1-sol at medium effort"
+    },
+    {
+      "id": "bug-fix",
+      "when": "Bug investigation and fix units",
+      "use": [{ "harness": "codex", "effort": "high" }],
+      "why": "Codex Sol high first; after 2 failures the orchestrator may escalate effort to xhigh or switch to claude-code (claude-opus-5-5) high (orchestrator retry policy, not expressed by the static fallback list)"
+    },
+    {
+      "id": "frontend",
+      "when": "Front-end interface units",
+      "use": [{ "harness": "claude-code", "capability": "deep", "effort": "medium" }],
+      "why": "Claude Code Opus 5.5 medium; capability deep is required because standard maps to Sonnet"
+    },
+    {
+      "id": "plans-and-contracts",
+      "when": "Planning and non-docs Task Contracts",
+      "use": [{ "harness": "claude-code", "capability": "deep", "effort": "high" }],
+      "why": "Claude Code Opus 5.5 high; second opinion uses agy once its adapter exists"
     },
     {
       "id": "independent-critique",
-      "when": "Critique of a Build made by another vendor's model",
-      "use": [{ "harness": "codex", "capability": "deep" }],
-      "approval": "human"
+      "when": "Critique of a Codex Build",
+      "use": [{ "harness": "claude-code", "capability": "deep", "effort": "high" }],
+      "approval": "human",
+      "why": "Critique never comes from the author's vendor; stand-in for a Codex build until the agy adapter can take Claude through agy"
     }
   ],
-  "default": [{ "harness": "claude-code" }]
+  "default": [{ "harness": "codex", "effort": "medium" }]
 }
