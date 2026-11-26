@@ -44,3 +44,40 @@ only dispatches with explicit confirmation from the human.
 | candidate `harness` | Required; name of a directory in `adapters/` |
 | candidate `capability` | Optional; `deep`, `standard` or `light` |
 | candidate `effort` | Optional; reasoning level requested from the harness |
+
+The JSON format does not carry model IDs. Models come from each adapter's
+`capabilities.json`, or from orchestrator judgment for harnesses not yet
+represented by an adapter.
+
+## Owner routing (2026-11-24)
+
+Current owner routing approved on 2026-11-24:
+
+- **Build:** `codex` (`gpt-6.1-sol`), `medium` effort.
+- **Bugs:** `codex` (`gpt-6.1-sol`), `high` effort. Escalate to `high` or
+  `xhigh`, or to `claude-code` (`claude-opus-5-5`) `high`, only after 2
+  failures.
+- **Docs-only work (including a docs-only Task Contract):** `agy`
+  `gemini-4-hydrogen-medium`.
+- **Large refactors:** `agy` `gemini-pro-orchestrator-neon` (replaces
+  `gemini-pro-orchestrator-g1-pro`, which no longer exists).
+- **Front end:** `claude-code` (`claude-opus-5-5`), `medium` effort. Because
+  `adapters/claude-code/capabilities.json` maps `deep` to `claude-opus-5-5`,
+  `standard` to `claude-sonnet-5-5` and `light` to `claude-haiku-5-5`, the
+  candidate must set `"capability": "deep"` together with `"effort": "medium"`.
+  In contrast, `adapters/codex/capabilities.json` maps both `deep` and
+  `standard` to `gpt-6.1-sol`.
+- **Plans and Task Contracts:** `claude-code` (`claude-opus-5-5`), `high`
+  effort (requiring `"capability": "deep"`), with a second opinion from `agy`
+  `gemini-4-neon-high` (replaces `gemini-4-argon-high`, which leaves service on
+  2026-11-30).
+- **Critique:** never comes from the author's vendor. Critique of a Codex build
+  runs on Claude through `agy`.
+- **Non-adapter tools:** Copilot reviews pull requests, and `cursor-agent` is
+  used for exploration or a second opinion. Neither is a Radiant adapter, so
+  neither appears as a `harness` in `routing.json`.
+
+Because `validators/check_repository.py` checks every `harness` in
+[routing.example.json](routing.example.json) against directories in `adapters/`
+(currently only `codex` and `claude-code`), the validated example cannot yet
+name `agy`. An `agy` example will be added once the `agy` adapter lands.
