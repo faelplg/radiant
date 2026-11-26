@@ -54,9 +54,10 @@ represented by an adapter.
 Current owner routing approved on 2026-11-24:
 
 - **Build:** `codex` (`gpt-6.1-sol`), `medium` effort.
-- **Bugs:** `codex` (`gpt-6.1-sol`), `high` effort. Escalate to `high` or
-  `xhigh`, or to `claude-code` (`claude-opus-5-5`) `high`, only after 2
-  failures.
+- **Bugs:** `codex` (`gpt-6.1-sol`), `high` effort on the first attempt. After 2
+  failures, the orchestrator may escalate effort to `xhigh` or switch to
+  `claude-code` (`claude-opus-5-5`) `high`; this retry policy is orchestrator
+  judgment, not something the static fallback list can express.
 - **Docs-only work (including a docs-only Task Contract):** `agy`
   `gemini-4-hydrogen-medium`.
 - **Large refactors:** `agy` `gemini-pro-orchestrator-neon` (replaces

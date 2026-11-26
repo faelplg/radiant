@@ -10,11 +10,8 @@
     {
       "id": "bug-fix",
       "when": "Bug investigation and fix units",
-      "use": [
-        { "harness": "codex", "effort": "high" },
-        { "harness": "claude-code", "capability": "deep", "effort": "high" }
-      ],
-      "why": "Codex Sol high first; escalate to high/xhigh or Claude Opus high only after 2 failures"
+      "use": [{ "harness": "codex", "effort": "high" }],
+      "why": "Codex Sol high first; after 2 failures the orchestrator may escalate effort to xhigh or switch to claude-code (claude-opus-5-5) high (orchestrator retry policy, not expressed by the static fallback list)"
     },
     {
       "id": "frontend",
@@ -30,13 +27,10 @@
     },
     {
       "id": "independent-critique",
-      "when": "Critique of a Build made by another vendor's model",
-      "use": [
-        { "harness": "claude-code", "capability": "deep", "effort": "high" },
-        { "harness": "codex", "capability": "deep", "effort": "high" }
-      ],
+      "when": "Critique of a Codex Build",
+      "use": [{ "harness": "claude-code", "capability": "deep", "effort": "high" }],
       "approval": "human",
-      "why": "Critique never comes from the author's vendor"
+      "why": "Critique never comes from the author's vendor; stand-in for a Codex build until the agy adapter can take Claude through agy"
     }
   ],
   "default": [{ "harness": "codex", "effort": "medium" }]
