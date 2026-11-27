@@ -27,7 +27,7 @@ entry commit, the Demerzel commit of section 3 and the move out of `READY`.
 
 ## 1. Objective
 
-> **Each adapter's `capabilities.json` and `provides.json` are the only place in Radiant that holds harness kinds, models and efforts; the routing format separates policy (unit type to capability and constraints) from resolution (to harness, model and effort); `docs/routing.example.json` validates in the new schema; and resolving today's rules, including the 2026-11-24 owner routing in `docs/routing.md`, gives the same harness, capability, model, effort and approval as at the planning baseline, as a golden table test shows for schema 1 and schema 2.**
+> **Each adapter's `capabilities.json` and `provides.json` are the only place in Radiant that holds harness kinds, models and efforts; the routing format separates policy (unit type to capability and constraints) from resolution (to harness, model and effort); `docs/routing.example.json` validates in the new schema; and resolving the rules of `docs/routing.example.json`, which represent the `codex` and `claude-code` routes of the 2026-11-24 owner routing in `docs/routing.md`, gives the same harness, capability, model, effort and approval as at the planning baseline, as a golden table test shows for schema 1 and schema 2. The `agy` routes of that owner routing stay outside the table until #29 lands.**
 
 ## 2. Why this task exists
 
@@ -62,7 +62,7 @@ entry commit, the Demerzel commit of section 3 and the move out of `READY`.
   Moving the facts into the adapter files and splitting the format makes
   each change land in one file, and lets `agy` arrive as adapter files.
 - What would refute it: the split cannot reproduce today's resolution for
-  every rule and unit floor, or keeping Demerzel working requires changing
+  every rule of the example and every unit floor, or keeping Demerzel working requires changing
   the shape of `capabilities.json` or of the `check_dispatch.py routing`
   output. The Build then stops on HOLD instead of changing the expected
   table or a consumer's reader.
@@ -388,8 +388,11 @@ candidates, or `default` without a rule; skip a harness without an adapter,
 one whose `provides` does not cover `requires` and one whose capability,
 the candidate's or else the floor, is below the floor; the first viable
 candidate gives `{harness, capability, model, effort, approval}`, where
-`model` is the adapter's `capabilities.json` value and an effort outside the
-adapter's `efforts` is returned as omitted with its reason. Without a viable
+`model` is the adapter's `capabilities.json` value. For a schema 1 file, and
+for a schema 2 file only under question 2 (B), an effort outside the
+adapter's `efforts` is returned as omitted with its reason, as Demerzel's
+`prepare` omits today an effort its list lacks; under question 2 (A),
+validation refuses such a schema 2 file before `resolve`. Without a viable
 candidate it returns `HOLD` with one reason per candidate. An unknown rule
 id is an error, not `default`. Choosing the rule stays orchestrator
 judgment, as today.
@@ -402,7 +405,8 @@ judgment, as today.
   breaks, including the owner's, which stays on schema 1 until the owner's
   dotfiles migrate it in their own change, outside this contract, as #29
   also leaves it.
-- **Demerzel at its current pin** (`93d61c0`) sees nothing until it bumps
+- **Demerzel at its current pin**
+  (`93d61c0e1f39025e55cc10049cc82c9854c04434`) sees nothing until it bumps
   the pin ([no silent update](../integration.md#no-silent-update)).
 - **Demerzel after a pin bump, before #60.** `capabilities.json` keeps its
   shape, so `catalog.ts:44-45` reads it; `catalog.ts:46-47` ignores the new
@@ -562,7 +566,9 @@ passes. New files are staged before the full test run:
 2. **Schema 2 and the golden table, test-first (TC-0005.2).** Add the
    baseline fixture first and the golden test against schema 1, which
    fails only because `routing_resolution.py` does not exist; then schema 2
-   validation, fold and resolver; then migrate the example. Commit:
+   validation, fold and resolver, whose effort tests follow question 2
+   (omission in `resolve` for schema 1, and for schema 2 under (B); refusal
+   in schema 2 validation under (A)); then migrate the example. Commit:
    `refactor(routing): separate policy from resolution in schema 2`.
 3. **Docs (TC-0005.3).** Commit:
    `docs(routing): document harness facts and routing schema 2`.
@@ -599,7 +605,7 @@ Record it as an observation or a Learn Back candidate.
 - [ ] A schema 2 file is refused, naming the rule or entry, for: an unknown key at any level, a `resolve` or `default` naming no entry, an unreferenced entry, a rule `capability` outside the three, a candidate capability below a referencing rule's capability, a harness without an adapter (with the text `harness without an adapter`), and, under question 2 (A), an effort outside the adapter's `efforts`.
 - [ ] `fold` of a schema 2 file gives the schema 1 shape, with the rule's `capability` on each candidate that lacks one; `fold` of the new example equals the baseline fixture in every field except `schema` and `why`.
 - [ ] `resolve` gives the golden table of section 11 for the baseline fixture and for the new example, for every rule and default, every floor and `requires` of `[]` and `["browser"]`; an unknown rule id is an error.
-- [ ] On synthetic rules, `resolve` falls back to the next candidate when the first is not viable, returns `HOLD` when every candidate's capability is below the floor, skips a harness without an adapter, and returns an effort outside the adapter's `efforts` as omitted with its reason.
+- [ ] On synthetic rules, `resolve` falls back to the next candidate when the first is not viable, returns `HOLD` when every candidate's capability is below the floor, skips a harness without an adapter, and, for a schema 1 file and, under question 2 (B), a schema 2 file, returns an effort outside the adapter's `efforts` as omitted with its reason; under question 2 (A), the schema 2 case is the validation refusal of the item above.
 - [ ] `check_dispatch.py routing` on a schema 2 file prints the output question 1 chose.
 - [ ] `docs/routing.example.json` is schema 2 and passes `check_repository.py` and `check_dispatch.py routing`.
 - [ ] Adding the fixture adapter of section 5 needs no change outside its directory and the global block line.
@@ -663,7 +669,7 @@ git diff --cached --check
 
 The baseline is `tests/fixtures/routing-schema1.json`, a byte copy of the
 planning baseline's example:
-`git show 4e4ff16:docs/routing.example.json | cmp - tests/fixtures/routing-schema1.json`
+`git show 4e4ff16d43ea83c589b3557cea99227029f7769a:docs/routing.example.json | cmp - tests/fixtures/routing-schema1.json`
 exits 0. If the example changes on `main` before activation, the Build stops
 on HOLD. In the model column, `codex:deep` means the `deep` value of
 `adapters/codex/capabilities.json`, which the test reads from the file and
@@ -696,6 +702,18 @@ With `requires` `["browser"]`, every row above is `HOLD`, with the reason
 that the adapter's `provides` does not cover `browser`. An unknown rule id
 is an error.
 
+Limitation: the table covers only the rules of the baseline example, the
+`codex` and `claude-code` routes of the 2026-11-24 owner routing. Its `agy`
+routes (docs-only work, large refactors, the plans second opinion and
+critique through `agy`) are in neither fixture and stay uncovered until #29
+lands. Until then, a routing rule naming `agy` keeps failing validation as
+at the planning baseline: a schema 1 file whose rule `docs-only` has the
+candidates `agy` then `codex` exits 1 with
+`{"errors": ["rule 'docs-only': harness without an adapter 'agy'"]}`, the
+`codex` fallback notwithstanding, and a test in
+`tests/test_check_dispatch.py` asserts those bytes, plus the text
+`harness without an adapter` for a schema 2 entry naming `agy`.
+
 The test asserts the table for `resolve(baseline fixture)`, for
 `resolve(fold(docs/routing.example.json))` and for the parsed stdout of
 `check_dispatch.py routing` on each of the two files, folded first when it
@@ -711,7 +729,9 @@ cover what section 7 lists: a first candidate whose harness has no adapter,
 then a viable one, resolves to the second; a candidate whose own capability
 is below the floor is skipped, and a rule whose every candidate is below the
 floor is `HOLD` with one reason per candidate; an effort outside the
-adapter's `efforts` resolves with the effort omitted and its reason.
+adapter's `efforts` resolves with the effort omitted and its reason in
+schema 1 and, under question 2 (B), in schema 2; under question 2 (A), the
+schema 2 test is that validation refuses it.
 
 ## Focused verification
 
@@ -727,7 +747,7 @@ adapter's `efforts` resolves with the effort omitted and its reason.
   rule capability in `fold`; ignore the candidate capability in `resolve`;
   let a candidate below the floor win; stop at the first candidate instead
   of falling back; skip the `provides` check; return an unaccepted effort
-  as applied in `resolve`; accept an effort outside `efforts` in validation
+  as applied in `resolve` (schema 1, and schema 2 under question 2 (B)); accept an effort outside `efforts` in validation
   (question 2 (A)); return `default` for an unknown rule; drop `why` from
   the `routing` output of a schema 1 file; discover adapters with
   `is_dir()` only; hard-code the render table again; accept a template path
@@ -798,6 +818,7 @@ The task can only be declared `DONE` when:
 - [ ] `cmp` shows that `check_dispatch.py routing` on the baseline fixture prints the same bytes as the entry commit on its example, and that rendered subagents and the global block are unchanged;
 - [ ] `rg` finds no adapter name in `validators/` code or `adapters/render_bootstrap.py`, and no file outside `adapters/*/provides.json` holds the facts of `cli`, `efforts` and `subagents` as data: `rg` over `validators/` and `adapters/render_bootstrap.py` finds no launch command table, effort list, agent template name, extension or read-only line, and no doc outside `docs/plans/` and `docs/history/` restates an adapter's effort list; a routing rule's `effort` uses a level and does not count (issue #35);
 - [ ] the fixture adapter test passes with no change outside its directory and the global block line;
+- [ ] a routing rule naming `agy` fails validation as at the planning baseline, as section 11 states, and the Completion report records that the `agy` routes of the 2026-11-24 owner routing are not covered until #29 lands;
 - [ ] `git diff --name-only <entry>..HEAD` shows no `adapters/*/capabilities.json` change and no file outside the Allowed scope;
 - [ ] `docs/integration.md` has the note for Demerzel, linking faelplg/demerzel#60 (issue #35);
 - [ ] the owner's `routing.json` was confirmed present before activation, and the orchestrator's before and after runs on it exit with the same code and print the same bytes;
@@ -874,6 +895,7 @@ The agent may not, without HOLD:
 ### Remaining limitations
 
 - `[known limitation or none]`
+- The golden table does not cover the `agy` routes of the 2026-11-24 owner routing until #29 lands (section 11).
 
 ### Learn Back candidate
 
