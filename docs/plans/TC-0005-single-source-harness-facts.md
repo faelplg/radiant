@@ -84,7 +84,7 @@ The agent may assume as input:
 - Demerzel, read-only, at the commit the activation records. Planning read
   the `main` working tree at `67215da9f0b0c5b1beca1451f161872ff7d62645`;
   Demerzel's `.radiant.json` pins Radiant at
-  `93d61c0e1f39025e55cc10049cc82c9854c04434`. Under question 10 (A), the
+  `93d61c0e1f39025e55cc10049cc82c9854c04434`. Under question 7 (A), the
   Build reads Demerzel only with `git -C <checkout> show <commit>:<path>`,
   and the request supplies the checkout's absolute root; the contract does
   not carry it, because the repository check refuses personal paths.
@@ -102,11 +102,11 @@ commit above.
 
 | # | Fact | Where it is today | Problem | Fate in this contract |
 | --- | --- | --- | --- | --- |
-| 1 | Which harnesses exist | `adapters/render_bootstrap.py:9-14` (keys of `ADAPTERS`) and `:73` (`--adapter` choices); `validators/check_dispatch.py:20,46-47` (a directory with three files); `validators/check_repository.py:74,91,98` (any directory); Demerzel `src/herdr/backend.ts:16` (keys of `KIND`) and `:104` | Three Radiant definitions of "an adapter", two of them different, and a Python list next to them | One discovery function in `validators/adapters.py`; `render_bootstrap.py` uses it; Demerzel note |
+| 1 | Which harnesses exist | `adapters/render_bootstrap.py:9-14` (keys of `ADAPTERS`) and `:73` (`--adapter` choices); `validators/check_dispatch.py:20,46-47` (a directory with three files); `validators/check_repository.py:74,91,98` (any directory); Demerzel `src/herdr/backend.ts:16` (keys of `KIND`) and `:104` | Three Radiant definitions of "an adapter", two of them different, and a Python list next to them | One discovery function in `validators/adapter_facts.py`; `render_bootstrap.py` uses it; Demerzel note |
 | 2 | Harness CLI, the herdr launch kind | Demerzel `src/herdr/backend.ts:16` (`claude-code` to `claude`, `codex` to `codex`); ADR-0002 lines 51-55 list herdr kinds as history | Radiant does not hold it, so a consumer must | `provides.json` gains `cli` |
 | 3 | Accepted effort levels | Demerzel `src/herdr/backend.ts:17-20`; Radiant accepts any non-empty text, `validators/dispatch_formats.py:172-174`; `docs/routing.md:28-29` describes dropping an unaccepted one | Radiant cannot say whether an effort is valid | `provides.json` gains `efforts` |
 | 4 | Subagent rendering per harness | `adapters/render_bootstrap.py:10-13` (agent template, extension, read-only line) | A new adapter needs a Python edit | `provides.json` gains `subagents` |
-| 5 | Model per capability | Source: `adapters/codex/capabilities.json:2-4`, `adapters/claude-code/capabilities.json:2-4`. Copies: `docs/routing.md:56-59,65-74` (model IDs, and the prose at `:65-70` that restates both maps); `docs/routing.example.json:8,14` (model IDs in `why`) | Each model rename edits docs too; the delegation skill keeps model IDs in adapters and reports | `capabilities.json` unchanged and read-only; the copies go under question 5 |
+| 5 | Model per capability | Source: `adapters/codex/capabilities.json:2-4`, `adapters/claude-code/capabilities.json:2-4`. Copies: `docs/routing.md:56-74` (adapter model IDs, the `agy` model IDs at `:61-64,72-74`, and the prose at `:65-70` that restates both maps); `docs/routing.example.json:8,14` (model IDs in `why`). Historical evidence, not a copy: `docs/adrs/ADR-0001-delegation-roles.md:369` | Each model rename edits docs too; the delegation skill keeps model IDs in adapters and reports | `capabilities.json` unchanged and read-only; the copies go under question 4; ADR-0001 stays read-only |
 | 6 | Policy mixed with resolution | `docs/routing.example.json:4-36` (every rule's `use` names harness, capability and effort); `:19` (`capability: deep` only to reach the larger model, explained at `docs/routing.md:65-68`); format at `docs/routing.md:32-50`; validator at `validators/dispatch_formats.py:152-208` | A machine fact is restated in every rule that needs it | Schema 2, section 5 |
 | 7 | The resolution algorithm | Described at `docs/routing.md:16-30`; implemented only in Demerzel `src/radiant/route.ts:23-64` | Radiant cannot test "same result as today" | A reference resolver in Radiant, used by the golden test |
 
@@ -131,13 +131,13 @@ adapters/claude-code/provides.json
 adapters/codex/README.md
 adapters/claude-code/README.md
 adapters/render_bootstrap.py
-validators/adapters.py
+validators/adapter_facts.py
 validators/routing_resolution.py
 validators/dispatch_formats.py
 validators/check_dispatch.py
 validators/check_repository.py
 validators/README.md
-tests/test_adapters.py
+tests/test_adapter_facts.py
 tests/test_routing_resolution.py
 tests/fixtures/routing-schema1.json
 tests/test_dispatch_formats.py
@@ -153,10 +153,13 @@ docs/adrs/ADR-0002-backend-dispatch-demerzel.md
 docs/plans/TC-0005-single-source-harness-facts.md
 ```
 
-`validators/adapters.py`, `validators/routing_resolution.py`,
-`tests/test_adapters.py`, `tests/test_routing_resolution.py` and
-`tests/fixtures/routing-schema1.json` are new. The two ADR paths apply only
-under question 9 (A), and `ADR-0002` then takes only its
+`validators/adapter_facts.py`, `validators/routing_resolution.py`,
+`tests/test_adapter_facts.py`, `tests/test_routing_resolution.py` and
+`tests/fixtures/routing-schema1.json` are new. The module is not named
+`adapters.py`: when `validators/` is not on `sys.path`, `import adapters`
+would silently load the top-level `adapters/` directory as a namespace
+package instead of failing. The two ADR paths apply only
+under question 6 (A), and `ADR-0002` then takes only its
 `Partly superseded by` header line, as it did for ADR-0003. Adapter READMEs,
 `docs/integration.md` and `docs/verification.md` take pointer sentences only.
 In `tests/test_integration.py`, existing tests change only where they read
@@ -187,7 +190,8 @@ the Demerzel checkout of section 3
 the owner's routing.json
 ```
 
-`adapters/global.template.md` stays read-only under question 8 (A).
+`adapters/global.template.md` stays read-only: the standing decisions of
+section 5 keep its adapter line hand-written.
 
 ### External systems allowed
 
@@ -206,7 +210,7 @@ units:
     role: radiant-dev
     requires: []
     objective: Move harness facts into each adapter provides.json and read adapters through one discovery module.
-    writes: [adapters/codex/provides.json, adapters/claude-code/provides.json, adapters/render_bootstrap.py, validators/adapters.py, validators/dispatch_formats.py, validators/check_dispatch.py, validators/check_repository.py, tests/test_adapters.py, tests/test_dispatch_formats.py, tests/test_repository.py, tests/test_integration.py]
+    writes: [adapters/codex/provides.json, adapters/claude-code/provides.json, adapters/render_bootstrap.py, validators/adapter_facts.py, validators/dispatch_formats.py, validators/check_dispatch.py, validators/check_repository.py, tests/test_adapter_facts.py, tests/test_dispatch_formats.py, tests/test_repository.py, tests/test_integration.py]
     depends_on: []
     done_when: The suite passes, rendered subagents match the entry commit byte for byte, and a fixture adapter passes every check with no code change.
   - id: TC-0005.2
@@ -226,16 +230,16 @@ units:
 ```
 
 The units run in order; each depends on the one before, so their shared
-paths do not overlap in time. Under question 9 (B), an amendment removes the
+paths do not overlap in time. Under question 6 (B), an amendment removes the
 two ADR paths from TC-0005.3.
 
 ## 5. Required outputs
 
 1. `adapters/<harness>/provides.json`, for both adapters: the harness facts
    of the data shape below, with `provides` unchanged.
-2. `validators/adapters.py`: the one adapter discovery and fact reader that
-   `check_dispatch.py`, `check_repository.py` and `render_bootstrap.py` use,
-   with tests in `tests/test_adapters.py`.
+2. `validators/adapter_facts.py`: the one adapter discovery and fact reader
+   that `check_dispatch.py`, `check_repository.py` and `render_bootstrap.py`
+   use, with tests in `tests/test_adapter_facts.py`.
 3. `validators/dispatch_formats.py`: `validate_provides` for the new keys,
    and `validate_routing` for schema 1, unchanged, and schema 2.
 4. `validators/routing_resolution.py`: `fold`, from schema 2 to the
@@ -244,12 +248,12 @@ two ADR paths from TC-0005.3.
    `tests/test_routing_resolution.py` and its baseline in
    `tests/fixtures/routing-schema1.json`.
 5. `validators/check_dispatch.py`: `routing` accepts both schemas; its
-   output follows question 2.
+   output follows question 1.
 6. `docs/routing.example.json` in schema 2.
 7. Docs: `docs/routing.md` (facts, both schemas, how they are applied,
    migration), the Demerzel note in `docs/integration.md`,
    `validators/README.md`, pointers in the adapter READMEs and
-   `docs/verification.md`, and, under question 9 (A), ADR-0004.
+   `docs/verification.md`, and, under question 6 (A), ADR-0004.
 
 Do not create additional artifacts without an observed need.
 
@@ -260,7 +264,8 @@ and `light`, each mapped to one full model ID. It stays the only place for
 models, and Demerzel's `catalog.ts:44-45` and `render_bootstrap.py` keep
 reading it unchanged.
 
-`provides.json` (question 1, option A) gains three required keys:
+`provides.json` gains three required keys, as the standing decisions below
+record:
 
 | Key | Rule |
 | --- | --- |
@@ -339,8 +344,20 @@ them, as its current tests require.
 }
 ```
 
-The `why` texts above follow question 5 (A); each `id` and `when` is the
+The `why` texts above follow question 4 (A); each `id` and `when` is the
 planning baseline's, so the golden table compares them.
+
+`resolution` is keyed by named profiles (`implementation`, `investigation`,
+`interface`, `judgment`), not by capability tier, which departs from the
+issue's shorthand "resolution (capability to harness, model, effort)". The
+baseline needs it: at floor `deep`, `build` resolves to `codex` at `medium`
+and `plans-and-contracts` to `claude-code` at `high`, so one capability
+leads to two harnesses and two efforts, and `build` and `bug-fix` share
+harness and capability but not effort. A map keyed by capability would
+change those rows of the golden table (section 11). Each profile still ends
+in a capability, the rule's or the candidate's own, and the model still
+comes from the adapter's `capabilities.json` for it, so the issue's chain
+from capability to harness, model and effort holds inside every profile.
 
 | Field | Rule |
 | --- | --- |
@@ -350,7 +367,7 @@ planning baseline's, so the golden table compares them.
 | `policy.rules[].capability` | Optional: the capability this unit type resolves at, used by every candidate of its resolution that has no capability of its own. A policy constraint: "plans need judgment" |
 | `policy.rules[].resolve`, `policy.default` | The name of an entry in `resolution` |
 | `resolution` | Kebab-case names to non-empty candidate lists; every entry is referenced by a rule or by `default` |
-| candidate | Exactly the schema 1 keys `harness`, `capability` and `effort`. A candidate's `capability` is harness-specific resolution, such as front end on `claude-code`, and is never below the `capability` of a rule that references the entry. Under question 3 (A), an `effort` outside the adapter's `efforts` is refused |
+| candidate | Exactly the schema 1 keys `harness`, `capability` and `effort`. A candidate's `capability` is harness-specific resolution, such as front end on `claude-code`, and is never below the `capability` of a rule that references the entry. Under question 2 (A), an `effort` outside the adapter's `efforts` is refused |
 
 Model IDs stay out of both schemas; the model comes from the adapter's
 `capabilities.json` for the resolved capability.
@@ -360,10 +377,13 @@ Model IDs stay out of both schemas; the model comes from the adapter's
 candidate list and each candidate without `capability` takes the rule's
 `capability` when the rule has one; `default` becomes its resolution's list.
 The fold loses nothing that resolution uses, so one resolver serves both
-schemas, and the folded view is the output question 2 (A) proposes.
+schemas, and the folded view is the output question 1 (A) proposes.
 
 `resolve(view, rule_id or none, floor, requires, adapters)` follows
-`docs/routing.md:16-30` and Demerzel `route.ts:23-64`: walk the rule's
+`docs/routing.md:16-30` and, in Demerzel, the candidate walk of
+`src/radiant/route.ts:23-64`, the effort check of
+`src/herdr/backend.ts:225-235` and the rule lookup and approval of
+`src/radiant/dispatch.ts:96-98,120-122`: walk the rule's
 candidates, or `default` without a rule; skip a harness without an adapter,
 one whose `provides` does not cover `requires` and one whose capability,
 the candidate's or else the floor, is below the floor; the first viable
@@ -386,12 +406,15 @@ judgment, as today.
   the pin ([no silent update](../integration.md#no-silent-update)).
 - **Demerzel after a pin bump, before #60.** `capabilities.json` keeps its
   shape, so `catalog.ts:44-45` reads it; `catalog.ts:46-47` ignores the new
-  `provides.json` keys; under question 2 (A), `check_dispatch.py routing`
+  `provides.json` keys; under question 1 (A), `check_dispatch.py routing`
   prints the schema 1 shape for either schema, so `validators.ts:144-169`
   reads it and `route.ts` resolves as before; the message
-  `harness without an adapter` keeps its text. Under question 2 (B),
-  Demerzel refuses a schema 2 file loudly, with `routing-invalid`, until #60
-  reads the new output; schema 1 files keep working.
+  `harness without an adapter` keeps its text. Under question 1 (B),
+  Demerzel refuses a schema 2 file until #60 reads the new output: the
+  command exits 0 with JSON that `readRules` rejects, so
+  `validators.ts:178-181` returns `validator-failed`
+  (`validators.ts:52-54`), whose next step blames `python3` or the Radiant
+  checkout rather than the file; schema 1 files keep working.
 - **AIKM and other consumers** reach Radiant through the pin,
   `check_project.py` and the opt-in `check_contract.py`; neither changes.
   Planning did not inspect AIKM.
@@ -401,7 +424,7 @@ judgment, as today.
   per-rule mapping `docs/routing.md` gains: each schema 1 rule becomes a
   policy rule with the same `id`, `when`, `approval` and `why`, whose
   `resolve` names an entry holding its `use` list; (4) removing schema 1
-  follows question 7.
+  follows question 5.
 
 ### Adding an adapter, and checking it without `agy`
 
@@ -410,10 +433,10 @@ capability needs only its directory: `README.md`, `capabilities.json`,
 `provides.json` and, when `subagents` is not `null`, its agent template. No
 validator, resolver, renderer, schema or test changes. Two limits remain,
 stated rather than hidden: the navigation pointers that already name each
-adapter (the global block, which `check_repository.py:73-76` checks under
-question 8 (A), `README.md` and `docs/capabilities.md`) get one line each;
-and a harness that needs more than one model per capability, which `agy`
-may, depends on question 6.
+adapter (the global block, which `check_repository.py:73-76` checks,
+`README.md` and `docs/capabilities.md`) get one line each; and a harness
+that needs more than one model per capability, which `agy` may, is left to
+#29 by the standing decisions below.
 
 Without an `agy` adapter, a test proves the property on a fixture: in an
 isolated copy of the tree, as `tests/test_repository.py` builds, it adds
@@ -421,8 +444,11 @@ isolated copy of the tree, as `tests/test_repository.py` builds, it adds
 global block line, and shows that `check_repository.py` passes,
 `check_dispatch.py routing` accepts schema 1 and schema 2 files naming it,
 `resolve` returns its model and effort, and `render_bootstrap.py --adapter
-fixture-harness` renders its subagents, with no file outside
-`adapters/fixture-harness/` and that one line changed.
+fixture-harness --agents-dir <temporary directory>` writes its subagents,
+with no file outside `adapters/fixture-harness/` and that one line changed.
+With the fixture's `subagents` set to `null`, `check_repository.py` still
+passes and `render_bootstrap.py --adapter fixture-harness` is refused as an
+invalid choice.
 
 ### Note for Demerzel
 
@@ -436,12 +462,26 @@ what Radiant now offers:
   `adapters/<harness>/provides.json` of the pinned checkout, and the harness
   list can come from the adapters it finds.
 - Launch mechanics stay Demerzel's: the flags in `modelArgs`
-  (`src/herdr/backend.ts:237-245`) and the Claude Code worktree hook
-  (`:233`, `:375`) are backend code, not harness facts. A harness listed by
-  Radiant without launch code in the backend is refused with a message that
-  names it.
-- `src/radiant/route.ts:23-64` repeats the resolution algorithm; whether it
-  calls a Radiant command instead follows question 4.
+  (`src/herdr/backend.ts:237-245`), the per-harness branch of `launch()`
+  (`:332-368`) and the Claude Code worktree hook (`:233`, `:375`) are
+  backend code, not harness facts. A harness listed by Radiant without
+  launch code in the backend is refused with a message that names it.
+- `src/radiant/route.ts:23-64`, with the effort check at
+  `src/herdr/backend.ts:225-235`, repeats the resolution algorithm; whether
+  it calls a Radiant command instead follows question 3.
+
+### Standing decisions
+
+These are the author's proposals where issue #35, a non-goal or the
+baseline already settles the choice. They are not owner decisions and do not
+go into section 18; each stands unless the owner overturns it in review.
+
+| Decision | Choice | Basis |
+| --- | --- | --- |
+| Where the new harness facts live | In `provides.json`, as the data shape above shows, not in a new `adapters/<harness>/harness.json`; `provides.json` then holds more than requirement terms, and Demerzel's current reader ignores the new keys | Issue #35 scope: "Adapter `capabilities.json` and `provides.json` become the only place"; a third file is one the issue did not name |
+| More than one model per capability, which `agy` may need | Not in this contract; until #29 settles `agy`'s facts on the CLI, the "adapter files only" property holds for harnesses that serve one model per capability | Section 6 non-goal: no `agy` fact (#29); designing the shape now would precede the facts it serves |
+| The adapter list in the global bootstrap block | Kept as the hand-written line that `check_repository.py:73-76` already checks; a new adapter adds one line there | Section 6 non-goal and section 14: the rendered global block must not change, and rendering the list from adapter facts would change it |
+| Keys of `resolution` | Named profiles, not capability tiers | The paragraph under "Data shape: routing schema 2" and the golden table of section 11 |
 
 ### Questions for the owner
 
@@ -449,21 +489,15 @@ Each question is a plain choice; option (A) is the recommended one. The
 Build does not start until the owner answers them, and the answers go into
 [section 18](#18-owner-decisions).
 
-1. **Where the new harness facts live.**
-   - (A) In `provides.json`, as section 5 shows. Consequence: the issue's
-     two files hold every fact; Demerzel's current reader ignores the new
-     keys; `provides.json` holds more than requirement terms.
-   - (B) In a new `adapters/<harness>/harness.json`. Consequence: a file
-     per concern, but a third file the issue did not name, and every
-     discovery rule and test gains it.
-2. **What `check_dispatch.py routing` prints for schema 2.**
+1. **What `check_dispatch.py routing` prints for schema 2.**
    - (A) The folded schema 1 shape, `{"schema": 2, "rules": [...], "default": [...]}`.
      Consequence: Demerzel dispatches a schema 2 file with no code change;
      the success output is a derived view, not the parsed file, and the
      docstring and README say so.
    - (B) The parsed schema 2 value. Consequence: the output stays "the
-     parsed value"; Demerzel refuses schema 2 files until #60 adapts.
-3. **An effort the adapter does not list, in schema 2.**
+     parsed value"; Demerzel refuses schema 2 files with `validator-failed`,
+     which points at `python3` or the Radiant checkout, until #60 adapts.
+2. **An effort the adapter does not list, in schema 2.**
    - (A) Refused by validation, naming the rule, harness and effort.
      Consequence: a typo fails before dispatch; a CLI that gains an effort
      level waits for the adapter update. Schema 1 keeps accepting any
@@ -471,14 +505,14 @@ Build does not start until the owner answers them, and the answers go into
    - (B) Accepted, and `resolve` omits it with a reason, as schema 1 does.
      Consequence: one behavior for both schemas; mistakes surface only at
      dispatch.
-4. **How the reference resolver is exposed.**
+3. **How the reference resolver is exposed.**
    - (A) As a library function used by the tests only. Consequence: the
      golden table is checkable now; Demerzel keeps `route.ts`; a command is
      decided with #60.
    - (B) Also as `check_dispatch.py resolve <rule|-> --capability <c> [--requires <term>...] [rules]`.
      Consequence: #60 can drop its copy of the algorithm; one more public
      command and output to keep stable.
-5. **Model IDs outside the adapters.**
+4. **Model IDs outside the adapters.**
    - (A) `docs/routing.md` and the example name no model ID: the owner
      routing section names harness, capability tier and effort, points to
      the adapters for models, and points to #29's 2026-11-24 comment for the
@@ -487,32 +521,14 @@ Build does not start until the owner answers them, and the answers go into
    - (B) The "Owner routing (2026-11-24)" section, merged in PR #75, stays
      as written. Consequence: the owner's record stays word for word; the
      model IDs there stay a copy to update by hand.
-6. **More than one model per capability, which `agy` may need.**
-   - (A) Not in this contract. Both current adapters serve one model per
-     capability; #29 settles `agy`'s model and effort facts on the CLI and,
-     if it needs more, adds an adapter-declared field with its own tests.
-     Consequence: no unverified shape now; until then, the "adapter files
-     only" property holds for one-model-per-capability harnesses.
-   - (B) Add now an optional adapter-declared map of named model variants,
-     selectable by a resolution candidate. Consequence: `agy` arrives as
-     adapter files only, but the shape is designed before the `agy` facts
-     are checked, and Demerzel at its current code would launch the
-     capability's model instead of a variant until #60.
-7. **How long schema 1 is accepted.**
+5. **How long schema 1 is accepted.**
    - (A) With no end date; removing it needs a later owner decision and its
      own issue, after Demerzel and the dotfiles move. Consequence: nothing
      breaks; two readers stay in the validator.
    - (B) Deprecated now, with removal planned before the v1.0.0 tag
      ([#54](https://github.com/faelplg/radiant/issues/54)). Consequence: a
      date to plan by; the owner's `routing.json` must move first.
-8. **The adapter list in the global bootstrap block.**
-   - (A) Kept as a hand-written line, which `check_repository.py:73-76`
-     already checks. Consequence: a new adapter adds one line there; the
-     block every user copies does not change.
-   - (B) Rendered from adapter facts. Consequence: no manual line, but every
-     user's global block changes at the next render, and the adapter needs a
-     display name fact.
-9. **ADR.**
+6. **ADR.**
    - (A) A new ADR-0004 records the policy and resolution split and the
      harness facts, and partly supersedes ADR-0002's "Routing rules format";
      ADR-0002 gets only its `Partly superseded by` header line. Consequence:
@@ -521,16 +537,17 @@ Build does not start until the owner answers them, and the answers go into
    - (B) No ADR; `docs/routing.md` and this contract record it.
      Consequence: one document fewer; ADR-0002 keeps describing schema 1
      only.
-10. **Demerzel compatibility probe.**
-    - (A) The Build reads, read-only, `src/radiant/catalog.ts`,
-      `src/radiant/validators.ts`, `src/radiant/route.ts` and
-      `src/herdr/backend.ts` at the Demerzel commit recorded at activation,
-      confirms the line references of section 3, and reports in section 16.
-      Consequence: the compatibility tests mirror the real readers; the
-      sandbox needs read access to that checkout.
-    - (B) No probe; the compatibility tests mirror the references as planned.
-      Consequence: no consumer access; a drift in Demerzel since planning is
-      found at its pin bump.
+7. **Demerzel compatibility probe.**
+   - (A) The Build reads, read-only, `src/radiant/catalog.ts`,
+     `src/radiant/validators.ts`, `src/radiant/route.ts`,
+     `src/radiant/dispatch.ts` and `src/herdr/backend.ts` at the Demerzel
+     commit recorded at activation, confirms the line references of
+     sections 3 and 5, and reports in section 16. Consequence: the
+     compatibility tests mirror the real readers; the sandbox needs read
+     access to that checkout.
+   - (B) No probe; the compatibility tests mirror the references as planned.
+     Consequence: no consumer access; a drift in Demerzel since planning is
+     found at its pin bump.
 
 ### Build order
 
@@ -575,17 +592,18 @@ Record it as an observation or a Learn Back candidate.
 
 # 7. Functional requirements
 
-- [ ] `validators/adapters.py` lists as adapters exactly the directories of `adapters/` that hold `README.md`, `capabilities.json` and `provides.json`, and reads each one's models and facts; `check_dispatch.py`, `check_repository.py` and `render_bootstrap.py` use it, and no adapter name is written in their code.
+- [ ] `validators/adapter_facts.py` lists as adapters exactly the directories of `adapters/` that hold `README.md`, `capabilities.json` and `provides.json`, and reads each one's models and facts; `check_dispatch.py`, `check_repository.py` and `render_bootstrap.py` use it, and no adapter name is written in their code.
 - [ ] `provides.json` without `cli`, `efforts` or `subagents`, with an unknown key, a `cli` with whitespace, a repeated or empty effort, or a `subagents` whose template is not a file of that adapter, is refused, naming the file and the key.
 - [ ] `render_bootstrap.py --adapter` offers the adapters whose `subagents` is not `null`, and for codex and claude-code renders files byte for byte equal to the entry commit's.
 - [ ] A schema 1 `routing.json` validates with the same errors as at the entry commit, and `check_dispatch.py routing` prints the same bytes for it.
-- [ ] A schema 2 file is refused, naming the rule or entry, for: an unknown key at any level, a `resolve` or `default` naming no entry, an unreferenced entry, a rule `capability` outside the three, a candidate capability below a referencing rule's capability, a harness without an adapter (with the text `harness without an adapter`), and, under question 3 (A), an effort outside the adapter's `efforts`.
+- [ ] A schema 2 file is refused, naming the rule or entry, for: an unknown key at any level, a `resolve` or `default` naming no entry, an unreferenced entry, a rule `capability` outside the three, a candidate capability below a referencing rule's capability, a harness without an adapter (with the text `harness without an adapter`), and, under question 2 (A), an effort outside the adapter's `efforts`.
 - [ ] `fold` of a schema 2 file gives the schema 1 shape, with the rule's `capability` on each candidate that lacks one; `fold` of the new example equals the baseline fixture in every field except `schema` and `why`.
 - [ ] `resolve` gives the golden table of section 11 for the baseline fixture and for the new example, for every rule and default, every floor and `requires` of `[]` and `["browser"]`; an unknown rule id is an error.
-- [ ] `check_dispatch.py routing` on a schema 2 file prints the output question 2 chose.
+- [ ] On synthetic rules, `resolve` falls back to the next candidate when the first is not viable, returns `HOLD` when every candidate's capability is below the floor, skips a harness without an adapter, and returns an effort outside the adapter's `efforts` as omitted with its reason.
+- [ ] `check_dispatch.py routing` on a schema 2 file prints the output question 1 chose.
 - [ ] `docs/routing.example.json` is schema 2 and passes `check_repository.py` and `check_dispatch.py routing`.
 - [ ] Adding the fixture adapter of section 5 needs no change outside its directory and the global block line.
-- [ ] After the Build, the Radiant tree outside `adapters/*/capabilities.json`, `docs/plans/` and `docs/history/` names no model ID, under question 5 (A).
+- [ ] After the Build, the Radiant tree outside `adapters/*/capabilities.json`, `docs/plans/`, `docs/history/` and the historical evidence in `docs/adrs/ADR-0001-delegation-roles.md` names no model ID, under question 4 (A).
 
 # 8. Engineering Check
 
@@ -605,9 +623,9 @@ Record it as an observation or a Learn Back candidate.
 | Practice | Serves | Why it applies here | Evidence |
 | --- | --- | --- | --- |
 | `tdd` | EB-03 | The golden table is known before any code moves | Failing runs before each implementation, in the Completion report |
-| `test-strategy` | EB-03 | Rules are unit tested; the gates are proven at their CLI boundary in an isolated tree | `tests/test_adapters.py`, `tests/test_routing_resolution.py`, `tests/test_check_dispatch.py`, `tests/test_repository.py` |
+| `test-strategy` | EB-03 | Rules are unit tested; the gates are proven at their CLI boundary in an isolated tree | `tests/test_adapter_facts.py`, `tests/test_routing_resolution.py`, `tests/test_check_dispatch.py`, `tests/test_repository.py` |
 | `solid-ocp` | EB-05 | A new harness extends Radiant through data, not code | The fixture adapter test |
-| `adr` | EB-05 | The routing format of ADR-0002 changes | ADR-0004 under question 9 (A), or the owner's choice of (B) in section 18 |
+| `adr` | EB-01 | The routing format of ADR-0002 changes | ADR-0004 under question 6 (A), or the owner's choice of (B) in section 18 |
 
 # 9. Project-specific constraints
 
@@ -679,12 +697,21 @@ that the adapter's `provides` does not cover `browser`. An unknown rule id
 is an error.
 
 The test asserts the table for `resolve(baseline fixture)`, for
-`resolve(fold(docs/routing.example.json))` and for each `routing.json` that
-`tests/test_check_dispatch.py` writes from the example. The plans and
-critique rows at `standard` and `light` need the new rule-level
-`capability`; the front end rows need the candidate's own `capability`; the
-build and default rows at `deep` show that a single "capability to harness"
-map would have changed today's result.
+`resolve(fold(docs/routing.example.json))` and for the parsed stdout of
+`check_dispatch.py routing` on each of the two files, folded first when it
+is schema 2 under question 1 (B). The plans and critique rows at `standard`
+and `light` need the new rule-level `capability`; the front end rows need
+the candidate's own `capability`; the build and default rows at `deep` show
+that a single "capability to harness" map would have changed today's
+result, which is why `resolution` has named profiles (section 5).
+
+Every rule of the table has one candidate, so the table alone cannot prove
+fallback or the skips. Synthetic rules in `tests/test_routing_resolution.py`
+cover what section 7 lists: a first candidate whose harness has no adapter,
+then a viable one, resolves to the second; a candidate whose own capability
+is below the floor is skipped, and a rule whose every candidate is below the
+floor is `HOLD` with one reason per candidate; an effort outside the
+adapter's `efforts` resolves with the effort omitted and its reason.
 
 ## Focused verification
 
@@ -698,9 +725,11 @@ map would have changed today's result.
   fail on the missing behavior while every existing test passes.
 - Mutation proof, after each commit and one change at a time: drop the
   rule capability in `fold`; ignore the candidate capability in `resolve`;
-  let a candidate below the floor win; skip the `provides` check; accept an
-  effort outside `efforts` (question 3 (A)); return `default` for an unknown
-  rule; fold schema 1 too, which changes its bytes; discover adapters with
+  let a candidate below the floor win; stop at the first candidate instead
+  of falling back; skip the `provides` check; return an unaccepted effort
+  as applied in `resolve`; accept an effort outside `efforts` in validation
+  (question 2 (A)); return `default` for an unknown rule; drop `why` from
+  the `routing` output of a schema 1 file; discover adapters with
   `is_dir()` only; hard-code the render table again; accept a template path
   outside the adapter. Commit before mutating; see the named test fail;
   restore with `git checkout -- <file>`; see the suite pass; gate each step
@@ -711,21 +740,24 @@ map would have changed today's result.
   `check_dispatch.py units templates/task-contract.md`; and
   `render_bootstrap.py`, its `--adapter codex` and `--adapter claude-code`
   outputs, compared with `diff -r`.
-- Demerzel compatibility, in `tests/test_adapters.py` and
+- Demerzel compatibility, in `tests/test_adapter_facts.py` and
   `tests/test_check_dispatch.py`: every `capabilities.json` value is a
   string; `provides.json` keeps `provides` as a list of strings; the
   `routing` output for both schemas has `rules` with `id`, `use` and
   optional `approval`, and candidates with only `harness`, `capability` and
-  `effort`. Under question 10 (A), the Build confirms these against the
+  `effort`. Under question 7 (A), the Build confirms these against the
   recorded Demerzel commit.
-- The orchestrator, not the Build, runs
-  `python3 validators/check_dispatch.py routing` with no argument, on the
-  owner's file, at the entry commit and at the end, and compares the two
-  stdouts with `cmp`; the Build never opens the file.
+- The orchestrator, not the Build, confirms before activation that the
+  owner's file exists at its default path, then runs
+  `python3 validators/check_dispatch.py routing` with no argument, on that
+  file, at the entry commit and at the end, and compares the two exit codes
+  and, with `cmp`, the two stdouts; the Build never opens the file.
 - `rg` over `validators/` and `adapters/render_bootstrap.py` finds no
-  adapter name in code. Under question 5 (A), `rg` over the tree, outside
-  `adapters/*/capabilities.json`, `docs/plans/` and `docs/history/`, finds
-  no model ID from the adapters; the test reads the IDs from the files.
+  adapter name in code. Under question 4 (A), `rg` over the tree, outside
+  `adapters/*/capabilities.json`, `docs/plans/`, `docs/history/` and
+  `docs/adrs/ADR-0001-delegation-roles.md`, whose usage evidence is
+  historical and read-only, finds no model ID from the adapters; the test
+  reads the IDs from the files.
 
 ## Readback
 
@@ -764,11 +796,11 @@ The task can only be declared `DONE` when:
 - [ ] `python3 validators/check_dispatch.py routing docs/routing.example.json` exits 0 on the schema 2 example, and `check_repository.py` passes (issue #35);
 - [ ] `python3 -m unittest discover -s tests -p test_routing_resolution.py` passes, asserting every row of the golden table for the schema 1 baseline and the schema 2 example (issue #35);
 - [ ] `cmp` shows that `check_dispatch.py routing` on the baseline fixture prints the same bytes as the entry commit on its example, and that rendered subagents and the global block are unchanged;
-- [ ] `rg` finds no adapter name in `validators/` code or `adapters/render_bootstrap.py`, and `cli`, `efforts` and `subagents` appear only in `adapters/*/provides.json` and their readers (issue #35);
+- [ ] `rg` finds no adapter name in `validators/` code or `adapters/render_bootstrap.py`, and no file outside `adapters/*/provides.json` holds the facts of `cli`, `efforts` and `subagents` as data: `rg` over `validators/` and `adapters/render_bootstrap.py` finds no launch command table, effort list, agent template name, extension or read-only line, and no doc outside `docs/plans/` and `docs/history/` restates an adapter's effort list; a routing rule's `effort` uses a level and does not count (issue #35);
 - [ ] the fixture adapter test passes with no change outside its directory and the global block line;
 - [ ] `git diff --name-only <entry>..HEAD` shows no `adapters/*/capabilities.json` change and no file outside the Allowed scope;
 - [ ] `docs/integration.md` has the note for Demerzel, linking faelplg/demerzel#60 (issue #35);
-- [ ] the orchestrator's before and after runs on the owner's `routing.json` print the same bytes;
+- [ ] the owner's `routing.json` was confirmed present before activation, and the orchestrator's before and after runs on it exit with the same code and print the same bytes;
 - [ ] all applicable checks in section 11 pass;
 - [ ] there was no change outside the Allowed scope;
 - [ ] relevant limitations are recorded;
@@ -782,7 +814,7 @@ Stop and ask for a decision when:
 - the golden table cannot hold for schema 1 or schema 2 without changing a
   row, or the baseline example changed on `main` since planning;
 - keeping Demerzel working needs a change to `capabilities.json`'s shape,
-  to the `routing` output beyond question 2, or to any Demerzel file;
+  to the `routing` output beyond question 1, or to any Demerzel file;
 - a fact needs a value that no current source holds, such as an effort level
   not in Demerzel's checked lists;
 - the design needs a vendor rule (#64), an `agy` fact (#29) or a change to
@@ -809,7 +841,7 @@ Do not disguise `FAIL` as `DONE WITH NOTES`.
 The agent may:
 
 - refactor adapter discovery in `check_dispatch.py`, `check_repository.py`
-  and `render_bootstrap.py` into `validators/adapters.py`;
+  and `render_bootstrap.py` into `validators/adapter_facts.py`;
 - update directly affected tests and pointers.
 
 The agent may not, without HOLD:
